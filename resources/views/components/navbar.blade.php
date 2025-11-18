@@ -22,7 +22,7 @@
 
                 <!-- Patterns Dropdown -->
                 <div class="relative">
-                    <button type="button" data-dropdown-toggle="patterns-dropdown" class="flex items-center gap-2 px-2 py-2 rounded-lg transition-all duration-200 hover:text-zinc-900 hover:bg-zinc-100/50 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800/50">
+                    <button type="button" data-dropdown-toggle="patterns-dropdown" class="flex items-center gap-2 px-2 py-2 rounded-lg transition-all duration-200 hover:text-zinc-900 hover:bg-zinc-100/50 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800/50 cursor-pointer">
                         <svg class="h-5 w-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                         </svg>
@@ -74,7 +74,7 @@
 
                 <!-- Models Dropdown -->
                 <div class="relative">
-                    <button type="button" data-dropdown-toggle="models-dropdown" class="flex items-center gap-2 px-2 py-2 rounded-lg transition-all duration-200 hover:text-zinc-900 hover:bg-zinc-100/50 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800/50">
+                    <button type="button" data-dropdown-toggle="models-dropdown" class="flex items-center gap-2 px-2 py-2 rounded-lg transition-all duration-200 hover:text-zinc-900 hover:bg-zinc-100/50 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800/50 cursor-pointer">
                         <svg class="h-5 w-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                         </svg>
@@ -137,7 +137,7 @@
 
                 <!-- Tutorials Dropdown -->
                 <div class="relative">
-                    <button type="button" data-dropdown-toggle="tutorials-dropdown" class="flex items-center gap-2 px-2 py-2 rounded-lg transition-all duration-200 hover:text-zinc-900 hover:bg-zinc-100/50 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800/50">
+                    <button type="button" data-dropdown-toggle="tutorials-dropdown" class="flex items-center gap-2 px-2 py-2 rounded-lg transition-all duration-200 hover:text-zinc-900 hover:bg-zinc-100/50 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800/50 cursor-pointer">
                         <svg class="h-5 w-5 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -265,7 +265,7 @@
                 <!-- Admin Panel (only for admins) -->
                 @if(auth()->user()->isAdmin ?? false)
                 <div class="relative">
-                    <button type="button" data-dropdown-toggle="admin-dropdown" class="flex items-center gap-2 px-2 py-2 rounded-lg transition-all duration-200 hover:text-zinc-900 hover:bg-zinc-100/50 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800/50">
+                    <button type="button" data-dropdown-toggle="admin-dropdown" class="flex items-center gap-2 px-2 py-2 rounded-lg transition-all duration-200 hover:text-zinc-900 hover:bg-zinc-100/50 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800/50 cursor-pointer">
                         <svg class="h-5 w-5 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -330,31 +330,60 @@
 
             <!-- Right side: Search, Theme Toggle, Account -->
             <div class="flex items-center gap-2 ml-auto">
-                <!-- Search -->
-                <button type="button" data-search-toggle class="flex h-10 w-10 items-center justify-center rounded-lg text-zinc-600 transition-all duration-200 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100">
-                    <svg class="h-5 w-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </button>
-
+                <!-- Search Section -->
+                <div class="relative flex items-center">
+                    <!-- Search Icon -->
+                    <button type="button" id="search-toggle" class="relative flex h-10 w-10 items-center justify-center rounded-lg text-zinc-600 transition-all duration-300 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 cursor-pointer">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </button>
+                    
+                    <!-- Search Box -->
+                    <div id="search-box" class="fixed top-[76px] right-1 opacity-0 invisible translate-y-[-10px] transition-all duration-400 ease-out pointer-events-none z-50">
+                        <div class="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl border border-zinc-200/50 dark:border-zinc-700/50 rounded-2xl shadow-2xl shadow-black/10 dark:shadow-black/30 w-[400px] p-2">
+                            <div class="flex items-center gap-2">
+                                <div class="flex-1 relative">
+                                    <input type="text" id="search-input" placeholder="Search patterns, tutorials..." class="w-full pl-10 pr-4 py-3 text-sm bg-zinc-50/80 dark:bg-zinc-800/80 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-400/50 focus:bg-white dark:focus:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder-zinc-500 dark:placeholder-zinc-400 transition-all duration-200" autocomplete="off">
+                                    <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-zinc-400 pointer-events-none">
+                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <button type="button" id="search-submit" class="flex items-center justify-center h-10 w-10 bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-violet-500/25 hover:scale-105 active:scale-95">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" style=" transform: rotate(90deg); ">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Theme Toggle -->
-                <button type="button" id="theme-toggle" class="flex h-10 w-10 items-center justify-center rounded-lg text-zinc-600 transition-all duration-200 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100">
-                    <svg class="h-5 w-5 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button type="button" id="theme-toggle" class="relative flex h-10 w-10 items-center justify-center rounded-lg text-zinc-600 transition-all duration-300 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 cursor-pointer">
+                    <!-- Sun Icon (visible in dark mode) -->
+                    <svg id="sun-icon" class="h-5 w-5 text-amber-500 transition-all duration-300 transform scale-0 rotate-90 opacity-0 dark:scale-100 dark:rotate-0 dark:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    <!-- Moon Icon (visible in light mode) -->
+                    <svg id="moon-icon" class="absolute h-5 w-5 text-indigo-600 transition-all duration-300 transform scale-100 rotate-0 opacity-100 dark:scale-0 dark:-rotate-90 dark:opacity-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                     </svg>
                 </button>
 
                 @guest
                 @if (Route::has('login'))
-                <a href="{{ route('login') }}" class="inline-flex items-center justify-center rounded-md border border-zinc-200 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:border-zinc-300 hover:text-zinc-900 dark:border-zinc-700 dark:text-zinc-200 dark:hover:border-zinc-500 dark:hover:text-white">Log in</a>
+                <a href="{{ route('login') }}" class="inline-flex items-center justify-center rounded-md border border-zinc-200 px-4 py-2 text-sm font-medium text-zinc-700 transition-all duration-200 hover:border-violet-300 hover:bg-violet-50 hover:text-violet-700 hover:shadow-md hover:scale-105 dark:border-zinc-700 dark:text-zinc-200 dark:hover:border-violet-500 dark:hover:bg-violet-900/20 dark:hover:text-violet-300">Log in</a>
                 @endif
                 @if (Route::has('register'))
-                <a href="{{ route('register') }}" class="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-violet-500/40 transition hover:brightness-110">Sign up</a>
+                <a href="{{ route('register') }}" class="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-violet-500/40 transition-all duration-200 hover:shadow-lg hover:shadow-violet-500/60 hover:scale-105 hover:brightness-110 hover:-translate-y-0.5">Sign up</a>
                 @endif
                 @else
                 <!-- Account Dropdown -->
                 <div class="relative">
-                    <button type="button" data-dropdown-toggle="account-dropdown" class="flex items-center gap-2 px-2 py-2 rounded-lg transition-all duration-200 hover:text-zinc-900 hover:bg-zinc-100/50 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800/50">
+                    <button type="button" data-dropdown-toggle="account-dropdown" class="flex items-center gap-2 px-2 py-2 rounded-lg transition-all duration-200 hover:text-zinc-900 hover:bg-zinc-100/50 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800/50 cursor-pointer">
                         <svg class="h-5 w-5 text-teal-600 dark:text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
@@ -427,18 +456,64 @@
             </div>
         </div>
 
-        <!-- Mobile menu button -->
-        <button type="button" data-navbar-toggle data-target="{{ $navbarId }}" class="ms-auto inline-flex items-center justify-center rounded-md border border-zinc-200 p-2 text-zinc-600 transition hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 focus:ring-offset-white dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:focus:ring-violet-500 dark:focus:ring-offset-zinc-900 xl:hidden" aria-expanded="false" aria-controls="{{ $navbarId }}">>
-            <span class="sr-only">Toggle navigation</span>
-            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-        </button>
+        <!-- Mobile actions: Search, Theme, Menu -->
+        <div class="flex items-center gap-2 ml-auto xl:hidden">
+            <!-- Search Section (Mobile) -->
+            <div class="relative flex items-center">
+                <!-- Search Icon (Mobile) -->
+                <button type="button" id="search-toggle-mobile" class="relative flex h-10 w-10 items-center justify-center rounded-lg text-zinc-600 transition-all duration-300 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 cursor-pointer">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </button>
+                
+                <!-- Search Box (Mobile) -->
+                <div id="search-box-mobile" class="absolute right-0 top-16 opacity-0 invisible translate-y-[-10px] transition-all duration-400 ease-out pointer-events-none z-50">
+                    <div class="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl border border-zinc-200/50 dark:border-zinc-700/50 rounded-2xl shadow-2xl shadow-black/10 dark:shadow-black/30 w-[320px] p-2">
+                        <div class="flex items-center gap-2">
+                            <div class="flex-1 relative">
+                                <input type="text" id="search-input-mobile" placeholder="Search patterns, tutorials..." class="w-full pl-10 pr-4 py-3 text-sm bg-zinc-50/80 dark:bg-zinc-800/80 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-400/50 focus:bg-white dark:focus:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder-zinc-500 dark:placeholder-zinc-400 transition-all duration-200" autocomplete="off">
+                                <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-zinc-400 pointer-events-none">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <button type="button" id="search-submit-mobile" class="flex items-center justify-center h-10 w-10 bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-violet-500/25 hover:scale-105 active:scale-95">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" style=" transform: rotate(90deg); ">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Theme Toggle (Mobile) -->
+            <button type="button" id="theme-toggle-mobile" class="relative flex h-10 w-10 items-center justify-center rounded-lg text-zinc-600 transition-all duration-300 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 cursor-pointer">
+                <!-- Sun Icon (visible in dark mode) -->
+                <svg class="sun-icon h-5 w-5 text-amber-500 transition-all duration-300 transform scale-0 rotate-90 opacity-0 dark:scale-100 dark:rotate-0 dark:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <!-- Moon Icon (visible in light mode) -->
+                <svg class="moon-icon absolute h-5 w-5 text-indigo-600 transition-all duration-300 transform scale-100 rotate-0 opacity-100 dark:scale-0 dark:-rotate-90 dark:opacity-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+            </button>
+
+            <!-- Mobile menu button -->
+            <button type="button" data-navbar-toggle data-target="{{ $navbarId }}" class="inline-flex items-center justify-center rounded-md border border-zinc-200 p-2 text-zinc-600 transition hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 focus:ring-offset-white dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:focus:ring-violet-500 dark:focus:ring-offset-zinc-900 cursor-pointer" aria-expanded="false" aria-controls="{{ $navbarId }}">
+                <span class="sr-only">Toggle navigation</span>
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
     </div>
 
     <!-- Mobile menu -->
-    <div id="{{ $navbarId }}" class="hidden flex-col border-t border-zinc-200/70 px-5 pb-6 pt-4 xl:hidden dark:border-zinc-800/70">
-        <div class="flex flex-col gap-4">
+    <div id="{{ $navbarId }}" class="hidden fixed top-16 right-0 w-80 max-w-sm h-screen bg-white/95 backdrop-blur-xl shadow-2xl border-l border-zinc-200/70 dark:bg-zinc-900/95 dark:border-zinc-700/70 transform translate-x-full transition-transform duration-300 ease-out z-50 overflow-y-auto lg:hidden" style="display: none;">
+        <div class="flex flex-col gap-4 p-5">
             <div class="grid gap-2 text-sm font-medium text-zinc-600 dark:text-zinc-300">
                 <!-- Home -->
                 <a href="#home" class="flex items-center gap-3 rounded-lg px-4 py-3 transition-all duration-200 hover:bg-zinc-100/80 hover:text-zinc-900 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100">
@@ -450,7 +525,7 @@
 
                 <!-- Patterns Mobile Dropdown -->
                 <div class="relative">
-                    <button type="button" data-mobile-dropdown-toggle="mobile-patterns-dropdown" class="flex w-full items-center justify-between gap-3 rounded-lg px-4 py-3 transition-all duration-200 hover:bg-zinc-100/80 hover:text-zinc-900 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100">
+                    <button type="button" data-mobile-dropdown-toggle="mobile-patterns-dropdown" class="flex w-full items-center justify-between gap-3 rounded-lg px-4 py-3 transition-all duration-200 hover:bg-zinc-100/80 hover:text-zinc-900 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100 cursor-pointer">
                         <div class="flex items-center gap-3">
                             <svg class="h-5 w-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
@@ -502,7 +577,7 @@
 
                 <!-- Models Mobile Dropdown -->
                 <div class="relative">
-                    <button type="button" data-mobile-dropdown-toggle="mobile-models-dropdown" class="flex w-full items-center justify-between gap-3 rounded-lg px-4 py-3 transition-all duration-200 hover:bg-zinc-100/80 hover:text-zinc-900 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100">
+                    <button type="button" data-mobile-dropdown-toggle="mobile-models-dropdown" class="flex w-full items-center justify-between gap-3 rounded-lg px-4 py-3 transition-all duration-200 hover:bg-zinc-100/80 hover:text-zinc-900 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100 cursor-pointer">
                         <div class="flex items-center gap-3">
                             <svg class="h-5 w-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
@@ -565,7 +640,7 @@
 
                 <!-- Tutorials Mobile Dropdown -->
                 <div class="relative">
-                    <button type="button" data-mobile-dropdown-toggle="mobile-tutorials-dropdown" class="flex w-full items-center justify-between gap-3 rounded-lg px-4 py-3 transition-all duration-200 hover:bg-zinc-100/80 hover:text-zinc-900 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100">
+                    <button type="button" data-mobile-dropdown-toggle="mobile-tutorials-dropdown" class="flex w-full items-center justify-between gap-3 rounded-lg px-4 py-3 transition-all duration-200 hover:bg-zinc-100/80 hover:text-zinc-900 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100 cursor-pointer">
                         <div class="flex items-center gap-3">
                             <svg class="h-5 w-5 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
@@ -699,7 +774,7 @@
                 <!-- Admin Panel Mobile Dropdown (only for admins) -->
                 @if(auth()->user()->isAdmin ?? false)
                 <div class="relative">
-                    <button type="button" data-mobile-dropdown-toggle="mobile-admin-dropdown" class="flex w-full items-center justify-between gap-3 rounded-lg px-4 py-3 transition-all duration-200 hover:bg-zinc-100/80 hover:text-zinc-900 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100">
+                    <button type="button" data-mobile-dropdown-toggle="mobile-admin-dropdown" class="flex w-full items-center justify-between gap-3 rounded-lg px-4 py-3 transition-all duration-200 hover:bg-zinc-100/80 hover:text-zinc-900 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100 cursor-pointer">
                         <div class="flex items-center gap-3">
                             <svg class="h-5 w-5 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -742,7 +817,7 @@
 
                 <!-- 👤 Account Mobile Dropdown -->
                 <div class="relative">
-                    <button type="button" data-mobile-dropdown-toggle="mobile-account-dropdown" class="flex w-full items-center justify-between gap-3 rounded-lg px-4 py-3 transition-all duration-200 hover:bg-zinc-100/80 hover:text-zinc-900 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100">
+                    <button type="button" data-mobile-dropdown-toggle="mobile-account-dropdown" class="flex w-full items-center justify-between gap-3 rounded-lg px-4 py-3 transition-all duration-200 hover:bg-zinc-100/80 hover:text-zinc-900 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100 cursor-pointer">
                         <div class="flex items-center gap-3">
                             <span>👤</span>
                             <span class="font-medium">{{ Auth::user()->name ?? 'Account' }}</span>
@@ -790,14 +865,12 @@
                 <!-- Guest user buttons -->
                 <div class="border-t border-zinc-200/70 dark:border-zinc-800/70 pt-4">
                     @if (Route::has('login'))
-                    <a href="{{ route('login') }}" class="flex items-center justify-center gap-2 rounded-lg border border-zinc-200 px-4 py-3 text-sm font-medium text-zinc-700 transition-all duration-200 hover:border-zinc-300 hover:bg-zinc-100/70 hover:text-zinc-900 dark:border-zinc-700 dark:text-zinc-200 dark:hover:border-zinc-500 dark:hover:bg-zinc-800/80 dark:hover:text-white">
-                        <span>👋</span>
+                    <a href="{{ route('login') }}" class="flex items-center justify-center gap-2 rounded-lg border border-zinc-200 px-4 py-3 text-sm font-medium text-zinc-700 transition-all duration-200 hover:border-violet-300 hover:bg-violet-50 hover:text-violet-700 dark:border-zinc-700 dark:text-zinc-200 dark:hover:border-violet-500 dark:hover:bg-violet-900/20 dark:hover:text-violet-300">
                         <span>Log in</span>
                     </a>
                     @endif
                     @if (Route::has('register'))
-                    <a href="{{ route('register') }}" class="mt-3 flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500 px-4 py-3 text-sm font-semibold text-white shadow-sm shadow-violet-500/40 transition hover:brightness-110">
-                        <span>✨</span>
+                    <a href="{{ route('register') }}" class="mt-3 flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500 px-4 py-3 text-sm font-semibold text-white shadow-sm shadow-violet-500/40 transition-all duration-200 hover:brightness-110">
                         <span>Sign up</span>
                     </a>
                     @endif
@@ -806,6 +879,8 @@
             </div>
         </div>
     </div>
+
+
 </nav>
 
 @once
@@ -818,16 +893,55 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Mobile navbar toggle functionality
             document.querySelectorAll('[data-navbar-toggle]').forEach(function(toggle) {
-                toggle.addEventListener('click', function() {
+                toggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
                     var targetId = toggle.getAttribute('data-target');
                     var target = document.getElementById(targetId);
                     if (!target) {
                         return;
                     }
-                    var isHidden = target.classList.contains('hidden');
-                    target.classList.toggle('hidden', !isHidden);
-                    target.classList.toggle('flex', isHidden);
-                    toggle.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+                    
+                    // Toggle the mobile menu visibility
+                    var isHidden = target.classList.contains('hidden') || target.style.display === 'none';
+                    
+                    if (isHidden) {
+                        // Show mobile menu
+                        target.style.display = 'block';
+                        target.classList.remove('hidden');
+                        // Small delay to ensure display is set before removing transform
+                        setTimeout(function() {
+                            target.classList.remove('translate-x-full');
+                        }, 10);
+                        toggle.setAttribute('aria-expanded', 'true');
+                    } else {
+                        // Hide mobile menu
+                        target.classList.add('translate-x-full');
+                        // Add hidden class and set display none after animation completes
+                        setTimeout(function() {
+                            target.classList.add('hidden');
+                            target.style.display = 'none';
+                        }, 300);
+                        toggle.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(e) {
+                var mobileMenus = document.querySelectorAll('[data-navbar-toggle]');
+                mobileMenus.forEach(function(toggle) {
+                    var targetId = toggle.getAttribute('data-target');
+                    var target = document.getElementById(targetId);
+                    if (target && !target.contains(e.target) && !toggle.contains(e.target)) {
+                        if (!target.classList.contains('hidden') && target.style.display !== 'none') {
+                            target.classList.add('translate-x-full');
+                            setTimeout(function() {
+                                target.classList.add('hidden');
+                                target.style.display = 'none';
+                            }, 300);
+                            toggle.setAttribute('aria-expanded', 'false');
+                        }
+                    }
                 });
             });
 
@@ -945,22 +1059,37 @@
                 }
             });
 
-            // Theme toggle functionality
+            // Theme toggle functionality (both desktop and mobile)
             const themeToggle = document.getElementById('theme-toggle');
-            if (themeToggle) {
+            const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+            const sunIcon = document.getElementById('sun-icon');
+            const moonIcon = document.getElementById('moon-icon');
+            
+            function toggleTheme(button) {
+                const isDark = document.documentElement.classList.contains('dark');
+                
+                // Add a brief scale animation to the clicked button
+                button.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    button.style.transform = 'scale(1)';
+                }, 150);
+                
+                // Toggle theme
+                document.documentElement.classList.toggle('dark', !isDark);
+                localStorage.setItem('theme', isDark ? 'light' : 'dark');
+            }
+            
+            // Desktop theme toggle
+            if (themeToggle && sunIcon && moonIcon) {
                 themeToggle.addEventListener('click', function() {
-                    const isDark = document.documentElement.classList.contains('dark');
-                    document.documentElement.classList.toggle('dark', !isDark);
-                    localStorage.setItem('theme', isDark ? 'light' : 'dark');
+                    toggleTheme(themeToggle);
                 });
             }
-
-            // Search toggle functionality (placeholder)
-            const searchToggle = document.querySelector('[data-search-toggle]');
-            if (searchToggle) {
-                searchToggle.addEventListener('click', function() {
-                    // Implement search modal/overlay here
-                    console.log('Search toggle clicked');
+            
+            // Mobile theme toggle
+            if (themeToggleMobile) {
+                themeToggleMobile.addEventListener('click', function() {
+                    toggleTheme(themeToggleMobile);
                 });
             }
 
@@ -1001,6 +1130,102 @@
                     }
                 });
             });
+
+            // Search functionality
+            const searchToggle = document.getElementById('search-toggle');
+            const searchToggleMobile = document.getElementById('search-toggle-mobile');
+            const searchBox = document.getElementById('search-box');
+            const searchBoxMobile = document.getElementById('search-box-mobile');
+            const searchInput = document.getElementById('search-input');
+            const searchInputMobile = document.getElementById('search-input-mobile');
+            const searchSubmit = document.getElementById('search-submit');
+            const searchSubmitMobile = document.getElementById('search-submit-mobile');
+            
+            // Search function
+            function performSearch(query) {
+                if (query.trim()) {
+                    // Add your search logic here
+                    console.log('Searching for:', query);
+                    // Example: window.location.href = '/search?q=' + encodeURIComponent(query);
+                    alert('Search functionality will be implemented here for: ' + query);
+                }
+            }
+            
+            // Desktop search toggle
+            if (searchToggle && searchBox) {
+                searchToggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    if (searchBox.classList.contains('opacity-0')) {
+                        // Show search box
+                        searchBox.classList.remove('opacity-0', 'invisible', 'translate-y-[-10px]', 'pointer-events-none');
+                        searchBox.classList.add('opacity-100', 'visible', 'translate-y-0', 'pointer-events-auto');
+                        
+                        // Focus the input after animation
+                        setTimeout(() => {
+                            if (searchInput) searchInput.focus();
+                        }, 200);
+                    } else {
+                        // Hide search box
+                        searchBox.classList.remove('opacity-100', 'visible', 'translate-y-0', 'pointer-events-auto');
+                        searchBox.classList.add('opacity-0', 'invisible', 'translate-y-[-10px]', 'pointer-events-none');
+                    }
+                });
+
+                // Close search box when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!searchBox.contains(e.target) && e.target !== searchToggle) {
+                        searchBox.classList.remove('opacity-100', 'visible', 'translate-y-0', 'pointer-events-auto');
+                        searchBox.classList.add('opacity-0', 'invisible', 'translate-y-[-10px]', 'pointer-events-none');
+                    }
+                });
+
+                if (searchSubmit) {
+                    searchSubmit.addEventListener('click', function() {
+                        if (searchInput) {
+                            performSearch(searchInput.value);
+                        }
+                    });
+                }
+            }
+
+            // Mobile search toggle
+            if (searchToggleMobile && searchBoxMobile) {
+                searchToggleMobile.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    if (searchBoxMobile.classList.contains('opacity-0')) {
+                        // Show search box
+                        searchBoxMobile.classList.remove('opacity-0', 'invisible', 'translate-y-[-10px]', 'pointer-events-none');
+                        searchBoxMobile.classList.add('opacity-100', 'visible', 'translate-y-0', 'pointer-events-auto');
+                        
+                        // Focus the input after animation
+                        setTimeout(() => {
+                            if (searchInputMobile) searchInputMobile.focus();
+                        }, 200);
+                    } else {
+                        // Hide search box
+                        searchBoxMobile.classList.remove('opacity-100', 'visible', 'translate-y-0', 'pointer-events-auto');
+                        searchBoxMobile.classList.add('opacity-0', 'invisible', 'translate-y-[-10px]', 'pointer-events-none');
+                    }
+                });
+
+                // Close search box when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!searchBoxMobile.contains(e.target) && e.target !== searchToggleMobile) {
+                        searchBoxMobile.classList.remove('opacity-100', 'visible', 'translate-y-0', 'pointer-events-auto');
+                        searchBoxMobile.classList.add('opacity-0', 'invisible', 'translate-y-[-10px]', 'pointer-events-none');
+                    }
+                });
+
+                if (searchSubmitMobile) {
+                    searchSubmitMobile.addEventListener('click', function() {
+                        if (searchInputMobile) {
+                            performSearch(searchInputMobile.value);
+                        }
+                    });
+                }
+            }
         });
     })();
 </script>

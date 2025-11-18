@@ -29,7 +29,7 @@ $maxWidth = [
         nextFocusable() { return this.focusables()[this.nextFocusableIndex()] || this.firstFocusable() },
         prevFocusable() { return this.focusables()[this.prevFocusableIndex()] || this.lastFocusable() },
         nextFocusableIndex() { return (this.focusables().indexOf(document.activeElement) + 1) % (this.focusables().length + 1) },
-        prevFocusableIndex() { return Math.max(0, this.focusables().indexOf(document.activeElement)) -1 },
+        prevFocusableIndex() { return Math.max(0, this.focusables().indexOf(document.activeElement)) - 1 }
     }"
     x-init="$watch('show', value => {
         if (value) {
@@ -47,7 +47,7 @@ $maxWidth = [
     x-on:keydown.shift.tab.prevent="prevFocusable().focus()"
     x-show="show"
     class="fixed inset-0 overflow-y-auto px-4 py-6 sm:px-0 z-50"
-    style="display: {{ $show ? 'block' : 'none' }};"
+    :style="show ? '' : 'display: none;'"
 >
     <div
         x-show="show"
