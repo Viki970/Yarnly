@@ -438,6 +438,15 @@
                                     </div>
                                 </a>
                                 <div class="border-t border-zinc-200 dark:border-zinc-700 my-2"></div>
+                                @if (Auth::user()?->role === 'admin')
+                                <a href="#reports" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-cyan-50 hover:to-sky-50 hover:text-cyan-700 dark:text-zinc-200 dark:hover:from-cyan-900/20 dark:hover:to-sky-900/20 dark:hover:text-cyan-300">
+                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-100 text-cyan-600 group-hover:bg-cyan-200 dark:bg-cyan-900/30 dark:text-cyan-400 dark:group-hover:bg-cyan-800/40">📊</div>
+                                    <div>
+                                        <div class="font-semibold">Reports</div>
+                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Analytics & insights</div>
+                                    </div>
+                                </a>
+                                @endif
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <button type="submit" class="group flex w-full items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-red-50 hover:to-rose-50 hover:text-red-700 dark:text-zinc-200 dark:hover:from-red-900/20 dark:hover:to-rose-900/20 dark:hover:text-red-300">
@@ -468,8 +477,8 @@
                 </button>
                 
                 <!-- Search Box (Mobile) -->
-                <div id="search-box-mobile" class="absolute right-0 top-16 opacity-0 invisible translate-y-[-10px] transition-all duration-400 ease-out pointer-events-none z-50">
-                    <div class="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl border border-zinc-200/50 dark:border-zinc-700/50 rounded-2xl shadow-2xl shadow-black/10 dark:shadow-black/30 w-[320px] p-2">
+                <div id="search-box-mobile" class="fixed right-4 top-[76px] opacity-0 invisible translate-y-[-10px] transition-all duration-400 ease-out pointer-events-none z-50 xl:hidden">
+                    <div class="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl border border-zinc-200/50 dark:border-zinc-700/50 rounded-2xl shadow-2xl shadow-black/10 dark:shadow-black/30 w-[280px] p-2">
                         <div class="flex items-center gap-2">
                             <div class="flex-1 relative">
                                 <input type="text" id="search-input-mobile" placeholder="Search patterns, tutorials..." class="w-full pl-10 pr-4 py-3 text-sm bg-zinc-50/80 dark:bg-zinc-800/80 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-400/50 focus:bg-white dark:focus:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder-zinc-500 dark:placeholder-zinc-400 transition-all duration-200" autocomplete="off">
