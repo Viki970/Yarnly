@@ -17,11 +17,9 @@ class CrochetPattern extends Model
         'pdf_file',
         'image_path',
         'makers_saved',
-        'featured',
     ];
 
     protected $casts = [
-        'featured' => 'boolean',
         'makers_saved' => 'integer',
         'estimated_hours' => 'integer',
     ];

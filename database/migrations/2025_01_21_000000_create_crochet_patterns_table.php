@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('pdf_file')->nullable(); // Path to stored PDF file
             $table->string('image_path')->nullable(); // Path to stored image file
             $table->integer('makers_saved')->default(0);
-            $table->boolean('featured')->default(false);
             $table->foreignId('author_id')
                 ->nullable()
                 ->constrained('users')

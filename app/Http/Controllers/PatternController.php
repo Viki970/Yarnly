@@ -9,8 +9,18 @@ class PatternController extends Controller
 {
     public function crochet()
     {
-        $featured = CrochetPattern::where('featured', true)->limit(3)->get();
-        return view('crochet_patterns', ['featured' => $featured, 'selectedCategory' => null]);
+        $newest = CrochetPattern::latest()->limit(6)->get();
+        
+        // Calculate patterns created this week
+        $startOfWeek = now()->startOfWeek();
+        $endOfWeek = now()->endOfWeek();
+        $newThisWeek = CrochetPattern::whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
+        
+        return view('crochet_patterns', [
+            'newest' => $newest, 
+            'selectedCategory' => null,
+            'newThisWeek' => $newThisWeek
+        ]);
     }
 
     public function crochetByCategory($category)
@@ -21,13 +31,31 @@ class PatternController extends Controller
             return redirect()->route('patterns.crochet');
         }
 
-        $patterns = CrochetPattern::where('category', $category)->get();
-        $featured = CrochetPattern::where('featured', true)->limit(3)->get();
+        $patterns = CrochetPattern::where('category', $category)->latest()->get();
+        $newest = CrochetPattern::latest()->limit(6)->get();
+        
+        // Calculate patterns created this week
+        $startOfWeek = now()->startOfWeek();
+        $endOfWeek = now()->endOfWeek();
+        $newThisWeek = CrochetPattern::whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
         
         return view('crochet_patterns', [
             'patterns' => $patterns,
-            'featured' => $featured,
+            'newest' => $newest,
             'selectedCategory' => $category,
+            'newThisWeek' => $newThisWeek
+        ]);
+    }
+
+    public function view(CrochetPattern $pattern)
+    {
+        if (!$pattern->pdf_file) {
+            return redirect()->back()->with('error', 'Pattern PDF not available');
+        }
+
+        return view('pattern_viewer', [
+            'pattern' => $pattern,
+            'pdfPath' => asset('storage/' . $pattern->pdf_file)
         ]);
     }
 }
