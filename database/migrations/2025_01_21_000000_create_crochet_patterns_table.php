@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('estimated_hours')->nullable();
             $table->string('pdf_file')->nullable(); // Path to stored PDF file
             $table->string('image_path')->nullable(); // Path to stored image file
+            $table->text('tags')->nullable(); // Tags for search and categorization
             $table->integer('makers_saved')->default(0);
             $table->foreignId('author_id')
                 ->nullable()

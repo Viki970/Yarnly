@@ -32,8 +32,8 @@
             @if (Route::has('register'))
             <a href="{{ route('register') }}" class="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-600 px-10 py-4 text-sm font-bold text-white shadow-2xl shadow-blue-500/50 transition hover:scale-110 hover:shadow-blue-600/60">
                 <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
-                    <path d="M8.03339 3.65784C8.37932 2.78072 9.62068 2.78072 9.96661 3.65785L11.0386 6.37599C11.1442 6.64378 11.3562 6.85576 11.624 6.96137L14.3422 8.03339C15.2193 8.37932 15.2193 9.62068 14.3422 9.96661L11.624 11.0386C11.3562 11.1442 11.1442 11.3562 11.0386 11.624L9.96661 14.3422C9.62067 15.2193 8.37932 15.2193 8.03339 14.3422L6.96137 11.624C6.85575 11.3562 6.64378 11.1442 6.37599 11.0386L3.65784 9.96661C2.78072 9.62067 2.78072 8.37932 3.65785 8.03339L6.37599 6.96137C6.64378 6.85575 6.85576 6.64378 6.96137 6.37599L8.03339 3.65784Z" stroke="currentColor" stroke-width="1.5"/>
-                    <path d="M16.4885 13.3481C16.6715 12.884 17.3285 12.884 17.5115 13.3481L18.3121 15.3781C18.368 15.5198 18.4802 15.632 18.6219 15.6879L20.6519 16.4885C21.116 16.6715 21.116 17.3285 20.6519 17.5115L18.6219 18.3121C18.4802 18.368 18.368 18.4802 18.3121 18.6219L17.5115 20.6519C17.3285 21.116 16.6715 21.116 16.4885 20.6519L15.6879 18.6219C15.632 18.4802 15.5198 18.368 15.3781 18.3121L13.3481 17.5115C12.884 17.3285 12.884 16.6715 13.3481 16.4885L15.3781 15.6879C15.5198 15.632 15.632 15.5198 15.6879 15.3781L16.4885 13.3481Z" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M8.03339 3.65784C8.37932 2.78072 9.62068 2.78072 9.96661 3.65785L11.0386 6.37599C11.1442 6.64378 11.3562 6.85576 11.624 6.96137L14.3422 8.03339C15.2193 8.37932 15.2193 9.62068 14.3422 9.96661L11.624 11.0386C11.3562 11.1442 11.1442 11.3562 11.0386 11.624L9.96661 14.3422C9.62067 15.2193 8.37932 15.2193 8.03339 14.3422L6.96137 11.624C6.85575 11.3562 6.64378 11.1442 6.37599 11.0386L3.65784 9.96661C2.78072 9.62067 2.78072 8.37932 3.65785 8.03339L6.37599 6.96137C6.64378 6.85575 6.85576 6.64378 6.96137 6.37599L8.03339 3.65784Z" stroke="currentColor" stroke-width="1.5" />
+                    <path d="M16.4885 13.3481C16.6715 12.884 17.3285 12.884 17.5115 13.3481L18.3121 15.3781C18.368 15.5198 18.4802 15.632 18.6219 15.6879L20.6519 16.4885C21.116 16.6715 21.116 17.3285 20.6519 17.5115L18.6219 18.3121C18.4802 18.368 18.368 18.4802 18.3121 18.6219L17.5115 20.6519C17.3285 21.116 16.6715 21.116 16.4885 20.6519L15.6879 18.6219C15.632 18.4802 15.5198 18.368 15.3781 18.3121L13.3481 17.5115C12.884 17.3285 12.884 16.6715 13.3481 16.4885L15.3781 15.6879C15.5198 15.632 15.632 15.5198 15.6879 15.3781L16.4885 13.3481Z" stroke="currentColor" stroke-width="1.5" />
                 </svg>
                 Start Creating
             </a>
@@ -44,9 +44,18 @@
             </a>
             @endif
             @else
+            @if(auth()->user()->is_admin)
             <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-600 px-10 py-4 text-sm font-bold text-white shadow-2xl shadow-blue-500/50 transition hover:scale-110 hover:shadow-blue-600/60">
                 <span>🚀</span> Go to Dashboard
             </a>
+            @else
+            <a href="{{ route('patterns.crochet') }}" class="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-600 px-10 py-4 text-sm font-bold text-white shadow-2xl shadow-blue-500/50 transition hover:scale-110 hover:shadow-blue-600/60">
+                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                    <path d="M8.03339 3.65784C8.37932 2.78072 9.62068 2.78072 9.96661 3.65785L11.0386 6.37599C11.1442 6.64378 11.3562 6.85576 11.624 6.96137L14.3422 8.03339C15.2193 8.37932 15.2193 9.62068 14.3422 9.96661L11.624 11.0386C11.3562 11.1442 11.1442 11.3562 11.0386 11.624L9.96661 14.3422C9.62067 15.2193 8.37932 15.2193 8.03339 14.3422L6.96137 11.624C6.85575 11.3562 6.64378 11.1442 6.37599 11.0386L3.65784 9.96661C2.78072 9.62067 2.78072 8.37932 3.65785 8.03339L6.37599 6.96137C6.64378 6.85575 6.85576 6.64378 6.96137 6.37599L8.03339 3.65784Z" stroke="currentColor" stroke-width="1.5" />
+                    <path d="M16.4885 13.3481C16.6715 12.884 17.3285 12.884 17.5115 13.3481L18.3121 15.3781C18.368 15.5198 18.4802 15.632 18.6219 15.6879L20.6519 16.4885C21.116 16.6715 21.116 17.3285 20.6519 17.5115L18.6219 18.3121C18.4802 18.368 18.368 18.4802 18.3121 18.6219L17.5115 20.6519C17.3285 21.116 16.6715 21.116 16.4885 20.6519L15.6879 18.6219C15.632 18.4802 15.5198 18.368 15.3781 18.3121L13.3481 17.5115C12.884 17.3285 12.884 16.6715 13.3481 16.4885L15.3781 15.6879C15.5198 15.632 15.632 15.5198 15.6879 15.3781L16.4885 13.3481Z" stroke="currentColor" stroke-width="1.5" />
+                </svg> Explore Patterns
+            </a>
+            @endif
             @endguest
         </div>
     </div>
@@ -284,9 +293,15 @@
             </a>
             @endif
             @else
+            @if(auth()->user()->is_admin)
             <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-fuchsia-600 via-violet-600 to-sky-600 px-10 py-4 text-sm font-bold text-white shadow-2xl shadow-violet-500/50 transition hover:scale-110 hover:shadow-violet-600/60">
                 <span>🚀</span> Continue in dashboard
             </a>
+            @else
+            <a href="{{ route('patterns.crochet') }}" class="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-fuchsia-600 via-violet-600 to-sky-600 px-10 py-4 text-sm font-bold text-white shadow-2xl shadow-violet-500/50 transition hover:scale-110 hover:shadow-violet-600/60">
+                <span>🎨</span> Start Crafting
+            </a>
+            @endif
             @endguest
             <a href="#patterns" class="inline-flex items-center justify-center gap-2 rounded-full border-2 border-violet-300 bg-white/80 px-10 py-4 text-sm font-bold text-violet-700 shadow-lg transition hover:border-violet-400 hover:bg-white dark:border-violet-700 dark:bg-zinc-900/80 dark:text-violet-300 dark:hover:border-violet-600">
                 Explore the pieces
@@ -302,7 +317,7 @@
 <section id="contact" class="relative overflow-hidden bg-gradient-to-br from-blue-50 via-indigo-50 to-sky-50 py-20 dark:from-blue-950/40 dark:via-indigo-950/40 dark:to-sky-950/40">
     <div class="absolute -left-20 top-20 h-80 w-80 rounded-full bg-blue-400/20 blur-3xl"></div>
     <div class="absolute -right-16 bottom-20 h-64 w-64 rounded-full bg-sky-300/25 blur-3xl"></div>
-    
+
     <div class="relative max-w-4xl mx-auto px-6 lg:px-12">
         <div class="text-center mb-12">
             <div class="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-sky-500 mb-6 shadow-xl shadow-blue-500/30">
@@ -318,47 +333,47 @@
             <div class="grid gap-6 md:grid-cols-2">
                 <div>
                     <label for="name" class="block text-sm font-bold text-blue-700 dark:text-blue-300 mb-2">Name</label>
-                    <input type="text" id="name" name="name" required 
+                    <input type="text" id="name" name="name" required
                         class="w-full rounded-xl border-2 border-blue-200 bg-white px-4 py-3 text-zinc-900 shadow-md transition-all duration-300 
                         hover:border-blue-400 hover:shadow-lg hover:shadow-blue-200/50 hover:-translate-y-0.5
                         focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/20 focus:shadow-xl focus:shadow-indigo-300/30
                         dark:border-blue-700 dark:bg-zinc-800 dark:text-white 
                         dark:hover:border-blue-500 dark:hover:shadow-blue-500/30
-                        dark:focus:border-indigo-400 dark:focus:ring-indigo-400/20" 
+                        dark:focus:border-indigo-400 dark:focus:ring-indigo-400/20"
                         placeholder="Your name">
                 </div>
                 <div>
                     <label for="email" class="block text-sm font-bold text-indigo-700 dark:text-indigo-300 mb-2">Email</label>
-                    <input type="email" id="email" name="email" required 
+                    <input type="email" id="email" name="email" required
                         class="w-full rounded-xl border-2 border-indigo-200 bg-white px-4 py-3 text-zinc-900 shadow-md transition-all duration-300
                         hover:border-indigo-400 hover:shadow-lg hover:shadow-indigo-200/50 hover:-translate-y-0.5
                         focus:border-sky-500 focus:outline-none focus:ring-4 focus:ring-sky-500/20 focus:shadow-xl focus:shadow-sky-300/30
                         dark:border-indigo-700 dark:bg-zinc-800 dark:text-white
                         dark:hover:border-indigo-500 dark:hover:shadow-indigo-500/30
-                        dark:focus:border-sky-400 dark:focus:ring-sky-400/20" 
+                        dark:focus:border-sky-400 dark:focus:ring-sky-400/20"
                         placeholder="your@email.com">
                 </div>
             </div>
             <div>
                 <label for="subject" class="block text-sm font-bold text-sky-700 dark:text-sky-300 mb-2">Subject</label>
-                <input type="text" id="subject" name="subject" required 
+                <input type="text" id="subject" name="subject" required
                     class="w-full rounded-xl border-2 border-sky-200 bg-white px-4 py-3 text-zinc-900 shadow-md transition-all duration-300
                     hover:border-sky-400 hover:shadow-lg hover:shadow-sky-200/50 hover:-translate-y-0.5
                     focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:shadow-xl focus:shadow-blue-300/30
                     dark:border-sky-700 dark:bg-zinc-800 dark:text-white
                     dark:hover:border-sky-500 dark:hover:shadow-sky-500/30
-                    dark:focus:border-blue-400 dark:focus:ring-blue-400/20" 
+                    dark:focus:border-blue-400 dark:focus:ring-blue-400/20"
                     placeholder="What's this about?">
             </div>
             <div>
                 <label for="message" class="block text-sm font-bold text-blue-700 dark:text-blue-300 mb-2">Message</label>
-                <textarea id="message" name="message" rows="6" required 
+                <textarea id="message" name="message" rows="6" required
                     class="w-full rounded-xl border-2 border-blue-200 bg-white px-4 py-3 text-zinc-900 shadow-md transition-all duration-300 resize-none
                     hover:border-blue-400 hover:shadow-lg hover:shadow-blue-200/50 hover:-translate-y-0.5
                     focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/20 focus:shadow-xl focus:shadow-indigo-300/30
                     dark:border-blue-700 dark:bg-zinc-800 dark:text-white
                     dark:hover:border-blue-500 dark:hover:shadow-blue-500/30
-                    dark:focus:border-indigo-400 dark:focus:ring-indigo-400/20" 
+                    dark:focus:border-indigo-400 dark:focus:ring-indigo-400/20"
                     placeholder="Your message..."></textarea>
             </div>
             <div class="text-center">
@@ -553,9 +568,15 @@
             </a>
             @endif
             @else
+            @if(auth()->user()->is_admin)
             <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-fuchsia-600 via-violet-600 to-sky-600 px-10 py-4 text-sm font-bold text-white shadow-2xl shadow-violet-500/50 transition hover:scale-110 hover:shadow-violet-600/60">
                 <span>🚀</span> Continue in dashboard
             </a>
+            @else
+            <a href="{{ route('patterns.crochet') }}" class="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-fuchsia-600 via-violet-600 to-sky-600 px-10 py-4 text-sm font-bold text-white shadow-2xl shadow-violet-500/50 transition hover:scale-110 hover:shadow-violet-600/60">
+                <span>🧶</span> Browse Patterns
+            </a>
+            @endif
             @endguest
             <a href="#flyover" class="inline-flex items-center justify-center gap-2 rounded-full border-2 border-violet-300 bg-white/80 px-10 py-4 text-sm font-bold text-violet-700 shadow-lg transition hover:border-violet-400 hover:bg-white dark:border-violet-700 dark:bg-zinc-900/80 dark:text-violet-300 dark:hover:border-violet-600">
                 Explore the pieces
