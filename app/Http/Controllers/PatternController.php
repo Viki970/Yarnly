@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CrochetPattern;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PatternController extends Controller
 {
@@ -57,5 +58,73 @@ class PatternController extends Controller
             'pattern' => $pattern,
             'pdfPath' => asset('storage/' . $pattern->pdf_file)
         ]);
+    }
+
+    public function create()
+    {
+        return view('patterns.create');
+    }
+
+    public function store(Request $request)
+    {
+        try {
+            $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'required|string',
+                'category' => 'required|in:blankets,amigurumi,bags,wearables,home-decor',
+                'difficulty' => 'required|in:beginner,intermediate,advanced',
+                'estimated_hours' => 'nullable|integer|min:1|max:200',
+                'pdf_file' => 'required|file|mimes:pdf|max:10240', // Max 10MB
+                'image_file' => 'nullable|file|mimes:png,jpg,jpeg|max:5120', // Max 5MB
+            ]);
+
+            $pdfFile = $request->file('pdf_file');
+            
+            // Check MIME type
+            if ($pdfFile->getMimeType() !== 'application/pdf') {
+                return back()->withInput()->with('error', 'File must be a PDF. Detected type: ' . $pdfFile->getMimeType());
+            }
+
+            $pdfPath = $pdfFile->store('patterns/pdfs', 'public');
+            if (!$pdfPath) {
+                return back()->withInput()->with('error', 'Failed to store PDF file on server.');
+            }
+
+            $imagePath = null;
+            if ($request->hasFile('image_file')) {
+                $imageFile = $request->file('image_file');
+                if ($imageFile->isValid()) {
+                    $imagePath = $imageFile->store('patterns/images', 'public');
+                }
+            }
+
+            CrochetPattern::create([
+                'title' => $request->title,
+                'description' => $request->description,
+                'category' => $request->category,
+                'difficulty' => $request->difficulty,
+                'estimated_hours' => $request->estimated_hours,
+                'pdf_file' => $pdfPath,
+                'image_path' => $imagePath,
+                'user_id' => Auth::id(),
+                'makers_saved' => 0,
+            ]);
+
+            return redirect()->route('my-patterns')->with('success', 'Pattern created successfully!');
+            
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()->withInput()->withErrors($e->errors());
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Failed to upload pattern. Error: ' . $e->getMessage());
+        }
+    }
+
+    public function myPatterns()
+    {
+        $patterns = CrochetPattern::where('user_id', Auth::id())
+            ->latest()
+            ->get();
+
+        return view('patterns.my-patterns', compact('patterns'));
     }
 }

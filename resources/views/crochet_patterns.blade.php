@@ -57,7 +57,26 @@
                 <h2 class="text-3xl font-bold text-zinc-900 dark:text-white">What crochet are you into?</h2>
                 <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">Jump straight to the style you want. Each option links to curated picks below.</p>
             </div>
-            <a href="/" class="text-sm font-semibold text-zinc-600 underline-offset-4 hover:underline dark:text-zinc-300">Back to home</a>
+            <div class="flex items-center gap-4">
+                @auth
+                    <a href="{{ route('patterns.create') }}" 
+                        class="rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-3 text-sm font-semibold text-white shadow-lg hover:from-emerald-500 hover:to-teal-500 transition-all duration-200 transform hover:scale-105">
+                        <svg class="inline-block h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Create Pattern
+                    </a>
+                @else
+                    <button onclick="handleCreatePatternGuest()" 
+                        class="rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-3 text-sm font-semibold text-white shadow-lg hover:from-emerald-500 hover:to-teal-500 transition-all duration-200 transform hover:scale-105">
+                        <svg class="inline-block h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Create Pattern
+                    </button>
+                @endauth
+                <a href="/" class="text-sm font-semibold text-zinc-600 underline-offset-4 hover:underline dark:text-zinc-300">Back to home</a>
+            </div>
         </div>
 
         <div class="mt-6 flex flex-wrap gap-3">
@@ -403,5 +422,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Handle create pattern for guest users
+function handleCreatePatternGuest() {
+    if (confirm('You need to sign up to create patterns. Would you like to create an account?')) {
+        window.location.href = '{{ route("register") }}';
+    }
+}
 </script>
 @endsection

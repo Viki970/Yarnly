@@ -17,12 +17,21 @@ class CrochetPattern extends Model
         'pdf_file',
         'image_path',
         'makers_saved',
+        'user_id',
     ];
 
     protected $casts = [
         'makers_saved' => 'integer',
         'estimated_hours' => 'integer',
     ];
+
+    /**
+     * Get the user who created this pattern
+     */
+    public function user()
+    {
+        return $this->belongsTo(\App\Models\User::class);
+    }
 
     /**
      * Get the category label for display
