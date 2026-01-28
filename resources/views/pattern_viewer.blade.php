@@ -37,9 +37,20 @@
                 </div>
                 <h1 class="text-3xl font-bold text-zinc-900 dark:text-white">{{ $pattern->title }}</h1>
                 <p class="mt-2 text-zinc-600 dark:text-zinc-300">{{ $pattern->description }}</p>
-                <div class="mt-3 flex items-center gap-3 text-sm font-semibold text-emerald-700 dark:text-emerald-200">
-                    <span class="inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
-                    {{ $pattern->makers_saved }} makers saved
+                <div class="mt-3 flex items-center justify-between">
+                    <div class="flex items-center gap-3 text-sm font-semibold text-emerald-700 dark:text-emerald-200">
+                        <span class="inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+                        <span class="makers-saved-{{ $pattern->id }}">{{ $pattern->makers_saved }}</span> makers saved
+                    </div>
+                    @auth
+                        <button class="favorite-btn p-2 rounded-full transition-all duration-200 hover:scale-110 {{ Auth::user()->hasFavorited($pattern) ? 'text-pink-600 hover:text-pink-700' : 'text-zinc-400 hover:text-pink-500' }}"
+                                data-pattern-id="{{ $pattern->id }}"
+                                data-favorited="{{ Auth::user()->hasFavorited($pattern) ? 'true' : 'false' }}">
+                            <svg class="h-5 w-5 {{ Auth::user()->hasFavorited($pattern) ? 'fill-current' : '' }}" fill="{{ Auth::user()->hasFavorited($pattern) ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                        </button>
+                    @endauth
                 </div>
             </div>
             
@@ -88,4 +99,81 @@
         </div>
     </div>
 </section>
+
+<script>
+// Event delegation for favorite buttons
+document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.favorite-btn')) {
+            e.preventDefault();
+            const button = e.target.closest('.favorite-btn');
+            const patternId = button.dataset.patternId;
+            const isFavorited = button.dataset.favorited === 'true';
+            
+            // Disable button during request and add loading state
+            button.disabled = true;
+            button.style.opacity = '0.7';
+            
+            fetch(`/patterns/${patternId}/toggle-favorite`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const svg = button.querySelector('svg');
+                    
+                    // Add smooth transition
+                    button.style.transition = 'all 0.2s ease';
+                    
+                    if (data.favorited) {
+                        button.classList.remove('text-zinc-400', 'hover:text-pink-500');
+                        button.classList.add('text-pink-600', 'hover:text-pink-700');
+                        button.dataset.favorited = 'true';
+                        svg.classList.add('fill-current');
+                        svg.setAttribute('fill', 'currentColor');
+                        
+                        // Add a brief scale animation for feedback
+                        button.style.transform = 'scale(1.1)';
+                        setTimeout(() => {
+                            button.style.transform = 'scale(1)';
+                        }, 150);
+                    } else {
+                        button.classList.remove('text-pink-600', 'hover:text-pink-700');
+                        button.classList.add('text-zinc-400', 'hover:text-pink-500');
+                        button.dataset.favorited = 'false';
+                        svg.classList.remove('fill-current');
+                        svg.setAttribute('fill', 'none');
+                    }
+                    
+                    // Update makers saved count with animation
+                    const countSpan = document.querySelector(`.makers-saved-${patternId}`);
+                    if (countSpan) {
+                        countSpan.style.transition = 'all 0.2s ease';
+                        countSpan.style.transform = 'scale(1.1)';
+                        countSpan.textContent = data.makers_saved;
+                        setTimeout(() => {
+                            countSpan.style.transform = 'scale(1)';
+                        }, 200);
+                    }
+                } else {
+                    alert('Error: ' + (data.message || 'Something went wrong'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Something went wrong. Please try again.');
+            })
+            .finally(() => {
+                button.disabled = false;
+                button.style.opacity = '1';
+            });
+        }
+    });
+});
+</script>
 @endsection

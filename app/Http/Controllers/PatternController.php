@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CrochetPattern;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,10 +18,19 @@ class PatternController extends Controller
         $endOfWeek = now()->endOfWeek();
         $newThisWeek = CrochetPattern::whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
         
+        // Count user's favorited patterns
+        $favoritesCount = 0;
+        if (Auth::check()) {
+            /** @var User $user */
+            $user = Auth::user();
+            $favoritesCount = $user->favoritePatterns()->count();
+        }
+        
         return view('crochet_patterns', [
             'newest' => $newest, 
             'selectedCategory' => null,
-            'newThisWeek' => $newThisWeek
+            'newThisWeek' => $newThisWeek,
+            'favoritesCount' => $favoritesCount
         ]);
     }
 
@@ -40,11 +50,20 @@ class PatternController extends Controller
         $endOfWeek = now()->endOfWeek();
         $newThisWeek = CrochetPattern::whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
         
+        // Count user's favorited patterns
+        $favoritesCount = 0;
+        if (Auth::check()) {
+            /** @var User $user */
+            $user = Auth::user();
+            $favoritesCount = $user->favoritePatterns()->count();
+        }
+        
         return view('crochet_patterns', [
             'patterns' => $patterns,
             'newest' => $newest,
             'selectedCategory' => $category,
-            'newThisWeek' => $newThisWeek
+            'newThisWeek' => $newThisWeek,
+            'favoritesCount' => $favoritesCount
         ]);
     }
 
@@ -126,5 +145,46 @@ class PatternController extends Controller
             ->get();
 
         return view('patterns.my-patterns', compact('patterns'));
+    }
+
+    /**
+     * Toggle favorite status of a pattern for the authenticated user
+     */
+    public function toggleFavorite(CrochetPattern $pattern)
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        
+        if ($user->hasFavorited($pattern)) {
+            // Unfavorite
+            $user->favoritePatterns()->detach($pattern->id);
+            $pattern->decrement('makers_saved');
+            $favorited = false;
+        } else {
+            // Favorite
+            $user->favoritePatterns()->attach($pattern->id);
+            $pattern->increment('makers_saved');
+            $favorited = true;
+        }
+        
+        return response()->json([
+            'success' => true,
+            'favorited' => $favorited,
+            'makers_saved' => $pattern->fresh()->makers_saved
+        ]);
+    }
+
+    /**
+     * Display the user's favorite patterns
+     */
+    public function favorites()
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        $favoritePatterns = $user->favoritePatterns()
+            ->latest('user_favorites.created_at')
+            ->get();
+
+        return view('patterns.favorites', compact('favoritePatterns'));
     }
 }

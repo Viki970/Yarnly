@@ -24,6 +24,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/patterns/create', [\App\Http\Controllers\PatternController::class, 'create'])->name('patterns.create');
     Route::post('/patterns/store', [\App\Http\Controllers\PatternController::class, 'store'])->name('patterns.store');
     Route::get('/my-patterns', [\App\Http\Controllers\PatternController::class, 'myPatterns'])->name('my-patterns');
+    
+    // Favorites routes
+    Route::post('/patterns/{pattern}/toggle-favorite', [\App\Http\Controllers\PatternController::class, 'toggleFavorite'])->name('patterns.toggle-favorite');
+    Route::get('/favorites', [\App\Http\Controllers\PatternController::class, 'favorites'])->name('favorites');
 });
 
 require __DIR__.'/auth.php';

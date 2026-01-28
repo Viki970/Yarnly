@@ -229,7 +229,7 @@
                                         <div class="text-xs text-zinc-500 dark:text-zinc-400">Track your learning</div>
                                     </div>
                                 </a>
-                                <a href="#favorites" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-pink-50 hover:to-rose-50 hover:text-pink-700 dark:text-zinc-200 dark:hover:from-pink-900/20 dark:hover:to-rose-900/20 dark:hover:text-pink-300">
+                                <a href="{{ route('favorites') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-pink-50 hover:to-rose-50 hover:text-pink-700 dark:text-zinc-200 dark:hover:from-pink-900/20 dark:hover:to-rose-900/20 dark:hover:text-pink-300">
                                     <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-pink-100 text-pink-600 group-hover:bg-pink-200 dark:bg-pink-900/30 dark:text-pink-400 dark:group-hover:bg-pink-800/40">
                                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -237,7 +237,7 @@
                                     </div>
                                     <div>
                                         <div class="font-semibold">Favorites</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Saved tutorials</div>
+                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Saved patterns</div>
                                     </div>
                                 </a>
                             </div>
@@ -428,7 +428,7 @@
                                         <div class="text-xs text-zinc-500 dark:text-zinc-400">Created patterns</div>
                                     </div>
                                 </a>
-                                <a href="#favorites" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-pink-50 hover:to-rose-50 hover:text-pink-700 dark:text-zinc-200 dark:hover:from-pink-900/20 dark:hover:to-rose-900/20 dark:hover:text-pink-300">
+                                <a href="{{ route('favorites') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-pink-50 hover:to-rose-50 hover:text-pink-700 dark:text-zinc-200 dark:hover:from-pink-900/20 dark:hover:to-rose-900/20 dark:hover:text-pink-300">
                                     <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-pink-100 text-pink-600 group-hover:bg-pink-200 dark:bg-pink-900/30 dark:text-pink-400 dark:group-hover:bg-pink-800/40">
                                         <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
                                             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
@@ -436,7 +436,7 @@
                                     </div>
                                     <div>
                                         <div class="font-semibold">Favorites</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Liked content</div>
+                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Saved patterns</div>
                                     </div>
                                 </a>
                                 <a href="#courses" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-orange-50 hover:to-amber-50 hover:text-orange-700 dark:text-zinc-200 dark:hover:from-orange-900/20 dark:hover:to-amber-900/20 dark:hover:text-orange-300">
@@ -781,7 +781,7 @@
                                     <div class="text-xs text-zinc-500 dark:text-zinc-400">Track your learning</div>
                                 </div>
                             </a>
-                            <a href="#favorites" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-pink-50 hover:to-rose-50 hover:text-pink-700 dark:text-zinc-200 dark:hover:from-pink-900/20 dark:hover:to-rose-900/20 dark:hover:text-pink-300">
+                            <a href="{{ route('favorites') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-pink-50 hover:to-rose-50 hover:text-pink-700 dark:text-zinc-200 dark:hover:from-pink-900/20 dark:hover:to-rose-900/20 dark:hover:text-pink-300">
                                 <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-pink-100 text-pink-600 group-hover:bg-pink-200 dark:bg-pink-900/30 dark:text-pink-400 dark:group-hover:bg-pink-800/40">
                                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -789,7 +789,7 @@
                                 </div>
                                 <div>
                                     <div class="font-semibold">Favorites</div>
-                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">Liked content</div>
+                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">Saved patterns</div>
                                 </div>
                             </a>
                         </div>
@@ -883,13 +883,13 @@
                             </svg>
                             <span>Uploads</span>
                         </a>
-                        <a href="#my-patterns" class="flex items-center gap-3 rounded-lg px-4 py-2 text-sm transition-all duration-200 hover:bg-purple-50 hover:text-purple-700 dark:hover:bg-purple-900/20 dark:hover:text-purple-300">
+                        <a href="{{ route('my-patterns') }}" class="flex items-center gap-3 rounded-lg px-4 py-2 text-sm transition-all duration-200 hover:bg-purple-50 hover:text-purple-700 dark:hover:bg-purple-900/20 dark:hover:text-purple-300">
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                             </svg>
                             <span>My Patterns</span>
                         </a>
-                        <a href="#favorites" class="flex items-center gap-3 rounded-lg px-4 py-2 text-sm transition-all duration-200 hover:bg-pink-50 hover:text-pink-700 dark:hover:bg-pink-900/20 dark:hover:text-pink-300">
+                        <a href="{{ route('favorites') }}" class="flex items-center gap-3 rounded-lg px-4 py-2 text-sm transition-all duration-200 hover:bg-pink-50 hover:text-pink-700 dark:hover:bg-pink-900/20 dark:hover:text-pink-300">
                             <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                             </svg>

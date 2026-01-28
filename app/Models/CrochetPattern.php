@@ -60,4 +60,22 @@ class CrochetPattern extends Model
             default => 'zinc',
         };
     }
+
+    /**
+     * Get the users who have favorited this pattern
+     */
+    public function favoritedByUsers()
+    {
+        return $this->belongsToMany(\App\Models\User::class, 'user_favorites', 'crochet_pattern_id', 'user_id')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Check if pattern is favorited by a specific user
+     */
+    public function isFavoritedBy($userId): bool
+    {
+        if (!$userId) return false;
+        return $this->favoritedByUsers()->where('users.id', $userId)->exists();
+    }
 }

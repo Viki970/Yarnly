@@ -70,4 +70,21 @@ class User extends Authenticatable
     {
         return $this->role === 'admin';
     }
+
+    /**
+     * Get the patterns this user has favorited
+     */
+    public function favoritePatterns()
+    {
+        return $this->belongsToMany(CrochetPattern::class, 'user_favorites', 'user_id', 'crochet_pattern_id')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Check if user has favorited a specific pattern
+     */
+    public function hasFavorited(CrochetPattern $pattern): bool
+    {
+        return $this->favoritePatterns()->where('crochet_patterns.id', $pattern->id)->exists();
+    }
 }
