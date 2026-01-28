@@ -133,7 +133,10 @@
                 @if($patterns && $patterns->count() > 0)
                     <div class="mt-8 grid gap-6 md:grid-cols-3">
                         @foreach($patterns as $pattern)
-                            <article class="group rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-emerald-900/40 dark:bg-zinc-900/70">
+                            <article class="group rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-emerald-900/40 dark:bg-zinc-900/70"
+                                     data-created="{{ $pattern->created_at->timestamp }}"
+                                     data-title="{{ $pattern->title }}"
+                                     data-makers-saved="{{ $pattern->makers_saved ?? 0 }}">
                                 @if($pattern->image_path)
                                     <div class="mb-4 aspect-[3/4] w-full overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800">
                                         <img 
@@ -152,7 +155,6 @@
                                     @endif
                                 </div>
                                 <h3 class="mt-4 text-lg font-bold text-zinc-900 dark:text-white">{{ $pattern->title }}</h3>
-                                <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">{{ $pattern->description }}</p>
                                 <div class="mt-4 flex items-center gap-3 text-xs font-semibold text-emerald-700 dark:text-emerald-200">
                                     <span class="inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
                                     {{ $pattern->makers_saved }} makers saved
@@ -189,7 +191,7 @@
                 <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
                     <div class="flex flex-wrap items-center gap-3">
                         <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">Sort by:</span>
-                        <select id="sortSelect" class="rounded-lg border border-emerald-200 bg-white px-3 py-2 text-sm font-medium text-zinc-700 transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800 dark:bg-zinc-800 dark:text-zinc-200">
+                        <select id="sortSelectAll" class="rounded-lg border border-emerald-200 bg-white px-3 py-2 text-sm font-medium text-zinc-700 transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800 dark:bg-zinc-800 dark:text-zinc-200">
                             <option value="newest">Newest first</option>
                             <option value="oldest">Oldest first</option>
                             <option value="title-asc">Title A-Z</option>
@@ -220,7 +222,10 @@
                 @if($newest && $newest->count() > 0)
                     <div class="mt-8 grid gap-6 md:grid-cols-3">
                         @foreach($newest as $pattern)
-                            <article class="group rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-emerald-900/40 dark:bg-zinc-900/70">
+                            <article class="group rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-emerald-900/40 dark:bg-zinc-900/70"
+                                     data-created="{{ $pattern->created_at->timestamp }}"
+                                     data-title="{{ $pattern->title }}"
+                                     data-makers-saved="{{ $pattern->makers_saved ?? 0 }}">
                                 @if($pattern->image_path)
                                     <div class="mb-4 aspect-[3/4] w-full overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800">
                                         <img 
@@ -239,7 +244,6 @@
                                     @endif
                                 </div>
                                 <h3 class="mt-4 text-lg font-bold text-zinc-900 dark:text-white">{{ $pattern->title }}</h3>
-                                <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">{{ $pattern->description }}</p>
                                 <div class="mt-4 flex items-center gap-3 text-xs font-semibold text-emerald-700 dark:text-emerald-200">
                                     <span class="inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
                                     {{ $pattern->makers_saved }} makers saved
@@ -280,112 +284,160 @@
         </div>
 
         <div class="mt-8 grid gap-6 md:grid-cols-3">
-            <div class="rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm ring-1 ring-transparent transition hover:-translate-y-1 hover:ring-emerald-200 dark:border-emerald-900/40 dark:bg-zinc-900/70 dark:hover:ring-emerald-800/50">
-                <h3 class="text-lg font-bold text-zinc-900 dark:text-white">Modern Granny Squares</h3>
-                <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">12-square palette with seamless joins and video tips.</p>
-                <div class="mt-4 flex flex-wrap gap-2 text-xs font-semibold text-emerald-700 dark:text-emerald-200">
-                    <span class="rounded-full bg-emerald-100 px-3 py-1 dark:bg-emerald-900/40">Colorwork</span>
-                    <span class="rounded-full bg-emerald-100 px-3 py-1 dark:bg-emerald-900/40">Modular</span>
+            @if(isset($patterns) && $patterns->isNotEmpty())
+                @foreach($patterns as $pattern)
+                    <article class="rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm ring-1 ring-transparent transition hover:-translate-y-1 hover:ring-emerald-200 dark:border-emerald-900/40 dark:bg-zinc-900/70 dark:hover:ring-emerald-800/50" 
+                             data-created="{{ $pattern->created_at->timestamp }}"
+                             data-title="{{ $pattern->title }}"
+                             data-makers-saved="{{ $pattern->makers_saved }}">
+                        @if($pattern->image_path)
+                            <img src="{{ asset('storage/' . $pattern->image_path) }}" alt="{{ $pattern->title }}" class="w-full h-32 object-cover rounded-lg mb-4">
+                        @endif
+                        <h3 class="text-lg font-bold text-zinc-900 dark:text-white">{{ $pattern->title }}</h3>
+                        <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">{{ Str::limit($pattern->description, 80) }}</p>
+                        
+                        <div class="mt-3 flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
+                            <span class="rounded-lg bg-{{ $pattern->getDifficultyColor() }}-100 px-3 py-1 font-semibold text-{{ $pattern->getDifficultyColor() }}-700 dark:bg-{{ $pattern->getDifficultyColor() }}-900/40 dark:text-{{ $pattern->getDifficultyColor() }}-200">
+                                {{ ucfirst($pattern->difficulty) }}
+                            </span>
+                            @if($pattern->estimated_hours)
+                                <span>{{ $pattern->estimated_hours }} hrs</span>
+                            @endif
+                        </div>
+                        
+                        <div class="mt-4 flex items-center justify-between">
+                            <span class="text-xs text-zinc-500 dark:text-zinc-400">{{ $pattern->makers_saved }} makers saved</span>
+                            <a href="{{ route('patterns.view', $pattern) }}" class="rounded-lg bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-500 transition-colors">
+                                View Pattern
+                            </a>
+                        </div>
+                        
+                        <div class="mt-2 flex flex-wrap gap-1 text-xs font-semibold text-emerald-700 dark:text-emerald-200">
+                            <span class="rounded-full bg-emerald-100 px-2 py-1 dark:bg-emerald-900/40">{{ $pattern->getCategoryLabel() }}</span>
+                            <span class="rounded-full bg-emerald-100 px-2 py-1 dark:bg-emerald-900/40">{{ $pattern->created_at->diffForHumans() }}</span>
+                        </div>
+                    </article>
+                @endforeach
+            @else
+                <div class="col-span-3 text-center py-8">
+                    <p class="text-zinc-600 dark:text-zinc-400">No patterns available yet. Be the first to create one!</p>
                 </div>
-            </div>
-
-            <div class="rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm ring-1 ring-transparent transition hover:-translate-y-1 hover:ring-emerald-200 dark:border-emerald-900/40 dark:bg-zinc-900/70 dark:hover:ring-emerald-800/50">
-                <h3 class="text-lg font-bold text-zinc-900 dark:text-white">Mindful Stitch Series</h3>
-                <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">Five meditative projects with breathing prompts and pacing guides.</p>
-                <div class="mt-4 flex flex-wrap gap-2 text-xs font-semibold text-emerald-700 dark:text-emerald-200">
-                    <span class="rounded-full bg-emerald-100 px-3 py-1 dark:bg-emerald-900/40">Wellness</span>
-                    <span class="rounded-full bg-emerald-100 px-3 py-1 dark:bg-emerald-900/40">Quick wins</span>
-                </div>
-            </div>
-
-            <div class="rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm ring-1 ring-transparent transition hover:-translate-y-1 hover:ring-emerald-200 dark:border-emerald-900/40 dark:bg-zinc-900/70 dark:hover:ring-emerald-800/50">
-                <h3 class="text-lg font-bold text-zinc-900 dark:text-white">Textured Staples</h3>
-                <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">Ribbed beanies, waffle scarves, and squishy mitts for gifting.</p>
-                <div class="mt-4 flex flex-wrap gap-2 text-xs font-semibold text-emerald-700 dark:text-emerald-200">
-                    <span class="rounded-full bg-emerald-100 px-3 py-1 dark:bg-emerald-900/40">Accessories</span>
-                    <span class="rounded-full bg-emerald-100 px-3 py-1 dark:bg-emerald-900/40">Texture</span>
-                </div>
-            </div>
+            @endif
         </div>
     </div>
 </section>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const sortSelect = document.getElementById('sortSelect');
-    const difficultyFilter = document.getElementById('difficultyFilter');
-    const timeFilter = document.getElementById('timeFilter');
-    const patternCount = document.getElementById('patternCount');
+    console.log('DOM loaded - initializing sorting');
     
-    function updatePatterns() {
-        const patternsGrid = document.querySelector('.mt-8.grid.gap-6.md\\:grid-cols-3');
-        if (!patternsGrid) return;
+    function sortPatterns() {
+        console.log('sortPatterns called');
         
-        const articles = Array.from(patternsGrid.children);
-        let visibleArticles = [];
+        // Find the patterns container - try both possible locations
+        let container = document.querySelector('#patterns .mt-8.grid.gap-6.md\\:grid-cols-3');
+        if (!container) {
+            container = document.querySelector('.mt-8.grid.gap-6.md\\:grid-cols-3');
+        }
         
-        // First, show all articles and collect them
-        articles.forEach(article => {
-            article.style.display = 'block';
-            
-            // Check difficulty filter
-            let shouldShow = true;
-            if (difficultyFilter && difficultyFilter.value !== 'all') {
-                const selectedDifficulty = difficultyFilter.value;
-                const diffElement = article.querySelector('.rounded-lg.px-3.py-1');
-                if (diffElement) {
-                    const difficulty = diffElement.textContent.trim().toLowerCase();
-                    shouldShow = difficulty === selectedDifficulty;
-                }
-            }
-            
-            if (shouldShow) {
-                visibleArticles.push(article);
-            } else {
-                article.style.display = 'none';
-            }
+        if (!container) {
+            console.log('No patterns container found');
+            return;
+        }
+        
+        // Get all articles
+        const articles = Array.from(container.querySelectorAll('article'));
+        console.log('Found articles:', articles.length);
+        
+        if (articles.length === 0) {
+            return;
+        }
+        
+        // Get active visible controls
+        const sortSelect = document.querySelector('#sortSelect') || document.querySelector('#sortSelectAll');
+        const timeFilter = document.querySelector('#timeFilter'); // IDs are unique due to if/else
+        const difficultyFilter = document.getElementById('difficultyFilter');
+        
+        // Log found controls
+        console.log('Controls found:', {
+            sort: sortSelect ? sortSelect.value : 'missing',
+            time: timeFilter ? timeFilter.value : 'missing',
+            difficulty: difficultyFilter ? difficultyFilter.value : 'missing'
         });
         
-        // Apply time sorting if selected
+        // Start with all articles
+        let filteredArticles = [...articles];
+        
+        // 1. Apply difficulty filter
+        if (difficultyFilter && difficultyFilter.value !== 'all') {
+            const targetDifficulty = difficultyFilter.value;
+            filteredArticles = filteredArticles.filter(article => {
+                const diffBadge = article.querySelector('.rounded-lg.px-3.py-1');
+                if (diffBadge) {
+                    const difficulty = diffBadge.textContent.trim().toLowerCase();
+                    return difficulty === targetDifficulty;
+                }
+                return false;
+            });
+            console.log('After difficulty filter:', filteredArticles.length);
+        }
+        
+        // 2. Apply sorting (Time OR Main Sort)
+        // If time filter is active (not 'all'), it takes precedence or we reset main sort?
+        // Logic: if time filter is used, main sort is ignored/reset (handled by listeners)
+        
         if (timeFilter && timeFilter.value !== 'all') {
-            const timeValue = timeFilter.value;
-            visibleArticles.sort((a, b) => {
-                const timeA = parseInt(a.querySelector('span[class*="hrs"]')?.textContent.match(/\\d+/)?.[0] || '999');
-                const timeB = parseInt(b.querySelector('span[class*="hrs"]')?.textContent.match(/\\d+/)?.[0] || '999');
+            const timeMode = timeFilter.value;
+            console.log('Sorting by time:', timeMode);
+            
+            filteredArticles.sort((a, b) => {
+                const getHours = (article) => {
+                    const text = article.textContent || '';
+                    const match = text.match(/(\d+)\s*hrs?/i);
+                    return match ? parseInt(match[1]) : 999;
+                };
                 
-                if (timeValue === 'shortest') {
-                    return timeA - timeB;
-                } else if (timeValue === 'longest') {
-                    return timeB - timeA;
+                const hoursA = getHours(a);
+                const hoursB = getHours(b);
+                
+                if (timeMode === 'shortest') {
+                    return hoursA - hoursB;
+                } else if (timeMode === 'longest') {
+                    return hoursB - hoursA;
                 }
                 return 0;
             });
-        } 
-        // Otherwise, apply main sorting
-        else if (sortSelect) {
-            const sortValue = sortSelect.value;
-            visibleArticles.sort((a, b) => {
-                switch (sortValue) {
+        } else if (sortSelect && sortSelect.value) {
+            const sortMode = sortSelect.value;
+            console.log('Sorting by main sort:', sortMode);
+            
+            filteredArticles.sort((a, b) => {
+                switch (sortMode) {
                     case 'newest':
-                        return articles.indexOf(a) - articles.indexOf(b);
+                        // data-created is timestamp
+                        const dateA = parseInt(a.getAttribute('data-created') || '0');
+                        const dateB = parseInt(b.getAttribute('data-created') || '0');
+                        return dateB - dateA; // Descending
                         
                     case 'oldest':
-                        return articles.indexOf(b) - articles.indexOf(a);
+                        const dateOldA = parseInt(a.getAttribute('data-created') || '0');
+                        const dateOldB = parseInt(b.getAttribute('data-created') || '0');
+                        return dateOldA - dateOldB; // Ascending
                         
                     case 'title-asc':
-                        const titleA = a.querySelector('h3').textContent.trim();
-                        const titleB = b.querySelector('h3').textContent.trim();
+                        const titleA = (a.getAttribute('data-title') || '').toLowerCase();
+                        const titleB = (b.getAttribute('data-title') || '').toLowerCase();
                         return titleA.localeCompare(titleB);
                         
                     case 'title-desc':
-                        const titleDescA = a.querySelector('h3').textContent.trim();
-                        const titleDescB = b.querySelector('h3').textContent.trim();
+                        const titleDescA = (a.getAttribute('data-title') || '').toLowerCase();
+                        const titleDescB = (b.getAttribute('data-title') || '').toLowerCase();
                         return titleDescB.localeCompare(titleDescA);
                         
                     case 'popular':
-                        const savedA = parseInt(a.textContent.match(/(\\d+)\\s+makers\\s+saved/i)?.[1] || '0');
-                        const savedB = parseInt(b.textContent.match(/(\\d+)\\s+makers\\s+saved/i)?.[1] || '0');
-                        return savedB - savedA;
+                         const savedA = parseInt(a.getAttribute('data-makers-saved') || '0');
+                         const savedB = parseInt(b.getAttribute('data-makers-saved') || '0');
+                         return savedB - savedA;
                         
                     default:
                         return 0;
@@ -393,34 +445,56 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
         
-        // Reorder visible articles in the DOM
-        visibleArticles.forEach(article => {
-            patternsGrid.appendChild(article);
+        // 3. Update DOM
+        articles.forEach(article => article.style.display = 'none'); // Hide all original
+        
+        // Show filtered
+        filteredArticles.forEach(article => {
+            article.style.display = 'block'; // Ensure visible
+            container.appendChild(article); // Move to end (reorder)
         });
         
-        // Update pattern count
-        if (patternCount) {
-            patternCount.textContent = visibleArticles.length;
+        // Update count
+        const countElement = document.getElementById('patternCount');
+        if (countElement) {
+            countElement.textContent = filteredArticles.length;
         }
     }
     
+    // Attach Listeners
+    const sortSelect = document.getElementById('sortSelect');
+    const sortSelectAll = document.getElementById('sortSelectAll');
+    const timeFilter = document.getElementById('timeFilter');
+    const difficultyFilter = document.getElementById('difficultyFilter');
+    
     if (sortSelect) {
         sortSelect.addEventListener('change', function() {
-            if (timeFilter) timeFilter.value = 'all'; // Reset time filter when main sort is used
-            updatePatterns();
+            if (timeFilter) timeFilter.value = 'all'; 
+            sortPatterns();
         });
     }
     
-    if (difficultyFilter) {
-        difficultyFilter.addEventListener('change', updatePatterns);
+    if (sortSelectAll) {
+        sortSelectAll.addEventListener('change', function() {
+            if (timeFilter) timeFilter.value = 'all'; 
+            sortPatterns();
+        });
     }
     
     if (timeFilter) {
         timeFilter.addEventListener('change', function() {
-            if (sortSelect) sortSelect.value = 'newest'; // Reset main sort when time filter is used
-            updatePatterns();
+            if (sortSelect) sortSelect.value = 'newest';
+            if (sortSelectAll) sortSelectAll.value = 'newest';
+            sortPatterns();
         });
     }
+    
+    if (difficultyFilter) {
+        difficultyFilter.addEventListener('change', sortPatterns);
+    }
+    
+    // Initial sort
+    setTimeout(sortPatterns, 100);
 });
 
 // Handle create pattern for guest users
