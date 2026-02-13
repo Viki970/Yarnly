@@ -79,6 +79,23 @@ class PatternController extends Controller
         ]);
     }
 
+    public function download(CrochetPattern $pattern)
+    {
+        if (!$pattern->pdf_file) {
+            return redirect()->back()->with('error', 'Pattern PDF not available');
+        }
+
+        $filePath = storage_path('app/public/' . $pattern->pdf_file);
+        
+        if (!file_exists($filePath)) {
+            return redirect()->back()->with('error', 'Pattern file not found');
+        }
+
+        $originalFilename = $pattern->original_filename ?: 'pattern.pdf';
+        
+        return response()->download($filePath, $originalFilename);
+    }
+
     public function create()
     {
         return view('patterns.create');
@@ -93,6 +110,7 @@ class PatternController extends Controller
                 'category' => 'required|in:blankets,amigurumi,bags,wearables,home-decor',
                 'difficulty' => 'required|in:beginner,intermediate,advanced',
                 'estimated_hours' => 'nullable|integer|min:1|max:200',
+                'tags' => 'nullable|string|max:500',
                 'pdf_file' => 'required|file|mimes:pdf|max:10240', // Max 10MB
                 'image_file' => 'nullable|file|mimes:png,jpg,jpeg|max:5120', // Max 5MB
             ]);
@@ -104,6 +122,8 @@ class PatternController extends Controller
                 return back()->withInput()->with('error', 'File must be a PDF. Detected type: ' . $pdfFile->getMimeType());
             }
 
+            // Store PDF with original filename preserved
+            $originalPdfName = $pdfFile->getClientOriginalName();
             $pdfPath = $pdfFile->store('patterns/pdfs', 'public');
             if (!$pdfPath) {
                 return back()->withInput()->with('error', 'Failed to store PDF file on server.');
@@ -117,13 +137,25 @@ class PatternController extends Controller
                 }
             }
 
+            // Process tags - clean up and format
+            $tags = null;
+            if ($request->filled('tags')) {
+                $tagsArray = array_map('trim', explode(',', $request->tags));
+                $tagsArray = array_filter($tagsArray, function($tag) {
+                    return !empty($tag) && strlen($tag) <= 50;
+                });
+                $tags = implode(', ', $tagsArray);
+            }
+
             CrochetPattern::create([
                 'title' => $request->title,
                 'description' => $request->description,
                 'category' => $request->category,
                 'difficulty' => $request->difficulty,
                 'estimated_hours' => $request->estimated_hours,
+                'tags' => $tags,
                 'pdf_file' => $pdfPath,
+                'original_filename' => $originalPdfName,
                 'image_path' => $imagePath,
                 'user_id' => Auth::id(),
                 'makers_saved' => 0,

@@ -22,11 +22,6 @@ return new class extends Migration
             $table->string('image_path')->nullable(); // Path to stored image file
             $table->text('tags')->nullable(); // Tags for search and categorization
             $table->integer('makers_saved')->default(0);
-            $table->foreignId('author_id')
-                ->nullable()
-                ->constrained('users')
-                ->cascadeOnUpdate()
-                ->nullOnDelete();
             $table->timestamps();
         });
     }

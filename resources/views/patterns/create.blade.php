@@ -106,6 +106,21 @@
                         @enderror
                     </div>
 
+                    <!-- Tags -->
+                    <div>
+                        <label for="tags" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-200 mb-3">
+                            Tags (Optional)
+                            <span class="text-emerald-600 dark:text-emerald-400 text-xs ml-2">(Separate with commas, e.g., "easy, beginner, cute")</span>
+                        </label>
+                        <input type="text" id="tags" name="tags" value="{{ old('tags') }}" 
+                            placeholder="cute, beginner-friendly, quick, colorful..."
+                            class="w-full px-4 py-3 rounded-lg border border-emerald-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700 dark:bg-zinc-800 dark:text-white transition-colors">
+                        <p class="mt-2 text-xs text-zinc-500 dark:text-zinc-400">Tags help other users find your pattern more easily through search</p>
+                        @error('tags')
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     <!-- File Uploads -->
                     <div class="space-y-6">
                         <!-- PDF File -->

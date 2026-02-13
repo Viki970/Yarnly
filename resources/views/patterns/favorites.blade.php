@@ -81,7 +81,7 @@
                         @if($pattern->pdf_file)
                             <div class="mt-5 flex gap-2">
                                 <a href="{{ route('patterns.view', $pattern->id) }}" class="flex-1 rounded-lg bg-teal-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-teal-700">View Pattern</a>
-                                <a href="{{ asset('storage/' . $pattern->pdf_file) }}" download class="flex-1 rounded-lg bg-pink-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-pink-700">Download PDF</a>
+                                <a href="{{ route('patterns.download', $pattern) }}" class="flex-1 rounded-lg bg-pink-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-pink-700">Download PDF</a>
                             </div>
                         @else
                             <button disabled class="mt-5 block w-full rounded-lg bg-zinc-200 px-4 py-2 text-center text-sm font-semibold text-zinc-500 cursor-not-allowed dark:bg-zinc-700 dark:text-zinc-400">PDF Coming Soon</button>

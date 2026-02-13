@@ -173,7 +173,7 @@
                                 @if($pattern->pdf_file)
                                     <div class="mt-5 flex gap-2">
                                         <a href="{{ route('patterns.view', $pattern->id) }}" class="flex-1 rounded-lg bg-teal-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-teal-700">View Pattern</a>
-                                        <a href="{{ asset('storage/' . $pattern->pdf_file) }}" download class="flex-1 rounded-lg bg-emerald-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-emerald-700 dark:hover:bg-emerald-500">Download PDF</a>
+                                        <a href="{{ route('patterns.download', $pattern) }}" class="flex-1 rounded-lg bg-emerald-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-emerald-700 dark:hover:bg-emerald-500">Download PDF</a>
                                     </div>
                                 @else
                                     <button disabled class="mt-5 block w-full rounded-lg bg-zinc-200 px-4 py-2 text-center text-sm font-semibold text-zinc-500 cursor-not-allowed dark:bg-zinc-700 dark:text-zinc-400">PDF Coming Soon</button>
@@ -273,7 +273,7 @@
                                 @if($pattern->pdf_file)
                                     <div class="mt-5 flex gap-2">
                                         <a href="{{ route('patterns.view', $pattern->id) }}" class="flex-1 rounded-lg bg-teal-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-teal-700">View Pattern</a>
-                                        <a href="{{ asset('storage/' . $pattern->pdf_file) }}" download class="flex-1 rounded-lg bg-emerald-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-emerald-700 dark:hover:bg-emerald-500">Download PDF</a>
+                                        <a href="{{ route('patterns.download', $pattern) }}" class="flex-1 rounded-lg bg-emerald-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-emerald-700 dark:hover:bg-emerald-500">Download PDF</a>
                                     </div>
                                 @else
                                     <button disabled class="mt-5 block w-full rounded-lg bg-zinc-200 px-4 py-2 text-center text-sm font-semibold text-zinc-500 cursor-not-allowed dark:bg-zinc-700 dark:text-zinc-400">PDF Coming Soon</button>
@@ -300,60 +300,85 @@
             <div>
                 <p class="text-sm font-semibold text-emerald-700 dark:text-emerald-200">Community sets</p>
                 <h2 class="text-3xl font-bold text-zinc-900 dark:text-white">Collections you can start tonight</h2>
-                <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">Save a set to your library or clone it into a project board.</p>
+                <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">Curated collections of patterns organized by theme, skill level, and project type.</p>
             </div>
-            <a href="/" class="text-sm font-semibold text-zinc-600 underline-offset-4 hover:underline dark:text-zinc-300">Back to home</a>
+            <div class="flex items-center gap-4">
+                @auth
+                    <button class="rounded-xl bg-gradient-to-r from-teal-800 to-teal-900 px-5 py-3 text-sm font-semibold text-white shadow-lg hover:from-teal-700 hover:to-teal-800 transition-all duration-200 transform hover:scale-105">
+                        <svg class="inline-block h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Add Collection
+                    </button>
+                @else
+                    <button onclick="handleCreateCollectionGuest()" class="rounded-xl bg-gradient-to-r from-teal-800 to-teal-900 px-5 py-3 text-sm font-semibold text-white shadow-lg hover:from-teal-700 hover:to-teal-800 transition-all duration-200 transform hover:scale-105">
+                        <svg class="inline-block h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Add Collection
+                    </button>
+                @endauth
+                <a href="/" class="text-sm font-semibold text-zinc-600 underline-offset-4 hover:underline dark:text-zinc-300">Back to home</a>
+            </div>
         </div>
 
         <div class="mt-8 grid gap-6 md:grid-cols-3">
-            @if(isset($patterns) && $patterns->isNotEmpty())
-                @foreach($patterns as $pattern)
+            @if(isset($collections) && $collections->isNotEmpty())
+                @foreach($collections as $collection)
                     <article class="rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm ring-1 ring-transparent transition hover:-translate-y-1 hover:ring-emerald-200 dark:border-emerald-900/40 dark:bg-zinc-900/70 dark:hover:ring-emerald-800/50" 
-                             data-created="{{ $pattern->created_at->timestamp }}"
-                             data-title="{{ $pattern->title }}"
-                             data-makers-saved="{{ $pattern->makers_saved }}">
-                        @if($pattern->image_path)
-                            <img src="{{ asset('storage/' . $pattern->image_path) }}" alt="{{ $pattern->title }}" class="w-full h-32 object-cover rounded-lg mb-4">
+                             data-created="{{ $collection->created_at->timestamp }}"
+                             data-title="{{ $collection->name }}">
+                        @if($collection->cover_image_path)
+                            <img src="{{ asset('storage/' . $collection->cover_image_path) }}" alt="{{ $collection->name }}" class="w-full h-32 object-cover rounded-lg mb-4">
+                        @elseif($collection->patterns->isNotEmpty() && $collection->patterns->first()->image_path)
+                            <img src="{{ asset('storage/' . $collection->patterns->first()->image_path) }}" alt="{{ $collection->name }}" class="w-full h-32 object-cover rounded-lg mb-4">
+                        @else
+                            <div class="w-full h-32 bg-gradient-to-br from-slate-200 to-slate-300 rounded-lg mb-4 flex items-center justify-center dark:from-slate-800/50 dark:to-slate-900/50">
+                                <svg class="h-8 w-8 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                </svg>
+                            </div>
                         @endif
-                        <h3 class="text-lg font-bold text-zinc-900 dark:text-white">{{ $pattern->title }}</h3>
-                        <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">{{ Str::limit($pattern->description, 80) }}</p>
+                        
+                        <h3 class="text-lg font-bold text-zinc-900 dark:text-white">{{ $collection->name }}</h3>
+                        @if($collection->description)
+                            <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">{{ Str::limit($collection->description, 80) }}</p>
+                        @endif
                         
                         <div class="mt-3 flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
-                            <span class="rounded-lg bg-{{ $pattern->getDifficultyColor() }}-100 px-3 py-1 font-semibold text-{{ $pattern->getDifficultyColor() }}-700 dark:bg-{{ $pattern->getDifficultyColor() }}-900/40 dark:text-{{ $pattern->getDifficultyColor() }}-200">
-                                {{ ucfirst($pattern->difficulty) }}
+                            <span class="flex items-center gap-1">
+                                <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                                {{ $collection->user->name }}
                             </span>
-                            @if($pattern->estimated_hours)
-                                <span>{{ $pattern->estimated_hours }} hrs</span>
-                            @endif
+                            <span>{{ $collection->patterns->count() }} {{ Str::plural('pattern', $collection->patterns->count()) }}</span>
                         </div>
                         
                         <div class="mt-4 flex items-center justify-between">
-                            <span class="text-xs text-zinc-500 dark:text-zinc-400 makers-saved-{{ $pattern->id }}">{{ $pattern->makers_saved }} makers saved</span>
+                            <span class="text-xs text-zinc-500 dark:text-zinc-400">{{ $collection->created_at->diffForHumans() }}</span>
                             <div class="flex items-center gap-2">
-                                @auth
-                                    <button class="favorite-btn p-1.5 rounded-full transition-all duration-200 hover:scale-110 {{ Auth::user()->hasFavorited($pattern) ? 'text-pink-600 hover:text-pink-700' : 'text-zinc-400 hover:text-pink-500' }}"
-                                            data-pattern-id="{{ $pattern->id }}"
-                                            data-favorited="{{ Auth::user()->hasFavorited($pattern) ? 'true' : 'false' }}">
-                                        <svg class="h-4 w-4 {{ Auth::user()->hasFavorited($pattern) ? 'fill-current' : '' }}" fill="{{ Auth::user()->hasFavorited($pattern) ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                        </svg>
-                                    </button>
-                                @endauth
-                                <a href="{{ route('patterns.view', $pattern) }}" class="rounded-lg bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-500 transition-colors">
-                                    View Pattern
+                                <a href="#" class="rounded-lg bg-teal-800 px-4 py-2 text-xs font-semibold text-white hover:bg-teal-700 transition-colors">
+                                    View Collection
                                 </a>
                             </div>
-                        </div>
-                        
-                        <div class="mt-2 flex flex-wrap gap-1 text-xs font-semibold text-emerald-700 dark:text-emerald-200">
-                            <span class="rounded-full bg-emerald-100 px-2 py-1 dark:bg-emerald-900/40">{{ $pattern->getCategoryLabel() }}</span>
-                            <span class="rounded-full bg-emerald-100 px-2 py-1 dark:bg-emerald-900/40">{{ $pattern->created_at->diffForHumans() }}</span>
                         </div>
                     </article>
                 @endforeach
             @else
-                <div class="col-span-3 text-center py-8">
-                    <p class="text-zinc-600 dark:text-zinc-400">No patterns available yet. Be the first to create one!</p>
+                <div class="col-span-3 text-center py-12">
+                    <div class="mx-auto h-16 w-16 rounded-full bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center mb-4 dark:from-slate-800/50 dark:to-slate-900/50">
+                        <svg class="h-8 w-8 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-zinc-900 dark:text-white">No collections yet</h3>
+                    <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">Be the first to create a collection and organize your favorite patterns!</p>
+                    @auth
+                        <button class="mt-4 inline-block rounded-lg bg-teal-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-teal-700">Create Collection</button>
+                    @else
+                        <button onclick="handleCreateCollectionGuest()" class="mt-4 inline-block rounded-lg bg-teal-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-teal-700">Create Collection</button>
+                    @endauth
                 </div>
             @endif
         </div>
@@ -632,6 +657,13 @@ document.addEventListener('DOMContentLoaded', function() {
 // Handle create pattern for guest users
 function handleCreatePatternGuest() {
     if (confirm('You need to sign up to create patterns. Would you like to create an account?')) {
+        window.location.href = '{{ route("register") }}';
+    }
+}
+
+// Handle create collection for guest users
+function handleCreateCollectionGuest() {
+    if (confirm('You need to sign up to create collections. Would you like to create an account?')) {
         window.location.href = '{{ route("register") }}';
     }
 }

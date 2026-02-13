@@ -56,7 +56,7 @@
             
             <!-- Action Buttons -->
             <div class="flex gap-3">
-                <a href="{{ $pdfPath }}" download class="rounded-lg bg-emerald-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700">
+                <a href="{{ route('patterns.download', $pattern) }}" class="rounded-lg bg-emerald-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700">
                     Download PDF
                 </a>
                 <a href="{{ route('patterns.crochet') }}" class="rounded-lg border border-emerald-200 bg-white px-6 py-3 text-sm font-semibold text-emerald-800 transition hover:bg-emerald-50 dark:border-emerald-800 dark:bg-zinc-900 dark:text-emerald-200 dark:hover:bg-zinc-800">
@@ -73,7 +73,7 @@
                 title="{{ $pattern->title }} Pattern">
                 <p class="p-8 text-center text-zinc-600 dark:text-zinc-300">
                     Your browser doesn't support PDF viewing. 
-                    <a href="{{ $pdfPath }}" download class="font-semibold text-emerald-600 hover:underline">Download the PDF</a> instead.
+                    <a href="{{ route('patterns.download', $pattern) }}" class="font-semibold text-emerald-600 hover:underline">Download the PDF</a> instead.
                 </p>
             </iframe>
         </div>
