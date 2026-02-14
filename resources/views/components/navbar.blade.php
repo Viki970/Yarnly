@@ -455,15 +455,15 @@
                                         <div class="text-xs text-zinc-500 dark:text-zinc-400">Created patterns</div>
                                     </div>
                                 </a>
-                                <a href="#collections" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-teal-50 hover:to-slate-50 hover:text-teal-700 dark:text-zinc-200 dark:hover:from-teal-900/20 dark:hover:to-slate-900/20 dark:hover:text-teal-300">
+                                <a href="{{ route('my-collections') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-teal-50 hover:to-slate-50 hover:text-teal-700 dark:text-zinc-200 dark:hover:from-teal-900/20 dark:hover:to-slate-900/20 dark:hover:text-teal-300">
                                     <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-100 text-teal-600 group-hover:bg-teal-200 dark:bg-teal-900/30 dark:text-teal-400 dark:group-hover:bg-teal-800/40">
                                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="font-semibold">Collections</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Pattern collections by type</div>
+                                        <div class="font-semibold">My Collections</div>
+                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Your pattern collections</div>
                                     </div>
                                 </a>
                                 <a href="{{ route('favorites') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-pink-50 hover:to-rose-50 hover:text-pink-700 dark:text-zinc-200 dark:hover:from-pink-900/20 dark:hover:to-rose-900/20 dark:hover:text-pink-300">

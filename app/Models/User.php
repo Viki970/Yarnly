@@ -87,4 +87,12 @@ class User extends Authenticatable
     {
         return $this->favoritePatterns()->where('crochet_patterns.id', $pattern->id)->exists();
     }
+
+    /**
+     * Get the collections created by this user
+     */
+    public function collections()
+    {
+        return $this->hasMany(Collection::class);
+    }
 }
