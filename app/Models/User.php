@@ -89,6 +89,23 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the collections this user has favorited
+     */
+    public function favoriteCollections()
+    {
+        return $this->belongsToMany(Collection::class, 'collection_favorites', 'user_id', 'collection_id')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Check if user has favorited a specific collection
+     */
+    public function hasFavoritedCollection(Collection $collection): bool
+    {
+        return $this->favoriteCollections()->where('collections.id', $collection->id)->exists();
+    }
+
+    /**
      * Get the collections created by this user
      */
     public function collections()

@@ -81,4 +81,31 @@ class Collection extends Model
             default => 'zinc',
         };
     }
+
+    /**
+     * Get the users who have favorited this collection
+     */
+    public function favoritedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'collection_favorites', 'collection_id', 'user_id')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Check if collection is favorited by a specific user
+     */
+    public function isFavoritedBy($userId): bool
+    {
+        // Handle both User objects and user IDs
+        $userId = $userId instanceof User ? $userId->id : $userId;
+        return $this->favoritedByUsers()->where('users.id', $userId)->exists();
+    }
+
+    /**
+     * Get the count of users who favorited this collection
+     */
+    public function getFavoritesCountAttribute()
+    {
+        return $this->favoritedByUsers()->count();
+    }
 }

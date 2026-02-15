@@ -158,7 +158,7 @@
                                 <div class="mt-4 flex items-center justify-between">
                                     <div class="flex items-center gap-3 text-xs font-semibold text-emerald-700 dark:text-emerald-200">
                                         <span class="inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
-                                        <span class="makers-saved-{{ $pattern->id }}">{{ $pattern->makers_saved }}</span> makers saved
+                                        <span class="makers-saved-{{ $pattern->id }}">{{ $pattern->makers_saved }}</span> users saved
                                     </div>
                                     @auth
                                         <button class="favorite-btn p-2 rounded-full transition-all duration-200 hover:scale-110 {{ Auth::user()->hasFavorited($pattern) ? 'text-pink-600 hover:text-pink-700' : 'text-zinc-400 hover:text-pink-500' }}"
@@ -258,7 +258,7 @@
                                 <div class="mt-4 flex items-center justify-between">
                                     <div class="flex items-center gap-3 text-xs font-semibold text-emerald-700 dark:text-emerald-200">
                                         <span class="inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
-                                        <span class="makers-saved-{{ $pattern->id }}">{{ $pattern->makers_saved }}</span> makers saved
+                                        <span class="makers-saved-{{ $pattern->id }}">{{ $pattern->makers_saved }}</span> users saved
                                     </div>
                                     @auth
                                         <button class="favorite-btn p-2 rounded-full transition-all duration-200 hover:scale-110 {{ Auth::user()->hasFavorited($pattern) ? 'text-pink-600 hover:text-pink-700' : 'text-zinc-400 hover:text-pink-500' }}"
@@ -325,44 +325,61 @@
         <div class="mt-8 grid gap-6 md:grid-cols-3">
             @if(isset($collections) && $collections->isNotEmpty())
                 @foreach($collections as $collection)
-                    <article class="rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm ring-1 ring-transparent transition hover:-translate-y-1 hover:ring-emerald-200 dark:border-emerald-900/40 dark:bg-zinc-900/70 dark:hover:ring-emerald-800/50" 
+                    <article class="group rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-emerald-900/40 dark:bg-zinc-900/70" 
                              data-created="{{ $collection->created_at->timestamp }}"
                              data-title="{{ $collection->name }}">
                         @if($collection->cover_image_path)
-                            <img src="{{ asset('storage/' . $collection->cover_image_path) }}" alt="{{ $collection->name }}" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <div class="mb-4 aspect-[3/4] w-full overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800">
+                                <img src="{{ asset('storage/' . $collection->cover_image_path) }}" 
+                                    alt="{{ $collection->name }}" 
+                                    class="h-full w-full object-cover"
+                                    loading="lazy">
+                            </div>
                         @elseif($collection->patterns->isNotEmpty() && $collection->patterns->first()->image_path)
-                            <img src="{{ asset('storage/' . $collection->patterns->first()->image_path) }}" alt="{{ $collection->name }}" class="w-full h-32 object-cover rounded-lg mb-4">
+                            <div class="mb-4 aspect-[3/4] w-full overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800">
+                                <img src="{{ asset('storage/' . $collection->patterns->first()->image_path) }}" 
+                                    alt="{{ $collection->name }}" 
+                                    class="h-full w-full object-cover"
+                                    loading="lazy">
+                            </div>
                         @else
-                            <div class="w-full h-32 bg-gradient-to-br from-slate-200 to-slate-300 rounded-lg mb-4 flex items-center justify-center dark:from-slate-800/50 dark:to-slate-900/50">
-                                <svg class="h-8 w-8 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="mb-4 aspect-[3/4] w-full overflow-hidden rounded-xl bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-800/50 dark:to-slate-900/50 flex items-center justify-center">
+                                <svg class="h-20 w-20 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                                 </svg>
                             </div>
                         @endif
                         
-                        <h3 class="text-lg font-bold text-zinc-900 dark:text-white">{{ $collection->name }}</h3>
-                        @if($collection->description)
-                            <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">{{ Str::limit($collection->description, 80) }}</p>
-                        @endif
-                        
-                        <div class="mt-3 flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
-                            <span class="flex items-center gap-1">
-                                <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
-                                {{ $collection->user->name }}
+                        <div class="flex items-center justify-between">
+                            <div class="rounded-lg px-3 py-1 text-xs font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200">
+                                {{ ucfirst($collection->craft_type ?? 'crochet') }}
+                            </div>
+                            <span class="text-xs font-medium text-emerald-700 dark:text-emerald-200">
+                                {{ $collection->patterns->count() }} {{ Str::plural('pattern', $collection->patterns->count()) }}
                             </span>
-                            <span>{{ $collection->patterns->count() }} {{ Str::plural('pattern', $collection->patterns->count()) }}</span>
                         </div>
+                        
+                        <h3 class="mt-4 text-lg font-bold text-zinc-900 dark:text-white">{{ $collection->name }}</h3>
                         
                         <div class="mt-4 flex items-center justify-between">
-                            <span class="text-xs text-zinc-500 dark:text-zinc-400">{{ $collection->created_at->diffForHumans() }}</span>
-                            <div class="flex items-center gap-2">
-                                <a href="{{ route('collections.show', $collection) }}" class="rounded-lg bg-teal-800 px-4 py-2 text-xs font-semibold text-white hover:bg-teal-700 transition-colors">
-                                    View Collection
-                                </a>
+                            <div class="flex items-center gap-3 text-xs font-semibold text-emerald-700 dark:text-emerald-200">
+                                <span class="inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+                                <span class="favorites-count-{{ $collection->id }}">{{ $collection->favorites_count }}</span> users saved
                             </div>
+                            @auth
+                                <button class="favorite-collection-btn p-2 rounded-full transition-all duration-200 hover:scale-110 {{ Auth::user()->hasFavoritedCollection($collection) ? 'text-pink-600 hover:text-pink-700' : 'text-zinc-400 hover:text-pink-500' }}"
+                                        data-collection-id="{{ $collection->id }}"
+                                        data-favorited="{{ Auth::user()->hasFavoritedCollection($collection) ? 'true' : 'false' }}">
+                                    <svg class="h-5 w-5 {{ Auth::user()->hasFavoritedCollection($collection) ? 'fill-current' : '' }}" fill="{{ Auth::user()->hasFavoritedCollection($collection) ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                </button>
+                            @endauth
                         </div>
+
+                        <a href="{{ route('collections.show', $collection) }}" class="mt-5 block w-full rounded-lg bg-teal-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-teal-700">
+                            View Collection
+                        </a>
                     </article>
                 @endforeach
             @else
@@ -637,6 +654,77 @@ document.addEventListener('DOMContentLoaded', function() {
                     const article = button.closest('article');
                     if (article) {
                         article.setAttribute('data-makers-saved', data.makers_saved);
+                    }
+                } else {
+                    alert('Error: ' + (data.message || 'Something went wrong'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Something went wrong. Please try again.');
+            })
+            .finally(() => {
+                button.disabled = false;
+                button.style.opacity = '1';
+            });
+        }
+        
+        // Handle collection favorite button clicks
+        if (e.target.closest('.favorite-collection-btn')) {
+            e.preventDefault();
+            const button = e.target.closest('.favorite-collection-btn');
+            const collectionId = button.dataset.collectionId;
+            const isFavorited = button.dataset.favorited === 'true';
+            
+            // Disable button during request and add loading state
+            button.disabled = true;
+            button.style.opacity = '0.7';
+            
+            fetch(`/collections/${collectionId}/toggle-favorite`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const svg = button.querySelector('svg');
+                    
+                    // Add smooth transition
+                    button.style.transition = 'all 0.2s ease';
+                    
+                    if (data.favorited) {
+                        button.classList.remove('text-zinc-400', 'hover:text-pink-500');
+                        button.classList.add('text-pink-600', 'hover:text-pink-700');
+                        button.dataset.favorited = 'true';
+                        svg.classList.add('fill-current');
+                        svg.setAttribute('fill', 'currentColor');
+                        
+                        // Add a brief scale animation for feedback
+                        button.style.transform = 'scale(1.1)';
+                        setTimeout(() => {
+                            button.style.transform = 'scale(1)';
+                        }, 150);
+                    } else {
+                        button.classList.remove('text-pink-600', 'hover:text-pink-700');
+                        button.classList.add('text-zinc-400', 'hover:text-pink-500');
+                        button.dataset.favorited = 'false';
+                        svg.classList.remove('fill-current');
+                        svg.setAttribute('fill', 'none');
+                    }
+                    
+                    // Update favorites count with animation
+                    const countSpan = document.querySelector(`.favorites-count-${collectionId}`);
+                    if (countSpan) {
+                        countSpan.style.transition = 'all 0.2s ease';
+                        countSpan.style.transform = 'scale(1.1)';
+                        countSpan.textContent = data.favorites_count;
+                        setTimeout(() => {
+                            countSpan.style.transform = 'scale(1)';
+                        }, 200);
                     }
                 } else {
                     alert('Error: ' + (data.message || 'Something went wrong'));

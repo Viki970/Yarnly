@@ -44,6 +44,7 @@ Route::middleware('auth')->group(function () {
     
     // Favorites routes
     Route::post('/patterns/{pattern}/toggle-favorite', [\App\Http\Controllers\PatternController::class, 'toggleFavorite'])->name('patterns.toggle-favorite');
+    Route::post('/collections/{collection}/toggle-favorite', [\App\Http\Controllers\CollectionController::class, 'toggleFavorite'])->name('collections.toggle-favorite');
     Route::get('/favorites', [\App\Http\Controllers\PatternController::class, 'favorites'])->name('favorites');
 });
 

@@ -202,4 +202,56 @@
         @endif
     </div>
 </div>
+
+@auth
+<script>
+    // Favorite collection button functionality
+    document.querySelectorAll('.favorite-collection-btn').forEach(button => {
+        button.addEventListener('click', async function(e) {
+            e.preventDefault();
+            const collectionId = this.dataset.collectionId;
+            const isFavorited = this.dataset.favorited === 'true';
+            
+            try {
+                const response = await fetch(`/collections/${collectionId}/toggle-favorite`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Toggle the button state
+                    this.dataset.favorited = data.favorited ? 'true' : 'false';
+                    const svg = this.querySelector('svg');
+                    
+                    if (data.favorited) {
+                        this.classList.remove('text-zinc-400', 'hover:text-pink-500');
+                        this.classList.add('text-pink-600', 'hover:text-pink-700');
+                        svg.classList.add('fill-current');
+                        svg.setAttribute('fill', 'currentColor');
+                    } else {
+                        this.classList.remove('text-pink-600', 'hover:text-pink-700');
+                        this.classList.add('text-zinc-400', 'hover:text-pink-500');
+                        svg.classList.remove('fill-current');
+                        svg.setAttribute('fill', 'none');
+                    }
+                    
+                    // Update favorites count
+                    const favoritesCountElement = document.querySelector('.favorites-count-' + collectionId);
+                    if (favoritesCountElement) {
+                        favoritesCountElement.textContent = data.favorites_count;
+                    }
+                }
+            } catch (error) {
+                console.error('Error toggling collection favorite:', error);
+            }
+        });
+    });
+</script>
+@endauth
+
 @endsection

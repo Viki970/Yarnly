@@ -1,10 +1,13 @@
-<div class="bg-white dark:bg-zinc-900 rounded-2xl shadow-lg border border-{{ $color }}-100 dark:border-{{ $color }}-900/40 overflow-hidden hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+<article class="group rounded-2xl border border-{{ $color }}-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-{{ $color }}-900/40 dark:bg-zinc-900/70">
     @if($collection->cover_image_path)
-        <img src="{{ asset('storage/' . $collection->cover_image_path) }}" 
-            alt="{{ $collection->name }}" 
-            class="w-full h-48 object-cover">
+        <div class="mb-4 aspect-[3/4] w-full overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800">
+            <img src="{{ asset('storage/' . $collection->cover_image_path) }}" 
+                alt="{{ $collection->name }}" 
+                class="h-full w-full object-cover"
+                loading="lazy">
+        </div>
     @else
-        <div class="w-full h-48 bg-gradient-to-br from-{{ $color }}-100 to-{{ $color }}-200 dark:from-{{ $color }}-900/40 dark:to-{{ $color }}-800/40 flex items-center justify-center">
+        <div class="mb-4 aspect-[3/4] w-full overflow-hidden rounded-xl bg-gradient-to-br from-{{ $color }}-100 to-{{ $color }}-200 dark:from-{{ $color }}-900/40 dark:to-{{ $color }}-800/40 flex items-center justify-center">
             @if($collection->craft_type === 'crochet')
                 <svg class="h-20 w-20 text-{{ $color }}-500 transform rotate-45" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2c-1.2 0-2.2.8-2.2 1.8v8.4c-.2.1-.4.3-.4.6l-.3 8.4c0 .2.1.3.2.4.1.1.3.2.4.2h1.8c.2 0 .3-.1.4-.2.1-.1.2-.2.2-.4l-.3-8.4c0-.2-.1-.4-.3-.5V4.6c0-.1 0-.1 0-.1 0 0 .1 0 .1 0 .1 0 .2.1.2.2v.6c0 .3.3.6.6.6.7 0 1.2-.5 1.2-1.2v-.3C13.2 2.8 12.4 2 12 2z" />
@@ -21,51 +24,41 @@
         </div>
     @endif
 
-    <div class="p-6">
-        <div class="flex items-start justify-between mb-2">
-            <h3 class="text-xl font-bold text-zinc-900 dark:text-white">{{ $collection->name }}</h3>
-            <span class="inline-flex items-center rounded-lg px-2 py-1 text-xs font-semibold bg-{{ $color }}-100 text-{{ $color }}-700 dark:bg-{{ $color }}-900/40 dark:text-{{ $color }}-200">
-                {{ ucfirst($collection->craft_type) }}
-            </span>
+    <div class="flex items-center justify-between">
+        <div class="rounded-lg px-3 py-1 text-xs font-semibold bg-{{ $color }}-100 text-{{ $color }}-800 dark:bg-{{ $color }}-900/40 dark:text-{{ $color }}-200">
+            {{ ucfirst($collection->craft_type) }}
         </div>
-        
-        @if($collection->description)
-            <p class="text-zinc-600 dark:text-zinc-400 text-sm mb-4 line-clamp-2">{{ Str::limit($collection->description, 100) }}</p>
-        @endif
-        
-        <div class="flex items-center justify-between mb-4">
-            <span class="inline-flex items-center rounded-lg px-3 py-1.5 text-sm font-bold bg-{{ $color }}-100 text-{{ $color }}-900 dark:bg-{{ $color }}-600 dark:text-white shadow-sm">
-                <svg class="h-4 w-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                </svg>
-                {{ $collection->patterns->count() }} {{ Str::plural('pattern', $collection->patterns->count()) }}
-            </span>
-        </div>
-
-        <div class="flex gap-3">
-            <a href="{{ route('collections.show', $collection) }}"
-                class="flex-1 text-center px-4 py-2 rounded-lg bg-{{ $color }}-600 text-white font-semibold hover:bg-{{ $color }}-500 transition-colors">
-                View Collection
-            </a>
-            <a href="{{ route('collections.edit', $collection) }}" 
-                class="px-4 py-2 rounded-lg border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">
-                Edit
-            </a>
-            <form action="{{ route('collections.destroy', $collection) }}" method="POST" 
-                onsubmit="return confirm('Are you sure you want to delete this collection? The patterns in it will not be deleted.');"
-                class="inline">
-                @csrf
-                @method('DELETE')
-                <button 
-                    type="submit"
-                    class="px-4 py-2 rounded-lg border border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 font-semibold hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
-                    Remove
-                </button>
-            </form>
-        </div>
-
-        <div class="mt-3 text-xs text-zinc-500 dark:text-zinc-400">
-            Created {{ $collection->created_at->diffForHumans() }}
-        </div>
+        <span class="text-xs font-medium text-{{ $color }}-700 dark:text-{{ $color }}-200">
+            {{ $collection->patterns->count() }} {{ Str::plural('pattern', $collection->patterns->count()) }}
+        </span>
     </div>
-</div>
+    
+    <h3 class="mt-4 text-lg font-bold text-zinc-900 dark:text-white">{{ $collection->name }}</h3>
+    
+    <div class="mt-4 flex items-center justify-between">
+        <div class="flex items-center gap-3 text-xs font-semibold text-emerald-700 dark:text-emerald-200">
+            <span class="inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+            <span class="favorites-count-{{ $collection->id }}">{{ $collection->favorites_count }}</span> users saved
+        </div>
+        @auth
+            <button class="favorite-collection-btn p-2 rounded-full transition-all duration-200 hover:scale-110 {{ Auth::user()->hasFavoritedCollection($collection) ? 'text-pink-600 hover:text-pink-700' : 'text-zinc-400 hover:text-pink-500' }}"
+                    data-collection-id="{{ $collection->id }}"
+                    data-favorited="{{ Auth::user()->hasFavoritedCollection($collection) ? 'true' : 'false' }}">
+                <svg class="h-5 w-5 {{ Auth::user()->hasFavoritedCollection($collection) ? 'fill-current' : '' }}" fill="{{ Auth::user()->hasFavoritedCollection($collection) ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+            </button>
+        @endauth
+    </div>
+
+    <div class="mt-5 flex gap-2">
+        <a href="{{ route('collections.show', $collection) }}"
+            class="flex-1 text-center px-4 py-2 rounded-lg bg-{{ $color }}-600 text-white font-semibold text-sm hover:bg-{{ $color }}-700 transition">
+            View Collection
+        </a>
+        <a href="{{ route('collections.edit', $collection) }}" 
+            class="px-4 py-2 rounded-lg border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 font-semibold text-sm hover:bg-zinc-50 dark:hover:bg-zinc-800 transition">
+            Edit
+        </a>
+    </div>
+</article>

@@ -111,17 +111,36 @@
                             <p class="text-sm font-semibold text-zinc-900 dark:text-white">{{ $collection->created_at->format('M d, Y') }}</p>
                         </div>
                     </div>
-                    <div class="text-right">
-                        <p class="text-xs text-zinc-600 dark:text-zinc-400">Patterns</p>
-                        <p class="text-3xl font-bold text-
-                            @if($collection->craft_type === 'crochet')
-                                emerald-600 dark:text-emerald-400
-                            @elseif($collection->craft_type === 'knitting')
-                                blue-600 dark:text-blue-400
-                            @else
-                                purple-600 dark:text-purple-400
+                    <div class="flex items-center gap-6">
+                        @auth
+                            @if($collection->user_id !== Auth::id())
+                                <div class="flex items-center gap-3">
+                                    <div class="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+                                        <span class="inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+                                        <span class="favorites-count-{{ $collection->id }}">{{ $collection->favorites_count }}</span> users saved
+                                    </div>
+                                    <button class="favorite-collection-btn p-2 rounded-full transition-all duration-200 hover:scale-110 {{ Auth::user()->hasFavoritedCollection($collection) ? 'text-pink-600 hover:text-pink-700' : 'text-zinc-400 hover:text-pink-500' }}"
+                                            data-collection-id="{{ $collection->id }}"
+                                            data-favorited="{{ Auth::user()->hasFavoritedCollection($collection) ? 'true' : 'false' }}">
+                                        <svg class="h-6 w-6 {{ Auth::user()->hasFavoritedCollection($collection) ? 'fill-current' : '' }}" fill="{{ Auth::user()->hasFavoritedCollection($collection) ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                        </svg>
+                                    </button>
+                                </div>
                             @endif
-                        ">{{ $collection->patterns->count() }}</p>
+                        @endauth
+                        <div class="text-right">
+                            <p class="text-xs text-zinc-600 dark:text-zinc-400">Patterns</p>
+                            <p class="text-3xl font-bold text-
+                                @if($collection->craft_type === 'crochet')
+                                    emerald-600 dark:text-emerald-400
+                                @elseif($collection->craft_type === 'knitting')
+                                    blue-600 dark:text-blue-400
+                                @else
+                                    purple-600 dark:text-purple-400
+                                @endif
+                            ">{{ $collection->patterns->count() }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -214,7 +233,7 @@
 
 @auth
 <script>
-    // Favorite button functionality
+    // Favorite button functionality for patterns
     document.querySelectorAll('.favorite-btn').forEach(button => {
         button.addEventListener('click', async function(e) {
             e.preventDefault();
@@ -258,6 +277,53 @@
                 }
             } catch (error) {
                 console.error('Error toggling favorite:', error);
+            }
+        });
+    });
+
+    // Favorite button functionality for collection
+    document.querySelectorAll('.favorite-collection-btn').forEach(button => {
+        button.addEventListener('click', async function(e) {
+            e.preventDefault();
+            const collectionId = this.dataset.collectionId;
+            const isFavorited = this.dataset.favorited === 'true';
+            
+            try {
+                const response = await fetch(`/collections/${collectionId}/toggle-favorite`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Toggle the button state
+                    this.dataset.favorited = data.favorited ? 'true' : 'false';
+                    const svg = this.querySelector('svg');
+                    
+                    if (data.favorited) {
+                        this.classList.remove('text-zinc-400', 'hover:text-pink-500');
+                        this.classList.add('text-pink-600', 'hover:text-pink-700');
+                        svg.classList.add('fill-current');
+                        svg.setAttribute('fill', 'currentColor');
+                    } else {
+                        this.classList.remove('text-pink-600', 'hover:text-pink-700');
+                        this.classList.add('text-zinc-400', 'hover:text-pink-500');
+                        svg.classList.remove('fill-current');
+                        svg.setAttribute('fill', 'none');
+                    }
+                    
+                    // Update favorites count
+                    const favoritesCountElement = document.querySelector('.favorites-count-' + collectionId);
+                    if (favoritesCountElement) {
+                        favoritesCountElement.textContent = data.favorites_count;
+                    }
+                }
+            } catch (error) {
+                console.error('Error toggling collection favorite:', error);
             }
         });
     });

@@ -362,4 +362,28 @@ class CollectionController extends Controller
         return redirect()->route('my-collections')
             ->with('success', 'Collection deleted successfully!');
     }
+
+    /**
+     * Toggle favorite status for a collection
+     */
+    public function toggleFavorite(Collection $collection)
+    {
+        $user = Auth::user();
+        
+        if ($user->hasFavoritedCollection($collection)) {
+            // Unfavorite
+            $user->favoriteCollections()->detach($collection->id);
+            $favorited = false;
+        } else {
+            // Favorite
+            $user->favoriteCollections()->attach($collection->id);
+            $favorited = true;
+        }
+        
+        return response()->json([
+            'success' => true,
+            'favorited' => $favorited,
+            'favorites_count' => $collection->fresh()->favorites_count
+        ]);
+    }
 }
