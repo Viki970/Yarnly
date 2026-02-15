@@ -25,4 +25,73 @@ class CollectionController extends Controller
 
         return view('collections.my-collections', compact('collections', 'crochetCollections', 'knittingCollections', 'embroideryCollections'));
     }
+
+    /**
+     * Show pattern selection page for creating a collection
+     */
+    public function selectPatterns()
+    {
+        $patterns = \App\Models\CrochetPattern::where('user_id', Auth::id())
+            ->latest()
+            ->get();
+
+        return view('collections.select-patterns', compact('patterns'));
+    }
+
+    /**
+     * Show the form for creating a new collection
+     */
+    public function create(Request $request)
+    {
+        $patternIds = $request->input('patterns', []);
+        
+        if (empty($patternIds)) {
+            return redirect()->route('collections.select-patterns')
+                ->with('error', 'Please select at least one pattern for your collection.');
+        }
+
+        $patterns = \App\Models\CrochetPattern::whereIn('id', $patternIds)
+            ->where('user_id', Auth::id())
+            ->get();
+
+        return view('collections.create', compact('patterns', 'patternIds'));
+    }
+
+    /**
+     * Store a newly created collection in the database
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'is_public' => 'required|boolean',
+            'craft_type' => 'required|in:crochet,knitting,embroidery',
+            'pattern_ids' => 'required|array|min:1',
+            'pattern_ids.*' => 'exists:crochet_patterns,id',
+        ]);
+
+        // Handle cover image upload
+        $coverImagePath = null;
+        if ($request->hasFile('cover_image')) {
+            $coverImagePath = $request->file('cover_image')->store('collections/covers', 'public');
+        }
+
+        // Create the collection
+        $collection = Collection::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'craft_type' => $request->craft_type,
+            'cover_image_path' => $coverImagePath,
+            'is_public' => $request->is_public,
+            'user_id' => Auth::id(),
+        ]);
+
+        // Attach patterns to collection
+        $collection->patterns()->attach($request->pattern_ids);
+
+        return redirect()->route('my-collections')
+            ->with('success', 'Collection created successfully!');
+    }
 }

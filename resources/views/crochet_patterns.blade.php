@@ -304,12 +304,12 @@
             </div>
             <div class="flex items-center gap-4">
                 @auth
-                    <button class="rounded-xl bg-gradient-to-r from-teal-800 to-teal-900 px-5 py-3 text-sm font-semibold text-white shadow-lg hover:from-teal-700 hover:to-teal-800 transition-all duration-200 transform hover:scale-105">
+                    <a href="{{ route('collections.select-patterns') }}" class="rounded-xl bg-gradient-to-r from-teal-800 to-teal-900 px-5 py-3 text-sm font-semibold text-white shadow-lg hover:from-teal-700 hover:to-teal-800 transition-all duration-200 transform hover:scale-105">
                         <svg class="inline-block h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                         </svg>
                         Add Collection
-                    </button>
+                    </a>
                 @else
                     <button onclick="handleCreateCollectionGuest()" class="rounded-xl bg-gradient-to-r from-teal-800 to-teal-900 px-5 py-3 text-sm font-semibold text-white shadow-lg hover:from-teal-700 hover:to-teal-800 transition-all duration-200 transform hover:scale-105">
                         <svg class="inline-block h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

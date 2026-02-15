@@ -28,13 +28,13 @@ Route::middleware('auth')->group(function () {
     
     // Collections routes
     Route::get('/my-collections', [\App\Http\Controllers\CollectionController::class, 'myCollections'])->name('my-collections');
+    Route::get('/collections/select-patterns', [\App\Http\Controllers\CollectionController::class, 'selectPatterns'])->name('collections.select-patterns');
+    Route::get('/collections/create', [\App\Http\Controllers\CollectionController::class, 'create'])->name('collections.create');
+    Route::post('/collections/store', [\App\Http\Controllers\CollectionController::class, 'store'])->name('collections.store');
     
     // Favorites routes
     Route::post('/patterns/{pattern}/toggle-favorite', [\App\Http\Controllers\PatternController::class, 'toggleFavorite'])->name('patterns.toggle-favorite');
     Route::get('/favorites', [\App\Http\Controllers\PatternController::class, 'favorites'])->name('favorites');
-    
-    // Collections routes
-    Route::get('/my-collections', [\App\Http\Controllers\CollectionController::class, 'myCollections'])->name('my-collections');
 });
 
 require __DIR__.'/auth.php';

@@ -13,13 +13,13 @@
                     Organize and manage your pattern collections
                 </p>
             </div>
-            <button 
+            <a href="{{ route('collections.select-patterns') }}" 
                 class="px-6 py-3 rounded-lg bg-gradient-to-r from-teal-600 to-emerald-600 text-white font-semibold hover:from-teal-500 hover:to-emerald-500 transform hover:scale-105 transition-all duration-200 shadow-lg">
                 <svg class="inline-block h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                 </svg>
                 Create New Collection
-            </button>
+            </a>
         </div>
 
         @if(session('success'))
@@ -97,13 +97,6 @@
                 </div>
                 <h3 class="text-2xl font-bold text-zinc-900 dark:text-white mb-2">No collections yet</h3>
                 <p class="text-zinc-600 dark:text-zinc-400 mb-6">Start organizing your patterns into collections to make them easier to find and share!</p>
-                <button 
-                    class="inline-flex items-center px-6 py-3 rounded-lg bg-gradient-to-r from-teal-600 to-emerald-600 text-white font-semibold hover:from-teal-500 hover:to-emerald-500 transform hover:scale-105 transition-all duration-200 shadow-lg">
-                    <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                    </svg>
-                    Create Your First Collection
-                </button>
             </div>
         @else
             <!-- Crochet Collections -->
@@ -181,7 +174,7 @@
             <div class="mt-12 bg-white dark:bg-zinc-900 rounded-2xl p-8 border border-teal-100 dark:border-teal-900/40 shadow-lg">
                 <h2 class="text-2xl font-bold text-zinc-900 dark:text-white mb-4">Quick Actions</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <button class="flex items-center gap-3 p-4 rounded-lg bg-gradient-to-r from-teal-50 to-emerald-50 dark:from-teal-900/20 dark:to-emerald-900/20 border border-teal-200 dark:border-teal-800 text-left hover:shadow-md transition-all duration-200">
+                    <a href="{{ route('collections.select-patterns') }}" class="flex items-center gap-3 p-4 rounded-lg bg-gradient-to-r from-teal-50 to-emerald-50 dark:from-teal-900/20 dark:to-emerald-900/20 border border-teal-200 dark:border-teal-800 text-left hover:shadow-md transition-all duration-200">
                         <div class="p-2 rounded-lg bg-teal-100 dark:bg-teal-900/40">
                             <svg class="h-5 w-5 text-teal-600 dark:text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
@@ -191,7 +184,7 @@
                             <h3 class="font-semibold text-zinc-900 dark:text-white">Create New Collection</h3>
                             <p class="text-sm text-zinc-600 dark:text-zinc-400">Organize more patterns</p>
                         </div>
-                    </button>
+                    </a>
 
                     <a href="{{ route('patterns.crochet') }}" class="flex items-center gap-3 p-4 rounded-lg bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border border-emerald-200 dark:border-emerald-800 text-left hover:shadow-md transition-all duration-200">
                         <div class="p-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/40">

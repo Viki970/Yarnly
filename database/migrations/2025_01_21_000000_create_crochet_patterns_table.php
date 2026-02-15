@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('crochet_patterns', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->text('description');
             $table->enum('category', ['blankets', 'amigurumi', 'bags', 'wearables', 'home-decor'])->index();
             $table->enum('difficulty', ['beginner', 'intermediate', 'advanced'])->default('beginner');
             $table->integer('estimated_hours')->nullable();
             $table->string('pdf_file')->nullable(); // Path to stored PDF file
+            $table->string('original_filename')->nullable(); // Original name of uploaded PDF
             $table->string('image_path')->nullable(); // Path to stored image file
             $table->text('tags')->nullable(); // Tags for search and categorization
             $table->integer('makers_saved')->default(0);

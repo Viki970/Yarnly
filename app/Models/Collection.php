@@ -14,6 +14,7 @@ class Collection extends Model
         'description',
         'craft_type',
         'cover_image_path',
+        'is_public',
         'user_id',
     ];
 
