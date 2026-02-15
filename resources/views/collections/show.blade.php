@@ -17,17 +17,17 @@
             </div>
 
             @if($collection->cover_image_path)
-                <div class="mb-8 aspect-[21/9] w-full overflow-hidden rounded-2xl shadow-2xl">
+                <div class="mb-8 w-full overflow-hidden rounded-2xl shadow-2xl">
                     <img src="{{ asset('storage/' . $collection->cover_image_path) }}" 
                         alt="{{ $collection->name }}" 
-                        class="h-full w-full object-cover">
+                        class="w-full h-auto object-contain">
                 </div>
             @endif
 
             <div class="bg-white/80 dark:bg-zinc-900/70 backdrop-blur rounded-2xl p-8 shadow-xl ring-1 ring-emerald-100 dark:ring-emerald-900/40">
                 <div class="flex items-start justify-between mb-4">
                     <div class="flex-1">
-                        <div class="flex items-center gap-3 mb-3">
+                        <div class="flex items-center gap-3 mb-3 flex-wrap">
                             <span class="inline-flex items-center rounded-lg px-3 py-1.5 text-xs font-semibold bg-
                                 @if($collection->craft_type === 'crochet')
                                     emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200
@@ -60,6 +60,38 @@
                             <p class="text-lg text-zinc-600 dark:text-zinc-300 leading-relaxed">{{ $collection->description }}</p>
                         @endif
                     </div>
+                    
+                    @auth
+                        @if($collection->user_id === Auth::id())
+                            <div class="flex flex-col gap-2 ml-4">
+                                <a href="{{ route('collections.edit', $collection) }}" 
+                                   class="inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition hover:from-emerald-700 hover:to-teal-700 hover:shadow-xl transform hover:-translate-y-0.5">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                    </svg>
+                                    Edit Collection
+                                </a>
+                                <a href="{{ route('collections.edit-patterns', $collection) }}" 
+                                   class="inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-teal-600 to-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition hover:from-teal-700 hover:to-emerald-700 hover:shadow-xl transform hover:-translate-y-0.5">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+                                    </svg>
+                                    Edit Patterns
+                                </a>
+                                <form action="{{ route('collections.destroy', $collection) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this collection? This action cannot be undone.');" class="w-full">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" 
+                                            class="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-red-600 to-rose-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition hover:from-red-700 hover:to-rose-700 hover:shadow-xl transform hover:-translate-y-0.5">
+                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                        </svg>
+                                        Delete Collection
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
+                    @endauth
                 </div>
 
                 <div class="mt-6 pt-6 border-t border-emerald-100 dark:border-emerald-900/40 flex items-center justify-between">

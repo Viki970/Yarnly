@@ -47,10 +47,10 @@
                 class="flex-1 text-center px-4 py-2 rounded-lg bg-{{ $color }}-600 text-white font-semibold hover:bg-{{ $color }}-500 transition-colors">
                 View Collection
             </a>
-            <button 
+            <a href="{{ route('collections.edit', $collection) }}" 
                 class="px-4 py-2 rounded-lg border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">
                 Edit
-            </button>
+            </a>
             <form action="{{ route('collections.destroy', $collection) }}" method="POST" 
                 onsubmit="return confirm('Are you sure you want to delete this collection? The patterns in it will not be deleted.');"
                 class="inline">

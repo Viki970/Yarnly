@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class CollectionController extends Controller
 {
@@ -104,6 +105,128 @@ class CollectionController extends Controller
         $collection->load(['patterns', 'user']);
 
         return view('collections.show', compact('collection'));
+    }
+
+    /**
+     * Show the form for editing a collection
+     */
+    public function edit(Collection $collection)
+    {
+        // Verify that the collection belongs to the authenticated user
+        if ($collection->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return view('collections.edit', compact('collection'));
+    }
+
+    /**
+     * Update the specified collection in storage
+     */
+    public function update(Request $request, Collection $collection)
+    {
+        // Verify that the collection belongs to the authenticated user
+        if ($collection->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'is_public' => 'required|boolean',
+            'craft_type' => 'required|in:crochet,knitting,embroidery',
+            'remove_cover_image' => 'nullable|boolean',
+        ]);
+
+        // Handle cover image
+        $coverImagePath = $collection->cover_image_path;
+        
+        // Remove old cover image if requested
+        if ($request->has('remove_cover_image') && $request->remove_cover_image) {
+            if ($coverImagePath && Storage::disk('public')->exists($coverImagePath)) {
+                Storage::disk('public')->delete($coverImagePath);
+            }
+            $coverImagePath = null;
+        }
+        
+        // Upload new cover image if provided
+        if ($request->hasFile('cover_image')) {
+            // Delete old cover image if it exists
+            if ($coverImagePath && Storage::disk('public')->exists($coverImagePath)) {
+                Storage::disk('public')->delete($coverImagePath);
+            }
+            $coverImagePath = $request->file('cover_image')->store('collections/covers', 'public');
+        }
+
+        // Update the collection
+        $collection->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'craft_type' => $request->craft_type,
+            'cover_image_path' => $coverImagePath,
+            'is_public' => $request->is_public,
+        ]);
+
+        return redirect()->route('collections.show', $collection)
+            ->with('success', 'Collection updated successfully!');
+    }
+
+    /**
+     * Show the form for editing patterns in a collection
+     */
+    public function editPatterns(Collection $collection)
+    {
+        // Verify that the collection belongs to the authenticated user
+        if ($collection->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Get all patterns belonging to the user
+        $patterns = \App\Models\CrochetPattern::where('user_id', Auth::id())
+            ->latest()
+            ->get();
+
+        // Get IDs of patterns currently in the collection
+        $collectionPatternIds = $collection->patterns->pluck('id');
+
+        return view('collections.edit-patterns', compact('collection', 'patterns', 'collectionPatternIds'));
+    }
+
+    /**
+     * Update the patterns in a collection
+     */
+    public function updatePatterns(Request $request, Collection $collection)
+    {
+        // Verify that the collection belongs to the authenticated user
+        if ($collection->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $request->validate([
+            'pattern_ids' => 'nullable|array',
+            'pattern_ids.*' => 'exists:crochet_patterns,id',
+        ]);
+
+        // Get the pattern IDs from the request (empty array if none selected)
+        $patternIds = $request->input('pattern_ids', []);
+
+        // Verify that all patterns belong to the authenticated user
+        if (!empty($patternIds)) {
+            $userPatternCount = \App\Models\CrochetPattern::whereIn('id', $patternIds)
+                ->where('user_id', Auth::id())
+                ->count();
+
+            if ($userPatternCount !== count($patternIds)) {
+                abort(403, 'Unauthorized action.');
+            }
+        }
+
+        // Sync the patterns with the collection
+        $collection->patterns()->sync($patternIds);
+
+        return redirect()->route('collections.show', $collection)
+            ->with('success', 'Collection patterns updated successfully!');
     }
 
     /**
