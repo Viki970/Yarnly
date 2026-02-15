@@ -107,6 +107,56 @@ class CollectionController extends Controller
     }
 
     /**
+     * Download all patterns in a collection as a ZIP file
+     */
+    public function downloadAll(Collection $collection)
+    {
+        // Load the collection's patterns
+        $collection->load('patterns');
+
+        // Filter patterns that have PDF files
+        $patternsWithPdf = $collection->patterns->filter(function ($pattern) {
+            return !empty($pattern->pdf_file);
+        });
+
+        if ($patternsWithPdf->isEmpty()) {
+            return redirect()->back()->with('error', 'No patterns with PDF files found in this collection.');
+        }
+
+        // Create a temporary directory for the ZIP file
+        $zipFileName = str_replace(' ', '_', $collection->name) . '_patterns.zip';
+        $zipPath = storage_path('app/temp/' . $zipFileName);
+        
+        // Ensure temp directory exists
+        if (!file_exists(storage_path('app/temp'))) {
+            mkdir(storage_path('app/temp'), 0755, true);
+        }
+
+        // Create ZIP archive
+        $zip = new \ZipArchive();
+        if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
+            return redirect()->back()->with('error', 'Could not create ZIP file.');
+        }
+
+        // Add each pattern's PDF to the ZIP
+        foreach ($patternsWithPdf as $pattern) {
+            $pdfPath = storage_path('app/public/' . $pattern->pdf_file);
+            
+            if (file_exists($pdfPath)) {
+                $filename = $pattern->original_filename ?: ($pattern->title . '.pdf');
+                // Make sure the filename is unique and safe
+                $filename = preg_replace('/[^A-Za-z0-9_\-\.]/', '_', $filename);
+                $zip->addFile($pdfPath, $filename);
+            }
+        }
+
+        $zip->close();
+
+        // Return the ZIP file as a download and delete after sending
+        return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
+    }
+
+    /**
      * Remove the specified collection from storage
      */
     public function destroy(Collection $collection)

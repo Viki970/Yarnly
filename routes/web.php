@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/collections/create', [\App\Http\Controllers\CollectionController::class, 'create'])->name('collections.create');
     Route::post('/collections/store', [\App\Http\Controllers\CollectionController::class, 'store'])->name('collections.store');
     Route::get('/collections/{collection}', [\App\Http\Controllers\CollectionController::class, 'show'])->name('collections.show');
+    Route::get('/collections/{collection}/download-all', [\App\Http\Controllers\CollectionController::class, 'downloadAll'])->name('collections.downloadAll');
     Route::delete('/collections/{collection}', [\App\Http\Controllers\CollectionController::class, 'destroy'])->name('collections.destroy');
     
     // Favorites routes
