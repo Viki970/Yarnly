@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CrochetPattern;
+use App\Models\Collection;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,11 +28,19 @@ class PatternController extends Controller
             $favoritesCount = $user->favoritePatterns()->count();
         }
         
+        // Get public collections with patterns and users
+        $collections = Collection::where('is_public', true)
+            ->with(['patterns', 'user'])
+            ->latest()
+            ->limit(6)
+            ->get();
+        
         return view('crochet_patterns', [
             'newest' => $newest, 
             'selectedCategory' => null,
             'newThisWeek' => $newThisWeek,
-            'favoritesCount' => $favoritesCount
+            'favoritesCount' => $favoritesCount,
+            'collections' => $collections
         ]);
     }
 
@@ -59,12 +68,20 @@ class PatternController extends Controller
             $favoritesCount = $user->favoritePatterns()->count();
         }
         
+        // Get public collections with patterns and users
+        $collections = Collection::where('is_public', true)
+            ->with(['patterns', 'user'])
+            ->latest()
+            ->limit(6)
+            ->get();
+        
         return view('crochet_patterns', [
             'patterns' => $patterns,
             'newest' => $newest,
             'selectedCategory' => $category,
             'newThisWeek' => $newThisWeek,
-            'favoritesCount' => $favoritesCount
+            'favoritesCount' => $favoritesCount,
+            'collections' => $collections
         ]);
     }
 

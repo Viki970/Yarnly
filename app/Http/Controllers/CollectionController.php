@@ -94,4 +94,32 @@ class CollectionController extends Controller
         return redirect()->route('my-collections')
             ->with('success', 'Collection created successfully!');
     }
+
+    /**
+     * Display a single collection with its patterns
+     */
+    public function show(Collection $collection)
+    {
+        // Load the collection with its patterns and user (author)
+        $collection->load(['patterns', 'user']);
+
+        return view('collections.show', compact('collection'));
+    }
+
+    /**
+     * Remove the specified collection from storage
+     */
+    public function destroy(Collection $collection)
+    {
+        // Verify that the collection belongs to the authenticated user
+        if ($collection->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Delete the collection (relationships in collection_pattern will be automatically deleted)
+        $collection->delete();
+
+        return redirect()->route('my-collections')
+            ->with('success', 'Collection deleted successfully!');
+    }
 }

@@ -358,7 +358,7 @@
                         <div class="mt-4 flex items-center justify-between">
                             <span class="text-xs text-zinc-500 dark:text-zinc-400">{{ $collection->created_at->diffForHumans() }}</span>
                             <div class="flex items-center gap-2">
-                                <a href="#" class="rounded-lg bg-teal-800 px-4 py-2 text-xs font-semibold text-white hover:bg-teal-700 transition-colors">
+                                <a href="{{ route('collections.show', $collection) }}" class="rounded-lg bg-teal-800 px-4 py-2 text-xs font-semibold text-white hover:bg-teal-700 transition-colors">
                                     View Collection
                                 </a>
                             </div>
@@ -375,7 +375,7 @@
                     <h3 class="text-lg font-bold text-zinc-900 dark:text-white">No collections yet</h3>
                     <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">Be the first to create a collection and organize your favorite patterns!</p>
                     @auth
-                        <button class="mt-4 inline-block rounded-lg bg-teal-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-teal-700">Create Collection</button>
+                        <a href="{{ route('collections.select-patterns') }}" class="mt-4 inline-block rounded-lg bg-teal-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-teal-700">Create Collection</a>
                     @else
                         <button onclick="handleCreateCollectionGuest()" class="mt-4 inline-block rounded-lg bg-teal-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-teal-700">Create Collection</button>
                     @endauth
