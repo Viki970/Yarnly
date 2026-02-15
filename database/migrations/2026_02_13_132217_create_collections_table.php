@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->enum('craft_type', ['crochet', 'knitting', 'embroidery'])->default('crochet');
             $table->string('cover_image_path')->nullable();
+            $table->boolean('is_public')->default(true);
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

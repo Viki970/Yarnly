@@ -23,26 +23,49 @@
         </div>
 
         <!-- Selected Patterns Preview -->
-        <div class="mb-8 p-6 rounded-xl bg-white dark:bg-zinc-900 shadow-lg border border-teal-100 dark:border-teal-900/40">
+        <div class="mb-8">
             <h3 class="text-lg font-semibold text-zinc-900 dark:text-white mb-4">
                 Selected Patterns ({{ $patterns->count() }})
             </h3>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($patterns as $pattern)
-                    <div class="relative group">
-                        @if($pattern->image_path)
-                            <img src="{{ asset('storage/' . $pattern->image_path) }}" 
-                                alt="{{ $pattern->title }}" 
-                                class="w-full h-24 object-cover rounded-lg">
-                        @else
-                            <div class="w-full h-24 bg-gradient-to-br from-teal-100 to-emerald-100 dark:from-teal-900/40 dark:to-emerald-900/40 rounded-lg flex items-center justify-center">
-                                <svg class="h-8 w-8 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                </svg>
+                    <div class="bg-white dark:bg-zinc-900 rounded-2xl shadow-lg border-2 border-teal-200 dark:border-teal-800 overflow-hidden hover:shadow-xl transition-all duration-300">
+                        <!-- Pattern Image -->
+                        <div class="relative">
+                            @if($pattern->image_path)
+                                <img src="{{ asset('storage/' . $pattern->image_path) }}" 
+                                    alt="{{ $pattern->title }}" 
+                                    class="w-full h-48 object-cover">
+                            @else
+                                <div class="w-full h-48 bg-gradient-to-br from-teal-100 to-emerald-100 dark:from-teal-900/40 dark:to-emerald-900/40 flex items-center justify-center">
+                                    <svg class="h-16 w-16 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                </div>
+                            @endif
+                        </div>
+
+                        <!-- Pattern Details -->
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-zinc-900 dark:text-white mb-2">{{ $pattern->title }}</h3>
+                            <p class="text-zinc-600 dark:text-zinc-400 text-sm mb-4 line-clamp-2">{{ Str::limit($pattern->description, 100) }}</p>
+                            
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="inline-flex items-center rounded-lg px-3 py-1 text-xs font-semibold bg-{{ $pattern->getDifficultyColor() }}-100 text-{{ $pattern->getDifficultyColor() }}-700 dark:bg-{{ $pattern->getDifficultyColor() }}-900/40 dark:text-{{ $pattern->getDifficultyColor() }}-200">
+                                    {{ ucfirst($pattern->difficulty) }}
+                                </span>
+                                
+                                <span class="text-sm text-zinc-500 dark:text-zinc-400">
+                                    {{ $pattern->getCategoryLabel() }}
+                                </span>
                             </div>
-                        @endif
-                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 rounded-lg transition-all duration-200 flex items-center justify-center">
-                            <p class="text-white text-xs font-semibold opacity-0 group-hover:opacity-100 text-center px-2">{{ Str::limit($pattern->title, 30) }}</p>
+
+                            <div class="flex items-center justify-between text-sm text-zinc-500 dark:text-zinc-400">
+                                @if($pattern->estimated_hours)
+                                    <span>{{ $pattern->estimated_hours }} hrs</span>
+                                @endif
+                                <span>{{ $pattern->makers_saved }} saved</span>
+                            </div>
                         </div>
                     </div>
                 @endforeach

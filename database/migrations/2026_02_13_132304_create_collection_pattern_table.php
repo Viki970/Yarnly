@@ -15,6 +15,7 @@ return new class extends Migration
             $table->foreignId('collection_id')->constrained()->onDelete('cascade');
             $table->foreignId('crochet_pattern_id')->constrained()->onDelete('cascade');
             $table->primary(['collection_id', 'crochet_pattern_id']);
+            $table->timestamps();
         });
     }
 
