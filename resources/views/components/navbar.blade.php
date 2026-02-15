@@ -462,8 +462,8 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="font-semibold">Collections</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Pattern collections by type</div>
+                                        <div class="font-semibold">My Collections</div>
+                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Your pattern collections</div>
                                     </div>
                                 </a>
                                 <a href="{{ route('favorites') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-pink-50 hover:to-rose-50 hover:text-pink-700 dark:text-zinc-200 dark:hover:from-pink-900/20 dark:hover:to-rose-900/20 dark:hover:text-pink-300">

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
+            $table->enum('craft_type', ['crochet', 'knitting', 'embroidery'])->default('crochet');
             $table->string('cover_image_path')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
