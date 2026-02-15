@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/collections/{collection}', [\App\Http\Controllers\CollectionController::class, 'show'])->name('collections.show');
     Route::get('/collections/{collection}/edit', [\App\Http\Controllers\CollectionController::class, 'edit'])->name('collections.edit');
     Route::put('/collections/{collection}', [\App\Http\Controllers\CollectionController::class, 'update'])->name('collections.update');
+    Route::delete('/collections/{collection}/remove-cover', [\App\Http\Controllers\CollectionController::class, 'removeCover'])->name('collections.remove-cover');
     Route::get('/collections/{collection}/edit-patterns', [\App\Http\Controllers\CollectionController::class, 'editPatterns'])->name('collections.edit-patterns');
     Route::post('/collections/{collection}/update-patterns', [\App\Http\Controllers\CollectionController::class, 'updatePatterns'])->name('collections.update-patterns');
     Route::get('/collections/{collection}/download-all', [\App\Http\Controllers\CollectionController::class, 'downloadAll'])->name('collections.downloadAll');

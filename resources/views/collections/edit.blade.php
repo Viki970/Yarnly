@@ -80,18 +80,25 @@
 
                 <!-- Current Cover Image -->
                 @if($collection->cover_image_path)
-                    <div class="mb-6">
-                        <label class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-2">
+                    <div class="mb-6" id="cover-image-section">
+                        <label class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3">
                             Current Cover Image
                         </label>
-                        <div class="relative inline-block">
+                        <div class="bg-zinc-50 dark:bg-zinc-800/50 rounded-xl p-4 border border-zinc-200 dark:border-zinc-700">
                             <img src="{{ asset('storage/' . $collection->cover_image_path) }}" 
                                  alt="{{ $collection->name }}" 
-                                 class="w-full max-w-md rounded-lg shadow-lg">
-                            <label class="absolute top-2 right-2">
-                                <input type="checkbox" name="remove_cover_image" value="1" class="mr-2">
-                                <span class="text-sm bg-red-600 text-white px-3 py-1 rounded-lg shadow-lg">Remove Image</span>
-                            </label>
+                                 class="w-full max-w-md rounded-lg shadow-md mx-auto mb-4">
+                            <div class="flex justify-center">
+                                <button type="button" 
+                                        id="remove-cover-btn"
+                                        onclick="removeCoverImage()"
+                                        class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-red-300 dark:border-red-700 bg-white dark:bg-zinc-800 text-red-600 dark:text-red-400 font-semibold hover:bg-red-50 dark:hover:bg-red-900/20 hover:border-red-400 dark:hover:border-red-600 transition-all duration-200">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                    Remove Cover Image
+                                </button>
+                            </div>
                         </div>
                     </div>
                 @endif
@@ -182,9 +189,40 @@
 </div>
 
 <script>
+// Track form changes
+let formChanged = false;
+const form = document.querySelector('form');
+
+// Track when form fields change
+if (form) {
+    form.addEventListener('change', function() {
+        formChanged = true;
+    });
+
+    form.addEventListener('input', function() {
+        formChanged = true;
+    });
+}
+
+// Handle cancel button clicks
+document.addEventListener('DOMContentLoaded', function() {
+    const cancelButtons = document.querySelectorAll('a[href*="collections"][href*="show"]');
+    
+    cancelButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            if (formChanged) {
+                if (!confirm('You have unsaved changes. Are you sure you want to leave without saving?')) {
+                    e.preventDefault();
+                }
+            }
+        });
+    });
+});
+
 function previewImage(event) {
     const file = event.target.files[0];
     if (file) {
+        formChanged = true; // Mark form as changed
         const reader = new FileReader();
         reader.onload = function(e) {
             const preview = document.getElementById('preview-image');
@@ -193,6 +231,68 @@ function previewImage(event) {
             container.classList.remove('hidden');
         }
         reader.readAsDataURL(file);
+    }
+}
+
+async function removeCoverImage() {
+    const button = document.getElementById('remove-cover-btn');
+    const originalText = button.innerHTML;
+    
+    // Show loading state
+    button.disabled = true;
+    button.innerHTML = `
+        <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Removing...
+    `;
+
+    try {
+        const response = await fetch('{{ route('collections.remove-cover', $collection) }}', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            // Remove the entire cover image section with a smooth fade
+            const section = document.getElementById('cover-image-section');
+            section.style.transition = 'opacity 0.3s ease-out';
+            section.style.opacity = '0';
+            
+            setTimeout(() => {
+                section.remove();
+            }, 300);
+
+            // Show success message
+            const successDiv = document.createElement('div');
+            successDiv.className = 'mb-6 p-4 rounded-lg bg-teal-50 dark:bg-teal-900/30 border border-teal-200 dark:border-teal-800';
+            successDiv.innerHTML = '<p class="text-teal-700 dark:text-teal-300">Cover image removed successfully!</p>';
+            document.querySelector('form').insertBefore(successDiv, document.querySelector('form').firstChild);
+            
+            // Auto-hide success message after 3 seconds
+            setTimeout(() => {
+                successDiv.style.transition = 'opacity 0.3s ease-out';
+                successDiv.style.opacity = '0';
+                setTimeout(() => successDiv.remove(), 300);
+            }, 3000);
+
+            // Reset formChanged since the removal was saved
+            formChanged = false;
+        } else {
+            throw new Error(data.message || 'Failed to remove cover image');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to remove cover image. Please try again.');
+        button.disabled = false;
+        button.innerHTML = originalText;
     }
 }
 </script>

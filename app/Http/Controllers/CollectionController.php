@@ -136,19 +136,10 @@ class CollectionController extends Controller
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
             'is_public' => 'required|boolean',
             'craft_type' => 'required|in:crochet,knitting,embroidery',
-            'remove_cover_image' => 'nullable|boolean',
         ]);
 
-        // Handle cover image
+        // Handle cover image upload
         $coverImagePath = $collection->cover_image_path;
-        
-        // Remove old cover image if requested
-        if ($request->has('remove_cover_image') && $request->remove_cover_image) {
-            if ($coverImagePath && Storage::disk('public')->exists($coverImagePath)) {
-                Storage::disk('public')->delete($coverImagePath);
-            }
-            $coverImagePath = null;
-        }
         
         // Upload new cover image if provided
         if ($request->hasFile('cover_image')) {
@@ -170,6 +161,29 @@ class CollectionController extends Controller
 
         return redirect()->route('collections.show', $collection)
             ->with('success', 'Collection updated successfully!');
+    }
+
+    /**
+     * Remove the cover image from a collection
+     */
+    public function removeCover(Collection $collection)
+    {
+        // Verify that the collection belongs to the authenticated user
+        if ($collection->user_id !== Auth::id()) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized action.'], 403);
+        }
+
+        // Delete the cover image if it exists
+        if ($collection->cover_image_path && Storage::disk('public')->exists($collection->cover_image_path)) {
+            Storage::disk('public')->delete($collection->cover_image_path);
+        }
+
+        // Update the collection to remove the cover image path
+        $collection->update([
+            'cover_image_path' => null,
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Cover image removed successfully!']);
     }
 
     /**

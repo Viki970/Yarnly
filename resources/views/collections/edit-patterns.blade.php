@@ -163,11 +163,50 @@
 </div>
 
 <script>
+// Track form changes
+let formChanged = false;
+const initialState = {};
+
+// Store initial checkbox states
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.pattern-checkbox').forEach((checkbox, index) => {
+        initialState[index] = checkbox.checked;
+        checkbox.addEventListener('change', function() {
+            updateSelectedCount();
+            checkForChanges();
+        });
+    });
+
+    // Handle cancel button clicks
+    const cancelButtons = document.querySelectorAll('a[href*="collections"][href*="show"]');
+    cancelButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            if (formChanged) {
+                if (!confirm('You have unsaved changes. Are you sure you want to leave without saving?')) {
+                    e.preventDefault();
+                }
+            }
+        });
+    });
+});
+
+// Check if form has changed from initial state
+function checkForChanges() {
+    let changed = false;
+    document.querySelectorAll('.pattern-checkbox').forEach((checkbox, index) => {
+        if (checkbox.checked !== initialState[index]) {
+            changed = true;
+        }
+    });
+    formChanged = changed;
+}
+
 function selectAll() {
     document.querySelectorAll('.pattern-checkbox').forEach(checkbox => {
         checkbox.checked = true;
     });
     updateSelectedCount();
+    checkForChanges();
 }
 
 function deselectAll() {
@@ -175,18 +214,12 @@ function deselectAll() {
         checkbox.checked = false;
     });
     updateSelectedCount();
+    checkForChanges();
 }
 
 function updateSelectedCount() {
     const count = document.querySelectorAll('.pattern-checkbox:checked').length;
     document.getElementById('selected-count').textContent = count;
 }
-
-// Update count when checkboxes change
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.pattern-checkbox').forEach(checkbox => {
-        checkbox.addEventListener('change', updateSelectedCount);
-    });
-});
 </script>
 @endsection
