@@ -249,7 +249,7 @@ async function removeCoverImage() {
     `;
 
     try {
-        const response = await fetch('{{ route('collections.remove-cover', $collection) }}', {
+        const response = await fetch('{{ route("collections.remove-cover", $collection) }}', {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

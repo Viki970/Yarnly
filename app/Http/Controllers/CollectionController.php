@@ -36,7 +36,11 @@ class CollectionController extends Controller
             ->latest()
             ->get();
 
-        return view('collections.select-patterns', compact('patterns'));
+        $collections = Collection::where('user_id', Auth::id())
+            ->latest()
+            ->get();
+
+        return view('collections.select-patterns', compact('patterns', 'collections'));
     }
 
     /**
@@ -241,6 +245,55 @@ class CollectionController extends Controller
 
         return redirect()->route('collections.show', $collection)
             ->with('success', 'Collection patterns updated successfully!');
+    }
+
+    /**
+     * Add patterns to an existing collection
+     */
+    public function addPatternsToExisting(Request $request, Collection $collection)
+    {
+        // Verify that the collection belongs to the authenticated user
+        if ($collection->user_id !== Auth::id()) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized action.'], 403);
+        }
+
+        $request->validate([
+            'pattern_ids' => 'required|array|min:1',
+            'pattern_ids.*' => 'exists:crochet_patterns,id',
+        ]);
+
+        $patternIds = $request->input('pattern_ids');
+
+        // Verify that all patterns belong to the authenticated user
+        $userPatternCount = \App\Models\CrochetPattern::whereIn('id', $patternIds)
+            ->where('user_id', Auth::id())
+            ->count();
+
+        if ($userPatternCount !== count($patternIds)) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized action.'], 403);
+        }
+
+        // Get existing pattern IDs in the collection
+        $existingPatternIds = $collection->patterns()->pluck('crochet_pattern_id')->toArray();
+
+        // Attach only new patterns (avoid duplicates)
+        $newPatternIds = array_diff($patternIds, $existingPatternIds);
+        
+        if (!empty($newPatternIds)) {
+            $collection->patterns()->attach($newPatternIds);
+            $count = count($newPatternIds);
+            return response()->json([
+                'success' => true, 
+                'message' => "$count pattern(s) added to collection successfully!",
+                'count' => $count
+            ]);
+        } else {
+            return response()->json([
+                'success' => true, 
+                'message' => 'All selected patterns are already in this collection.',
+                'count' => 0
+            ]);
+        }
     }
 
     /**

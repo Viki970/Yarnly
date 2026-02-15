@@ -68,13 +68,24 @@
                 <p class="text-zinc-600 dark:text-zinc-400">
                     <span id="selected-count" class="font-semibold text-teal-600 dark:text-teal-400">0</span> pattern(s) selected
                 </p>
-                <button id="continue-btn" disabled
-                    class="px-6 py-3 rounded-lg bg-gradient-to-r from-teal-600 to-emerald-600 text-white font-semibold hover:from-teal-500 hover:to-emerald-500 transform hover:scale-105 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
-                    Continue to Collection Details
-                    <svg class="inline-block h-5 w-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                    </svg>
-                </button>
+                <div class="flex gap-3">
+                    @if($collections->count() > 0)
+                        <button id="add-to-existing-btn" disabled
+                            class="px-6 py-3 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold hover:from-emerald-500 hover:to-teal-500 transform hover:scale-105 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
+                            <svg class="inline-block h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                            </svg>
+                            Add to Existing Collection
+                        </button>
+                    @endif
+                    <button id="continue-btn" disabled
+                        class="px-6 py-3 rounded-lg bg-gradient-to-r from-teal-600 to-emerald-600 text-white font-semibold hover:from-teal-500 hover:to-emerald-500 transform hover:scale-105 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
+                        Continue to Collection Details
+                        <svg class="inline-block h-5 w-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -133,11 +144,105 @@
     </div>
 </div>
 
+<!-- Modal for selecting existing collection -->
+<div id="collection-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
+        <!-- Modal Header -->
+        <div class="bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-4">
+            <div class="flex items-center justify-between">
+                <h2 class="text-2xl font-bold text-white">Add to Existing Collection</h2>
+                <button onclick="closeModal()" class="text-white hover:text-gray-200 transition-colors">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-6 overflow-y-auto max-h-[calc(80vh-140px)]">
+            <p class="text-zinc-600 dark:text-zinc-400 mb-4">
+                Select a collection to add the <span id="modal-pattern-count" class="font-semibold text-emerald-600 dark:text-emerald-400">0</span> selected pattern(s):
+            </p>
+            
+            @if($collections->count() > 0)
+                <div class="space-y-3">
+                    @foreach($collections as $collection)
+                        <label class="flex items-start p-4 rounded-xl border-2 border-zinc-200 dark:border-zinc-700 cursor-pointer hover:border-emerald-400 dark:hover:border-emerald-500 transition-all group">
+                            <input type="radio" 
+                                   name="selected_collection" 
+                                   value="{{ $collection->id }}"
+                                   class="mt-1 w-5 h-5 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+                            <div class="ml-4 flex-1">
+                                <div class="flex items-start justify-between mb-2">
+                                    <h3 class="font-bold text-zinc-900 dark:text-white text-lg">{{ $collection->name }}</h3>
+                                    <span class="inline-flex items-center rounded-lg px-2 py-1 text-xs font-semibold 
+                                        @if($collection->craft_type === 'crochet')
+                                            bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200
+                                        @elseif($collection->craft_type === 'knitting')
+                                            bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-200
+                                        @else
+                                            bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-200
+                                        @endif
+                                    ">
+                                        {{ ucfirst($collection->craft_type) }}
+                                    </span>
+                                </div>
+                                @if($collection->description)
+                                    <p class="text-sm text-zinc-600 dark:text-zinc-400 mb-2">{{ Str::limit($collection->description, 100) }}</p>
+                                @endif
+                                <div class="flex items-center gap-4 text-xs text-zinc-500 dark:text-zinc-400">
+                                    <span class="flex items-center gap-1">
+                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                        </svg>
+                                        {{ $collection->patterns->count() }} {{ Str::plural('pattern', $collection->patterns->count()) }}
+                                    </span>
+                                    <span class="flex items-center gap-1">
+                                        @if($collection->is_public)
+                                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            Public
+                                        @else
+                                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                            </svg>
+                                            Private
+                                        @endif
+                                    </span>
+                                </div>
+                            </div>
+                        </label>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="bg-zinc-50 dark:bg-zinc-800 px-6 py-4 flex items-center justify-end gap-3">
+            <button onclick="closeModal()" 
+                    class="px-6 py-2.5 rounded-lg bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-200 font-semibold hover:bg-zinc-300 dark:hover:bg-zinc-600 transition-all">
+                Cancel
+            </button>
+            <button onclick="addToCollection()" 
+                    id="add-btn"
+                    class="px-6 py-2.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold hover:from-emerald-500 hover:to-teal-500 transition-all shadow-lg">
+                <svg class="inline-block h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                </svg>
+                Add Patterns
+            </button>
+        </div>
+    </div>
+</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const checkboxes = document.querySelectorAll('.pattern-checkbox');
     const selectedCount = document.getElementById('selected-count');
     const continueBtn = document.getElementById('continue-btn');
+    const addToExistingBtn = document.getElementById('add-to-existing-btn');
     const patternCards = document.querySelectorAll('.pattern-card');
     
     // Update count and button state
@@ -145,6 +250,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const checkedCount = document.querySelectorAll('.pattern-checkbox:checked').length;
         selectedCount.textContent = checkedCount;
         continueBtn.disabled = checkedCount === 0;
+        if (addToExistingBtn) {
+            addToExistingBtn.disabled = checkedCount === 0;
+        }
     }
     
     // Add event listeners to checkboxes
@@ -183,6 +291,90 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = '{{ route("collections.create") }}?' + params.toString();
         }
     });
+
+    // Add to existing collection button
+    if (addToExistingBtn) {
+        addToExistingBtn.addEventListener('click', function() {
+            openModal();
+        });
+    }
 });
+
+// Modal functions
+function openModal() {
+    const modal = document.getElementById('collection-modal');
+    const selectedCount = document.querySelectorAll('.pattern-checkbox:checked').length;
+    document.getElementById('modal-pattern-count').textContent = selectedCount;
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    const modal = document.getElementById('collection-modal');
+    modal.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+    // Clear radio selection
+    document.querySelectorAll('input[name="selected_collection"]').forEach(radio => radio.checked = false);
+}
+
+// Add patterns to selected collection
+async function addToCollection() {
+    const selectedCollection = document.querySelector('input[name="selected_collection"]:checked');
+    
+    if (!selectedCollection) {
+        alert('Please select a collection first.');
+        return;
+    }
+
+    const collectionId = selectedCollection.value;
+    const selectedPatterns = Array.from(document.querySelectorAll('.pattern-checkbox:checked'))
+        .map(cb => cb.value);
+
+    if (selectedPatterns.length === 0) {
+        alert('No patterns selected.');
+        return;
+    }
+
+    const addBtn = document.getElementById('add-btn');
+    const originalText = addBtn.innerHTML;
+    
+    // Show loading state
+    addBtn.disabled = true;
+    addBtn.innerHTML = `
+        <svg class="animate-spin inline-block h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Adding...
+    `;
+
+    try {
+        const response = await fetch(`/collections/${collectionId}/add-patterns`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ pattern_ids: selectedPatterns })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            // Redirect to my collections page
+            window.location.href = '/my-collections';
+        } else {
+            throw new Error(data.message || 'Failed to add patterns');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to add patterns to collection. Please try again.');
+    } finally {
+        addBtn.disabled = false;
+        addBtn.innerHTML = originalText;
+    }
+}
+
 </script>
 @endsection
