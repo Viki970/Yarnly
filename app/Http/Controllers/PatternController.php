@@ -6,6 +6,7 @@ use App\Models\CrochetPattern;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PatternController extends Controller
 {
@@ -218,5 +219,29 @@ class PatternController extends Controller
             ->get();
 
         return view('patterns.favorites', compact('favoritePatterns'));
+    }
+
+    /**
+     * Delete a pattern
+     */
+    public function destroy(CrochetPattern $pattern)
+    {
+        // Ensure only the owner can delete the pattern
+        if ($pattern->user_id !== Auth::id()) {
+            return redirect()->back()->with('error', 'You are not authorized to delete this pattern.');
+        }
+
+        // Delete associated files
+        if ($pattern->image_path) {
+            Storage::disk('public')->delete($pattern->image_path);
+        }
+        if ($pattern->pdf_path) {
+            Storage::disk('public')->delete($pattern->pdf_path);
+        }
+
+        // Delete the pattern
+        $pattern->delete();
+
+        return redirect()->route('my-patterns')->with('success', 'Pattern deleted successfully!');
     }
 }

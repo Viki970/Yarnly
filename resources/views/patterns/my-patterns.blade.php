@@ -28,6 +28,12 @@
             </div>
         @endif
 
+        @if(session('error'))
+            <div class="mb-6 p-4 rounded-lg bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800">
+                <p class="text-red-700 dark:text-red-300">{{ session('error') }}</p>
+            </div>
+        @endif
+
         <!-- Statistics Cards -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-lg border border-emerald-100 dark:border-emerald-900/40">
@@ -143,7 +149,20 @@
                                     class="flex-1 text-center px-4 py-2 rounded-lg bg-emerald-600 text-white font-semibold hover:bg-emerald-500 transition-colors">
                                     View Pattern
                                 </a>
+                                <button 
+                                    type="button"
+                                    data-pattern-id="{{ $pattern->id }}" 
+                                    class="delete-pattern-btn px-4 py-2 rounded-lg bg-red-400 text-white font-semibold hover:bg-red-500 transition-colors">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                </button>
                             </div>
+                            <!-- Hidden delete form -->
+                            <form id="delete-form-{{ $pattern->id }}" action="{{ route('patterns.destroy', $pattern) }}" method="POST" style="display: none;">
+                                @csrf
+                                @method('DELETE')
+                            </form>
 
                             <div class="mt-3 text-xs text-zinc-500 dark:text-zinc-400">
                                 Created {{ $pattern->created_at->diffForHumans() }}
@@ -155,4 +174,19 @@
         @endif
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteButtons = document.querySelectorAll('.delete-pattern-btn');
+    
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const patternId = this.getAttribute('data-pattern-id');
+            if (confirm('Are you sure you want to delete this pattern? This action cannot be undone.')) {
+                document.getElementById('delete-form-' + patternId).submit();
+            }
+        });
+    });
+});
+</script>
 @endsection

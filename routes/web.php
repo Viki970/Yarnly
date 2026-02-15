@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/patterns/create', [\App\Http\Controllers\PatternController::class, 'create'])->name('patterns.create');
     Route::post('/patterns/store', [\App\Http\Controllers\PatternController::class, 'store'])->name('patterns.store');
     Route::get('/my-patterns', [\App\Http\Controllers\PatternController::class, 'myPatterns'])->name('my-patterns');
+    Route::delete('/patterns/{pattern}', [\App\Http\Controllers\PatternController::class, 'destroy'])->name('patterns.destroy');
     
     // Collections routes
     Route::get('/my-collections', [\App\Http\Controllers\CollectionController::class, 'myCollections'])->name('my-collections');
