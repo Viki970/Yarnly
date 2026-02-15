@@ -29,6 +29,9 @@ Route::middleware('auth')->group(function () {
     // Favorites routes
     Route::post('/patterns/{pattern}/toggle-favorite', [\App\Http\Controllers\PatternController::class, 'toggleFavorite'])->name('patterns.toggle-favorite');
     Route::get('/favorites', [\App\Http\Controllers\PatternController::class, 'favorites'])->name('favorites');
+    
+    // Collections routes
+    Route::get('/my-collections', [\App\Http\Controllers\CollectionController::class, 'myCollections'])->name('my-collections');
 });
 
 require __DIR__.'/auth.php';
