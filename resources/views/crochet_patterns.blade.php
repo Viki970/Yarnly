@@ -335,14 +335,65 @@
                                     class="h-full w-full object-cover"
                                     loading="lazy">
                             </div>
-                        @elseif($collection->patterns->isNotEmpty() && $collection->patterns->first()->image_path)
-                            <div class="mb-4 aspect-[3/4] w-full overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800">
-                                <img src="{{ asset('storage/' . $collection->patterns->first()->image_path) }}" 
-                                    alt="{{ $collection->name }}" 
-                                    class="h-full w-full object-cover"
-                                    loading="lazy">
-                            </div>
+                        @elseif($collection->patterns->isNotEmpty())
+                            @php
+                                $patternCount = $collection->patterns->count();
+                                $patternsWithImages = $collection->patterns->filter(fn($p) => $p->image_path)->take(4);
+                            @endphp
+                            @if($patternsWithImages->isNotEmpty())
+                                <div class="mb-4 aspect-[3/4] w-full overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800">
+                                    <div class="grid h-full w-full grid-cols-2 grid-rows-2 gap-0.5">
+                                        @if($patternsWithImages->count() === 1)
+                                            {{-- Single pattern: Full span --}}
+                                            <img src="{{ asset('storage/' . $patternsWithImages->first()->image_path) }}" 
+                                                 alt="{{ $patternsWithImages->first()->title }}" 
+                                                 class="col-span-2 row-span-2 h-full w-full object-cover"
+                                                 loading="lazy">
+                                        @elseif($patternsWithImages->count() === 2)
+                                            {{-- Two patterns: Horizontal split --}}
+                                            <img src="{{ asset('storage/' . $patternsWithImages[0]->image_path) }}" 
+                                                 alt="{{ $patternsWithImages[0]->title }}" 
+                                                 class="col-span-2 row-span-1 h-full w-full object-cover"
+                                                 loading="lazy">
+                                            <img src="{{ asset('storage/' . $patternsWithImages[1]->image_path) }}" 
+                                                 alt="{{ $patternsWithImages[1]->title }}" 
+                                                 class="col-span-2 row-span-1 h-full w-full object-cover"
+                                                 loading="lazy">
+                                        @elseif($patternsWithImages->count() === 3)
+                                            {{-- Three patterns: Top large, bottom two small --}}
+                                            <img src="{{ asset('storage/' . $patternsWithImages[0]->image_path) }}" 
+                                                 alt="{{ $patternsWithImages[0]->title }}" 
+                                                 class="col-span-2 row-span-1 h-full w-full object-cover"
+                                                 loading="lazy">
+                                            <img src="{{ asset('storage/' . $patternsWithImages[1]->image_path) }}" 
+                                                 alt="{{ $patternsWithImages[1]->title }}" 
+                                                 class="col-span-1 row-span-1 h-full w-full object-cover"
+                                                 loading="lazy">
+                                            <img src="{{ asset('storage/' . $patternsWithImages[2]->image_path) }}" 
+                                                 alt="{{ $patternsWithImages[2]->title }}" 
+                                                 class="col-span-1 row-span-1 h-full w-full object-cover"
+                                                 loading="lazy">
+                                        @else
+                                            {{-- Four or more patterns: 2x2 grid --}}
+                                            @foreach($patternsWithImages->take(4) as $pattern)
+                                                <img src="{{ asset('storage/' . $pattern->image_path) }}" 
+                                                     alt="{{ $pattern->title }}" 
+                                                     class="col-span-1 row-span-1 h-full w-full object-cover"
+                                                     loading="lazy">
+                                            @endforeach
+                                        @endif
+                                    </div>
+                                </div>
+                            @else
+                                {{-- No patterns with images: Show icon placeholder --}}
+                                <div class="mb-4 aspect-[3/4] w-full overflow-hidden rounded-xl bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-800/50 dark:to-slate-900/50 flex items-center justify-center">
+                                    <svg class="h-20 w-20 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                    </svg>
+                                </div>
+                            @endif
                         @else
+                            {{-- Collection is empty: Show icon placeholder --}}
                             <div class="mb-4 aspect-[3/4] w-full overflow-hidden rounded-xl bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-800/50 dark:to-slate-900/50 flex items-center justify-center">
                                 <svg class="h-20 w-20 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />

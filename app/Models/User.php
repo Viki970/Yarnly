@@ -4,11 +4,29 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 
+/**
+ * App\Models\User
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property string $role
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, CrochetPattern> $favoritePatterns
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Collection> $favoriteCollections
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Collection> $collections
+ * @method BelongsToMany favoritePatterns()
+ * @method BelongsToMany favoriteCollections()
+ * @method HasMany collections()
+ * @method bool hasFavorited(CrochetPattern $pattern)
+ * @method bool hasFavoritedCollection(Collection $collection)
+ */
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -74,7 +92,7 @@ class User extends Authenticatable
     /**
      * Get the patterns this user has favorited
      */
-    public function favoritePatterns()
+    public function favoritePatterns(): BelongsToMany
     {
         return $this->belongsToMany(CrochetPattern::class, 'user_favorites', 'user_id', 'crochet_pattern_id')
                     ->withTimestamps();
@@ -91,7 +109,7 @@ class User extends Authenticatable
     /**
      * Get the collections this user has favorited
      */
-    public function favoriteCollections()
+    public function favoriteCollections(): BelongsToMany
     {
         return $this->belongsToMany(Collection::class, 'collection_favorites', 'user_id', 'collection_id')
                     ->withTimestamps();
@@ -108,7 +126,7 @@ class User extends Authenticatable
     /**
      * Get the collections created by this user
      */
-    public function collections()
+    public function collections(): HasMany
     {
         return $this->hasMany(Collection::class);
     }

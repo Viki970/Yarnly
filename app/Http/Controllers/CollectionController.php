@@ -368,6 +368,7 @@ class CollectionController extends Controller
      */
     public function toggleFavorite(Collection $collection)
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
         
         if ($user->hasFavoritedCollection($collection)) {
