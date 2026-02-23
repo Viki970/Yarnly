@@ -85,6 +85,82 @@ class PatternController extends Controller
         ]);
     }
 
+    public function knitting()
+    {
+        $newest = CrochetPattern::latest()->limit(6)->get();
+        
+        // Calculate patterns created this week
+        $startOfWeek = now()->startOfWeek();
+        $endOfWeek = now()->endOfWeek();
+        $newThisWeek = CrochetPattern::whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
+        
+        // Count user's favorited patterns
+        $favoritesCount = 0;
+        if (Auth::check()) {
+            /** @var User $user */
+            $user = Auth::user();
+            $favoritesCount = $user->favoritePatterns()->count();
+        }
+        
+        // Get public collections with patterns and users  (knitting type)
+        $collections = Collection::where('is_public', true)
+            ->where('craft_type', 'knitting')
+            ->with(['patterns', 'user'])
+            ->latest()
+            ->limit(6)
+            ->get();
+        
+        return view('knitting_patterns', [
+            'newest' => $newest, 
+            'selectedCategory' => null,
+            'newThisWeek' => $newThisWeek,
+            'favoritesCount' => $favoritesCount,
+            'collections' => $collections
+        ]);
+    }
+
+    public function knittingByCategory($category)
+    {
+        $validCategories = ['sweaters', 'scarves', 'accessories', 'socks', 'hats'];
+        
+        if (!in_array($category, $validCategories)) {
+            return redirect()->route('patterns.knitting');
+        }
+
+        $patterns = CrochetPattern::where('category', $category)->latest()->get();
+        $newest = CrochetPattern::latest()->limit(6)->get();
+        
+        // Calculate patterns created this week
+        $startOfWeek = now()->startOfWeek();
+        $endOfWeek = now()->endOfWeek();
+        $newThisWeek = CrochetPattern::whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
+        
+        // Count user's favorited patterns
+        $favoritesCount = 0;
+        if (Auth::check()) {
+            /** @var User $user */
+            $user = Auth::user();
+            $favoritesCount = $user->favoritePatterns()->count();
+        }
+        
+        // Get public collections with patterns and users (knitting type)
+        $collections = Collection::where('is_public', true)
+            ->where('craft_type', 'knitting')
+            ->with(['patterns', 'user'])
+            ->latest()
+            ->limit(6)
+            ->get();
+        
+        return view('knitting_patterns', [
+            'patterns' => $patterns,
+            'newest' => $newest,
+            'selectedCategory' => $category,
+            'newThisWeek' => $newThisWeek,
+            'favoritesCount' => $favoritesCount,
+            'collections' => $collections
+        ]);
+    }
+
     public function view(CrochetPattern $pattern)
     {
         if (!$pattern->pdf_file) {
