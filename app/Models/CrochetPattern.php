@@ -80,4 +80,13 @@ class CrochetPattern extends Model
         if (!$userId) return false;
         return $this->favoritedByUsers()->where('users.id', $userId)->exists();
     }
+
+    /**
+     * All patterns in the crochet_patterns table are crochet by nature.
+     * This accessor lets collection-level filtering by craft_type work correctly.
+     */
+    public function getCraftTypeAttribute(): string
+    {
+        return 'crochet';
+    }
 }

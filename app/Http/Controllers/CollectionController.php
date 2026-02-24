@@ -12,8 +12,10 @@ class CollectionController extends Controller
     /**
      * Display the user's collections
      */
-    public function myCollections()
+    public function myCollections(Request $request)
     {
+        $filter = $request->get('filter', 'all');
+        
         $collections = Collection::where('user_id', Auth::id())
             ->latest()
             ->with('patterns') // Eager load patterns for efficiency
@@ -24,7 +26,7 @@ class CollectionController extends Controller
         $knittingCollections = $collections->where('craft_type', 'knitting');
         $embroideryCollections = $collections->where('craft_type', 'embroidery');
 
-        return view('collections.my-collections', compact('collections', 'crochetCollections', 'knittingCollections', 'embroideryCollections'));
+        return view('collections.my-collections', compact('collections', 'crochetCollections', 'knittingCollections', 'embroideryCollections', 'filter'));
     }
 
     /**

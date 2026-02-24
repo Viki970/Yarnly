@@ -303,15 +303,69 @@ class PatternController extends Controller
     /**
      * Display the user's favorite patterns
      */
-    public function favorites()
+    public function favorites(Request $request)
     {
         /** @var User $user */
         $user = Auth::user();
-        $favoritePatterns = $user->favoritePatterns()
+        
+        // Get filter parameters
+        $tab = $request->get('tab', 'patterns'); // patterns or collections
+        $craftFilter = $request->get('filter', 'all'); // all, crochet, knitting, embroidery
+        
+        // Get all favorite patterns
+        $allFavoritePatterns = $user->favoritePatterns()
             ->latest('user_favorites.created_at')
             ->get();
-
-        return view('patterns.favorites', compact('favoritePatterns'));
+        
+        // Get all favorite collections
+        $allFavoriteCollections = $user->favoriteCollections()
+            ->latest('collection_favorites.created_at')
+            ->get();
+        
+        // Count totals
+        $totalFavorites = $allFavoritePatterns->count() + $allFavoriteCollections->count();
+        $totalPatterns = $allFavoritePatterns->count();
+        $totalCollections = $allFavoriteCollections->count();
+        
+        // Group patterns by craft type
+        $crochetPatterns = $allFavoritePatterns->where('craft_type', 'crochet');
+        $knittingPatterns = $allFavoritePatterns->where('craft_type', 'knitting');
+        $embroideryPatterns = $allFavoritePatterns->where('craft_type', 'embroidery');
+        
+        // Group collections by craft type
+        $crochetCollections = $allFavoriteCollections->where('craft_type', 'crochet');
+        $knittingCollections = $allFavoriteCollections->where('craft_type', 'knitting');
+        $embroideryCollections = $allFavoriteCollections->where('craft_type', 'embroidery');
+        
+        // Apply craft type filter for patterns
+        if ($craftFilter === 'all') {
+            $favoritePatterns = $allFavoritePatterns;
+        } else {
+            $favoritePatterns = $allFavoritePatterns->where('craft_type', $craftFilter);
+        }
+        
+        // Apply craft type filter for collections
+        if ($craftFilter === 'all') {
+            $favoriteCollections = $allFavoriteCollections;
+        } else {
+            $favoriteCollections = $allFavoriteCollections->where('craft_type', $craftFilter);
+        }
+        
+        return view('patterns.favorites', compact(
+            'favoritePatterns',
+            'favoriteCollections',
+            'totalFavorites',
+            'totalPatterns',
+            'totalCollections',
+            'crochetPatterns',
+            'knittingPatterns',
+            'embroideryPatterns',
+            'crochetCollections',
+            'knittingCollections',
+            'embroideryCollections',
+            'tab',
+            'craftFilter'
+        ));
     }
 
     /**

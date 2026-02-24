@@ -1,4 +1,4 @@
-<article class="group rounded-2xl border border-{{ $color }}-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-{{ $color }}-900/40 dark:bg-zinc-900/70">
+<article class="group rounded-2xl border border-{{ $color }}-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-{{ $color }}-500/40 dark:bg-gray-800/60">
     @if($collection->cover_image_path)
         <div class="mb-4 aspect-[3/4] w-full overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800">
             <img src="{{ asset('storage/' . $collection->cover_image_path) }}" 
