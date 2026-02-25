@@ -4,22 +4,25 @@
 <div class="min-h-screen bg-gradient-to-br from-teal-50 via-white to-emerald-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-teal-950/20 py-12">
     <div class="container mx-auto px-4 max-w-7xl">
         <!-- Header -->
-        <div class="flex items-center justify-between mb-8">
-            <div>
-                <h1 class="text-4xl font-bold bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent mb-2">
-                    Select Patterns for Collection
-                </h1>
-                <p class="text-zinc-600 dark:text-zinc-300 text-lg">
-                    Choose the patterns you want to add to your new collection
-                </p>
-            </div>
-            <a href="{{ route('my-collections') }}" 
-                class="px-6 py-3 rounded-lg bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-200 font-semibold hover:bg-zinc-300 dark:hover:bg-zinc-600 transition-all duration-200">
-                <svg class="inline-block h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-teal-100 to-emerald-100 dark:from-teal-800/30 dark:to-emerald-800/30 shadow-inner mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-teal-600 dark:text-teal-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                 </svg>
-                Back to Collections
-            </a>
+            </div>
+            <h1 class="text-5xl font-extrabold tracking-tight mb-3">
+                <span class="bg-gradient-to-r from-teal-700 via-emerald-500 to-teal-500 dark:from-teal-300 dark:via-emerald-200 dark:to-teal-200 bg-clip-text text-transparent">
+                    Select Patterns for Collection
+                </span>
+            </h1>
+            <div class="flex items-center justify-center gap-2 mb-3">
+                <span class="h-px w-12 bg-gradient-to-r from-transparent to-teal-400 dark:to-teal-400 rounded-full"></span>
+                <span class="text-teal-600 dark:text-teal-300 text-xs font-semibold uppercase tracking-widest">Curate your craft</span>
+                <span class="h-px w-12 bg-gradient-to-l from-transparent to-teal-400 dark:to-teal-400 rounded-full"></span>
+            </div>
+            <p class="text-zinc-500 dark:text-zinc-400 text-base">
+                Choose the patterns you want to add to your new collection
+            </p>
         </div>
 
         @if(session('success'))

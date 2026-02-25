@@ -4,27 +4,42 @@
 <div class="min-h-screen bg-gradient-to-br from-teal-50 via-white to-emerald-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-teal-950/20 py-12">
     <div class="container mx-auto px-4 max-w-4xl">
         <!-- Header -->
-        <div class="flex items-center justify-between mb-8">
-            <div>
-                <h1 class="text-4xl font-bold bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent mb-2">
-                    Create New Collection
-                </h1>
-                <p class="text-zinc-600 dark:text-zinc-300 text-lg">
-                    Organize your selected patterns into a beautiful collection
-                </p>
-            </div>
-            <a href="{{ route('collections.select-patterns') }}" 
-                class="px-6 py-3 rounded-lg bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-200 font-semibold hover:bg-zinc-300 dark:hover:bg-zinc-600 transition-all duration-200">
-                <svg class="inline-block h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-teal-100 to-emerald-100 dark:from-teal-800/30 dark:to-emerald-800/30 shadow-inner mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-teal-600 dark:text-teal-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                 </svg>
-                Back to Pattern Selection
-            </a>
+            </div>
+            <h1 class="text-5xl font-extrabold tracking-tight mb-3">
+                <span class="bg-gradient-to-r from-teal-700 via-emerald-500 to-teal-500 dark:from-teal-300 dark:via-emerald-200 dark:to-teal-200 bg-clip-text text-transparent">
+                    Create New Collection
+                </span>
+            </h1>
+            <div class="flex items-center justify-center gap-2 mb-3">
+                <span class="h-px w-12 bg-gradient-to-r from-transparent to-teal-400 dark:to-teal-400 rounded-full"></span>
+                <span class="text-teal-600 dark:text-teal-300 text-xs font-semibold uppercase tracking-widest">Curate your craft</span>
+                <span class="h-px w-12 bg-gradient-to-l from-transparent to-teal-400 dark:to-teal-400 rounded-full"></span>
+            </div>
+            <p class="text-zinc-500 dark:text-zinc-400 text-base">
+                Organize your selected patterns into a beautiful collection
+            </p>
         </div>
+
+        @if(session('success'))
+        <div class="mb-6 p-4 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800">
+            <p class="text-emerald-700 dark:text-emerald-300">{{ session('success') }}</p>
+        </div>
+        @endif
+
+        @if(session('error'))
+        <div class="mb-6 p-4 rounded-lg bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800">
+            <p class="text-red-700 dark:text-red-300">{{ session('error') }}</p>
+        </div>
+        @endif
 
         <!-- Selected Patterns Preview -->
         <div class="mb-8">
-            <h3 class="text-lg font-semibold text-zinc-900 dark:text-white mb-4">
+            <h3 class="text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-4 uppercase tracking-widest">
                 Selected Patterns ({{ $patterns->count() }})
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -73,7 +88,7 @@
         </div>
 
         <!-- Collection Form -->
-        <form action="{{ route('collections.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form action="{{ route('collections.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             
             <!-- Hidden pattern IDs -->
@@ -81,10 +96,11 @@
                 <input type="hidden" name="pattern_ids[]" value="{{ $patternId }}">
             @endforeach
 
-            <div class="bg-white dark:bg-zinc-900 rounded-2xl shadow-lg border border-teal-100 dark:border-teal-900/40 p-8">
+            <div class="bg-white dark:bg-zinc-900 rounded-2xl shadow-lg border border-teal-100 dark:border-teal-900/40 overflow-hidden">
+                <div class="p-8 space-y-6">
                 <!-- Collection Name -->
-                <div class="mb-6">
-                    <label for="name" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-2">
+                <div>
+                    <label for="name" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3">
                         Collection Name <span class="text-red-500">*</span>
                     </label>
                     <input type="text" 
@@ -100,8 +116,8 @@
                 </div>
 
                 <!-- Description -->
-                <div class="mb-6">
-                    <label for="description" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-2">
+                <div>
+                    <label for="description" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3">
                         Description
                     </label>
                     <textarea id="description" 
@@ -115,8 +131,8 @@
                 </div>
 
                 <!-- Craft Type -->
-                <div class="mb-6">
-                    <label for="craft_type" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-2">
+                <div>
+                    <label for="craft_type" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3">
                         Craft Type <span class="text-red-500">*</span>
                     </label>
                     <select id="craft_type" 
@@ -133,8 +149,8 @@
                 </div>
 
                 <!-- Cover Image -->
-                <div class="mb-6">
-                    <label for="cover_image" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-2">
+                <div>
+                    <label for="cover_image" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3">
                         Cover Image (Optional)
                     </label>
                     <div class="flex items-center gap-4">
@@ -166,7 +182,7 @@
                 </div>
 
                 <!-- Visibility -->
-                <div class="mb-6">
+                <div>
                     <label class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3">
                         Visibility <span class="text-red-500">*</span>
                     </label>
@@ -199,20 +215,18 @@
                     @enderror
                 </div>
 
-                <!-- Submit Button -->
-                <div class="flex items-center justify-end gap-4 mt-8 pt-6 border-t border-zinc-200 dark:border-zinc-700">
-                    <a href="{{ route('collections.select-patterns') }}" 
-                       class="px-6 py-3 rounded-lg bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-200 font-semibold hover:bg-zinc-300 dark:hover:bg-zinc-600 transition-all duration-200">
+                <!-- Action Buttons -->
+                <div class="flex justify-end gap-4 mt-8 pt-6 border-t border-teal-100 dark:border-teal-900/40">
+                    <a href="{{ route('collections.select-patterns') }}"
+                        class="px-6 py-3 rounded-lg border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 font-semibold hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-all duration-200">
                         Cancel
                     </a>
-                    <button type="submit" 
-                            class="px-8 py-3 rounded-lg bg-gradient-to-r from-teal-600 to-emerald-600 text-white font-semibold hover:from-teal-500 hover:to-emerald-500 transform hover:scale-105 transition-all duration-200 shadow-lg">
-                        <svg class="inline-block h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                        </svg>
+                    <button type="submit"
+                        class="px-8 py-3 rounded-lg bg-gradient-to-r from-teal-600 to-emerald-500 text-white font-semibold hover:from-teal-700 hover:to-emerald-600 transform hover:scale-105 transition-all duration-200 shadow-lg shadow-teal-500/25">
                         Create Collection
                     </button>
                 </div>
+                </div><!-- end p-8 space-y-6 -->
             </div>
         </form>
     </div>

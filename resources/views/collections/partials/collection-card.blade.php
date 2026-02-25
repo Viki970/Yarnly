@@ -102,6 +102,12 @@
     </div>
     
     <h3 class="mt-4 text-lg font-bold text-zinc-900 dark:text-white">{{ $collection->name }}</h3>
+    @if($collection->user)
+        <p class="mt-1 flex items-center gap-1 text-xs text-zinc-400 dark:text-zinc-500">
+            <svg class="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+            <span>{{ $collection->user->name }}</span>
+        </p>
+    @endif
     
     <div class="mt-4 flex items-center justify-between">
         <div class="flex items-center gap-3 text-xs font-semibold text-emerald-700 dark:text-emerald-200">

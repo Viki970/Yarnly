@@ -215,9 +215,7 @@
 
 @push('scripts')
 <script type="application/json" id="categories-data">
-    {
-        !!json_encode($categories) !!
-    }
+    {!! json_encode($categories) !!}
 </script>
 <script>
     const categories = JSON.parse(document.getElementById('categories-data').textContent);

@@ -18,7 +18,7 @@ class CollectionController extends Controller
         
         $collections = Collection::where('user_id', Auth::id())
             ->latest()
-            ->with('patterns') // Eager load patterns for efficiency
+            ->with(['patterns', 'user']) // Eager load patterns and user for efficiency
             ->get();
 
         // Group collections by craft type
@@ -26,7 +26,7 @@ class CollectionController extends Controller
         $knittingCollections = $collections->where('craft_type', 'knitting');
         $embroideryCollections = $collections->where('craft_type', 'embroidery');
 
-        return view('collections.my-collections', compact('collections', 'crochetCollections', 'knittingCollections', 'embroideryCollections', 'filter'));
+        return view('profile.my-collections', compact('collections', 'crochetCollections', 'knittingCollections', 'embroideryCollections', 'filter'));
     }
 
     /**
