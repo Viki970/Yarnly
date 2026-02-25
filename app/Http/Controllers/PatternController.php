@@ -35,7 +35,7 @@ class PatternController extends Controller
             ->limit(6)
             ->get();
         
-        return view('crochet_patterns', [
+        return view('patterns.crochet.crochet_patterns', [
             'newest' => $newest, 
             'selectedCategory' => null,
             'newThisWeek' => $newThisWeek,
@@ -75,7 +75,7 @@ class PatternController extends Controller
             ->limit(6)
             ->get();
         
-        return view('crochet_patterns', [
+        return view('patterns.crochet.crochet_patterns', [
             'patterns' => $patterns,
             'newest' => $newest,
             'selectedCategory' => $category,
@@ -110,7 +110,7 @@ class PatternController extends Controller
             ->limit(6)
             ->get();
         
-        return view('knitting_patterns', [
+        return view('patterns.knitting.knitting_patterns', [
             'newest' => $newest, 
             'selectedCategory' => null,
             'newThisWeek' => $newThisWeek,
@@ -151,7 +151,7 @@ class PatternController extends Controller
             ->limit(6)
             ->get();
         
-        return view('knitting_patterns', [
+        return view('patterns.knitting.knitting_patterns', [
             'patterns' => $patterns,
             'newest' => $newest,
             'selectedCategory' => $category,
@@ -167,7 +167,7 @@ class PatternController extends Controller
             return redirect()->back()->with('error', 'Pattern PDF not available');
         }
 
-        return view('pattern_viewer', [
+        return view('patterns.crochet.pattern_viewer', [
             'pattern' => $pattern,
             'pdfPath' => asset('storage/' . $pattern->pdf_file)
         ]);
@@ -192,7 +192,7 @@ class PatternController extends Controller
 
     public function create()
     {
-        return view('patterns.create');
+        return view('patterns.crochet.create');
     }
 
     public function store(Request $request)
@@ -270,7 +270,7 @@ class PatternController extends Controller
             ->latest()
             ->get();
 
-        return view('patterns.my-patterns', compact('patterns'));
+        return view('profile.my-patterns', compact('patterns'));
     }
 
     /**
@@ -351,7 +351,7 @@ class PatternController extends Controller
             $favoriteCollections = $allFavoriteCollections->where('craft_type', $craftFilter);
         }
         
-        return view('patterns.favorites', compact(
+        return view('profile.favorites', compact(
             'favoritePatterns',
             'favoriteCollections',
             'totalFavorites',
