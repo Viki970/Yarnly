@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('title');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->enum('category', ['blankets', 'amigurumi', 'bags', 'wearables', 'home-decor'])->index();
             $table->enum('difficulty', ['beginner', 'intermediate', 'advanced'])->default('beginner');
             $table->integer('estimated_hours')->nullable();

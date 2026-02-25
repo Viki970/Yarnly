@@ -13,12 +13,12 @@ class PatternController extends Controller
 {
     public function crochet()
     {
-        $newest = Pattern::latest()->limit(6)->get();
+        $newest = Pattern::where('craft_type', 'crochet')->latest()->limit(6)->get();
         
         // Calculate patterns created this week
         $startOfWeek = now()->startOfWeek();
         $endOfWeek = now()->endOfWeek();
-        $newThisWeek = Pattern::whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
+        $newThisWeek = Pattern::where('craft_type', 'crochet')->whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
         
         // Count user's favorited patterns
         $favoritesCount = 0;
@@ -52,13 +52,13 @@ class PatternController extends Controller
             return redirect()->route('patterns.crochet');
         }
 
-        $patterns = Pattern::where('category', $category)->latest()->get();
-        $newest = Pattern::latest()->limit(6)->get();
+        $patterns = Pattern::where('craft_type', 'crochet')->where('category', $category)->latest()->get();
+        $newest = Pattern::where('craft_type', 'crochet')->latest()->limit(6)->get();
         
         // Calculate patterns created this week
         $startOfWeek = now()->startOfWeek();
         $endOfWeek = now()->endOfWeek();
-        $newThisWeek = Pattern::whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
+        $newThisWeek = Pattern::where('craft_type', 'crochet')->whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
         
         // Count user's favorited patterns
         $favoritesCount = 0;
@@ -87,12 +87,12 @@ class PatternController extends Controller
 
     public function knitting()
     {
-        $newest = Pattern::latest()->limit(6)->get();
+        $newest = Pattern::where('craft_type', 'knitting')->latest()->limit(6)->get();
         
         // Calculate patterns created this week
         $startOfWeek = now()->startOfWeek();
         $endOfWeek = now()->endOfWeek();
-        $newThisWeek = Pattern::whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
+        $newThisWeek = Pattern::where('craft_type', 'knitting')->whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
         
         // Count user's favorited patterns
         $favoritesCount = 0;
@@ -127,13 +127,13 @@ class PatternController extends Controller
             return redirect()->route('patterns.knitting');
         }
 
-        $patterns = Pattern::where('category', $category)->latest()->get();
-        $newest = Pattern::latest()->limit(6)->get();
+        $patterns = Pattern::where('craft_type', 'knitting')->where('category', $category)->latest()->get();
+        $newest = Pattern::where('craft_type', 'knitting')->latest()->limit(6)->get();
         
         // Calculate patterns created this week
         $startOfWeek = now()->startOfWeek();
         $endOfWeek = now()->endOfWeek();
-        $newThisWeek = Pattern::whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
+        $newThisWeek = Pattern::where('craft_type', 'knitting')->whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
         
         // Count user's favorited patterns
         $favoritesCount = 0;
@@ -193,7 +193,7 @@ class PatternController extends Controller
     public function create()
     {
         $categories = Pattern::CATEGORIES;
-        return view('patterns.crochet.create', compact('categories'));
+        return view('patterns.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -207,7 +207,7 @@ class PatternController extends Controller
 
             $request->validate([
                 'title' => 'required|string|max:255',
-                'description' => 'required|string',
+                'description' => 'nullable|string',
                 'craft_type' => 'required|in:' . implode(',', $validCraftTypes),
                 'category' => 'required|in:' . implode(',', $validCategories),
                 'difficulty' => 'required|in:beginner,intermediate,advanced',
