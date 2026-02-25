@@ -56,20 +56,35 @@
                         @enderror
                     </div>
 
-                    <!-- Category and Difficulty -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Craft Type, Category and Difficulty -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Craft Type -->
+                        <div>
+                            <label for="craft_type" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-200 mb-3">
+                                Craft Type <span class="text-red-500">*</span>
+                            </label>
+                            <select id="craft_type" name="craft_type" required
+                                class="w-full px-4 py-3 rounded-lg border border-emerald-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700 dark:bg-zinc-800 dark:text-white transition-colors">
+                                <option value="">Select Craft</option>
+                                @foreach(array_keys($categories) as $craft)
+                                    <option value="{{ $craft }}" {{ old('craft_type') == $craft ? 'selected' : '' }}>
+                                        {{ ucfirst($craft) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('craft_type')
+                                <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Category -->
                         <div>
                             <label for="category" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-200 mb-3">
                                 Category <span class="text-red-500">*</span>
                             </label>
-                            <select id="category" name="category" required 
+                            <select id="category" name="category" required
                                 class="w-full px-4 py-3 rounded-lg border border-emerald-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700 dark:bg-zinc-800 dark:text-white transition-colors">
                                 <option value="">Select Category</option>
-                                <option value="blankets" {{ old('category') == 'blankets' ? 'selected' : '' }}>Blankets & Throws</option>
-                                <option value="amigurumi" {{ old('category') == 'amigurumi' ? 'selected' : '' }}>Amigurumi</option>
-                                <option value="bags" {{ old('category') == 'bags' ? 'selected' : '' }}>Bags & Totes</option>
-                                <option value="wearables" {{ old('category') == 'wearables' ? 'selected' : '' }}>Wearables</option>
-                                <option value="home-decor" {{ old('category') == 'home-decor' ? 'selected' : '' }}>Home Decor</option>
                             </select>
                             @error('category')
                                 <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
@@ -170,3 +185,34 @@
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+    const categories = @json($categories);
+    const oldCraftType = "{{ old('craft_type') }}";
+    const oldCategory  = "{{ old('category') }}";
+
+    const craftSelect    = document.getElementById('craft_type');
+    const categorySelect = document.getElementById('category');
+
+    function populateCategories(craft) {
+        categorySelect.innerHTML = '<option value="">Select Category</option>';
+        if (!craft || !categories[craft]) return;
+        Object.entries(categories[craft]).forEach(([value, label]) => {
+            const opt = document.createElement('option');
+            opt.value = value;
+            opt.textContent = label;
+            if (value === oldCategory) opt.selected = true;
+            categorySelect.appendChild(opt);
+        });
+    }
+
+    craftSelect.addEventListener('change', () => populateCategories(craftSelect.value));
+
+    // Re-populate on page load (e.g. after validation error)
+    if (oldCraftType) {
+        craftSelect.value = oldCraftType;
+        populateCategories(oldCraftType);
+    }
+</script>
+@endpush

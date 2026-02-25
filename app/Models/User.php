@@ -18,13 +18,13 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property string $name
  * @property string $email
  * @property string $role
- * @property-read \Illuminate\Database\Eloquent\Collection<int, CrochetPattern> $favoritePatterns
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Pattern> $favoritePatterns
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Collection> $favoriteCollections
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Collection> $collections
  * @method BelongsToMany favoritePatterns()
  * @method BelongsToMany favoriteCollections()
  * @method HasMany collections()
- * @method bool hasFavorited(CrochetPattern $pattern)
+ * @method bool hasFavorited(Pattern $pattern)
  * @method bool hasFavoritedCollection(Collection $collection)
  */
 class User extends Authenticatable
@@ -94,16 +94,16 @@ class User extends Authenticatable
      */
     public function favoritePatterns(): BelongsToMany
     {
-        return $this->belongsToMany(CrochetPattern::class, 'user_favorites', 'user_id', 'crochet_pattern_id')
+        return $this->belongsToMany(Pattern::class, 'user_favorites', 'user_id', 'pattern_id')
                     ->withTimestamps();
     }
 
     /**
      * Check if user has favorited a specific pattern
      */
-    public function hasFavorited(CrochetPattern $pattern): bool
+    public function hasFavorited(Pattern $pattern): bool
     {
-        return $this->favoritePatterns()->where('crochet_patterns.id', $pattern->id)->exists();
+        return $this->favoritePatterns()->where('patterns.id', $pattern->id)->exists();
     }
 
     /**

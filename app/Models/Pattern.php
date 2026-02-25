@@ -4,9 +4,33 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class CrochetPattern extends Model
+class Pattern extends Model
 {
     protected $table = 'patterns';
+
+    public const CATEGORIES = [
+        'crochet'    => [
+            'blankets'   => 'Blankets & Throws',
+            'amigurumi'  => 'Amigurumi',
+            'bags'       => 'Bags & Totes',
+            'wearables'  => 'Wearables',
+            'home-decor' => 'Home Decor',
+        ],
+        'knitting' => [
+            'sweaters'    => 'Sweaters',
+            'scarves'     => 'Scarves',
+            'socks'       => 'Socks',
+            'hats'        => 'Hats',
+            'accessories' => 'Accessories',
+        ],
+        'embroidery' => [
+            'wall-art'    => 'Wall Art',
+            'clothing'    => 'Clothing',
+            'hoop-art'    => 'Hoop Art',
+            'patches'     => 'Patches',
+            'accessories' => 'Accessories',
+        ],
+    ];
 
     protected $fillable = [
         'title',
@@ -42,14 +66,12 @@ class CrochetPattern extends Model
      */
     public function getCategoryLabel()
     {
-        return match($this->category) {
-            'blankets' => 'Blankets & Throws',
-            'amigurumi' => 'Amigurumi',
-            'bags' => 'Bags & Totes',
-            'wearables' => 'Wearables',
-            'home-decor' => 'Home decor',
-            default => ucfirst($this->category),
-        };
+        foreach (self::CATEGORIES as $craftCategories) {
+            if (isset($craftCategories[$this->category])) {
+                return $craftCategories[$this->category];
+            }
+        }
+        return ucfirst($this->category);
     }
 
     /**

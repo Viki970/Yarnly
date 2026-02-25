@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CrochetPattern;
+use App\Models\Pattern;
 use App\Models\Collection;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -13,12 +13,12 @@ class PatternController extends Controller
 {
     public function crochet()
     {
-        $newest = CrochetPattern::latest()->limit(6)->get();
+        $newest = Pattern::latest()->limit(6)->get();
         
         // Calculate patterns created this week
         $startOfWeek = now()->startOfWeek();
         $endOfWeek = now()->endOfWeek();
-        $newThisWeek = CrochetPattern::whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
+        $newThisWeek = Pattern::whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
         
         // Count user's favorited patterns
         $favoritesCount = 0;
@@ -46,19 +46,19 @@ class PatternController extends Controller
 
     public function crochetByCategory($category)
     {
-        $validCategories = ['blankets', 'amigurumi', 'bags', 'wearables', 'home-decor'];
+        $validCategories = array_keys(Pattern::CATEGORIES['crochet']);
         
         if (!in_array($category, $validCategories)) {
             return redirect()->route('patterns.crochet');
         }
 
-        $patterns = CrochetPattern::where('category', $category)->latest()->get();
-        $newest = CrochetPattern::latest()->limit(6)->get();
+        $patterns = Pattern::where('category', $category)->latest()->get();
+        $newest = Pattern::latest()->limit(6)->get();
         
         // Calculate patterns created this week
         $startOfWeek = now()->startOfWeek();
         $endOfWeek = now()->endOfWeek();
-        $newThisWeek = CrochetPattern::whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
+        $newThisWeek = Pattern::whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
         
         // Count user's favorited patterns
         $favoritesCount = 0;
@@ -87,12 +87,12 @@ class PatternController extends Controller
 
     public function knitting()
     {
-        $newest = CrochetPattern::latest()->limit(6)->get();
+        $newest = Pattern::latest()->limit(6)->get();
         
         // Calculate patterns created this week
         $startOfWeek = now()->startOfWeek();
         $endOfWeek = now()->endOfWeek();
-        $newThisWeek = CrochetPattern::whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
+        $newThisWeek = Pattern::whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
         
         // Count user's favorited patterns
         $favoritesCount = 0;
@@ -121,19 +121,19 @@ class PatternController extends Controller
 
     public function knittingByCategory($category)
     {
-        $validCategories = ['sweaters', 'scarves', 'accessories', 'socks', 'hats'];
+        $validCategories = array_keys(Pattern::CATEGORIES['knitting']);
         
         if (!in_array($category, $validCategories)) {
             return redirect()->route('patterns.knitting');
         }
 
-        $patterns = CrochetPattern::where('category', $category)->latest()->get();
-        $newest = CrochetPattern::latest()->limit(6)->get();
+        $patterns = Pattern::where('category', $category)->latest()->get();
+        $newest = Pattern::latest()->limit(6)->get();
         
         // Calculate patterns created this week
         $startOfWeek = now()->startOfWeek();
         $endOfWeek = now()->endOfWeek();
-        $newThisWeek = CrochetPattern::whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
+        $newThisWeek = Pattern::whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
         
         // Count user's favorited patterns
         $favoritesCount = 0;
@@ -161,7 +161,7 @@ class PatternController extends Controller
         ]);
     }
 
-    public function view(CrochetPattern $pattern)
+    public function view(Pattern $pattern)
     {
         if (!$pattern->pdf_file) {
             return redirect()->back()->with('error', 'Pattern PDF not available');
@@ -173,7 +173,7 @@ class PatternController extends Controller
         ]);
     }
 
-    public function download(CrochetPattern $pattern)
+    public function download(Pattern $pattern)
     {
         if (!$pattern->pdf_file) {
             return redirect()->back()->with('error', 'Pattern PDF not available');
@@ -192,21 +192,29 @@ class PatternController extends Controller
 
     public function create()
     {
-        return view('patterns.crochet.create');
+        $categories = Pattern::CATEGORIES;
+        return view('patterns.crochet.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
         try {
+            $craftType = $request->input('craft_type', 'crochet');
+            $validCraftTypes = array_keys(Pattern::CATEGORIES);
+            $validCategories = isset(Pattern::CATEGORIES[$craftType])
+                ? array_keys(Pattern::CATEGORIES[$craftType])
+                : [];
+
             $request->validate([
                 'title' => 'required|string|max:255',
                 'description' => 'required|string',
-                'category' => 'required|in:blankets,amigurumi,bags,wearables,home-decor',
+                'craft_type' => 'required|in:' . implode(',', $validCraftTypes),
+                'category' => 'required|in:' . implode(',', $validCategories),
                 'difficulty' => 'required|in:beginner,intermediate,advanced',
                 'estimated_hours' => 'nullable|integer|min:1|max:200',
                 'tags' => 'nullable|string|max:500',
-                'pdf_file' => 'required|file|mimes:pdf|max:10240', // Max 10MB
-                'image_file' => 'nullable|file|mimes:png,jpg,jpeg|max:5120', // Max 5MB
+                'pdf_file' => 'required|file|mimes:pdf|max:10240',
+                'image_file' => 'nullable|file|mimes:png,jpg,jpeg|max:5120',
             ]);
 
             $pdfFile = $request->file('pdf_file');
@@ -241,7 +249,7 @@ class PatternController extends Controller
                 $tags = implode(', ', $tagsArray);
             }
 
-            CrochetPattern::create([
+            Pattern::create([
                 'title' => $request->title,
                 'description' => $request->description,
                 'category' => $request->category,
@@ -253,6 +261,7 @@ class PatternController extends Controller
                 'image_path' => $imagePath,
                 'user_id' => Auth::id(),
                 'makers_saved' => 0,
+                'craft_type' => $craftType,
             ]);
 
             return redirect()->route('my-patterns')->with('success', 'Pattern created successfully!');
@@ -266,7 +275,7 @@ class PatternController extends Controller
 
     public function myPatterns()
     {
-        $patterns = CrochetPattern::where('user_id', Auth::id())
+        $patterns = Pattern::where('user_id', Auth::id())
             ->latest()
             ->get();
 
@@ -276,7 +285,7 @@ class PatternController extends Controller
     /**
      * Toggle favorite status of a pattern for the authenticated user
      */
-    public function toggleFavorite(CrochetPattern $pattern)
+    public function toggleFavorite(Pattern $pattern)
     {
         /** @var User $user */
         $user = Auth::user();
@@ -371,7 +380,7 @@ class PatternController extends Controller
     /**
      * Delete a pattern
      */
-    public function destroy(CrochetPattern $pattern)
+    public function destroy(Pattern $pattern)
     {
         // Ensure only the owner can delete the pattern
         if ($pattern->user_id !== Auth::id()) {

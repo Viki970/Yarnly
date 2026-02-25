@@ -34,7 +34,7 @@ class CollectionController extends Controller
      */
     public function selectPatterns()
     {
-        $patterns = \App\Models\CrochetPattern::where('user_id', Auth::id())
+        $patterns = \App\Models\Pattern::where('user_id', Auth::id())
             ->latest()
             ->get();
 
@@ -57,7 +57,7 @@ class CollectionController extends Controller
                 ->with('error', 'Please select at least one pattern for your collection.');
         }
 
-        $patterns = \App\Models\CrochetPattern::whereIn('id', $patternIds)
+        $patterns = \App\Models\Pattern::whereIn('id', $patternIds)
             ->where('user_id', Auth::id())
             ->get();
 
@@ -76,7 +76,7 @@ class CollectionController extends Controller
             'is_public' => 'required|boolean',
             'craft_type' => 'required|in:crochet,knitting,embroidery',
             'pattern_ids' => 'required|array|min:1',
-            'pattern_ids.*' => 'exists:crochet_patterns,id',
+            'pattern_ids.*' => 'exists:patterns,id',
         ]);
 
         // Handle cover image upload
@@ -203,7 +203,7 @@ class CollectionController extends Controller
         }
 
         // Get all patterns belonging to the user
-        $patterns = \App\Models\CrochetPattern::where('user_id', Auth::id())
+        $patterns = \App\Models\Pattern::where('user_id', Auth::id())
             ->latest()
             ->get();
 
@@ -225,7 +225,7 @@ class CollectionController extends Controller
 
         $request->validate([
             'pattern_ids' => 'nullable|array',
-            'pattern_ids.*' => 'exists:crochet_patterns,id',
+            'pattern_ids.*' => 'exists:patterns,id',
         ]);
 
         // Get the pattern IDs from the request (empty array if none selected)
@@ -233,7 +233,7 @@ class CollectionController extends Controller
 
         // Verify that all patterns belong to the authenticated user
         if (!empty($patternIds)) {
-            $userPatternCount = \App\Models\CrochetPattern::whereIn('id', $patternIds)
+            $userPatternCount = \App\Models\Pattern::whereIn('id', $patternIds)
                 ->where('user_id', Auth::id())
                 ->count();
 
@@ -261,13 +261,13 @@ class CollectionController extends Controller
 
         $request->validate([
             'pattern_ids' => 'required|array|min:1',
-            'pattern_ids.*' => 'exists:crochet_patterns,id',
+            'pattern_ids.*' => 'exists:patterns,id',
         ]);
 
         $patternIds = $request->input('pattern_ids');
 
         // Verify that all patterns belong to the authenticated user
-        $userPatternCount = \App\Models\CrochetPattern::whereIn('id', $patternIds)
+        $userPatternCount = \App\Models\Pattern::whereIn('id', $patternIds)
             ->where('user_id', Auth::id())
             ->count();
 
@@ -276,7 +276,7 @@ class CollectionController extends Controller
         }
 
         // Get existing pattern IDs in the collection
-        $existingPatternIds = $collection->patterns()->pluck('crochet_pattern_id')->toArray();
+        $existingPatternIds = $collection->patterns()->pluck('pattern_id')->toArray();
 
         // Attach only new patterns (avoid duplicates)
         $newPatternIds = array_diff($patternIds, $existingPatternIds);

@@ -36,7 +36,7 @@ class Collection extends Model
      */
     public function patterns()
     {
-        return $this->belongsToMany(CrochetPattern::class, 'collection_pattern', 'collection_id', 'crochet_pattern_id')
+        return $this->belongsToMany(Pattern::class, 'collection_pattern', 'collection_id', 'pattern_id')
                     ->withTimestamps();
     }
 
@@ -51,9 +51,9 @@ class Collection extends Model
     /**
      * Check if a specific pattern is in this collection
      */
-    public function hasPattern(CrochetPattern $pattern): bool
+    public function hasPattern(Pattern $pattern): bool
     {
-        return $this->patterns()->where('crochet_patterns.id', $pattern->id)->exists();
+        return $this->patterns()->where('patterns.id', $pattern->id)->exists();
     }
 
     /**
