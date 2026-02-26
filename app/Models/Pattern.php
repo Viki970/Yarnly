@@ -17,18 +17,17 @@ class Pattern extends Model
             'home-decor' => 'Home Decor',
         ],
         'knitting' => [
-            'sweaters'    => 'Sweaters',
-            'scarves'     => 'Scarves',
-            'socks'       => 'Socks',
-            'hats'        => 'Hats',
+            'wearables'  => 'Wearables',
             'accessories' => 'Accessories',
+            'home-decor' => 'Home & Decor',
+            'toys'       => 'Toys',
+            'baby-kids'  => 'Baby & Kids',
         ],
         'embroidery' => [
-            'wall-art'    => 'Wall Art',
-            'clothing'    => 'Clothing',
-            'hoop-art'    => 'Hoop Art',
-            'patches'     => 'Patches',
-            'accessories' => 'Accessories',
+            'clothing-embroidery'   => 'Clothing Embroidery',
+            'hoop-art-wall-decor'   => 'Hoop Art & Wall Decor',
+            'cross-stitch'          => 'Cross Stitch',
+            'hand-techniques'       => 'Hand Techniques',
         ],
     ];
 
