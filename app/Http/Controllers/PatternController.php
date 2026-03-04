@@ -324,7 +324,11 @@ class PatternController extends Controller
                 $tagsArray = array_filter($tagsArray, function($tag) {
                     return !empty($tag) && strlen($tag) <= 50;
                 });
-                $tags = implode(', ', $tagsArray);
+                $tagsArray = array_map(function($tag) {
+                    $tag = ltrim($tag, '#');
+                    return '#' . $tag;
+                }, $tagsArray);
+                $tags = implode(' ', $tagsArray);
             }
 
             Pattern::create([
@@ -478,5 +482,34 @@ class PatternController extends Controller
         $pattern->delete();
 
         return redirect()->route('my-patterns')->with('success', 'Pattern deleted successfully!');
+    }
+
+    /**
+     * Models Gallery – Instagram-style feed
+     */
+    public function gallery()
+    {
+        // Use patterns that have images as "models" for now
+        $recentModels = Pattern::whereNotNull('image_path')
+            ->with('user')
+            ->latest()
+            ->paginate(12);
+
+        $topRatedModels = Pattern::whereNotNull('image_path')
+            ->with('user')
+            ->orderByDesc('makers_saved')
+            ->paginate(12);
+
+        $totalModels = Pattern::whereNotNull('image_path')->count();
+        $newToday    = Pattern::whereNotNull('image_path')
+            ->whereDate('created_at', today())
+            ->count();
+
+        return view('models.gallery', compact(
+            'recentModels',
+            'topRatedModels',
+            'totalModels',
+            'newToday'
+        ));
     }
 }

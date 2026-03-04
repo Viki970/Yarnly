@@ -13,6 +13,7 @@ Route::get('/patterns/knitting', [\App\Http\Controllers\PatternController::class
 Route::get('/patterns/knitting/{category}', [\App\Http\Controllers\PatternController::class, 'knittingByCategory'])->name('patterns.knitting.category');
 Route::get('/patterns/embroidery', [\App\Http\Controllers\PatternController::class, 'embroidery'])->name('patterns.embroidery');
 Route::get('/patterns/embroidery/{category}', [\App\Http\Controllers\PatternController::class, 'embroideryByCategory'])->name('patterns.embroidery.category');
+Route::get('/models/gallery', [\App\Http\Controllers\PatternController::class, 'gallery'])->name('models.gallery');
 Route::get('/patterns/{pattern}/view', [\App\Http\Controllers\PatternController::class, 'view'])->name('patterns.view');
 Route::get('/patterns/{pattern}/download', [\App\Http\Controllers\PatternController::class, 'download'])->name('patterns.download');
 

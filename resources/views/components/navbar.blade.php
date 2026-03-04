@@ -72,68 +72,13 @@
                     </div>
                 </div>
 
-                <!-- Models Dropdown -->
-                <div class="relative">
-                    <button type="button" data-dropdown-toggle="models-dropdown" class="flex items-center gap-2 px-2 py-2 rounded-lg transition-all duration-200 hover:text-zinc-900 hover:bg-zinc-100/50 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800/50 cursor-pointer">
-                        <svg class="h-5 w-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                        </svg>
-                        <span class="font-medium">Models</span>
-                        <svg class="h-4 w-4 transition-transform duration-300 ease-out dropdown-arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
-                    <div id="models-dropdown" class="hidden absolute left-0 top-full mt-3 w-60 origin-top-left">
-                        <div class="rounded-xl bg-white/95 backdrop-blur-xl shadow-xl ring-1 ring-black/5 border border-white/20 dark:bg-zinc-900/95 dark:ring-white/10 dark:border-zinc-700/50">
-                            <div class="p-2">
-                                <a href="#gallery" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700 dark:text-zinc-200 dark:hover:from-blue-900/20 dark:hover:to-indigo-900/20 dark:hover:text-blue-300">
-                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-600 group-hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:group-hover:bg-blue-800/40">
-                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="font-semibold">Gallery</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Browse all models</div>
-                                    </div>
-                                </a>
-                                <a href="#top-rated" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-yellow-50 hover:to-amber-50 hover:text-yellow-700 dark:text-zinc-200 dark:hover:from-yellow-900/20 dark:hover:to-amber-900/20 dark:hover:text-yellow-300">
-                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-yellow-100 text-yellow-600 group-hover:bg-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:group-hover:bg-yellow-800/40">
-                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="font-semibold">Top Rated</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Community favorites</div>
-                                    </div>
-                                </a>
-                                <a href="#recently-added" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 hover:text-green-700 dark:text-zinc-200 dark:hover:from-green-900/20 dark:hover:to-emerald-900/20 dark:hover:text-green-300">
-                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-green-100 text-green-600 group-hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400 dark:group-hover:bg-green-800/40">
-                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="font-semibold">Recently Added</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Latest uploads</div>
-                                    </div>
-                                </a>
-                                <a href="#create-model" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-purple-50 hover:to-violet-50 hover:text-purple-700 dark:text-zinc-200 dark:hover:from-purple-900/20 dark:hover:to-violet-900/20 dark:hover:text-purple-300">
-                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100 text-purple-600 group-hover:bg-purple-200 dark:bg-purple-900/30 dark:text-purple-400 dark:group-hover:bg-purple-800/40">
-                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="font-semibold">Create Model</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Upload your work</div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Models direct link -->
+                <a href="{{ route('models.gallery') }}" class="flex items-center gap-2 px-2 py-2 rounded-lg transition-all duration-200 hover:text-zinc-900 hover:bg-zinc-100/50 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800/50">
+                    <svg class="h-5 w-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span class="font-medium">Gallery</span>
+                </a>
 
                 <!-- Tutorials Dropdown -->
                 <div class="relative">
@@ -339,39 +284,8 @@
                 @endauth
             </div>
 
-            <!-- Right side: Search, Theme Toggle, Account -->
+            <!-- Right side: Theme Toggle, Account -->
             <div class="flex items-center gap-2 ml-auto">
-                <!-- Search Section -->
-                <div class="relative flex items-center">
-                    <!-- Search Icon -->
-                    <button type="button" id="search-toggle" class="relative flex h-10 w-10 items-center justify-center rounded-lg text-zinc-600 transition-all duration-300 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 cursor-pointer">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                    </button>
-                    
-                    <!-- Search Box -->
-                    <div id="search-box" class="fixed top-[76px] right-1 opacity-0 invisible translate-y-[-10px] transition-all duration-400 ease-out pointer-events-none z-50">
-                        <div class="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl border border-zinc-200/50 dark:border-zinc-700/50 rounded-2xl shadow-2xl shadow-black/10 dark:shadow-black/30 w-[400px] p-2">
-                            <div class="flex items-center gap-2">
-                                <div class="flex-1 relative">
-                                    <input type="text" id="search-input" placeholder="Search patterns, tutorials..." class="w-full pl-10 pr-4 py-3 text-sm bg-zinc-50/80 dark:bg-zinc-800/80 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-400/50 focus:bg-white dark:focus:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder-zinc-500 dark:placeholder-zinc-400 transition-all duration-200" autocomplete="off">
-                                    <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-zinc-400 pointer-events-none">
-                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                        </svg>
-                                    </div>
-                                </div>
-                                <button type="button" id="search-submit" class="flex items-center justify-center h-10 w-10 bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-violet-500/25 hover:scale-105 active:scale-95">
-                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" style=" transform: rotate(90deg); ">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
                 <!-- Theme Toggle -->
                 <button type="button" id="theme-toggle" class="relative flex h-10 w-10 items-center justify-center rounded-lg text-zinc-600 transition-all duration-300 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 cursor-pointer">
                     <!-- Sun Icon (visible in dark mode) -->
@@ -507,39 +421,8 @@
             </div>
         </div>
 
-        <!-- Mobile actions: Search, Theme, Menu -->
+        <!-- Mobile actions: Theme, Menu -->
         <div class="flex items-center gap-2 ml-auto xl:hidden">
-            <!-- Search Section (Mobile) -->
-            <div class="relative flex items-center">
-                <!-- Search Icon (Mobile) -->
-                <button type="button" id="search-toggle-mobile" class="relative flex h-10 w-10 items-center justify-center rounded-lg text-zinc-600 transition-all duration-300 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 cursor-pointer">
-                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </button>
-                
-                <!-- Search Box (Mobile) -->
-                <div id="search-box-mobile" class="fixed right-4 top-[76px] opacity-0 invisible translate-y-[-10px] transition-all duration-400 ease-out pointer-events-none z-50 xl:hidden">
-                    <div class="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl border border-zinc-200/50 dark:border-zinc-700/50 rounded-2xl shadow-2xl shadow-black/10 dark:shadow-black/30 w-[280px] p-2">
-                        <div class="flex items-center gap-2">
-                            <div class="flex-1 relative">
-                                <input type="text" id="search-input-mobile" placeholder="Search patterns, tutorials..." class="w-full pl-10 pr-4 py-3 text-sm bg-zinc-50/80 dark:bg-zinc-800/80 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-400/50 focus:bg-white dark:focus:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder-zinc-500 dark:placeholder-zinc-400 transition-all duration-200" autocomplete="off">
-                                <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-zinc-400 pointer-events-none">
-                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                    </svg>
-                                </div>
-                            </div>
-                            <button type="button" id="search-submit-mobile" class="flex items-center justify-center h-10 w-10 bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-violet-500/25 hover:scale-105 active:scale-95">
-                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" style=" transform: rotate(90deg); ">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
             <!-- Theme Toggle (Mobile) -->
             <button type="button" id="theme-toggle-mobile" class="relative flex h-10 w-10 items-center justify-center rounded-lg text-zinc-600 transition-all duration-300 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 cursor-pointer">
                 <!-- Sun Icon (visible in dark mode) -->
@@ -626,68 +509,13 @@
                     </div>
                 </div>
 
-                <!-- Models Mobile Dropdown -->
-                <div class="relative">
-                    <button type="button" data-mobile-dropdown-toggle="mobile-models-dropdown" class="flex w-full items-center justify-between gap-3 rounded-lg px-4 py-3 transition-all duration-200 hover:bg-zinc-100/80 hover:text-zinc-900 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100 cursor-pointer">
-                        <div class="flex items-center gap-3">
-                            <svg class="h-5 w-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                            </svg>
-                            <span class="font-medium">Models</span>
-                        </div>
-                        <svg class="h-4 w-4 transition-transform duration-300 ease-out mobile-dropdown-arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
-                    <div id="mobile-models-dropdown" class="hidden mt-3 bg-white/95 backdrop-blur-xl rounded-xl shadow-lg ring-1 ring-black/5 border border-white/20 dark:bg-zinc-900/95 dark:ring-white/10 dark:border-zinc-700/50">
-                        <div class="p-2">
-                            <a href="#gallery" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700 dark:text-zinc-200 dark:hover:from-blue-900/20 dark:hover:to-indigo-900/20 dark:hover:text-blue-300">
-                                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-600 group-hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:group-hover:bg-blue-800/40">
-                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <div class="font-semibold">Gallery</div>
-                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">Browse all models</div>
-                                </div>
-                            </a>
-                            <a href="#top-rated" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-yellow-50 hover:to-amber-50 hover:text-yellow-700 dark:text-zinc-200 dark:hover:from-yellow-900/20 dark:hover:to-amber-900/20 dark:hover:text-yellow-300">
-                                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-yellow-100 text-yellow-600 group-hover:bg-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:group-hover:bg-yellow-800/40">
-                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <div class="font-semibold">Top Rated</div>
-                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">Community favorites</div>
-                                </div>
-                            </a>
-                            <a href="#recently-added" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 hover:text-green-700 dark:text-zinc-200 dark:hover:from-green-900/20 dark:hover:to-emerald-900/20 dark:hover:text-green-300">
-                                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-green-100 text-green-600 group-hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400 dark:group-hover:bg-green-800/40">
-                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <div class="font-semibold">Recently Added</div>
-                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">Latest uploads</div>
-                                </div>
-                            </a>
-                            <a href="#create-model" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-purple-50 hover:to-violet-50 hover:text-purple-700 dark:text-zinc-200 dark:hover:from-purple-900/20 dark:hover:to-violet-900/20 dark:hover:text-purple-300">
-                                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100 text-purple-600 group-hover:bg-purple-200 dark:bg-purple-900/30 dark:text-purple-400 dark:group-hover:bg-purple-800/40">
-                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <div class="font-semibold">Create Model</div>
-                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">Upload your work</div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                <!-- Models mobile direct link -->
+                <a href="{{ route('models.gallery') }}" class="flex items-center gap-3 rounded-lg px-4 py-3 transition-all duration-200 hover:bg-zinc-100/80 hover:text-zinc-900 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100">
+                    <svg class="h-5 w-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span class="font-medium">Gallery</span>
+                </a>
 
                 <!-- Tutorials Mobile Dropdown -->
                 <div class="relative">
