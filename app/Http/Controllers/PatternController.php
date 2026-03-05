@@ -505,7 +505,7 @@ class PatternController extends Controller
             ->whereDate('created_at', today())
             ->count();
 
-        return view('models.gallery', compact(
+        return view('gallery.gallery', compact(
             'recentModels',
             'topRatedModels',
             'totalModels',

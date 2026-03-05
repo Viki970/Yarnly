@@ -144,7 +144,7 @@
 
             <!-- Create button -->
             @auth
-                <a href="{{ route('patterns.create') }}"
+                <a href="{{ route('posts.create') }}"
                    class="flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-violet-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-purple-500/25 transition-all duration-200 hover:from-purple-500 hover:to-violet-500 hover:scale-105">
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
@@ -173,7 +173,7 @@
             @if(isset($recentModels) && $recentModels->count())
                 <div class="gallery-columns">
                     @foreach($recentModels as $model)
-                        @include('models.partials.post-card', ['model' => $model])
+                        @include('gallery.partials.post-card', ['model' => $model])
                     @endforeach
                 </div>
 
@@ -182,7 +182,7 @@
                     <div class="h-12 w-12 animate-spin rounded-full border-4 border-purple-200 border-t-purple-600 dark:border-zinc-700 dark:border-t-purple-400"></div>
                 </div>
             @else
-                @include('models.partials.empty-state', ['tab' => 'recently added'])
+                @include('gallery.partials.empty-state', ['tab' => 'recently added'])
             @endif
         </div>
 
@@ -191,21 +191,21 @@
             @if(isset($topRatedModels) && $topRatedModels->count())
                 <div class="gallery-columns">
                     @foreach($topRatedModels as $model)
-                        @include('models.partials.post-card', ['model' => $model])
+                        @include('gallery.partials.post-card', ['model' => $model])
                     @endforeach
                 </div>
                 <div id="sentinel-top-rated" class="mt-8 flex justify-center">
                     <div class="h-12 w-12 animate-spin rounded-full border-4 border-purple-200 border-t-purple-600 dark:border-zinc-700 dark:border-t-purple-400"></div>
                 </div>
             @else
-                @include('models.partials.empty-state', ['tab' => 'top rated'])
+                @include('gallery.partials.empty-state', ['tab' => 'top rated'])
             @endif
         </div>
 
         <!-- ─ Following feed ─ -->
         <div id="feed-following" class="gallery-feed-section hidden">
             @auth
-                @include('models.partials.empty-state', ['tab' => 'following'])
+                @include('gallery.partials.empty-state', ['tab' => 'following'])
             @else
                 <div class="flex flex-col items-center justify-center py-24 text-center">
                     <div class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-900/30">

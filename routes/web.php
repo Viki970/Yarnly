@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -51,6 +52,30 @@ Route::middleware('auth')->group(function () {
     Route::post('/patterns/{pattern}/toggle-favorite', [\App\Http\Controllers\PatternController::class, 'toggleFavorite'])->name('patterns.toggle-favorite');
     Route::post('/collections/{collection}/toggle-favorite', [\App\Http\Controllers\CollectionController::class, 'toggleFavorite'])->name('collections.toggle-favorite');
     Route::get('/favorites', [\App\Http\Controllers\PatternController::class, 'favorites'])->name('patterns.favorites');
+});
+
+// ─── Posts ─────────────────────────────────────────────────────────────────
+// Public feed & single post view
+Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+
+// Specific named routes MUST be declared before the {post} wildcard
+Route::middleware('auth')->group(function () {
+    Route::get('/posts/create',    [PostController::class, 'create'])->name('posts.create');
+    Route::get('/posts/liked',     [PostController::class, 'liked'])->name('posts.liked');
+    Route::get('/posts/favorited', [PostController::class, 'favorited'])->name('posts.favorited');
+    Route::post('/posts',          [PostController::class, 'store'])->name('posts.store');
+});
+
+// Wildcard show route after specific routes
+Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
+
+// Auth-required actions on a post
+Route::middleware('auth')->group(function () {
+    Route::delete('/posts/{post}',          [PostController::class, 'destroy'])->name('posts.destroy');
+    Route::post('/posts/{post}/like',       [PostController::class, 'like'])->name('posts.like');
+    Route::delete('/posts/{post}/like',     [PostController::class, 'unlike'])->name('posts.unlike');
+    Route::post('/posts/{post}/favorite',   [PostController::class, 'favorite'])->name('posts.favorite');
+    Route::delete('/posts/{post}/favorite', [PostController::class, 'unfavorite'])->name('posts.unfavorite');
 });
 
 require __DIR__.'/auth.php';

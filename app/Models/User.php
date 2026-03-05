@@ -21,11 +21,19 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Pattern> $favoritePatterns
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Collection> $favoriteCollections
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Collection> $collections
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Post> $posts
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Post> $likedPosts
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Post> $favoritedPosts
  * @method BelongsToMany favoritePatterns()
  * @method BelongsToMany favoriteCollections()
  * @method HasMany collections()
+ * @method HasMany posts()
+ * @method BelongsToMany likedPosts()
+ * @method BelongsToMany favoritedPosts()
  * @method bool hasFavorited(Pattern $pattern)
  * @method bool hasFavoritedCollection(Collection $collection)
+ * @method bool hasLikedPost(Post $post)
+ * @method bool hasFavoritedPost(Post $post)
  */
 class User extends Authenticatable
 {
@@ -129,5 +137,47 @@ class User extends Authenticatable
     public function collections(): HasMany
     {
         return $this->hasMany(Collection::class);
+    }
+
+    /**
+     * Get the posts created by this user
+     */
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    /**
+     * Get the posts this user has liked
+     */
+    public function likedPosts(): BelongsToMany
+    {
+        return $this->belongsToMany(Post::class, 'post_likes', 'user_id', 'post_id')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Check if user has liked a specific post
+     */
+    public function hasLikedPost(Post $post): bool
+    {
+        return $this->likedPosts()->where('posts.id', $post->id)->exists();
+    }
+
+    /**
+     * Get the posts this user has favorited
+     */
+    public function favoritedPosts(): BelongsToMany
+    {
+        return $this->belongsToMany(Post::class, 'post_favorites', 'user_id', 'post_id')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Check if user has favorited a specific post
+     */
+    public function hasFavoritedPost(Post $post): bool
+    {
+        return $this->favoritedPosts()->where('posts.id', $post->id)->exists();
     }
 }
