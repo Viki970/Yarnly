@@ -80,56 +80,48 @@ class PostController extends Controller
 
     // ─── LIKES ───────────────────────────────────────────────────────────────
 
-    public function like(Post $post): RedirectResponse
+    public function like(Post $post)
     {
         /** @var User $user */
         $user = Auth::user();
-
-        PostLike::firstOrCreate([
-            'user_id' => $user->id,
-            'post_id' => $post->id,
-        ]);
-
-        return back();
+        PostLike::firstOrCreate(['user_id' => $user->id, 'post_id' => $post->id]);
+        $count = $post->likes()->count();
+        return request()->expectsJson()
+            ? response()->json(['liked' => true, 'count' => $count])
+            : back();
     }
 
-    public function unlike(Post $post): RedirectResponse
+    public function unlike(Post $post)
     {
         /** @var User $user */
         $user = Auth::user();
-
-        PostLike::where('user_id', $user->id)
-                ->where('post_id', $post->id)
-                ->delete();
-
-        return back();
+        PostLike::where('user_id', $user->id)->where('post_id', $post->id)->delete();
+        $count = $post->likes()->count();
+        return request()->expectsJson()
+            ? response()->json(['liked' => false, 'count' => $count])
+            : back();
     }
 
     // ─── FAVORITES ───────────────────────────────────────────────────────────
 
-    public function favorite(Post $post): RedirectResponse
+    public function favorite(Post $post)
     {
         /** @var User $user */
         $user = Auth::user();
-
-        PostFavorite::firstOrCreate([
-            'user_id' => $user->id,
-            'post_id' => $post->id,
-        ]);
-
-        return back();
+        PostFavorite::firstOrCreate(['user_id' => $user->id, 'post_id' => $post->id]);
+        return request()->expectsJson()
+            ? response()->json(['favorited' => true])
+            : back();
     }
 
-    public function unfavorite(Post $post): RedirectResponse
+    public function unfavorite(Post $post)
     {
         /** @var User $user */
         $user = Auth::user();
-
-        PostFavorite::where('user_id', $user->id)
-                    ->where('post_id', $post->id)
-                    ->delete();
-
-        return back();
+        PostFavorite::where('user_id', $user->id)->where('post_id', $post->id)->delete();
+        return request()->expectsJson()
+            ? response()->json(['favorited' => false])
+            : back();
     }
 
     // ─── LISTING PAGES ───────────────────────────────────────────────────────

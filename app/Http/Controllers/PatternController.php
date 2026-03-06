@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pattern;
 use App\Models\Collection;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -489,21 +490,28 @@ class PatternController extends Controller
      */
     public function gallery()
     {
-        // Use patterns that have images as "models" for now
-        $recentModels = Pattern::whereNotNull('image_path')
-            ->with('user')
+        $userId = \Illuminate\Support\Facades\Auth::id();
+
+        $recentModels = Post::with(['user', 'images'])
+            ->withCount('likes')
+            ->when($userId, fn($q) => $q
+                ->withExists(['likes as liked_by_user'     => fn($q) => $q->where('user_id', $userId)])
+                ->withExists(['favorites as faved_by_user' => fn($q) => $q->where('user_id', $userId)])
+            )
             ->latest()
             ->paginate(12);
 
-        $topRatedModels = Pattern::whereNotNull('image_path')
-            ->with('user')
-            ->orderByDesc('makers_saved')
+        $topRatedModels = Post::with(['user', 'images'])
+            ->withCount('likes')
+            ->when($userId, fn($q) => $q
+                ->withExists(['likes as liked_by_user'     => fn($q) => $q->where('user_id', $userId)])
+                ->withExists(['favorites as faved_by_user' => fn($q) => $q->where('user_id', $userId)])
+            )
+            ->orderByDesc('likes_count')
             ->paginate(12);
 
-        $totalModels = Pattern::whereNotNull('image_path')->count();
-        $newToday    = Pattern::whereNotNull('image_path')
-            ->whereDate('created_at', today())
-            ->count();
+        $totalModels = Post::count();
+        $newToday    = Post::whereDate('created_at', today())->count();
 
         return view('gallery.gallery', compact(
             'recentModels',

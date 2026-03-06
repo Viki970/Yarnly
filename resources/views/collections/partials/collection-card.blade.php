@@ -9,7 +9,7 @@
     @elseif($collection->patterns->isNotEmpty())
         @php
             $patternCount = $collection->patterns->count();
-            $patternsWithImages = $collection->patterns->filter(fn($p) => $p->image_path)->take(4);
+            $patternsWithImages = $collection->patterns->filter(fn($p) => $p->image_path)->take(4)->values();
         @endphp
         @if($patternsWithImages->isNotEmpty())
             <div class="mb-4 aspect-[3/4] w-full overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800">
