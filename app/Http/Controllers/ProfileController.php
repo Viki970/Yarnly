@@ -38,13 +38,21 @@ class ProfileController extends Controller
             ->latest('post_favorites.created_at')
             ->get();
 
+        // Liked tab – posts the user has liked
+        $likedPosts = $user->likedPosts()
+            ->with('images')
+            ->withCount('likes')
+            ->latest('post_likes.created_at')
+            ->get();
+
         return view('profile.show', compact(
             'user',
             'postsCount',
             'followersCount',
             'followingCount',
             'posts',
-            'savedPosts'
+            'savedPosts',
+            'likedPosts'
         ));
     }
 
@@ -63,13 +71,26 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
+        $data = $request->validated();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        if ($request->hasFile('profile_picture')) {
+            // Delete old picture if present
+            if ($user->profile_picture) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($user->profile_picture);
+            }
+            $data['profile_picture'] = $request->file('profile_picture')->store('profile-pictures', 'public');
+        } else {
+            unset($data['profile_picture']);
         }
 
-        $request->user()->save();
+        $user->fill($data);
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+
+        $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }

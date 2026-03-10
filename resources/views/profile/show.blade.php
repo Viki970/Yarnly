@@ -8,7 +8,7 @@
 $authUser   = auth()->user();
 // Build serialisable post data for JS modal
 $allPostData = [];
-foreach (array_merge($posts->all(), $savedPosts->all()) as $post) {
+foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $post) {
     if (isset($allPostData[$post->id])) continue;
     $allPostData[$post->id] = [
         'id'          => $post->id,
@@ -85,22 +85,31 @@ foreach (array_merge($posts->all(), $savedPosts->all()) as $post) {
 
             {{-- Avatar --}}
             <div class="shrink-0">
-                <div class="w-24 h-24 sm:w-36 sm:h-36 rounded-full bg-gradient-to-br from-violet-500 via-purple-500 to-indigo-500 flex items-center justify-center text-4xl sm:text-5xl font-bold text-white shadow-lg ring-2 ring-zinc-700">
-                    {{ $user->initials() }}
-                </div>
+                @if($user->profile_picture)
+                    <img src="{{ asset('storage/' . $user->profile_picture) }}"
+                         alt="{{ $user->username }}"
+                         class="w-24 h-24 sm:w-36 sm:h-36 rounded-full object-cover shadow-lg ring-2 ring-zinc-700">
+                @else
+                    <div class="w-24 h-24 sm:w-36 sm:h-36 rounded-full bg-gradient-to-br from-violet-500 via-purple-500 to-indigo-500 flex items-center justify-center text-4xl sm:text-5xl font-bold text-white shadow-lg ring-2 ring-zinc-700">
+                        {{ $user->initials() }}
+                    </div>
+                @endif
             </div>
 
             {{-- Info --}}
             <div class="flex flex-col gap-4 min-w-0 flex-1">
 
-                {{-- Username row --}}
+                {{-- Username + Edit button row --}}
                 <div class="flex flex-wrap items-center gap-3">
-                    <h1 class="text-xl font-light tracking-wide truncate">{{ $user->name }}</h1>
+                    <h1 class="text-xl font-bold tracking-wide truncate">{{ $user->username }}</h1>
                     <a href="{{ route('profile.edit') }}"
                        class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-sm font-semibold text-white transition-colors duration-200 border border-zinc-700">
                         Edit Profile
                     </a>
                 </div>
+
+                {{-- Full name directly under username --}}
+                <p class="text-sm text-zinc-400 -mt-2">{{ $user->name }}</p>
 
                 {{-- Stats row (desktop) --}}
                 <div class="hidden sm:flex items-center gap-8">
@@ -117,9 +126,6 @@ foreach (array_merge($posts->all(), $savedPosts->all()) as $post) {
                         <span class="ml-1 text-sm text-zinc-300">following</span>
                     </button>
                 </div>
-
-                {{-- Display name --}}
-                <p class="text-sm font-semibold text-zinc-200 hidden sm:block">{{ $user->name }}</p>
             </div>
         </div>
 
@@ -162,14 +168,14 @@ foreach (array_merge($posts->all(), $savedPosts->all()) as $post) {
                 <span class="hidden sm:inline">Saved</span>
             </button>
 
-            {{-- Patterns tab --}}
-            <button onclick="switchTab('patterns')" id="tab-patterns"
+            {{-- Liked tab --}}
+            <button onclick="switchTab('liked')" id="tab-liked"
                     class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-400">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
                 </svg>
-                <span class="hidden sm:inline">Patterns</span>
+                <span class="hidden sm:inline">Liked</span>
             </button>
         </div>
 
@@ -278,28 +284,49 @@ foreach (array_merge($posts->all(), $savedPosts->all()) as $post) {
             @endif
         </div>
 
-        {{-- ── Patterns tab content ── --}}
-        <div id="panel-patterns" class="hidden">
+        {{-- ── Liked tab content ── --}}
+        <div id="panel-liked" class="hidden">
+            @if($likedPosts->isEmpty())
             <div class="flex flex-col items-center justify-center py-24 text-center">
                 <div class="w-20 h-20 rounded-full border-2 border-zinc-600 flex items-center justify-center mb-5">
                     <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                              d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+                              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
                     </svg>
                 </div>
-                <h3 class="text-2xl font-extrabold mb-2">Your Patterns</h3>
-                <p class="text-zinc-400 text-sm mb-5">Manage all the patterns you've created or favorited.</p>
-                <div class="flex gap-3">
-                    <a href="{{ route('my-patterns') }}"
-                       class="px-5 py-2 rounded-full bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition-colors">
-                        My Patterns
-                    </a>
-                    <a href="{{ route('patterns.favorites') }}"
-                       class="px-5 py-2 rounded-full bg-zinc-700 hover:bg-zinc-600 text-white text-sm font-semibold transition-colors">
-                        Favorites
-                    </a>
-                </div>
+                <h3 class="text-2xl font-extrabold mb-2">No Liked Posts Yet</h3>
+                <p class="text-zinc-400 text-sm">Posts you like will appear here.</p>
             </div>
+            @else
+            <div class="grid grid-cols-3 gap-0.5">
+                @foreach($likedPosts as $post)
+                @php
+                    $firstImg = $post->images->first();
+                    $imgUrl   = $firstImg ? asset('storage/' . $firstImg->image_path) : null;
+                @endphp
+                <button data-post-id="{{ $post->id }}" class="profile-thumb">
+                    @if($imgUrl)
+                        <img src="{{ $imgUrl }}" alt="Liked post" loading="lazy">
+                    @else
+                        <div class="w-full h-full bg-gradient-to-br from-violet-900/50 to-purple-900/50 flex items-center justify-center">
+                            <svg class="w-8 h-8 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                    @endif
+                    <div class="thumb-overlay">
+                        <span class="thumb-stat">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                            </svg>
+                            {{ $post->likes_count }}
+                        </span>
+                    </div>
+                </button>
+                @endforeach
+            </div>
+            @endif
         </div>
 
     </div>{{-- /max-w-3xl --}}
@@ -389,7 +416,9 @@ foreach (array_merge($posts->all(), $savedPosts->all()) as $post) {
 
                     {{-- Comment input (decorative – no comments table yet) --}}
                     <div class="flex items-center gap-2 pt-1 border-t border-zinc-800">
-                        <span class="text-lg select-none">🙂</span>
+                        <svg class="w-6 h-6 text-zinc-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
                         <input type="text" placeholder="Add a comment…"
                                class="flex-1 bg-transparent text-sm text-zinc-300 placeholder-zinc-600 outline-none py-1"/>
                         <button class="text-sm font-semibold text-violet-400 hover:text-violet-300 transition-colors">Post</button>
@@ -460,7 +489,7 @@ document.addEventListener('click', function (e) {
 
 // ── Tab switching
 // ═══════════════════════════════════════════════════════════
-const tabs = ['posts', 'saved', 'patterns'];
+const tabs = ['posts', 'saved', 'liked'];
 function switchTab(name) {
     tabs.forEach(t => {
         document.getElementById('panel-' + t).classList.toggle('hidden', t !== name);
