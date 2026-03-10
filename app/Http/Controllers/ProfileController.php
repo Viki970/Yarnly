@@ -8,9 +8,46 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
+    /**
+     * Display the Instagram-style profile page.
+     */
+    public function show(Request $request): View
+    {
+        /** @var User $user */
+        $user = $request->user();
+
+        $postsCount     = $user->posts()->count();
+        $followersCount = $user->followers()->count();
+        $followingCount = $user->following()->count();
+
+        // Posts tab – user's own models
+        $posts = $user->posts()
+            ->with('images')
+            ->withCount('likes')
+            ->latest()
+            ->get();
+
+        // Saved tab – posts the user has bookmarked
+        $savedPosts = $user->favoritedPosts()
+            ->with('images')
+            ->withCount('likes')
+            ->latest('post_favorites.created_at')
+            ->get();
+
+        return view('profile.show', compact(
+            'user',
+            'postsCount',
+            'followersCount',
+            'followingCount',
+            'posts',
+            'savedPosts'
+        ));
+    }
+
     /**
      * Display the user's profile form.
      */

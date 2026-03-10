@@ -15,12 +15,12 @@ class PatternController extends Controller
     public function crochet()
     {
         $newest = Pattern::where('craft_type', 'crochet')->latest()->limit(6)->get();
-        
+
         // Calculate patterns created this week
         $startOfWeek = now()->startOfWeek();
         $endOfWeek = now()->endOfWeek();
         $newThisWeek = Pattern::where('craft_type', 'crochet')->whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
-        
+
         // Count user's favorited crochet patterns
         $favoritesCount = 0;
         if (Auth::check()) {
@@ -28,7 +28,7 @@ class PatternController extends Controller
             $user = Auth::user();
             $favoritesCount = $user->favoritePatterns()->where('craft_type', 'crochet')->count();
         }
-        
+
         // Get public crochet collections with patterns and users
         $collections = Collection::where('is_public', true)
             ->where('craft_type', 'crochet')
@@ -36,9 +36,9 @@ class PatternController extends Controller
             ->latest()
             ->limit(6)
             ->get();
-        
+
         return view('patterns.crochet.crochet_patterns', [
-            'newest' => $newest, 
+            'newest' => $newest,
             'selectedCategory' => null,
             'newThisWeek' => $newThisWeek,
             'favoritesCount' => $favoritesCount,
@@ -49,19 +49,19 @@ class PatternController extends Controller
     public function crochetByCategory($category)
     {
         $validCategories = array_keys(Pattern::CATEGORIES['crochet']);
-        
+
         if (!in_array($category, $validCategories)) {
             return redirect()->route('patterns.crochet');
         }
 
         $patterns = Pattern::where('craft_type', 'crochet')->where('category', $category)->with('user')->latest()->get();
         $newest = Pattern::where('craft_type', 'crochet')->with('user')->latest()->limit(6)->get();
-        
+
         // Calculate patterns created this week
         $startOfWeek = now()->startOfWeek();
         $endOfWeek = now()->endOfWeek();
         $newThisWeek = Pattern::where('craft_type', 'crochet')->whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
-        
+
         // Count user's favorited crochet patterns
         $favoritesCount = 0;
         if (Auth::check()) {
@@ -69,7 +69,7 @@ class PatternController extends Controller
             $user = Auth::user();
             $favoritesCount = $user->favoritePatterns()->where('craft_type', 'crochet')->count();
         }
-        
+
         // Get public crochet collections with patterns and users
         $collections = Collection::where('is_public', true)
             ->where('craft_type', 'crochet')
@@ -77,7 +77,7 @@ class PatternController extends Controller
             ->latest()
             ->limit(6)
             ->get();
-        
+
         return view('patterns.crochet.crochet_patterns', [
             'patterns' => $patterns,
             'newest' => $newest,
@@ -91,12 +91,12 @@ class PatternController extends Controller
     public function knitting()
     {
         $newest = Pattern::where('craft_type', 'knitting')->with('user')->latest()->limit(6)->get();
-        
+
         // Calculate patterns created this week
         $startOfWeek = now()->startOfWeek();
         $endOfWeek = now()->endOfWeek();
         $newThisWeek = Pattern::where('craft_type', 'knitting')->whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
-        
+
         // Count user's favorited knitting patterns
         $favoritesCount = 0;
         if (Auth::check()) {
@@ -104,7 +104,7 @@ class PatternController extends Controller
             $user = Auth::user();
             $favoritesCount = $user->favoritePatterns()->where('craft_type', 'knitting')->count();
         }
-        
+
         // Get public collections with patterns and users  (knitting type)
         $collections = Collection::where('is_public', true)
             ->where('craft_type', 'knitting')
@@ -112,9 +112,9 @@ class PatternController extends Controller
             ->latest()
             ->limit(6)
             ->get();
-        
+
         return view('patterns.knitting.knitting_patterns', [
-            'newest' => $newest, 
+            'newest' => $newest,
             'selectedCategory' => null,
             'newThisWeek' => $newThisWeek,
             'favoritesCount' => $favoritesCount,
@@ -125,19 +125,19 @@ class PatternController extends Controller
     public function knittingByCategory($category)
     {
         $validCategories = array_keys(Pattern::CATEGORIES['knitting']);
-        
+
         if (!in_array($category, $validCategories)) {
             return redirect()->route('patterns.knitting');
         }
 
         $patterns = Pattern::where('craft_type', 'knitting')->where('category', $category)->with('user')->latest()->get();
         $newest = Pattern::where('craft_type', 'knitting')->with('user')->latest()->limit(6)->get();
-        
+
         // Calculate patterns created this week
         $startOfWeek = now()->startOfWeek();
         $endOfWeek = now()->endOfWeek();
         $newThisWeek = Pattern::where('craft_type', 'knitting')->whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
-        
+
         // Count user's favorited knitting patterns
         $favoritesCount = 0;
         if (Auth::check()) {
@@ -145,7 +145,7 @@ class PatternController extends Controller
             $user = Auth::user();
             $favoritesCount = $user->favoritePatterns()->where('craft_type', 'knitting')->count();
         }
-        
+
         // Get public collections with patterns and users (knitting type)
         $collections = Collection::where('is_public', true)
             ->where('craft_type', 'knitting')
@@ -153,7 +153,7 @@ class PatternController extends Controller
             ->latest()
             ->limit(6)
             ->get();
-        
+
         return view('patterns.knitting.knitting_patterns', [
             'patterns' => $patterns,
             'newest' => $newest,
@@ -167,12 +167,12 @@ class PatternController extends Controller
     public function embroidery()
     {
         $newest = Pattern::where('craft_type', 'embroidery')->with('user')->latest()->limit(6)->get();
-        
+
         // Calculate patterns created this week
         $startOfWeek = now()->startOfWeek();
         $endOfWeek = now()->endOfWeek();
         $newThisWeek = Pattern::where('craft_type', 'embroidery')->whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
-        
+
         // Count user's favorited embroidery patterns
         $favoritesCount = 0;
         if (Auth::check()) {
@@ -180,7 +180,7 @@ class PatternController extends Controller
             $user = Auth::user();
             $favoritesCount = $user->favoritePatterns()->where('craft_type', 'embroidery')->count();
         }
-        
+
         // Get public embroidery collections with patterns and users
         $collections = Collection::where('is_public', true)
             ->where('craft_type', 'embroidery')
@@ -188,9 +188,9 @@ class PatternController extends Controller
             ->latest()
             ->limit(6)
             ->get();
-        
+
         return view('patterns.embroidery.embroidery_patterns', [
-            'newest' => $newest, 
+            'newest' => $newest,
             'selectedCategory' => null,
             'newThisWeek' => $newThisWeek,
             'favoritesCount' => $favoritesCount,
@@ -201,19 +201,19 @@ class PatternController extends Controller
     public function embroideryByCategory($category)
     {
         $validCategories = array_keys(Pattern::CATEGORIES['embroidery']);
-        
+
         if (!in_array($category, $validCategories)) {
             return redirect()->route('patterns.embroidery');
         }
 
         $patterns = Pattern::where('craft_type', 'embroidery')->where('category', $category)->with('user')->latest()->get();
         $newest = Pattern::where('craft_type', 'embroidery')->with('user')->latest()->limit(6)->get();
-        
+
         // Calculate patterns created this week
         $startOfWeek = now()->startOfWeek();
         $endOfWeek = now()->endOfWeek();
         $newThisWeek = Pattern::where('craft_type', 'embroidery')->whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
-        
+
         // Count user's favorited embroidery patterns
         $favoritesCount = 0;
         if (Auth::check()) {
@@ -221,7 +221,7 @@ class PatternController extends Controller
             $user = Auth::user();
             $favoritesCount = $user->favoritePatterns()->where('craft_type', 'embroidery')->count();
         }
-        
+
         // Get public embroidery collections with patterns and users
         $collections = Collection::where('is_public', true)
             ->where('craft_type', 'embroidery')
@@ -229,7 +229,7 @@ class PatternController extends Controller
             ->latest()
             ->limit(6)
             ->get();
-        
+
         return view('patterns.embroidery.embroidery_patterns', [
             'patterns' => $patterns,
             'newest' => $newest,
@@ -259,13 +259,13 @@ class PatternController extends Controller
         }
 
         $filePath = storage_path('app/public/' . $pattern->pdf_file);
-        
+
         if (!file_exists($filePath)) {
             return redirect()->back()->with('error', 'Pattern file not found');
         }
 
         $originalFilename = $pattern->original_filename ?: 'pattern.pdf';
-        
+
         return response()->download($filePath, $originalFilename);
     }
 
@@ -297,7 +297,7 @@ class PatternController extends Controller
             ]);
 
             $pdfFile = $request->file('pdf_file');
-            
+
             // Check MIME type
             if ($pdfFile->getMimeType() !== 'application/pdf') {
                 return back()->withInput()->with('error', 'File must be a PDF. Detected type: ' . $pdfFile->getMimeType());
@@ -322,10 +322,10 @@ class PatternController extends Controller
             $tags = null;
             if ($request->filled('tags')) {
                 $tagsArray = array_map('trim', explode(',', $request->tags));
-                $tagsArray = array_filter($tagsArray, function($tag) {
+                $tagsArray = array_filter($tagsArray, function ($tag) {
                     return !empty($tag) && strlen($tag) <= 50;
                 });
-                $tagsArray = array_map(function($tag) {
+                $tagsArray = array_map(function ($tag) {
                     $tag = ltrim($tag, '#');
                     return '#' . $tag;
                 }, $tagsArray);
@@ -348,7 +348,6 @@ class PatternController extends Controller
             ]);
 
             return redirect()->route('my-patterns')->with('success', 'Pattern created successfully!');
-            
         } catch (\Illuminate\Validation\ValidationException $e) {
             return back()->withInput()->withErrors($e->errors());
         } catch (\Exception $e) {
@@ -372,7 +371,7 @@ class PatternController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-        
+
         if ($user->hasFavorited($pattern)) {
             // Unfavorite
             $user->favoritePatterns()->detach($pattern->id);
@@ -384,7 +383,7 @@ class PatternController extends Controller
             $pattern->increment('makers_saved');
             $favorited = true;
         }
-        
+
         return response()->json([
             'success' => true,
             'favorited' => $favorited,
@@ -399,51 +398,51 @@ class PatternController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-        
+
         // Get filter parameters
         $tab = $request->get('tab', 'patterns'); // patterns or collections
         $craftFilter = $request->get('filter', 'all'); // all, crochet, knitting, embroidery
-        
+
         // Get all favorite patterns
         $allFavoritePatterns = $user->favoritePatterns()
             ->latest('user_favorites.created_at')
             ->get();
-        
+
         // Get all favorite collections
         $allFavoriteCollections = $user->favoriteCollections()
             ->with('user')
             ->latest('collection_favorites.created_at')
             ->get();
-        
+
         // Count totals
         $totalFavorites = $allFavoritePatterns->count() + $allFavoriteCollections->count();
         $totalPatterns = $allFavoritePatterns->count();
         $totalCollections = $allFavoriteCollections->count();
-        
+
         // Group patterns by craft type
         $crochetPatterns = $allFavoritePatterns->where('craft_type', 'crochet');
         $knittingPatterns = $allFavoritePatterns->where('craft_type', 'knitting');
         $embroideryPatterns = $allFavoritePatterns->where('craft_type', 'embroidery');
-        
+
         // Group collections by craft type
         $crochetCollections = $allFavoriteCollections->where('craft_type', 'crochet');
         $knittingCollections = $allFavoriteCollections->where('craft_type', 'knitting');
         $embroideryCollections = $allFavoriteCollections->where('craft_type', 'embroidery');
-        
+
         // Apply craft type filter for patterns
         if ($craftFilter === 'all') {
             $favoritePatterns = $allFavoritePatterns;
         } else {
             $favoritePatterns = $allFavoritePatterns->where('craft_type', $craftFilter);
         }
-        
+
         // Apply craft type filter for collections
         if ($craftFilter === 'all') {
             $favoriteCollections = $allFavoriteCollections;
         } else {
             $favoriteCollections = $allFavoriteCollections->where('craft_type', $craftFilter);
         }
-        
+
         return view('profile.favorites', compact(
             'favoritePatterns',
             'favoriteCollections',
@@ -494,18 +493,22 @@ class PatternController extends Controller
 
         $recentModels = Post::with(['user', 'images'])
             ->withCount('likes')
-            ->when($userId, fn($q) => $q
-                ->withExists(['likes as liked_by_user'     => fn($q) => $q->where('user_id', $userId)])
-                ->withExists(['favorites as faved_by_user' => fn($q) => $q->where('user_id', $userId)])
+            ->when(
+                $userId,
+                fn($q) => $q
+                    ->withExists(['likes as liked_by_user'     => fn($q) => $q->where('user_id', $userId)])
+                    ->withExists(['favorites as faved_by_user' => fn($q) => $q->where('user_id', $userId)])
             )
             ->latest()
             ->paginate(12);
 
         $topRatedModels = Post::with(['user', 'images'])
             ->withCount('likes')
-            ->when($userId, fn($q) => $q
-                ->withExists(['likes as liked_by_user'     => fn($q) => $q->where('user_id', $userId)])
-                ->withExists(['favorites as faved_by_user' => fn($q) => $q->where('user_id', $userId)])
+            ->when(
+                $userId,
+                fn($q) => $q
+                    ->withExists(['likes as liked_by_user'     => fn($q) => $q->where('user_id', $userId)])
+                    ->withExists(['favorites as faved_by_user' => fn($q) => $q->where('user_id', $userId)])
             )
             ->orderByDesc('likes_count')
             ->paginate(12);
@@ -513,11 +516,19 @@ class PatternController extends Controller
         $totalModels = Post::count();
         $newToday    = Post::whereDate('created_at', today())->count();
 
+        // IDs of users that the current user is following (empty array if guest)
+        /** @var User|null $authUser */
+        $authUser     = Auth::user();
+        $followingIds = ($userId && $authUser)
+            ? $authUser->following()->pluck('following_id')->toArray()
+            : [];
+
         return view('gallery.gallery', compact(
             'recentModels',
             'topRatedModels',
             'totalModels',
-            'newToday'
+            'newToday',
+            'followingIds'
         ));
     }
 }

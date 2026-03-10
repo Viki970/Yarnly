@@ -52,6 +52,49 @@
     @keyframes shimmer { to { background-position: -200% 0; } }
 </style>
 
+@php
+$galleryPostData = [];
+$allGalleryModels = collect();
+
+if (isset($recentModels)) {
+    foreach ($recentModels->items() as $m) { $allGalleryModels->put($m->id, $m); }
+}
+if (isset($topRatedModels)) {
+    foreach ($topRatedModels->items() as $m) {
+        if (!$allGalleryModels->has($m->id)) $allGalleryModels->put($m->id, $m);
+    }
+}
+
+foreach ($allGalleryModels as $model) {
+    $imgs = [];
+    if (!empty($model->images) && $model->images->count()) {
+        $imgs = $model->images->map(fn($i) => asset('storage/'.$i->image_path))->values()->all();
+    } elseif ($model->image_url ?? null) {
+        $imgs = [$model->image_url];
+    } elseif ($model->cover_image ?? null) {
+        $imgs = [asset('storage/'.$model->cover_image)];
+    }
+
+    $galleryPostData[$model->id] = [
+        'id'          => $model->id,
+        'images'      => $imgs,
+        'description' => $model->description ?? '',
+        'craft_type'  => $model->craft_type ?? ($model->type ?? 'crochet'),
+        'tags'        => method_exists($model, 'getTagsArrayAttribute') ? $model->tags_array : [],
+        'likes_count' => $model->likes_count ?? 0,
+        'author'      => $model->user->name ?? 'Anonymous',
+        'initials'    => strtoupper(substr($model->user->name ?? 'A', 0, 1)),
+        'created_at'  => $model->created_at->diffForHumans(),
+        'is_liked'    => (bool)($model->liked_by_user ?? false),
+        'is_faved'    => (bool)($model->faved_by_user ?? false),
+        'like_url'    => route('posts.like',       $model->id),
+        'unlike_url'  => route('posts.unlike',     $model->id),
+        'fav_url'     => route('posts.favorite',   $model->id),
+        'unfav_url'   => route('posts.unfavorite', $model->id),
+    ];
+}
+@endphp
+
 <!-- ─── Hero ─── -->
 <section class="relative overflow-hidden bg-gradient-to-br from-purple-950 via-violet-950 to-indigo-950 py-14">
     <div class="absolute -left-20 top-0 h-72 w-72 rounded-full bg-purple-600/20 blur-3xl"></div>
@@ -246,6 +289,102 @@
     </div>
 </div>
 
+<!-- ─── Post detail modal ─── -->
+<div id="gal-post-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-2 sm:p-6 bg-black/80 backdrop-blur-sm" onclick="galHandleBackdrop(event)">
+    <div class="relative flex flex-col md:flex-row w-full max-w-6xl rounded-2xl overflow-hidden shadow-2xl ring-1 ring-zinc-700 bg-zinc-900 dark:bg-zinc-900"
+         style="max-height:90vh;" onclick="event.stopPropagation()">
+
+        {{-- ✕ --}}
+        <button onclick="galCloseModal()" class="absolute top-3 right-3 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+
+        {{-- LEFT: image carousel --}}
+        <div class="relative flex-none w-full md:w-3/5 bg-black flex items-stretch" style="min-height:320px;max-height:90vh;">
+            <div id="gal-pm-carousel" class="w-full overflow-hidden relative" style="min-height:320px;">
+                <div id="gal-pm-track" style="display:flex;transition:transform .3s ease;height:100%;"></div>
+            </div>
+            <button id="gal-pm-prev" onclick="galPmGo(-1)" class="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 hidden items-center justify-center rounded-full bg-black/55 text-white hover:bg-black/80 transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <button id="gal-pm-next" onclick="galPmGo(1)" class="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 hidden items-center justify-center rounded-full bg-black/55 text-white hover:bg-black/80 transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+            </button>
+            <div id="gal-pm-dots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10"></div>
+        </div>
+
+        {{-- RIGHT: meta --}}
+        <div class="flex flex-col w-full md:w-2/5 min-w-0 border-t border-zinc-800 md:border-t-0 md:border-l md:border-zinc-800" style="max-height:90vh;">
+
+            {{-- Author header --}}
+            <div class="flex items-center gap-3 px-4 py-3 border-b border-zinc-800 shrink-0">
+                <div id="gal-pm-avatar" class="w-9 h-9 rounded-full bg-gradient-to-br from-purple-500 to-violet-500 flex items-center justify-center text-sm font-bold text-white shrink-0 select-none"></div>
+                <div class="min-w-0 flex-1">
+                    <p id="gal-pm-author" class="text-sm font-semibold text-white truncate"></p>
+                    <p id="gal-pm-time"   class="text-xs text-zinc-500"></p>
+                </div>
+                <span id="gal-pm-badge" class="inline-flex items-center rounded-full bg-purple-900/40 text-purple-300 px-2.5 py-0.5 text-xs font-semibold capitalize shrink-0"></span>
+                <button onclick="galCloseModal()" class="ml-1 text-zinc-500 hover:text-white transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            {{-- Scrollable body --}}
+            <div class="flex-1 overflow-y-auto px-4 py-4 space-y-3 text-sm">
+                <p id="gal-pm-desc" class="text-zinc-200 leading-relaxed whitespace-pre-wrap break-words"></p>
+                <div id="gal-pm-tags" class="flex flex-wrap gap-1.5"></div>
+            </div>
+
+            {{-- Actions --}}
+            <div class="shrink-0 border-t border-zinc-800 px-4 py-3 space-y-2">
+                <div class="flex items-center justify-between">
+                    @auth
+                    <button id="gal-pm-like-btn" onclick="galPmToggleLike()"
+                            class="flex items-center gap-1.5 text-zinc-400 hover:text-red-400 transition-colors duration-200">
+                        <svg id="gal-pm-like-icon" class="w-6 h-6 stroke-2 transition-transform duration-150 hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                        </svg>
+                        <span id="gal-pm-like-count" class="text-sm font-medium"></span>
+                    </button>
+                    @else
+                    <button onclick="openLoginModal()" class="flex items-center gap-1.5 text-zinc-600 hover:text-red-400 transition-colors duration-200">
+                        <svg class="w-6 h-6 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                        </svg>
+                        <span id="gal-pm-like-count" class="text-sm font-medium text-zinc-400"></span>
+                    </button>
+                    @endauth
+
+                    @auth
+                    <button id="gal-pm-save-btn" onclick="galPmToggleSave()" class="text-zinc-400 hover:text-purple-400 transition-colors duration-200">
+                        <svg id="gal-pm-save-icon" class="w-6 h-6 stroke-2 hover:scale-110 transition-transform duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+                        </svg>
+                    </button>
+                    @else
+                    <button onclick="openLoginModal()" class="text-zinc-600 hover:text-purple-400 transition-colors duration-200">
+                        <svg class="w-6 h-6 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+                        </svg>
+                    </button>
+                    @endauth
+                </div>
+
+                <p id="gal-pm-likes-label" class="text-xs text-zinc-500"></p>
+
+                <div class="flex items-center gap-2 pt-1 border-t border-zinc-800">
+                    <span class="text-lg select-none">🙂</span>
+                    <input type="text" placeholder="Add a comment…"
+                           class="flex-1 bg-transparent text-sm text-zinc-300 placeholder-zinc-600 outline-none py-1"/>
+                    <button class="text-sm font-semibold text-purple-400 hover:text-purple-300 transition-colors">Post</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
 <script>
 // ─── Tab switching with sliding pill ──────────────────────────────────────────────
@@ -303,6 +442,210 @@ sentinels.forEach(sentinel => {
         });
     }, { threshold: 0.5 });
     observer.observe(sentinel);
+});
+
+// ─── Open post modal when clicking image area ─────────────────────────
+document.addEventListener('click', function (e) {
+    const trigger = e.target.closest('[data-open-post]');
+    if (trigger) galOpenModal(trigger.dataset.openPost);
+});
+</script>
+<script id="gallery-post-data" type="application/json">@json($galleryPostData)</script>
+<script>
+// ═══════════════════════════════════════════════════════════
+// Gallery post modal
+// ═══════════════════════════════════════════════════════════
+const _galPosts  = JSON.parse(document.getElementById('gallery-post-data').textContent);
+const _galCsrf   = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
+let   _galCurr   = null;
+let   _galIdx    = 0;
+
+function galOpenModal(postId) {
+    const post = _galPosts[postId];
+    if (!post) return;
+    _galCurr = post;
+    _galIdx  = 0;
+
+    document.getElementById('gal-pm-avatar').textContent = post.initials;
+    document.getElementById('gal-pm-author').textContent = post.author;
+    document.getElementById('gal-pm-time').textContent   = post.created_at;
+    document.getElementById('gal-pm-badge').textContent  = post.craft_type;
+    document.getElementById('gal-pm-desc').textContent   = post.description;
+
+    const tagsEl = document.getElementById('gal-pm-tags');
+    tagsEl.innerHTML = '';
+    (post.tags || []).forEach(tag => {
+        const s = document.createElement('span');
+        s.className   = 'text-xs text-purple-400 hover:text-purple-300 cursor-default';
+        s.textContent = '#' + tag;
+        tagsEl.appendChild(s);
+    });
+
+    galPmSetLike(post.is_liked, post.likes_count);
+    galPmSetSave(post.is_faved);
+
+    // Build carousel
+    const track = document.getElementById('gal-pm-track');
+    const dots  = document.getElementById('gal-pm-dots');
+    track.innerHTML = '';
+    dots.innerHTML  = '';
+    const imgs = (post.images && post.images.length) ? post.images : [null];
+    imgs.forEach((url, i) => {
+        const slide = document.createElement('div');
+        slide.style.cssText = 'flex:none;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#000;';
+        if (url) {
+            const img = document.createElement('img');
+            img.src = url; img.alt = 'Post image';
+            img.style.cssText = 'width:100%;height:100%;object-fit:contain;';
+            slide.appendChild(img);
+        } else {
+            slide.innerHTML = `<svg style="width:4rem;height:4rem;color:#3f3f46" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`;
+        }
+        track.appendChild(slide);
+        if (imgs.length > 1) {
+            const dot = document.createElement('div');
+            dot.style.cssText = `height:.375rem;border-radius:9999px;transition:all .2s;background:${i===0?'#fff':'rgba(255,255,255,.4)'};width:${i===0?'.625rem':'.375rem'};`;
+            dots.appendChild(dot);
+        }
+    });
+
+    const carEl = document.getElementById('gal-pm-carousel');
+    carEl.style.height = (carEl.parentElement.offsetHeight || 560) + 'px';
+    track.style.height = '100%';
+
+    galPmUpdateArrows(imgs.length);
+    galPmGoTo(0);
+
+    const modal = document.getElementById('gal-post-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+}
+
+function galCloseModal() {
+    document.getElementById('gal-post-modal').classList.add('hidden');
+    document.getElementById('gal-post-modal').classList.remove('flex');
+    document.body.style.overflow = '';
+    _galCurr = null;
+}
+function galHandleBackdrop(e) {
+    if (e.target === document.getElementById('gal-post-modal')) galCloseModal();
+}
+
+// Carousel
+function galPmGoTo(index) {
+    const track = document.getElementById('gal-pm-track');
+    const total = track.children.length;
+    _galIdx = Math.max(0, Math.min(index, total - 1));
+    track.style.transform = `translateX(-${_galIdx * 100}%)`;
+    const dotEls = document.getElementById('gal-pm-dots').children;
+    Array.from(dotEls).forEach((d, i) => {
+        d.style.background = i === _galIdx ? '#fff' : 'rgba(255,255,255,.4)';
+        d.style.width = i === _galIdx ? '.625rem' : '.375rem';
+    });
+    galPmUpdateArrows(total);
+}
+function galPmGo(dir) { galPmGoTo(_galIdx + dir); }
+function galPmUpdateArrows(total) {
+    const prev = document.getElementById('gal-pm-prev');
+    const next = document.getElementById('gal-pm-next');
+    const show = (el, visible) => { el.classList.toggle('hidden', !visible); el.classList.toggle('flex', visible); };
+    show(prev, total > 1 && _galIdx > 0);
+    show(next, total > 1 && _galIdx < total - 1);
+}
+
+// Like
+function galPmSetLike(liked, count) {
+    const icon  = document.getElementById('gal-pm-like-icon');
+    const btn   = document.getElementById('gal-pm-like-btn');
+    const cntEl = document.getElementById('gal-pm-like-count');
+    const label = document.getElementById('gal-pm-likes-label');
+    if (icon) icon.setAttribute('fill', liked ? 'currentColor' : 'none');
+    if (btn)  { btn.classList.toggle('text-red-500',  liked); btn.classList.toggle('text-zinc-400', !liked); }
+    if (cntEl) cntEl.textContent = count;
+    if (label) label.textContent = count + (count === 1 ? ' like' : ' likes');
+
+    // Sync the card's heart button too
+    if (_galCurr) {
+        const cardBtn = document.querySelector(`.like-btn[data-post-id="${_galCurr.id}"]`);
+        if (cardBtn) {
+            const svg = cardBtn.querySelector('svg');
+            const cnt = cardBtn.querySelector('.like-count');
+            cardBtn.dataset.liked = liked ? 'true' : 'false';
+            if (svg) svg.setAttribute('fill', liked ? 'currentColor' : 'none');
+            cardBtn.classList.toggle('text-red-500',  liked);
+            cardBtn.classList.toggle('text-zinc-500', !liked);
+            if (cnt) cnt.textContent = count;
+        }
+    }
+}
+function galPmSetSave(saved) {
+    const icon = document.getElementById('gal-pm-save-icon');
+    const btn  = document.getElementById('gal-pm-save-btn');
+    if (icon) icon.setAttribute('fill', saved ? 'currentColor' : 'none');
+    if (btn)  { btn.classList.toggle('text-purple-400', saved); btn.classList.toggle('text-zinc-400', !saved); }
+
+    // Sync the card's bookmark button too
+    if (_galCurr) {
+        const cardBtn = document.querySelector(`.fav-btn[data-post-id="${_galCurr.id}"]`);
+        if (cardBtn) {
+            const svg = cardBtn.querySelector('svg');
+            cardBtn.dataset.faved = saved ? 'true' : 'false';
+            if (svg) svg.setAttribute('fill', saved ? 'currentColor' : 'none');
+            cardBtn.classList.toggle('text-purple-500', saved);
+            cardBtn.classList.toggle('text-zinc-400',   !saved);
+        }
+    }
+}
+
+async function galPmToggleLike() {
+    if (!_galCurr) return;
+    const liked  = _galCurr.is_liked;
+    const url    = liked ? _galCurr.unlike_url : _galCurr.like_url;
+    const method = liked ? 'DELETE' : 'POST';
+    try {
+        const res  = await fetch(url, { method, headers: { 'X-CSRF-TOKEN': _galCsrf, 'Accept': 'application/json' } });
+        const data = await res.json();
+        _galCurr.is_liked    = data.liked;
+        _galCurr.likes_count = data.count;
+        _galPosts[_galCurr.id].is_liked    = data.liked;
+        _galPosts[_galCurr.id].likes_count = data.count;
+        galPmSetLike(data.liked, data.count);
+    } catch (err) { console.error(err); }
+}
+
+async function galPmToggleSave() {
+    if (!_galCurr) return;
+    const saved  = _galCurr.is_faved;
+    const url    = saved ? _galCurr.unfav_url : _galCurr.fav_url;
+    const method = saved ? 'DELETE' : 'POST';
+    try {
+        const res  = await fetch(url, { method, headers: { 'X-CSRF-TOKEN': _galCsrf, 'Accept': 'application/json' } });
+        const data = await res.json();
+        _galCurr.is_faved              = data.favorited;
+        _galPosts[_galCurr.id].is_faved = data.favorited;
+        galPmSetSave(data.favorited);
+    } catch (err) { console.error(err); }
+}
+
+// Touch swipe inside modal carousel
+(function () {
+    let sx = 0;
+    const el = document.getElementById('gal-pm-carousel');
+    el.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
+    el.addEventListener('touchend',   e => {
+        const diff = sx - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 40) galPmGo(diff > 0 ? 1 : -1);
+    }, { passive: true });
+})();
+
+// Keyboard
+document.addEventListener('keydown', e => {
+    if (!document.getElementById('gal-post-modal').classList.contains('hidden')) {
+        if (e.key === 'Escape')     galCloseModal();
+        if (e.key === 'ArrowLeft')  galPmGo(-1);
+        if (e.key === 'ArrowRight') galPmGo(1);
+    }
 });
 </script>
 @endpush

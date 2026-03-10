@@ -9,6 +9,11 @@
         'embroidery' => 'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300',
     ];
     $craftEmojis = ['crochet' => '🧶', 'knitting' => '🪡', 'embroidery' => '🪢'];
+
+    $showFollowBtn = Auth::check() && Auth::id() !== $post->user_id;
+    $isFollowing   = $showFollowBtn && Auth::user()->isFollowing($post->user);
+    $followUrl     = $showFollowBtn ? route('users.follow',   $post->user_id) : '#';
+    $unfollowUrl   = $showFollowBtn ? route('users.unfollow', $post->user_id) : '#';
 @endphp
 
 <div class="group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-zinc-100 dark:border-zinc-800 transition-all duration-300">
@@ -42,6 +47,21 @@
                     {{ strtoupper(substr($post->user->name, 0, 1)) }}
                 </div>
                 <span class="text-sm font-medium text-zinc-700 dark:text-zinc-300">{{ $post->user->name }}</span>
+                @if($showFollowBtn)
+                <form method="POST"
+                      action="{{ $isFollowing ? $unfollowUrl : $followUrl }}"
+                      class="inline">
+                    @csrf
+                    @if($isFollowing) @method('DELETE') @endif
+                    <button type="submit"
+                            class="text-xs font-semibold px-2 py-0.5 rounded-full border transition-colors duration-200
+                                   {{ $isFollowing
+                                       ? 'border-zinc-300 text-zinc-500 hover:border-red-400 hover:text-red-500 dark:border-zinc-600 dark:text-zinc-400'
+                                       : 'border-purple-400 text-purple-600 hover:bg-purple-500 hover:text-white dark:border-purple-500 dark:text-purple-400 dark:hover:bg-purple-600 dark:hover:text-white' }}">
+                        {{ $isFollowing ? 'Following' : '+ Follow' }}
+                    </button>
+                </form>
+                @endif
             </div>
             <span class="text-xs font-semibold px-2 py-1 rounded-full {{ $craftColors[$post->craft_type] ?? 'bg-zinc-100 text-zinc-600' }}">
                 {{ $craftEmojis[$post->craft_type] ?? '' }} {{ ucfirst($post->craft_type) }}

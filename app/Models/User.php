@@ -24,16 +24,21 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Post> $posts
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Post> $likedPosts
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Post> $favoritedPosts
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $following
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $followers
  * @method BelongsToMany favoritePatterns()
  * @method BelongsToMany favoriteCollections()
  * @method HasMany collections()
  * @method HasMany posts()
  * @method BelongsToMany likedPosts()
  * @method BelongsToMany favoritedPosts()
+ * @method BelongsToMany following()
+ * @method BelongsToMany followers()
  * @method bool hasFavorited(Pattern $pattern)
  * @method bool hasFavoritedCollection(Collection $collection)
  * @method bool hasLikedPost(Post $post)
  * @method bool hasFavoritedPost(Post $post)
+ * @method bool isFollowing(User $user)
  */
 class User extends Authenticatable
 {
@@ -179,5 +184,49 @@ class User extends Authenticatable
     public function hasFavoritedPost(Post $post): bool
     {
         return $this->favoritedPosts()->where('posts.id', $post->id)->exists();
+    }
+
+    /**
+     * Users that this user is following
+     */
+    public function following(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'follows', 'follower_id', 'following_id')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Users that follow this user
+     */
+    public function followers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'follows', 'following_id', 'follower_id')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Check if this user is following the given user
+     */
+    public function isFollowing(User $user): bool
+    {
+        return $this->following()->where('following_id', $user->id)->exists();
+    }
+
+    /**
+     * Follow the given user (no-op if already following or self)
+     */
+    public function follow(User $user): void
+    {
+        if ($this->id !== $user->id) {
+            $this->following()->syncWithoutDetaching([$user->id]);
+        }
+    }
+
+    /**
+     * Unfollow the given user
+     */
+    public function unfollow(User $user): void
+    {
+        $this->following()->detach($user->id);
     }
 }
