@@ -1,4 +1,4 @@
-﻿@extends('layout.app')
+﻿﻿@extends('layout.app')
 
 @section('title', 'Settings · Yarnly')
 
@@ -240,10 +240,9 @@
                         </div>
                         <div class="space-y-3 max-w-md">
                             @foreach ([
-                                ['label' => 'Private account',      'desc' => 'Only approved followers can see your posts',     'on' => false],
-                                ['label' => 'Show activity status', 'desc' => 'Let others see when you were last active',       'on' => true],
-                                ['label' => 'Allow tags in posts',  'desc' => 'Let other users tag you in their posts',         'on' => true],
-                                ['label' => 'Searchable profile',   'desc' => 'Allow your profile to appear in search results', 'on' => true],
+                                ['label' => 'Searchable profile',    'desc' => 'Let your profile appear in search and explore results',    'on' => true],
+                                ['label' => 'Show liked posts',      'desc' => 'Let others see which posts you\'ve liked',                 'on' => false],
+                                ['label' => 'Show saved collections','desc' => 'Let others browse the collections you\'ve created',        'on' => true],
                             ] as $item)
                             <div class="flex items-center justify-between gap-4 px-4 py-3.5 bg-zinc-800 rounded-xl"
                                  x-data="{ on: {{ $item['on'] ? 'true' : 'false' }} }">
@@ -323,20 +322,25 @@
                         {{-- Accent colour --}}
                         <div>
                             <p class="text-sm font-semibold text-white mb-3">Accent Colour</p>
-                            <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-3 flex-wrap">
                                 @foreach ([
-                                    ['value' => 'violet',  'bg' => 'bg-violet-500'],
-                                    ['value' => 'indigo',  'bg' => 'bg-indigo-500'],
-                                    ['value' => 'rose',    'bg' => 'bg-rose-500'],
-                                    ['value' => 'emerald', 'bg' => 'bg-emerald-500'],
-                                    ['value' => 'amber',   'bg' => 'bg-amber-500'],
-                                    ['value' => 'sky',     'bg' => 'bg-sky-500'],
+                                    ['value' => 'default', 'label' => 'Default', 'bg' => 'bg-[conic-gradient(from_0deg,_#f43f5e,_#f97316,_#eab308,_#22c55e,_#06b6d4,_#6366f1,_#a855f7,_#f43f5e)]'],
+                                    ['value' => 'violet',  'label' => 'Violet',  'bg' => 'bg-violet-500'],
+                                    ['value' => 'indigo',  'label' => 'Indigo',  'bg' => 'bg-indigo-500'],
+                                    ['value' => 'rose',    'label' => 'Rose',    'bg' => 'bg-rose-500'],
+                                    ['value' => 'emerald', 'label' => 'Emerald', 'bg' => 'bg-emerald-500'],
+                                    ['value' => 'amber',   'label' => 'Amber',   'bg' => 'bg-amber-500'],
+                                    ['value' => 'sky',     'label' => 'Sky',     'bg' => 'bg-sky-500'],
                                 ] as $a)
-                                <button type="button"
-                                        @click="accent = '{{ $a['value'] }}'; localStorage.setItem('yarnly-accent', '{{ $a['value'] }}')"
-                                        :class="accent === '{{ $a['value'] }}' ? 'ring-2 ring-white ring-offset-2 ring-offset-zinc-950 scale-110' : 'opacity-60 hover:opacity-100'"
-                                        class="{{ $a['bg'] }} w-8 h-8 rounded-full transition-all focus:outline-none cursor-pointer">
-                                </button>
+                                <div class="flex flex-col items-center gap-1.5">
+                                    <button type="button"
+                                            @click="accent = '{{ $a['value'] }}'; localStorage.setItem('yarnly-accent', '{{ $a['value'] }}')"
+                                            :class="accent === '{{ $a['value'] }}' ? 'ring-2 ring-white ring-offset-2 ring-offset-zinc-950 scale-110' : 'opacity-60 hover:opacity-100 hover:scale-110'"
+                                            class="{{ $a['bg'] }} w-8 h-8 rounded-full block transition-all focus:outline-none cursor-pointer peer">
+                                    </button>
+                                    <span :class="accent === '{{ $a['value'] }}' ? 'opacity-100 text-white translate-y-0' : 'opacity-0 peer-hover:opacity-100 peer-hover:translate-y-0 text-zinc-400 -translate-y-1'"
+                                          class="text-[10px] font-medium transition-all duration-150 pointer-events-none">{{ $a['label'] }}</span>
+                                </div>
                                 @endforeach
                             </div>
                         </div>
@@ -346,20 +350,22 @@
                             <p class="text-sm font-semibold text-white mb-3">Font Size</p>
                             <div class="space-y-2 max-w-md">
                                 @foreach ([
-                                    ['value' => 'small',  'label' => 'Small',  'desc' => '13px вЂ” compact view'],
-                                    ['value' => 'medium', 'label' => 'Medium', 'desc' => '15px вЂ” default'],
-                                    ['value' => 'large',  'label' => 'Large',  'desc' => '17px вЂ” easier to read'],
+                                    ['value' => 'small',  'label' => 'Small',  'preview' => 'Aa', 'size' => 'text-sm',  'desc' => 'Compact — fits more on screen'],
+                                    ['value' => 'medium', 'label' => 'Medium', 'preview' => 'Aa', 'size' => 'text-base','desc' => 'Default — balanced readability'],
+                                    ['value' => 'large',  'label' => 'Large',  'preview' => 'Aa', 'size' => 'text-lg',  'desc' => 'Comfortable — easier on the eyes'],
                                 ] as $f)
                                 <button type="button"
-                                        @click="size = '{{ $f['value'] }}'; localStorage.setItem('yarnly-font', '{{ $f['value'] }}')"
+                                        @click="size = '{{ $f['value'] }}'; localStorage.setItem('yarnly-font', '{{ $f['value'] }}'); document.documentElement.style.fontSize = ({ small: '13px', medium: '15px', large: '17px' })['{{ $f['value'] }}']"
                                         :class="size === '{{ $f['value'] }}'
                                             ? 'border-violet-500 bg-violet-500/10'
                                             : 'border-zinc-700 hover:border-zinc-500'"
-                                        class="w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all cursor-pointer focus:outline-none text-left">
+                                        class="w-full flex items-center gap-4 px-4 py-3 rounded-xl border transition-all cursor-pointer focus:outline-none text-left">
                                     <div :class="size === '{{ $f['value'] }}' ? 'border-violet-500' : 'border-zinc-600'"
                                          class="w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0">
                                         <div x-show="size === '{{ $f['value'] }}'" class="w-2 h-2 rounded-full bg-violet-500"></div>
                                     </div>
+                                    <span :class="size === '{{ $f['value'] }}' ? 'text-violet-400' : 'text-zinc-400'"
+                                          class="{{ $f['size'] }} font-bold w-8 shrink-0 transition-colors">{{ $f['preview'] }}</span>
                                     <div>
                                         <p class="text-sm font-medium text-white">{{ $f['label'] }}</p>
                                         <p class="text-xs text-zinc-400">{{ $f['desc'] }}</p>
