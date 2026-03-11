@@ -14,5 +14,6 @@
 
         @stack('scripts')
         @stack('modals')
+        @fluxScripts
     </body>
 </html>

@@ -218,8 +218,9 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                     {{-- Multi-image badge --}}
                     @if($multiImg)
                     <div class="absolute top-2 right-2 z-10">
-                        <svg class="w-5 h-5 text-white drop-shadow" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M7 3h10a2 2 0 012 2v13l-2-1V5H7V3zm-2 2a2 2 0 012-2v16l-5-2.5V7a2 2 0 012-2zm2 2h8v14l-4-2-4 2V7z"/>
+                        <svg class="w-5 h-5 text-white drop-shadow" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <rect x="7" y="3" width="14" height="14" rx="2"/>
+                            <path d="M3 7v12a2 2 0 002 2h12"/>
                         </svg>
                     </div>
                     @endif
@@ -258,6 +259,7 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                 @php
                     $firstImg = $post->images->first();
                     $imgUrl   = $firstImg ? asset('storage/' . $firstImg->image_path) : null;
+                    $multiImg = $post->images->count() > 1;
                 @endphp
                 <button data-post-id="{{ $post->id }}" class="profile-thumb">
                     @if($imgUrl)
@@ -269,6 +271,15 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                                       d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
                         </div>
+                    @endif
+                    {{-- Multi-image badge --}}
+                    @if($multiImg)
+                    <div class="absolute top-2 right-2 z-10">
+                        <svg class="w-5 h-5 text-white drop-shadow" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <rect x="7" y="3" width="14" height="14" rx="2"/>
+                            <path d="M3 7v12a2 2 0 002 2h12"/>
+                        </svg>
+                    </div>
                     @endif
                     <div class="thumb-overlay">
                         <span class="thumb-stat">
@@ -303,6 +314,7 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                 @php
                     $firstImg = $post->images->first();
                     $imgUrl   = $firstImg ? asset('storage/' . $firstImg->image_path) : null;
+                    $multiImg = $post->images->count() > 1;
                 @endphp
                 <button data-post-id="{{ $post->id }}" class="profile-thumb">
                     @if($imgUrl)
@@ -314,6 +326,15 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                                       d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
                         </div>
+                    @endif
+                    {{-- Multi-image badge --}}
+                    @if($multiImg)
+                    <div class="absolute top-2 right-2 z-10">
+                        <svg class="w-5 h-5 text-white drop-shadow" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <rect x="7" y="3" width="14" height="14" rx="2"/>
+                            <path d="M3 7v12a2 2 0 002 2h12"/>
+                        </svg>
+                    </div>
                     @endif
                     <div class="thumb-overlay">
                         <span class="thumb-stat">

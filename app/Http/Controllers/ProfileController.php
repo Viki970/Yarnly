@@ -92,7 +92,21 @@ class ProfileController extends Controller
 
         $user->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        if ($request->input('_from') === 'settings') {
+            return Redirect::route('profile.settings', ['tab' => 'password']);
+        }
+
+        return Redirect::route('profile.show');
+    }
+
+    /**
+     * Display the account settings page.
+     */
+    public function settings(Request $request): View
+    {
+        return view('profile.settings', [
+            'user' => $request->user(),
+        ]);
     }
 
     /**

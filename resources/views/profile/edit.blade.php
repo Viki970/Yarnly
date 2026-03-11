@@ -78,56 +78,29 @@
                 @enderror
             </div>
 
-            {{-- Email --}}
+            {{-- Email (read-only) --}}
             <div>
                 <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">Email</label>
-                <input type="email" name="email" value="{{ old('email', auth()->user()->email) }}" required
-                       class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
-                @error('email')
-                    <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
-                @enderror
-
-                @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! auth()->user()->hasVerifiedEmail())
-                    <p class="mt-2 text-xs text-zinc-400">
-                        Your email is unverified.
-                        <form id="send-verification" method="post" action="{{ route('verification.send') }}" class="inline">@csrf</form>
-                        <button form="send-verification" class="underline text-violet-400 hover:text-violet-300 ml-1">Resend verification</button>
-                    </p>
-                    @if (session('status') === 'verification-link-sent')
-                        <p class="mt-1 text-xs text-green-400">Verification link sent!</p>
-                    @endif
-                @endif
+                <div class="flex items-center gap-3 px-4 py-3.5 bg-zinc-900 border border-zinc-700 rounded-xl">
+                    <svg class="w-5 h-5 text-zinc-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                    <span class="text-base text-zinc-300">{{ auth()->user()->email }}</span>
+                    <span class="ml-auto text-sm text-zinc-500 whitespace-nowrap">Change in
+                        <a href="{{ route('profile.settings') }}?tab=password" class="text-violet-400 hover:text-violet-300 underline underline-offset-2">Settings</a>
+                    </span>
+                </div>
             </div>
 
             {{-- Save button --}}
-            <div class="pt-2 flex items-center gap-4">
+            <div class="pt-2">
                 <button type="submit"
                         class="px-8 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition-colors">
                     Save
                 </button>
-                @if (session('status') === 'profile-updated')
-                    <span x-data="{ show: true }" x-show="show" x-transition
-                          x-init="setTimeout(() => show = false, 2000)"
-                          class="text-sm text-green-400">Saved!</span>
-                @endif
             </div>
         </form>
-
-        <hr class="border-zinc-800 my-8">
-
-        {{-- Change Password --}}
-        <div>
-            <h2 class="text-base font-bold mb-5">Change Password</h2>
-            @include('profile.partials.update-password-form')
-        </div>
-
-        <hr class="border-zinc-800 my-8">
-
-        {{-- Delete Account --}}
-        <div>
-            <h2 class="text-base font-bold text-red-400 mb-5">Danger Zone</h2>
-            @include('profile.partials.delete-user-form')
-        </div>
 
     </div>
 </div>
