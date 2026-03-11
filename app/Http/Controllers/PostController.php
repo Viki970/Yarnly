@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostRequest;
 use App\Models\Post;
+use App\Models\PostComment;
 use App\Models\PostImage;
 use App\Models\PostLike;
 use App\Models\PostFavorite;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
@@ -53,9 +56,63 @@ class PostController extends Controller
                          ->with('success', 'Post created successfully!');
     }
 
-    public function show(Post $post): RedirectResponse
+    public function show(Post $post): View
     {
-        return redirect()->route('models.gallery');
+        $post->load(['user', 'images']);
+
+        $liked     = Auth::check() && $post->isLikedBy(Auth::user());
+        $favorited = Auth::check() && $post->isFavoritedBy(Auth::user());
+
+        return view('gallery.posts.show', compact('post', 'liked', 'favorited'));
+    }
+
+    public function comments(Post $post): JsonResponse
+    {
+        $comments = $post->comments()
+            ->with('user')
+            ->get()
+            ->map(fn($c) => [
+                'id'         => $c->id,
+                'body'       => $c->body,
+                'author'     => $c->user->name,
+                'initials'   => strtoupper(substr($c->user->name, 0, 1)),
+                'avatar'     => $c->user->profile_picture
+                                    ? asset('storage/' . $c->user->profile_picture)
+                                    : null,
+                'created_at' => $c->created_at->diffForHumans(),
+            ]);
+
+        return response()->json(['comments' => $comments]);
+    }
+
+    public function storeComment(Request $request, Post $post): JsonResponse
+    {
+        $validated = $request->validate([
+            'body' => ['required', 'string', 'max:500'],
+        ]);
+
+        /** @var User $user */
+        $user    = Auth::user();
+        $comment = PostComment::create([
+            'post_id' => $post->id,
+            'user_id' => $user->id,
+            'body'    => $validated['body'],
+        ]);
+
+        $comment->load('user');
+
+        return response()->json([
+            'comment' => [
+                'id'         => $comment->id,
+                'body'       => $comment->body,
+                'author'     => $comment->user->name,
+                'initials'   => strtoupper(substr($comment->user->name, 0, 1)),
+                'avatar'     => $comment->user->profile_picture
+                                    ? asset('storage/' . $comment->user->profile_picture)
+                                    : null,
+                'created_at' => $comment->created_at->diffForHumans(),
+            ],
+        ], 201);
     }
 
     public function destroy(Post $post): RedirectResponse

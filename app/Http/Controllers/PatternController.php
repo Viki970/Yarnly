@@ -492,7 +492,7 @@ class PatternController extends Controller
         $userId = \Illuminate\Support\Facades\Auth::id();
 
         $recentModels = Post::with(['user', 'images'])
-            ->withCount('likes')
+            ->withCount(['likes', 'comments'])
             ->when(
                 $userId,
                 fn($q) => $q
@@ -503,7 +503,7 @@ class PatternController extends Controller
             ->paginate(12);
 
         $topRatedModels = Post::with(['user', 'images'])
-            ->withCount('likes')
+            ->withCount(['likes', 'comments'])
             ->when(
                 $userId,
                 fn($q) => $q

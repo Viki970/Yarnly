@@ -13,7 +13,9 @@
     $accent = $accentMap[$craftType] ?? $accentMap['model'];
 
     $authorName    = $model->user->name ?? 'Anonymous';
-    $authorAvatar  = $model->user->avatar ?? null;
+    $authorAvatar  = ($model->user->profile_picture ?? null)
+                        ? asset('storage/' . $model->user->profile_picture)
+                        : null;
     $authorInitial = strtoupper(substr($authorName, 0, 1));
 
     $createdAt = $model->created_at ?? now();
@@ -55,15 +57,15 @@
         <div class="flex items-center gap-3">
             @if($authorAvatar)
                 <img src="{{ $authorAvatar }}" alt="{{ $authorName }}"
-                     class="h-9 w-9 rounded-full object-cover ring-2 {{ $accent['ring'] }}">
+                     class="h-9 w-9 rounded-full object-cover">
             @else
-                <div class="flex h-9 w-9 items-center justify-center rounded-full {{ $accent['bg'] }} ring-2 {{ $accent['ring'] }} text-sm font-bold text-white shadow">
+                <div class="flex h-9 w-9 items-center justify-center rounded-full {{ $accent['bg'] }} text-sm font-bold text-white shadow">
                     {{ $authorInitial }}
                 </div>
             @endif
             <div>
-                <div class="flex items-center gap-2">
-                    <p class="text-sm font-semibold text-zinc-900 dark:text-white leading-none">{{ $authorName }}</p>
+                <div class="flex items-center gap-2 min-w-0">
+                    <p class="text-sm font-semibold text-zinc-900 dark:text-white leading-none truncate">{{ $authorName }}</p>
                     @if($showFollowBtn)
                     <button
                         data-author-id="{{ $postAuthorId }}"
@@ -71,7 +73,7 @@
                         data-follow-url="{{ $followUrl }}"
                         data-unfollow-url="{{ $unfollowUrl }}"
                         onclick="postToggleFollow(this)"
-                        class="follow-btn text-xs font-semibold leading-none px-2 py-0.5 rounded-full border transition-colors duration-200
+                        class="follow-btn flex-shrink-0 text-xs font-semibold leading-none px-2 py-0.5 rounded-full border transition-colors duration-200
                                {{ $isFollowing
                                    ? 'border-zinc-300 text-zinc-500 hover:border-red-400 hover:text-red-500 dark:border-zinc-600 dark:text-zinc-400 dark:hover:border-red-500 dark:hover:text-red-400'
                                    : 'border-purple-400 text-purple-600 hover:bg-purple-500 hover:text-white dark:border-purple-500 dark:text-purple-400 dark:hover:bg-purple-600 dark:hover:text-white' }}">
@@ -177,11 +179,13 @@
             @endauth
 
             {{-- Comment --}}
-            <button class="flex items-center gap-1.5 text-zinc-500 hover:text-purple-500 dark:text-zinc-400 dark:hover:text-purple-400 transition-colors duration-200">
+            <button data-comment-link="{{ $modelId }}"
+                    onclick="galOpenModal('{{ $modelId }}')"
+                    class="flex items-center gap-1.5 text-zinc-500 hover:text-purple-500 dark:text-zinc-400 dark:hover:text-purple-400 transition-colors duration-200">
                 <svg class="h-6 w-6 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                 </svg>
-                <span class="text-sm font-medium">{{ $commentsCount }}</span>
+                <span class="comment-count text-sm font-medium">{{ $commentsCount }}</span>
             </button>
 
             {{-- Share --}}

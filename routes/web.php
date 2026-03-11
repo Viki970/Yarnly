@@ -72,6 +72,9 @@ Route::middleware('auth')->group(function () {
 // Wildcard show route after specific routes
 Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
 
+// Comments (GET is public; POST requires auth)
+Route::get('/posts/{post}/comments', [PostController::class, 'comments'])->name('posts.comments');
+
 // Auth-required actions on a post
 Route::middleware('auth')->group(function () {
     Route::delete('/posts/{post}',          [PostController::class, 'destroy'])->name('posts.destroy');
@@ -79,6 +82,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/posts/{post}/like',     [PostController::class, 'unlike'])->name('posts.unlike');
     Route::post('/posts/{post}/favorite',   [PostController::class, 'favorite'])->name('posts.favorite');
     Route::delete('/posts/{post}/favorite', [PostController::class, 'unfavorite'])->name('posts.unfavorite');
+    Route::post('/posts/{post}/comments',   [PostController::class, 'storeComment'])->name('posts.comments.store');
 });
 
 // ─── Follow ──────────────────────────────────────────────────────────────────

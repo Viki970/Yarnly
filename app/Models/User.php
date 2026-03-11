@@ -189,6 +189,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Comments left by this user
+     */
+    public function postComments(): HasMany
+    {
+        return $this->hasMany(PostComment::class);
+    }
+
+    /**
      * Users that this user is following
      */
     public function following(): BelongsToMany

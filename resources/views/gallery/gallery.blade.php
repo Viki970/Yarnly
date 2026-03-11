@@ -87,10 +87,13 @@ foreach ($allGalleryModels as $model) {
         'created_at'  => $model->created_at->diffForHumans(),
         'is_liked'    => (bool)($model->liked_by_user ?? false),
         'is_faved'    => (bool)($model->faved_by_user ?? false),
-        'like_url'    => route('posts.like',       $model->id),
-        'unlike_url'  => route('posts.unlike',     $model->id),
-        'fav_url'     => route('posts.favorite',   $model->id),
-        'unfav_url'   => route('posts.unfavorite', $model->id),
+        'like_url'       => route('posts.like',           $model->id),
+        'unlike_url'     => route('posts.unlike',         $model->id),
+        'fav_url'        => route('posts.favorite',       $model->id),
+        'unfav_url'      => route('posts.unfavorite',     $model->id),
+        'comments_count' => $model->comments_count ?? 0,
+        'comments_url'   => route('posts.comments',       $model->id),
+        'comment_url'    => route('posts.comments.store', $model->id),
     ];
 }
 @endphp
@@ -142,7 +145,7 @@ foreach ($allGalleryModels as $model) {
 
 <!-- ─── Sticky tab bar ─── -->
 <div id="gallery-feed" class="sticky top-[65px] z-40 border-b border-zinc-200/80 bg-white/90 backdrop-blur dark:border-zinc-800/70 dark:bg-zinc-900/90">
-    <div class="max-w-5xl mx-auto px-6 lg:px-12">
+    <div class="max-w-6xl mx-auto px-6 lg:px-12">
         <div class="flex items-center justify-between py-3 gap-4">
 
             <!-- Sliding pill tabs -->
@@ -205,7 +208,7 @@ foreach ($allGalleryModels as $model) {
 
 <!-- ─── Feed ─── -->
 <section class="bg-white py-10 dark:bg-zinc-900 min-h-screen">
-    <div class="max-w-5xl mx-auto px-6 lg:px-12">
+    <div class="max-w-6xl mx-auto px-6 lg:px-12">
 
         <!-- ─ Recently Added feed ─ -->
         <div id="feed-recently-added" class="gallery-feed-section">
@@ -332,9 +335,14 @@ foreach ($allGalleryModels as $model) {
             </div>
 
             {{-- Scrollable body --}}
-            <div class="flex-1 overflow-y-auto px-4 py-4 space-y-3 text-sm">
+            <div id="gal-pm-scroll" class="flex-1 overflow-y-auto px-4 py-4 space-y-3 text-sm">
                 <p id="gal-pm-desc" class="text-zinc-200 leading-relaxed whitespace-pre-wrap break-words"></p>
                 <div id="gal-pm-tags" class="flex flex-wrap gap-1.5"></div>
+                {{-- Comments loader + list --}}
+                <div id="gal-pm-comments-loading" class="hidden justify-center py-3">
+                    <div class="h-4 w-4 animate-spin rounded-full border-2 border-zinc-700 border-t-purple-400"></div>
+                </div>
+                <div id="gal-pm-comments-list" class="space-y-4"></div>
             </div>
 
             {{-- Actions --}}
@@ -374,12 +382,34 @@ foreach ($allGalleryModels as $model) {
 
                 <p id="gal-pm-likes-label" class="text-xs text-zinc-500"></p>
 
-                <div class="flex items-center gap-2 pt-1 border-t border-zinc-800">
-                    <span class="text-lg select-none">🙂</span>
-                    <input type="text" placeholder="Add a comment…"
-                           class="flex-1 bg-transparent text-sm text-zinc-300 placeholder-zinc-600 outline-none py-1"/>
-                    <button class="text-sm font-semibold text-purple-400 hover:text-purple-300 transition-colors">Post</button>
+                @auth
+                {{-- Replying-to pill (hidden until Reply is clicked) --}}
+                <div id="gal-pm-reply-banner" class="hidden items-center gap-2 px-0 pb-1 text-xs text-zinc-400">
+                    <span>Replying to <span id="gal-pm-reply-to" class="text-purple-400 font-semibold"></span></span>
+                    <button onclick="galCancelReply()" class="ml-auto text-zinc-600 hover:text-zinc-300 transition-colors">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
                 </div>
+                <div class="flex items-center gap-2 pt-1 border-t border-zinc-800">
+                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-violet-400 to-purple-500 flex-none flex items-center justify-center text-white text-xs font-bold select-none">
+                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    </div>
+                    <input id="gal-pm-comment-input" type="text" placeholder="Add a comment…"
+                           class="flex-1 bg-transparent text-sm text-zinc-300 placeholder-zinc-600 outline-none py-1"
+                           maxlength="500"
+                           oninput="document.getElementById('gal-pm-comment-btn').disabled = this.value.trim().length === 0"
+                           onkeydown="if(event.key==='Enter'){event.preventDefault();galPostComment();}"/>
+                    <button id="gal-pm-comment-btn" onclick="galPostComment()"
+                            class="text-sm font-semibold text-purple-400 hover:text-purple-300 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                            disabled>Post</button>
+                </div>
+                @else
+                <div class="pt-2 border-t border-zinc-800 text-center">
+                    <a href="{{ route('login') }}" class="text-sm text-purple-400 hover:underline">Sign in to leave a comment</a>
+                </div>
+                @endauth
             </div>
         </div>
     </div>
@@ -520,6 +550,15 @@ function galOpenModal(postId) {
     modal.classList.remove('hidden');
     modal.classList.add('flex');
     document.body.style.overflow = 'hidden';
+
+    // Reset comment input
+    const inp = document.getElementById('gal-pm-comment-input');
+    const commentBtn = document.getElementById('gal-pm-comment-btn');
+    if (inp)        { inp.value = ''; }
+    if (commentBtn) { commentBtn.disabled = true; }
+    galCancelReply();
+
+    galLoadComments();
 }
 
 function galCloseModal() {
@@ -628,6 +667,305 @@ async function galPmToggleSave() {
     } catch (err) { console.error(err); }
 }
 
+// ─── Comments ────────────────────────────────────────────────────────────────
+
+async function galLoadComments() {
+    if (!_galCurr) return;
+    const list    = document.getElementById('gal-pm-comments-list');
+    const loading = document.getElementById('gal-pm-comments-loading');
+    list.innerHTML = '';
+    loading.classList.remove('hidden');
+    loading.classList.add('flex');
+    try {
+        const res  = await fetch(_galCurr.comments_url, { headers: { 'Accept': 'application/json' } });
+        const data = await res.json();
+        const comments = data.comments || [];
+
+        // ── Group: separate top-level from replies ──
+        // A reply starts with @SomeWord. Build a map: normalised-author → [replies]
+        const replyMap  = {};   // key: lowercase no-space author name
+        const topLevel  = [];
+
+        comments.forEach(c => {
+            const m = c.body.match(/^@(\S+)\s?/);
+            if (m) {
+                const key = m[1].toLowerCase();
+                (replyMap[key] = replyMap[key] || []).push(c);
+            } else {
+                topLevel.push(c);
+            }
+        });
+
+        // ── Render each top-level comment followed by its reply group ──
+        topLevel.forEach(c => {
+            const key     = c.author.replace(/\s+/g, '').toLowerCase();
+            const replies = replyMap[key] || [];
+            list.appendChild(galBuildCommentGroup(c, replies));
+            // Remove consumed replies so orphan replies fall through below
+            delete replyMap[key];
+        });
+
+        // ── Any replies whose mention didn't match a top-level author go at the bottom ──
+        Object.values(replyMap).flat().forEach(c => {
+            list.appendChild(galBuildCommentGroup(c, []));
+        });
+    } catch (err) { console.error(err); }
+    finally {
+        loading.classList.add('hidden');
+        loading.classList.remove('flex');
+    }
+}
+
+// Builds a top-level comment row + optional collapsible replies block
+function galBuildCommentGroup(comment, replies) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'comment-group';
+    wrapper.dataset.authorKey = comment.author.replace(/\s+/g, '').toLowerCase();
+
+    wrapper.appendChild(galBuildCommentEl(comment, false));
+
+    if (replies.length > 0) {
+        // Toggle button
+        const toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'flex items-center gap-1.5 pl-9 mt-1 text-xs font-semibold text-zinc-500 hover:text-zinc-200 transition-colors';
+        toggle.innerHTML = `
+            <span class="inline-block w-5 h-px bg-zinc-700"></span>
+            <span class="toggle-label">View ${replies.length} repl${replies.length === 1 ? 'y' : 'ies'}</span>
+            <svg class="toggle-chevron w-3 h-3 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
+            </svg>`;
+
+        // Replies container (hidden by default)
+        const repliesContainer = document.createElement('div');
+        repliesContainer.className = 'replies-container hidden mt-2 space-y-3';
+        replies.forEach(r => repliesContainer.appendChild(galBuildCommentEl(r, true)));
+
+        toggle.onclick = () => {
+            const open = !repliesContainer.classList.contains('hidden');
+            repliesContainer.classList.toggle('hidden', open);
+            toggle.querySelector('.toggle-label').textContent = open
+                ? `View ${repliesContainer.children.length} repl${repliesContainer.children.length === 1 ? 'y' : 'ies'}`
+                : `Hide repl${repliesContainer.children.length === 1 ? 'y' : 'ies'}`;
+            toggle.querySelector('.toggle-chevron').style.transform = open ? '' : 'rotate(180deg)';
+        };
+
+        wrapper.appendChild(toggle);
+        wrapper.appendChild(repliesContainer);
+    } else {
+        // Still add an empty (invisible) replies container so galPostComment can inject into it later
+        const repliesContainer = document.createElement('div');
+        repliesContainer.className = 'replies-container hidden mt-2 space-y-3';
+        wrapper.appendChild(repliesContainer);
+    }
+
+    return wrapper;
+}
+
+// Builds a single comment row (top-level or reply)
+function galBuildCommentEl(c, isReply) {
+    const mentionMatch = c.body.match(/^(@\S+)\s?([\s\S]*)$/);
+    const mentionPart  = mentionMatch ? mentionMatch[1] : null;
+    const restBody     = mentionMatch ? mentionMatch[2] : c.body;
+
+    const wrap = document.createElement('div');
+    wrap.className = isReply ? 'flex gap-2 items-start pl-9' : 'flex gap-2.5 items-start';
+
+    // Avatar
+    let av;
+    if (c.avatar) {
+        av = document.createElement('img');
+        av.src = c.avatar; av.alt = c.author;
+        av.className = isReply ? 'w-6 h-6 rounded-full object-cover flex-none' : 'w-7 h-7 rounded-full object-cover flex-none';
+    } else {
+        av = document.createElement('div');
+        av.className = (isReply ? 'w-6 h-6' : 'w-7 h-7') + ' rounded-full bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold flex-none';
+        av.textContent = c.initials;
+    }
+
+    // Body column
+    const body = document.createElement('div');
+    body.className = 'flex-1 min-w-0 group/comment';
+
+    // Top line: bold author + text inline (Instagram style)
+    const topLine = document.createElement('p');
+    topLine.className = 'text-xs leading-relaxed break-words';
+
+    const authorSpan = document.createElement('span');
+    authorSpan.className = 'font-semibold text-white mr-1.5';
+    authorSpan.textContent = c.author;
+    topLine.appendChild(authorSpan);
+
+    if (isReply && mentionPart) {
+        const mentionSpan = document.createElement('span');
+        mentionSpan.className = 'text-purple-400 font-semibold mr-1';
+        mentionSpan.textContent = mentionPart;
+        topLine.appendChild(mentionSpan);
+    }
+    topLine.appendChild(document.createTextNode(isReply && mentionPart ? restBody : c.body));
+
+    // Meta line: timestamp + Reply button
+    const metaLine = document.createElement('div');
+    metaLine.className = 'flex items-center gap-3 mt-0.5';
+
+    const timeSpan = document.createElement('span');
+    timeSpan.className = 'text-xs text-zinc-600';
+    timeSpan.textContent = c.created_at;
+    metaLine.appendChild(timeSpan);
+
+    // Reply button visible for logged-in users only (proxy: input element presence)
+    if (document.getElementById('gal-pm-comment-input')) {
+        const replyBtn = document.createElement('button');
+        replyBtn.type = 'button';
+        replyBtn.className = 'text-xs font-semibold text-zinc-500 hover:text-zinc-200 transition-colors opacity-0 group-hover/comment:opacity-100';
+        replyBtn.textContent = 'Reply';
+        replyBtn.onclick = () => galStartReply(c.author);
+        metaLine.appendChild(replyBtn);
+    }
+
+    body.appendChild(topLine);
+    body.appendChild(metaLine);
+    wrap.appendChild(av);
+    wrap.appendChild(body);
+    return wrap;
+}
+
+async function galPostComment() {
+    if (!_galCurr) return;
+    const input = document.getElementById('gal-pm-comment-input');
+    const btn   = document.getElementById('gal-pm-comment-btn');
+    if (!input) return;
+    const body = input.value.trim();
+    if (!body) return;
+
+    btn.disabled = true;
+    const prevText = btn.textContent;
+    btn.textContent = '...';
+
+    try {
+        const res = await fetch(_galCurr.comment_url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': _galCsrf,
+            },
+            body: JSON.stringify({ body }),
+        });
+
+        if (res.status === 401) { openLoginModal(); return; }
+
+        const data = await res.json();
+        if (data.comment) {
+            input.value = '';
+            btn.disabled = true;
+            btn.textContent = prevText;
+            galCancelReply();
+
+            const list    = document.getElementById('gal-pm-comments-list');
+            const scroll  = document.getElementById('gal-pm-scroll');
+            const comment = data.comment;
+
+            // ── Decide where to inject: reply or top-level ──
+            const mentionMatch = comment.body.match(/^@(\S+)\s?/);
+            if (mentionMatch) {
+                // Find the parent group by author key
+                const key     = mentionMatch[1].toLowerCase();
+                const group   = list.querySelector(`.comment-group[data-author-key="${key}"]`);
+                if (group) {
+                    const container = group.querySelector('.replies-container');
+                    container.appendChild(galBuildCommentEl(comment, true));
+
+                    // Show or create the toggle button
+                    let toggle = group.querySelector('button.flex');
+                    const replyCount = container.children.length;
+                    if (!toggle) {
+                        toggle = document.createElement('button');
+                        toggle.type = 'button';
+                        toggle.className = 'flex items-center gap-1.5 pl-9 mt-1 text-xs font-semibold text-zinc-500 hover:text-zinc-200 transition-colors';
+                        toggle.innerHTML = `
+                            <span class="inline-block w-5 h-px bg-zinc-700"></span>
+                            <span class="toggle-label"></span>
+                            <svg class="toggle-chevron w-3 h-3 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
+                            </svg>`;
+                        toggle.onclick = () => {
+                            const open = !container.classList.contains('hidden');
+                            container.classList.toggle('hidden', open);
+                            toggle.querySelector('.toggle-label').textContent = open
+                                ? `View ${container.children.length} repl${container.children.length === 1 ? 'y' : 'ies'}`
+                                : `Hide repl${container.children.length === 1 ? 'y' : 'ies'}`;
+                            toggle.querySelector('.toggle-chevron').style.transform = open ? '' : 'rotate(180deg)';
+                        };
+                        group.insertBefore(toggle, container);
+                    }
+
+                    // Auto-expand the replies after posting
+                    container.classList.remove('hidden');
+                    toggle.querySelector('.toggle-label').textContent = `Hide repl${replyCount === 1 ? 'y' : 'ies'}`;
+                    toggle.querySelector('.toggle-chevron').style.transform = 'rotate(180deg)';
+                } else {
+                    // Parent not found, append as top-level group
+                    list.appendChild(galBuildCommentGroup(comment, []));
+                }
+            } else {
+                // Top-level comment
+                list.appendChild(galBuildCommentGroup(comment, []));
+            }
+
+            if (scroll) scroll.scrollTop = scroll.scrollHeight;
+
+            // Update in-memory counts
+            _galCurr.comments_count = (_galCurr.comments_count || 0) + 1;
+            _galPosts[_galCurr.id].comments_count = _galCurr.comments_count;
+
+            const cardBubble = document.querySelector(`[data-comment-link="${_galCurr.id}"] .comment-count`);
+            if (cardBubble) cardBubble.textContent = _galCurr.comments_count;
+        }
+    } catch (err) {
+        console.error(err);
+        btn.textContent = prevText;
+    }
+}
+
+// ─── Reply helpers ───────────────────────────────────────────────────────────
+
+function galStartReply(authorName) {
+    const input   = document.getElementById('gal-pm-comment-input');
+    const banner  = document.getElementById('gal-pm-reply-banner');
+    const replyTo = document.getElementById('gal-pm-reply-to');
+    const btn     = document.getElementById('gal-pm-comment-btn');
+    if (!input) return;
+
+    const mention = '@' + authorName.replace(/\s+/g, '') + ' ';
+    input.value = mention;
+    input.focus();
+    // Place cursor at end
+    input.setSelectionRange(mention.length, mention.length);
+    if (btn) btn.disabled = false;
+
+    if (banner && replyTo) {
+        replyTo.textContent = '@' + authorName;
+        banner.classList.remove('hidden');
+        banner.classList.add('flex');
+    }
+}
+
+function galCancelReply() {
+    const banner = document.getElementById('gal-pm-reply-banner');
+    const input  = document.getElementById('gal-pm-comment-input');
+    if (banner) { banner.classList.add('hidden'); banner.classList.remove('flex'); }
+    // Only clear the @mention prefix if it's the only content (user hasn't typed more)
+    if (input) {
+        const mention = input.value.match(/^@\S+ ?$/);
+        if (mention) {
+            input.value = '';
+            const btn = document.getElementById('gal-pm-comment-btn');
+            if (btn) btn.disabled = true;
+        }
+    }
+}
+
 // Touch swipe inside modal carousel
 (function () {
     let sx = 0;
@@ -649,5 +987,4 @@ document.addEventListener('keydown', e => {
 });
 </script>
 @endpush
-
 @endsection

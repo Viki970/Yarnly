@@ -35,6 +35,16 @@ class Post extends Model
         return $this->hasMany(PostFavorite::class);
     }
 
+    public function comments(): HasMany
+    {
+        return $this->hasMany(PostComment::class)->oldest();
+    }
+
+    public function getCommentsCountAttribute(): int
+    {
+        return $this->comments()->count();
+    }
+
     public function isLikedBy(User $user): bool
     {
         return $this->likes()->where('user_id', $user->id)->exists();
