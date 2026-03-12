@@ -15,8 +15,10 @@ new class extends Component {
      */
     public function mount(): void
     {
-        $this->name = Auth::user()->name;
-        $this->email = Auth::user()->email;
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $this->name = $user->name;
+        $this->email = $user->email;
     }
 
     /**
@@ -24,6 +26,7 @@ new class extends Component {
      */
     public function updateProfileInformation(): void
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         $validated = $this->validate([
@@ -55,6 +58,7 @@ new class extends Component {
      */
     public function resendVerificationNotification(): void
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         if ($user->hasVerifiedEmail()) {

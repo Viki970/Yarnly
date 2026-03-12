@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Notifications;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
@@ -79,6 +79,6 @@ class NotificationBell extends Component
 
     public function render()
     {
-        return view('livewire.notification-bell');
+        return view('notifications.notification-bell');
     }
 }

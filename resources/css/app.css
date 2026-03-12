@@ -10,7 +10,7 @@
 
 /* Prevent horizontal scroll on all pages */
 html, body {
-    overflow-x: hidden;
+    overflow-x: clip;
 }
 
 @theme {

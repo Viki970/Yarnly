@@ -46,14 +46,28 @@ class ProfileController extends Controller
             ->latest('post_likes.created_at')
             ->get();
 
-        return view('profile.show', compact(
+        // Patterns tab – user's own uploaded patterns
+        $patterns = \App\Models\Pattern::where('user_id', $user->id)
+            ->latest()
+            ->get();
+
+        // Collections tab – user's own collections
+        $collections = $user->collections()
+            ->with(['patterns' => fn($q) => $q->whereNotNull('image_path')])
+            ->withCount('patterns')
+            ->latest()
+            ->get();
+
+        return view('profile.myprofile.show', compact(
             'user',
             'postsCount',
             'followersCount',
             'followingCount',
             'posts',
             'savedPosts',
-            'likedPosts'
+            'likedPosts',
+            'patterns',
+            'collections'
         ));
     }
 
@@ -62,7 +76,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
+        return view('profile.myprofile.edit', [
             'user' => $request->user(),
         ]);
     }

@@ -45,7 +45,7 @@
         x-transition:leave="transition ease-in duration-150"
         x-transition:leave-start="opacity-100 scale-100 translate-y-0"
         x-transition:leave-end="opacity-0 scale-95 -translate-y-2"
-        class="absolute right-0 top-full mt-2 w-80 max-w-[calc(100vw-1rem)] origin-top-right z-50"
+        class="absolute right-0 top-full mt-6 w-80 max-w-[calc(100vw-1rem)] origin-top-right z-50"
         style="display:none;">
         <div class="rounded-xl bg-white/95 backdrop-blur-xl shadow-xl ring-1 ring-black/5 border border-white/20 dark:bg-zinc-900/95 dark:ring-white/10 dark:border-zinc-700/50">
             {{-- Header --}}
