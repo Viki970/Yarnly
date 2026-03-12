@@ -306,7 +306,8 @@
                 <a href="{{ route('register') }}" class="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-violet-500/40 transition-all duration-200 hover:shadow-lg hover:shadow-violet-500/60 hover:scale-105 hover:brightness-110 hover:-translate-y-0.5">Sign up</a>
                 @endif
                 @else
-                <!-- Account Dropdown -->
+                <!-- Notification Bell -->
+                @livewire('notification-bell')
                 <div class="relative">
                     <button type="button" data-dropdown-toggle="account-dropdown" class="flex items-center gap-2 px-2 py-2 rounded-lg transition-all duration-200 hover:text-zinc-900 hover:bg-zinc-100/50 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800/50 cursor-pointer">
                         <svg class="h-5 w-5 text-teal-600 dark:text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -843,6 +844,8 @@
                     }
 
                     // Close all other dropdowns with animation
+                    // Also close the notification bell Alpine dropdown
+                    window.dispatchEvent(new CustomEvent('close-bell'));
                     document.querySelectorAll('[data-dropdown-toggle]').forEach(function(otherToggle) {
                         if (otherToggle !== toggle) {
                             var otherTargetId = otherToggle.getAttribute('data-dropdown-toggle');

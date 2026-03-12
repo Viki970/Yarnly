@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -89,6 +90,18 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/users/{user}/follow',   [FollowController::class, 'follow'])  ->name('users.follow');
     Route::delete('/users/{user}/follow', [FollowController::class, 'unfollow'])->name('users.unfollow');
+});
+
+// ─── Notifications ──────────────────────────────────────────────────────────
+Route::middleware('auth')->group(function () {
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/{id}/read', [NotificationController::class, 'markRead'])->name('notifications.markRead');
+    Route::post('/notifications/mark-all-read', function () {
+        /** @var \App\Models\User $authUser */
+        $authUser = \Illuminate\Support\Facades\Auth::user();
+        $authUser->unreadNotifications->markAsRead();
+        return back();
+    })->name('notifications.markAllRead');
 });
 
 require __DIR__.'/auth.php';

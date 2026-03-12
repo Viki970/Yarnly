@@ -9,6 +9,9 @@ use App\Models\PostImage;
 use App\Models\PostLike;
 use App\Models\PostFavorite;
 use App\Models\User;
+use App\Notifications\NewLikeNotification;
+use App\Notifications\NewCommentNotification;
+use App\Notifications\NewPostFromFollowedNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -50,6 +53,11 @@ class PostController extends Controller
                 'image_path' => $path,
                 'order'      => $index,
             ]);
+        }
+
+        // Notify all followers of the poster about the new post
+        foreach ($user->followers as $follower) {
+            $follower->notify(new NewPostFromFollowedNotification($user, $post));
         }
 
         return redirect()->route('models.gallery')
@@ -101,6 +109,11 @@ class PostController extends Controller
 
         $comment->load('user');
 
+        // Notify post owner (not if they comment on their own post)
+        if ($post->user_id !== $user->id) {
+            $post->user->notify(new NewCommentNotification($user, $post, $validated['body']));
+        }
+
         return response()->json([
             'comment' => [
                 'id'         => $comment->id,
@@ -141,8 +154,15 @@ class PostController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
+        $alreadyLiked = PostLike::where('user_id', $user->id)->where('post_id', $post->id)->exists();
         PostLike::firstOrCreate(['user_id' => $user->id, 'post_id' => $post->id]);
         $count = $post->likes()->count();
+
+        // Notify post owner (only on first like, not if they like their own post)
+        if (!$alreadyLiked && $post->user_id !== $user->id) {
+            $post->user->notify(new NewLikeNotification($user, $post));
+        }
+
         return request()->expectsJson()
             ? response()->json(['liked' => true, 'count' => $count])
             : back();

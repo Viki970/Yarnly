@@ -6,6 +6,7 @@ use App\Models\Pattern;
 use App\Models\Collection;
 use App\Models\Post;
 use App\Models\User;
+use App\Notifications\NewPatternFromFollowedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -346,6 +347,16 @@ class PatternController extends Controller
                 'makers_saved' => 0,
                 'craft_type' => $craftType,
             ]);
+
+            // Notify all followers about the new pattern
+            /** @var User $creator */
+            $creator = Auth::user();
+            $pattern = Pattern::where('user_id', $creator->id)->latest()->first();
+            if ($pattern) {
+                foreach ($creator->followers as $follower) {
+                    $follower->notify(new NewPatternFromFollowedNotification($creator, $pattern));
+                }
+            }
 
             return redirect()->route('my-patterns')->with('success', 'Pattern created successfully!');
         } catch (\Illuminate\Validation\ValidationException $e) {

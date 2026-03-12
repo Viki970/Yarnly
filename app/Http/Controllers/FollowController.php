@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Notifications\NewFollowNotification;
 use Illuminate\Support\Facades\Auth;
 
 class FollowController extends Controller
@@ -22,6 +23,9 @@ class FollowController extends Controller
         }
 
         $authUser->follow($user);
+
+        // Notify the followed user
+        $user->notify(new NewFollowNotification($authUser));
 
         return request()->expectsJson()
             ? response()->json(['following' => true, 'followers_count' => $user->followers()->count()])
