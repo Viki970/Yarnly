@@ -65,6 +65,9 @@ class Post extends Model
         if (empty($this->tags)) {
             return [];
         }
-        return array_filter(array_map('trim', explode(',', $this->tags)));
+        return array_values(array_filter(array_map(
+            fn($t) => ltrim(trim($t), '#'),
+            explode(',', $this->tags)
+        )));
     }
 }

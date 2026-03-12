@@ -50,6 +50,46 @@
     .skeleton { animation: shimmer 1.4s infinite; background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%); background-size: 200% 100%; }
     .dark .skeleton { background: linear-gradient(90deg, #27272a 25%, #3f3f46 50%, #27272a 75%); background-size: 200% 100%; }
     @keyframes shimmer { to { background-position: -200% 0; } }
+
+    /* Hide scrollbar on tab strip */
+    .scrollbar-hide { scrollbar-width: none; }
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+
+    /* Mobile inline comments animation */
+    .mc-section { animation: fadeInDown 0.2s ease both; }
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-6px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Mobile post-detail modal ─────────────────── */
+    @media (max-width: 767px) {
+        #gal-post-modal {
+            padding: 0 !important;
+            align-items: stretch;
+        }
+        #gal-post-modal .gal-modal-inner {
+            max-height: 100dvh;
+            max-height: 100vh;
+            border-radius: 0 !important;
+        }
+        #gal-post-modal .gal-image-panel {
+            height: 45vh !important;
+            min-height: 0 !important;
+            max-height: 45vh !important;
+        }
+        #gal-post-modal .gal-detail-panel {
+            max-height: 55vh !important;
+            flex: 1 1 auto;
+        }
+    }
+
+    /* ── Reply buttons: always visible on touch devices ── */
+    @media (hover: none) and (pointer: coarse) {
+        .group\/comment .reply-btn {
+            opacity: 0.6 !important;
+        }
+    }
 </style>
 
 @php
@@ -61,6 +101,11 @@ if (isset($recentModels)) {
 }
 if (isset($topRatedModels)) {
     foreach ($topRatedModels->items() as $m) {
+        if (!$allGalleryModels->has($m->id)) $allGalleryModels->put($m->id, $m);
+    }
+}
+if (isset($followingModels) && $followingModels) {
+    foreach ($followingModels->items() as $m) {
         if (!$allGalleryModels->has($m->id)) $allGalleryModels->put($m->id, $m);
     }
 }
@@ -99,7 +144,7 @@ foreach ($allGalleryModels as $model) {
 @endphp
 
 <!-- ─── Hero ─── -->
-<section class="relative overflow-hidden bg-gradient-to-br from-purple-950 via-violet-950 to-indigo-950 py-14">
+<section class="relative overflow-hidden bg-gradient-to-br from-purple-950 via-violet-950 to-indigo-950 py-8 sm:py-14">
     <div class="absolute -left-20 top-0 h-72 w-72 rounded-full bg-purple-600/20 blur-3xl"></div>
     <div class="absolute -right-16 bottom-0 h-72 w-72 rounded-full bg-violet-600/20 blur-3xl"></div>
     <div class="absolute left-1/2 top-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-500/10 blur-3xl"></div>
@@ -107,10 +152,10 @@ foreach ($allGalleryModels as $model) {
     <div class="relative max-w-3xl mx-auto px-6 lg:px-12 text-center">
 
         {{-- Headline --}}
-        <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
-            Discover what crafters<br>are making right now
+        <h1 class="text-2xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
+            Discover what crafters <br class="hidden sm:block">are making right now
         </h1>
-        <p class="mt-4 text-base text-purple-200/70">
+        <p class="mt-3 text-sm sm:text-base text-purple-200/70">
             {{ $totalModels ?? 0 }} models shared &middot; {{ $newToday ?? 0 }} new today
             <span class="inline-flex items-center gap-1 ml-2">
                 <span class="inline-flex h-1.5 w-1.5 rounded-full bg-green-400 animate-pulse"></span>
@@ -125,16 +170,45 @@ foreach ($allGalleryModels as $model) {
             </svg>
             <input
                 type="text"
+                id="gallery-search"
+                name="q"
+                value="{{ $search ?? '' }}"
                 placeholder="Search models, crafters, tags…"
                 class="w-full bg-transparent text-sm text-white placeholder-purple-300/60 outline-none"
+                onkeydown="if(event.key==='Enter'){event.preventDefault();galSearch(this.value);}"
+                oninput="document.getElementById('gal-search-clear').classList.toggle('hidden', this.value.trim()==='');"
             >
+            @if(!empty($search))
+            <button id="gal-search-clear"
+                    onclick="galSearch('')"
+                    class="shrink-0 text-purple-300/70 hover:text-white transition-colors"
+                    title="Clear search">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            @else
+            <button id="gal-search-clear"
+                    onclick="galSearch(document.getElementById('gallery-search').value)"
+                    class="hidden shrink-0 text-purple-300/70 hover:text-white transition-colors"
+                    title="Clear search">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            @endif
         </div>
 
         {{-- Trending tags --}}
         <div class="mt-5 flex flex-wrap items-center justify-center gap-2">
             <span class="text-xs font-semibold text-purple-400 uppercase tracking-wide">Trending:</span>
             @foreach(['amigurumi', 'blanket', 'sweater', 'cross-stitch', 'beanie', 'tote-bag'] as $tag)
-                <button class="rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-purple-200 ring-1 ring-white/10 hover:bg-purple-500/30 hover:text-white hover:ring-purple-400/50 transition-all duration-200">
+                <button
+                    onclick="galSearch('{{ $tag }}')"
+                    class="rounded-full px-3 py-1 text-xs font-medium ring-1 transition-all duration-200
+                        {{ ($search ?? '') === $tag
+                            ? 'bg-purple-500/60 text-white ring-purple-400/70'
+                            : 'bg-white/10 text-purple-200 ring-white/10 hover:bg-purple-500/30 hover:text-white hover:ring-purple-400/50' }}">
                     #{{ $tag }}
                 </button>
             @endforeach
@@ -145,11 +219,11 @@ foreach ($allGalleryModels as $model) {
 
 <!-- ─── Sticky tab bar ─── -->
 <div id="gallery-feed" class="sticky top-[65px] z-40 border-b border-zinc-200/80 bg-white/90 backdrop-blur dark:border-zinc-800/70 dark:bg-zinc-900/90">
-    <div class="max-w-6xl mx-auto px-6 lg:px-12">
-        <div class="flex items-center justify-between py-3 gap-4">
+    <div class="max-w-6xl mx-auto px-3 sm:px-6 lg:px-12">
+        <div class="flex items-center justify-between py-2 sm:py-3 gap-2 sm:gap-4">
 
             <!-- Sliding pill tabs -->
-            <div class="relative flex items-center gap-1 rounded-xl bg-zinc-100/80 p-1 dark:bg-zinc-800/60" id="tab-bar">
+            <div class="relative flex items-center gap-1 rounded-xl bg-zinc-100/80 p-1 dark:bg-zinc-800/60 overflow-x-auto scrollbar-hide flex-1 sm:flex-none min-w-0" id="tab-bar">
                 {{-- Sliding pill background --}}
                 <div id="tab-pill"
                      class="absolute top-1 bottom-1 rounded-lg bg-gradient-to-r from-purple-600 to-violet-600 shadow-md shadow-purple-500/30 transition-all duration-300 ease-in-out pointer-events-none"
@@ -158,8 +232,8 @@ foreach ($allGalleryModels as $model) {
                 <button
                     onclick="switchTab('recently-added')"
                     id="tab-recently-added"
-                    class="tab-btn relative z-10 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-colors duration-200 text-white">
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="tab-btn relative z-10 flex items-center gap-1.5 rounded-lg px-2.5 sm:px-4 py-2 text-xs sm:text-sm font-semibold transition-colors duration-200 text-white whitespace-nowrap">
+                    <svg class="h-4 w-4 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                     Recently Added
@@ -167,8 +241,8 @@ foreach ($allGalleryModels as $model) {
                 <button
                     onclick="switchTab('top-rated')"
                     id="tab-top-rated"
-                    class="tab-btn relative z-10 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-colors duration-200 text-zinc-500 dark:text-zinc-400">
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="tab-btn relative z-10 flex items-center gap-1.5 rounded-lg px-2.5 sm:px-4 py-2 text-xs sm:text-sm font-semibold transition-colors duration-200 text-zinc-500 dark:text-zinc-400 whitespace-nowrap">
+                    <svg class="h-4 w-4 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
                     </svg>
                     Top Rated
@@ -176,8 +250,8 @@ foreach ($allGalleryModels as $model) {
                 <button
                     onclick="switchTab('following')"
                     id="tab-following"
-                    class="tab-btn relative z-10 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-colors duration-200 text-zinc-500 dark:text-zinc-400">
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="tab-btn relative z-10 flex items-center gap-1.5 rounded-lg px-2.5 sm:px-4 py-2 text-xs sm:text-sm font-semibold transition-colors duration-200 text-zinc-500 dark:text-zinc-400 whitespace-nowrap">
+                    <svg class="h-4 w-4 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
                     </svg>
                     Following
@@ -187,19 +261,19 @@ foreach ($allGalleryModels as $model) {
             <!-- Create button -->
             @auth
                 <a href="{{ route('posts.create') }}"
-                   class="flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-violet-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-purple-500/25 transition-all duration-200 hover:from-purple-500 hover:to-violet-500 hover:scale-105">
+                   class="flex-shrink-0 flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-violet-600 px-2.5 sm:px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-purple-500/25 transition-all duration-200 hover:from-purple-500 hover:to-violet-500 hover:scale-105">
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                     </svg>
-                    Share Model
+                    <span class="hidden sm:inline">Share Post</span>
                 </a>
             @else
                 <button onclick="openLoginModal()"
-                   class="flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-violet-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-purple-500/25 transition-all duration-200 hover:from-purple-500 hover:to-violet-500 hover:scale-105">
+                   class="flex-shrink-0 flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-violet-600 px-2.5 sm:px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-purple-500/25 transition-all duration-200 hover:from-purple-500 hover:to-violet-500 hover:scale-105">
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                     </svg>
-                    Share Model
+                    <span class="hidden sm:inline">Share Post</span>
                 </button>
             @endauth
         </div>
@@ -207,15 +281,15 @@ foreach ($allGalleryModels as $model) {
 </div>
 
 <!-- ─── Feed ─── -->
-<section class="bg-white py-10 dark:bg-zinc-900 min-h-screen">
-    <div class="max-w-6xl mx-auto px-6 lg:px-12">
+<section class="bg-white py-6 sm:py-10 dark:bg-zinc-900 min-h-screen">
+    <div class="max-w-6xl mx-auto px-3 sm:px-6 lg:px-12">
 
         <!-- ─ Recently Added feed ─ -->
         <div id="feed-recently-added" class="gallery-feed-section">
             @if(isset($recentModels) && $recentModels->count())
                 <div class="gallery-columns">
                     @foreach($recentModels as $model)
-                        @include('gallery.partials.post-card', ['model' => $model])
+                        @include('gallery.partials.post-card', ['model' => $model, 'feedPrefix' => 'r'])
                     @endforeach
                 </div>
 
@@ -233,7 +307,7 @@ foreach ($allGalleryModels as $model) {
             @if(isset($topRatedModels) && $topRatedModels->count())
                 <div class="gallery-columns">
                     @foreach($topRatedModels as $model)
-                        @include('gallery.partials.post-card', ['model' => $model])
+                        @include('gallery.partials.post-card', ['model' => $model, 'feedPrefix' => 't'])
                     @endforeach
                 </div>
                 <div id="sentinel-top-rated" class="mt-8 flex justify-center">
@@ -247,7 +321,28 @@ foreach ($allGalleryModels as $model) {
         <!-- ─ Following feed ─ -->
         <div id="feed-following" class="gallery-feed-section hidden">
             @auth
-                @include('gallery.partials.empty-state', ['tab' => 'following'])
+                @if(isset($followingModels) && $followingModels->count())
+                    <div class="gallery-columns">
+                        @foreach($followingModels as $model)
+                            @include('gallery.partials.post-card', ['model' => $model, 'feedPrefix' => 'f'])
+                        @endforeach
+                    </div>
+                    <div id="sentinel-following" class="mt-8 flex justify-center">
+                        <div class="h-12 w-12 animate-spin rounded-full border-4 border-purple-200 border-t-purple-600 dark:border-zinc-700 dark:border-t-purple-400"></div>
+                    </div>
+                @elseif(count($followingIds ?? []) === 0)
+                    <div class="flex flex-col items-center justify-center py-24 text-center">
+                        <div class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-900/30">
+                            <svg class="h-10 w-10 text-purple-400 dark:text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-zinc-900 dark:text-white">No one followed yet</h3>
+                        <p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400 max-w-xs">Follow some crafters and their latest posts will appear here.</p>
+                    </div>
+                @else
+                    @include('gallery.partials.empty-state', ['tab' => 'following'])
+                @endif
             @else
                 <div class="flex flex-col items-center justify-center py-24 text-center">
                     <div class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-900/30">
@@ -293,8 +388,25 @@ foreach ($allGalleryModels as $model) {
 </div>
 
 <!-- ─── Post detail modal ─── -->
-<div id="gal-post-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-2 sm:p-6 bg-black/80 backdrop-blur-sm" onclick="galHandleBackdrop(event)">
-    <div class="relative flex flex-col md:flex-row w-full max-w-6xl rounded-2xl overflow-hidden shadow-2xl ring-1 ring-zinc-700 bg-zinc-900 dark:bg-zinc-900"
+<div id="gal-post-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-0 sm:p-6 bg-black/80 backdrop-blur-sm" onclick="galHandleBackdrop(event)">
+
+    {{-- ◀ Prev post (outside modal box) --}}
+    <button id="gal-nav-prev" onclick="galPrevPost()" style="display:none;"
+        class="absolute left-4 top-1/2 -translate-y-1/2 z-10 flex w-12 h-12 items-center justify-center rounded-2xl bg-black/50 border border-white/20 text-white hover:bg-violet-600/80 hover:border-violet-400/60 hover:scale-110 transition-all duration-200 backdrop-blur-sm shadow-lg">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+        </svg>
+    </button>
+
+    {{-- ▶ Next post (outside modal box) --}}
+    <button id="gal-nav-next" onclick="galNextPost()" style="display:none;"
+        class="absolute right-4 top-1/2 -translate-y-1/2 z-10 flex w-12 h-12 items-center justify-center rounded-2xl bg-black/50 border border-white/20 text-white hover:bg-violet-600/80 hover:border-violet-400/60 hover:scale-110 transition-all duration-200 backdrop-blur-sm shadow-lg">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+        </svg>
+    </button>
+
+    <div class="gal-modal-inner relative flex flex-col md:flex-row w-full max-w-6xl rounded-none sm:rounded-2xl overflow-hidden shadow-2xl ring-1 ring-zinc-700 bg-zinc-900 dark:bg-zinc-900"
          style="max-height:90vh;" onclick="event.stopPropagation()">
 
         {{-- ✕ --}}
@@ -305,7 +417,7 @@ foreach ($allGalleryModels as $model) {
         </button>
 
         {{-- LEFT: image carousel --}}
-        <div class="relative flex-none w-full md:w-3/5 bg-black flex items-stretch" style="min-height:320px;max-height:90vh;">
+        <div class="gal-image-panel relative flex-none w-full md:w-3/5 bg-black flex items-stretch" style="min-height:320px;max-height:90vh;">
             <div id="gal-pm-carousel" class="w-full overflow-hidden relative" style="min-height:320px;">
                 <div id="gal-pm-track" style="display:flex;transition:transform .3s ease;height:100%;"></div>
             </div>
@@ -319,7 +431,7 @@ foreach ($allGalleryModels as $model) {
         </div>
 
         {{-- RIGHT: meta --}}
-        <div class="flex flex-col w-full md:w-2/5 min-w-0 border-t border-zinc-800 md:border-t-0 md:border-l md:border-zinc-800" style="max-height:90vh;">
+        <div class="gal-detail-panel flex flex-col w-full md:w-2/5 min-w-0 border-t border-zinc-800 md:border-t-0 md:border-l md:border-zinc-800" style="max-height:90vh;">
 
             {{-- Author header --}}
             <div class="flex items-center gap-3 px-4 py-3 border-b border-zinc-800 shrink-0">
@@ -474,7 +586,7 @@ sentinels.forEach(sentinel => {
     observer.observe(sentinel);
 });
 
-// ─── Open post modal when clicking image area ─────────────────────────
+// ─── Open post modal when clicking image area ────────────────────────────
 document.addEventListener('click', function (e) {
     const trigger = e.target.closest('[data-open-post]');
     if (trigger) galOpenModal(trigger.dataset.openPost);
@@ -490,11 +602,67 @@ const _galCsrf   = document.querySelector('meta[name="csrf-token"]')?.content ??
 let   _galCurr   = null;
 let   _galIdx    = 0;
 
+// ─── Search helper ───────────────────────────────────────────────────────────
+function galSearch(term) {
+    const url = new URL(window.location.href);
+    const trimmed = term.trim();
+    if (trimmed) {
+        url.searchParams.set('q', trimmed);
+    } else {
+        url.searchParams.delete('q');
+    }
+    window.location.href = url.toString();
+}
+
+// ─── Post-to-post navigation ─────────────────────────────────────────────────
+let _galPostList    = [];  // ordered list of postIds in current visible feed
+let _galPostListIdx = -1;  // which post is open right now
+
+function galBuildPostList() {
+    const feed = document.querySelector('.gallery-feed-section:not(.hidden)');
+    if (!feed) { _galPostList = []; return; }
+    const seen = new Set();
+    _galPostList = Array.from(feed.querySelectorAll('[data-open-post]'))
+        .map(el => el.dataset.openPost)
+        .filter(id => { if (seen.has(id)) return false; seen.add(id); return true; });
+}
+
+function galUpdateNavArrows() {
+    const prev = document.getElementById('gal-nav-prev');
+    const next = document.getElementById('gal-nav-next');
+    if (!prev || !next) return;
+    // Never show outer nav arrows on mobile
+    if (window.innerWidth < 768) { prev.style.display = 'none'; next.style.display = 'none'; return; }
+    const hasPrev = _galPostListIdx > 0;
+    const hasNext = _galPostListIdx < _galPostList.length - 1;
+    prev.style.display = hasPrev ? 'flex' : 'none';
+    next.style.display = hasNext ? 'flex' : 'none';
+}
+
+function galPrevPost() {
+    if (_galPostListIdx > 0) {
+        _galPostListIdx--;
+        galOpenModal(_galPostList[_galPostListIdx]);
+    }
+}
+
+function galNextPost() {
+    if (_galPostListIdx < _galPostList.length - 1) {
+        _galPostListIdx++;
+        galOpenModal(_galPostList[_galPostListIdx]);
+    }
+}
+
 function galOpenModal(postId) {
     const post = _galPosts[postId];
     if (!post) return;
     _galCurr = post;
     _galIdx  = 0;
+
+    // Update post-list navigation
+    galBuildPostList();
+    _galPostListIdx = _galPostList.indexOf(String(postId));
+    galUpdateNavArrows();
 
     document.getElementById('gal-pm-avatar').textContent = post.initials;
     document.getElementById('gal-pm-author').textContent = post.author;
@@ -507,7 +675,7 @@ function galOpenModal(postId) {
     (post.tags || []).forEach(tag => {
         const s = document.createElement('span');
         s.className   = 'text-xs text-purple-400 hover:text-purple-300 cursor-default';
-        s.textContent = '#' + tag;
+        s.textContent = '#' + tag.replace(/^#+/, '');
         tagsEl.appendChild(s);
     });
 
@@ -566,6 +734,11 @@ function galCloseModal() {
     document.getElementById('gal-post-modal').classList.remove('flex');
     document.body.style.overflow = '';
     _galCurr = null;
+    // Hide outer nav arrows
+    const prev = document.getElementById('gal-nav-prev');
+    const next = document.getElementById('gal-nav-next');
+    if (prev) prev.style.display = 'none';
+    if (next) next.style.display = 'none';
 }
 function galHandleBackdrop(e) {
     if (e.target === document.getElementById('gal-post-modal')) galCloseModal();
@@ -817,7 +990,7 @@ function galBuildCommentEl(c, isReply) {
     if (document.getElementById('gal-pm-comment-input')) {
         const replyBtn = document.createElement('button');
         replyBtn.type = 'button';
-        replyBtn.className = 'text-xs font-semibold text-zinc-500 hover:text-zinc-200 transition-colors opacity-0 group-hover/comment:opacity-100';
+        replyBtn.className = 'reply-btn text-xs font-semibold text-zinc-500 hover:text-zinc-200 transition-colors opacity-0 group-hover/comment:opacity-100';
         replyBtn.textContent = 'Reply';
         replyBtn.onclick = () => galStartReply(c.author);
         metaLine.appendChild(replyBtn);
@@ -977,12 +1150,272 @@ function galCancelReply() {
     }, { passive: true });
 })();
 
+// ─── Mobile inline comments ─────────────────────────────────────────────────
+function cardCommentClick(cardUid, postId) {
+    if (window.innerWidth >= 768) {
+        galOpenModal(postId);
+    } else {
+        mcToggle(cardUid, postId);
+    }
+}
+
+function mcToggle(cardUid, postId) {
+    const section = document.getElementById('mc-' + cardUid);
+    if (!section) return;
+    const isHidden = section.classList.contains('hidden');
+    section.classList.toggle('hidden', !isHidden);
+    if (isHidden && section.dataset.mcLoaded === 'false') {
+        mcLoad(cardUid, postId);
+    }
+}
+
+async function mcLoad(cardUid, postId) {
+    const post    = _galPosts[postId];
+    const list    = document.getElementById('mc-list-' + cardUid);
+    const loading = document.getElementById('mc-loading-' + cardUid);
+    const section = document.getElementById('mc-' + cardUid);
+    if (!post || !list) return;
+    loading.classList.remove('hidden'); loading.classList.add('flex');
+    try {
+        const res  = await fetch(post.comments_url, { headers: { 'Accept': 'application/json' } });
+        const data = await res.json();
+        list.innerHTML = '';
+        const replyMap = {};
+        const topLevel = [];
+        (data.comments || []).forEach(c => {
+            const m = c.body.match(/^@(\S+)\s?/);
+            if (m) {
+                const key = m[1].toLowerCase();
+                (replyMap[key] = replyMap[key] || []).push(c);
+            } else {
+                topLevel.push(c);
+            }
+        });
+        topLevel.forEach(c => {
+            const key     = c.author.replace(/\s+/g, '').toLowerCase();
+            const replies = replyMap[key] || [];
+            list.appendChild(mcBuildCommentGroup(cardUid, c, replies));
+            delete replyMap[key];
+        });
+        Object.values(replyMap).flat().forEach(c => {
+            list.appendChild(mcBuildCommentGroup(cardUid, c, []));
+        });
+        section.dataset.mcLoaded = 'true';
+    } catch (err) { console.error(err); }
+    finally { loading.classList.add('hidden'); loading.classList.remove('flex'); }
+}
+
+function mcBuildCommentGroup(cardUid, comment, replies) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'comment-group';
+    wrapper.dataset.authorKey = comment.author.replace(/\s+/g, '').toLowerCase();
+    wrapper.appendChild(mcBuildCommentEl(cardUid, comment, false));
+
+    if (replies.length > 0) {
+        const toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'flex items-center gap-1.5 pl-9 mt-1 text-xs font-semibold text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors';
+        toggle.innerHTML = `
+            <span class="inline-block w-5 h-px bg-zinc-300 dark:bg-zinc-600"></span>
+            <span class="toggle-label">View ${replies.length} repl${replies.length === 1 ? 'y' : 'ies'}</span>
+            <svg class="toggle-chevron w-3 h-3 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
+            </svg>`;
+
+        const repliesContainer = document.createElement('div');
+        repliesContainer.className = 'replies-container hidden mt-2 space-y-3';
+        replies.forEach(r => repliesContainer.appendChild(mcBuildCommentEl(cardUid, r, true)));
+
+        toggle.onclick = () => {
+            const open = !repliesContainer.classList.contains('hidden');
+            repliesContainer.classList.toggle('hidden', open);
+            toggle.querySelector('.toggle-label').textContent = open
+                ? `View ${repliesContainer.children.length} repl${repliesContainer.children.length === 1 ? 'y' : 'ies'}`
+                : `Hide repl${repliesContainer.children.length === 1 ? 'y' : 'ies'}`;
+            toggle.querySelector('.toggle-chevron').style.transform = open ? '' : 'rotate(180deg)';
+        };
+        wrapper.appendChild(toggle);
+        wrapper.appendChild(repliesContainer);
+    } else {
+        const repliesContainer = document.createElement('div');
+        repliesContainer.className = 'replies-container hidden mt-2 space-y-3';
+        wrapper.appendChild(repliesContainer);
+    }
+    return wrapper;
+}
+
+function mcBuildCommentEl(cardUid, c, isReply) {
+    const mentionMatch = c.body.match(/^(@\S+)\s?([\s\S]*)$/);
+    const mentionPart  = mentionMatch ? mentionMatch[1] : null;
+    const restBody     = mentionMatch ? mentionMatch[2] : c.body;
+
+    const wrap = document.createElement('div');
+    wrap.className = isReply ? 'flex gap-2 items-start pl-9' : 'flex gap-2 items-start';
+
+    let av;
+    if (c.avatar) {
+        av = document.createElement('img');
+        av.src = c.avatar; av.alt = c.author;
+        av.className = isReply ? 'w-6 h-6 rounded-full object-cover flex-none' : 'w-7 h-7 rounded-full object-cover flex-none';
+    } else {
+        av = document.createElement('div');
+        av.className = (isReply ? 'w-6 h-6' : 'w-7 h-7') + ' rounded-full bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold flex-none';
+        av.textContent = c.initials;
+    }
+
+    const body = document.createElement('div');
+    body.className = 'flex-1 min-w-0 group/comment';
+
+    const topLine = document.createElement('p');
+    topLine.className = 'text-xs leading-relaxed break-words text-zinc-800 dark:text-zinc-200';
+
+    const authorSpan = document.createElement('span');
+    authorSpan.className = 'font-semibold mr-1.5';
+    authorSpan.textContent = c.author;
+    topLine.appendChild(authorSpan);
+
+    if (isReply && mentionPart) {
+        const mentionSpan = document.createElement('span');
+        mentionSpan.className = 'text-purple-500 font-semibold mr-1';
+        mentionSpan.textContent = mentionPart;
+        topLine.appendChild(mentionSpan);
+    }
+    topLine.appendChild(document.createTextNode(isReply && mentionPart ? restBody : c.body));
+
+    const metaLine = document.createElement('div');
+    metaLine.className = 'flex items-center gap-3 mt-0.5';
+
+    const timeSpan = document.createElement('span');
+    timeSpan.className = 'text-xs text-zinc-400 dark:text-zinc-500';
+    timeSpan.textContent = c.created_at;
+    metaLine.appendChild(timeSpan);
+
+    if (cardUid && document.getElementById('mc-input-' + cardUid)) {
+        const replyBtn = document.createElement('button');
+        replyBtn.type = 'button';
+        replyBtn.className = 'reply-btn text-xs font-semibold text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors opacity-0 group-hover/comment:opacity-100';
+        replyBtn.textContent = 'Reply';
+        replyBtn.onclick = () => mcStartReply(cardUid, c.author);
+        metaLine.appendChild(replyBtn);
+    }
+
+    body.appendChild(topLine);
+    body.appendChild(metaLine);
+    wrap.appendChild(av);
+    wrap.appendChild(body);
+    return wrap;
+}
+
+function mcStartReply(cardUid, author) {
+    const banner  = document.getElementById('mc-reply-banner-' + cardUid);
+    const replyTo = document.getElementById('mc-reply-to-'     + cardUid);
+    const input   = document.getElementById('mc-input-'        + cardUid);
+    if (!banner || !input) return;
+    replyTo.textContent = '@' + author;
+    banner.classList.remove('hidden');
+    banner.classList.add('flex');
+    input.value = '@' + author + ' ';
+    input.focus();
+    document.getElementById('mc-btn-' + cardUid).disabled = false;
+}
+
+function mcCancelReply(cardUid) {
+    const banner = document.getElementById('mc-reply-banner-' + cardUid);
+    const input  = document.getElementById('mc-input-'        + cardUid);
+    if (banner) { banner.classList.add('hidden'); banner.classList.remove('flex'); }
+    if (input && input.value.startsWith('@')) { input.value = ''; }
+    const btn = document.getElementById('mc-btn-' + cardUid);
+    if (btn) btn.disabled = true;
+}
+
+async function mobilePostComment(cardUid, postId) {
+    const post  = _galPosts[postId];
+    const input = document.getElementById('mc-input-' + cardUid);
+    const btn   = document.getElementById('mc-btn-'  + cardUid);
+    const list  = document.getElementById('mc-list-' + cardUid);
+    if (!post || !input || !input.value.trim()) return;
+    const body = input.value.trim();
+    btn.disabled   = true;
+    const prev = btn.textContent;
+    btn.textContent = '…';
+    try {
+        const res = await fetch(post.comment_url, {
+            method : 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': _csrf },
+            body   : JSON.stringify({ body }),
+        });
+        if (res.status === 401) { window.location.href = '/login'; return; }
+        const data = await res.json();
+        if (data.comment) {
+            input.value = '';
+            btn.disabled = true;
+            btn.textContent = prev;
+            mcCancelReply(cardUid);
+
+            const comment = data.comment;
+            const mentionMatch = comment.body.match(/^@(\S+)\s?/);
+            if (mentionMatch && list) {
+                const key   = mentionMatch[1].toLowerCase();
+                const group = list.querySelector(`.comment-group[data-author-key="${key}"]`);
+                if (group) {
+                    const container = group.querySelector('.replies-container');
+                    container.appendChild(mcBuildCommentEl(cardUid, comment, true));
+
+                    // Show replies container
+                    container.classList.remove('hidden');
+
+                    // Update or create the toggle button
+                    let toggle = group.querySelector('button.flex');
+                    const replyCount = container.children.length;
+                    if (!toggle) {
+                        toggle = document.createElement('button');
+                        toggle.type = 'button';
+                        toggle.className = 'flex items-center gap-1.5 pl-9 mt-1 text-xs font-semibold text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors';
+                        toggle.innerHTML = `
+                            <span class="inline-block w-5 h-px bg-zinc-300 dark:bg-zinc-600"></span>
+                            <span class="toggle-label"></span>
+                            <svg class="toggle-chevron w-3 h-3 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
+                            </svg>`;
+                        toggle.onclick = () => {
+                            const open = !container.classList.contains('hidden');
+                            container.classList.toggle('hidden', open);
+                            toggle.querySelector('.toggle-label').textContent = open
+                                ? `View ${container.children.length} repl${container.children.length === 1 ? 'y' : 'ies'}`
+                                : `Hide repl${container.children.length === 1 ? 'y' : 'ies'}`;
+                            toggle.querySelector('.toggle-chevron').style.transform = open ? '' : 'rotate(180deg)';
+                        };
+                        group.insertBefore(toggle, container);
+                    }
+                    toggle.querySelector('.toggle-label').textContent = `Hide repl${replyCount === 1 ? 'y' : 'ies'}`;
+                    toggle.querySelector('.toggle-chevron').style.transform = 'rotate(180deg)';
+                } else if (list) {
+                    list.appendChild(mcBuildCommentGroup(cardUid, comment, []));
+                }
+            } else if (list) {
+                list.appendChild(mcBuildCommentGroup(cardUid, comment, []));
+            }
+
+            // Update comment count badge on the card
+            const cnt = document.querySelector(`[data-comment-link="${postId}"] .comment-count`);
+            if (cnt) cnt.textContent = parseInt(cnt.textContent || 0) + 1;
+            if (_galPosts[postId]) _galPosts[postId].comments_count = (_galPosts[postId].comments_count || 0) + 1;
+        }
+    } catch (err) { console.error(err); btn.textContent = prev; btn.disabled = false; }
+}
+
 // Keyboard
 document.addEventListener('keydown', e => {
     if (!document.getElementById('gal-post-modal').classList.contains('hidden')) {
-        if (e.key === 'Escape')     galCloseModal();
-        if (e.key === 'ArrowLeft')  galPmGo(-1);
-        if (e.key === 'ArrowRight') galPmGo(1);
+        if (e.key === 'Escape') { galCloseModal(); return; }
+        // Shift + Arrow = navigate between posts; plain Arrow = navigate images in carousel
+        if (e.shiftKey) {
+            if (e.key === 'ArrowLeft')  { e.preventDefault(); galPrevPost(); }
+            if (e.key === 'ArrowRight') { e.preventDefault(); galNextPost(); }
+        } else {
+            if (e.key === 'ArrowLeft')  galPmGo(-1);
+            if (e.key === 'ArrowRight') galPmGo(1);
+        }
     }
 });
 </script>

@@ -35,6 +35,9 @@
     $modelDesc   = $model->description ?? ($model->title ?? '');
     $modelId     = $model->id ?? 0;
     $carouselId  = 'carousel-' . $modelId . '-' . uniqid();
+    // Unique per-feed card ID to avoid duplicate element IDs when the same post
+    // appears in multiple feed tabs rendered simultaneously in the DOM.
+    $cardUid     = ($feedPrefix ?? 'c') . '-' . $modelId;
     $isLiked     = $model->liked_by_user     ?? false;
     $isFavorited = $model->faved_by_user ?? false;
     $likeUrl     = route('posts.like',       $modelId);
@@ -122,7 +125,7 @@
 
                 {{-- Prev arrow --}}
                 <button onclick="event.stopPropagation(); carouselPrev('{{ $carouselId }}')"
-                        class="absolute left-1.5 top-1/2 -translate-y-1/2 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-black/35 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-black/55">
+                        class="carousel-arrow absolute left-1.5 top-1/2 -translate-y-1/2 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-black/35 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-black/55">
                     <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/>
                     </svg>
@@ -130,7 +133,7 @@
 
                 {{-- Next arrow --}}
                 <button onclick="event.stopPropagation(); carouselNext('{{ $carouselId }}')"
-                        class="absolute right-1.5 top-1/2 -translate-y-1/2 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-black/35 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-black/55">
+                        class="carousel-arrow absolute right-1.5 top-1/2 -translate-y-1/2 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-black/35 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-black/55">
                     <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"/>
                     </svg>
@@ -180,7 +183,7 @@
 
             {{-- Comment --}}
             <button data-comment-link="{{ $modelId }}"
-                    onclick="galOpenModal('{{ $modelId }}')"
+                    onclick="cardCommentClick('{{ $cardUid }}', '{{ $modelId }}')"
                     class="flex items-center gap-1.5 text-zinc-500 hover:text-purple-500 dark:text-zinc-400 dark:hover:text-purple-400 transition-colors duration-200">
                 <svg class="h-6 w-6 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
@@ -221,18 +224,59 @@
 
     {{-- ── Caption (Instagram style: bold username + description inline) ── --}}
     @if($modelDesc)
-        <div class="px-4 pb-4">
+        <div class="px-4 pb-3">
             <p class="text-sm text-zinc-700 dark:text-zinc-300 line-clamp-3">
                 <span class="font-semibold text-zinc-900 dark:text-white mr-1">{{ $authorName }}</span>{{ $modelDesc }}
             </p>
         </div>
     @endif
 
+    {{-- ── Mobile inline comments (hidden on desktop via md:hidden) ── --}}
+    <div id="mc-{{ $cardUid }}"
+         class="hidden border-t border-zinc-100 dark:border-zinc-700 md:hidden mc-section"
+         data-mc-loaded="false">
+        <div id="mc-loading-{{ $cardUid }}" class="hidden justify-center py-4">
+            <div class="h-4 w-4 animate-spin rounded-full border-2 border-zinc-200 border-t-purple-500"></div>
+        </div>
+        <div id="mc-list-{{ $cardUid }}" class="px-4 pt-3 space-y-3"></div>
+        @auth
+        {{-- Replying-to pill --}}
+        <div id="mc-reply-banner-{{ $cardUid }}" class="hidden items-center gap-2 px-4 pb-1 text-xs text-zinc-500 dark:text-zinc-400">
+            <span>Replying to <span id="mc-reply-to-{{ $cardUid }}" class="text-purple-500 font-semibold"></span></span>
+            <button onclick="mcCancelReply('{{ $cardUid }}')" class="ml-auto text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors">✕</button>
+        </div>
+        <div class="flex items-center gap-2 px-4 pt-2 pb-3 mt-2 border-t border-zinc-100 dark:border-zinc-700">
+            <div class="w-7 h-7 rounded-full bg-gradient-to-br from-violet-400 to-purple-500 flex-none flex items-center justify-center text-white text-xs font-bold select-none">
+                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+            </div>
+            <input type="text"
+                   id="mc-input-{{ $cardUid }}"
+                   placeholder="Add a comment…"
+                   class="flex-1 bg-transparent text-sm text-zinc-700 dark:text-zinc-300 placeholder-zinc-400 dark:placeholder-zinc-600 outline-none py-1"
+                   maxlength="500"
+                   oninput="document.getElementById('mc-btn-{{ $cardUid }}').disabled = this.value.trim().length === 0"
+                   onkeydown="if(event.key==='Enter'){event.preventDefault();mobilePostComment('{{ $cardUid }}', '{{ $modelId }}');}"/>
+            <button id="mc-btn-{{ $cardUid }}"
+                    onclick="mobilePostComment('{{ $cardUid }}', '{{ $modelId }}')"
+                    class="text-sm font-semibold text-purple-500 hover:text-purple-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    disabled>Post</button>
+        </div>
+        @else
+        <div class="px-4 pb-3 text-center">
+            <a href="{{ route('login') }}" class="text-sm text-purple-500 hover:underline">Sign in to comment</a>
+        </div>
+        @endauth
+    </div>
+
 </div>
 
 @once
-@push('scripts')
-<script>
+@push('scripts')<style>
+/* Show carousel arrows on touch devices */
+@media (hover: none) and (pointer: coarse) {
+    .carousel-wrapper .carousel-arrow { opacity: 0.65 !important; }
+}
+</style><script>
 // ─── Carousel ────────────────────────────────────────────────────────────────
 const _carouselState = {};
 
@@ -283,6 +327,20 @@ function carouselPrev(id) {
     const current = _carouselState[id] ?? 0;
     if (current > 0) carouselGo(id, current - 1);
 }
+
+// Touch swipe support for post card carousels
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.carousel-wrapper').forEach(el => {
+        let sx = 0;
+        el.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
+        el.addEventListener('touchend', e => {
+            const diff = sx - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 40) {
+                diff > 0 ? carouselNext(el.id) : carouselPrev(el.id);
+            }
+        }, { passive: true });
+    });
+});
 
 // ─── Like / Favorite AJAX ────────────────────────────────────────────────────
 const _csrf = document.querySelector('meta[name="csrf-token"]')?.content ?? '';

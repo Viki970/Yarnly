@@ -498,48 +498,62 @@ class PatternController extends Controller
     /**
      * Models Gallery – Instagram-style feed
      */
-    public function gallery()
+    public function gallery(\Illuminate\Http\Request $request)
     {
         $userId = \Illuminate\Support\Facades\Auth::id();
+        $search = trim($request->query('q', ''));
 
-        $recentModels = Post::with(['user', 'images'])
+        // Reusable filter closure
+        $applySearch = function ($query) use ($search) {
+            if ($search === '') return $query;
+            $term = '%' . $search . '%';
+            return $query->where(function ($q) use ($term, $search) {
+                $q->where('tags', 'like', $term)
+                  ->orWhere('description', 'like', $term)
+                  ->orWhereHas('user', fn($u) => $u->where('name', 'like', $term));
+            });
+        };
+
+        $base = fn() => Post::with(['user', 'images'])
             ->withCount(['likes', 'comments'])
             ->when(
                 $userId,
                 fn($q) => $q
                     ->withExists(['likes as liked_by_user'     => fn($q) => $q->where('user_id', $userId)])
                     ->withExists(['favorites as faved_by_user' => fn($q) => $q->where('user_id', $userId)])
-            )
-            ->latest()
-            ->paginate(12);
+            );
 
-        $topRatedModels = Post::with(['user', 'images'])
-            ->withCount(['likes', 'comments'])
-            ->when(
-                $userId,
-                fn($q) => $q
-                    ->withExists(['likes as liked_by_user'     => fn($q) => $q->where('user_id', $userId)])
-                    ->withExists(['favorites as faved_by_user' => fn($q) => $q->where('user_id', $userId)])
-            )
-            ->orderByDesc('likes_count')
-            ->paginate(12);
+        $recentModels   = $applySearch($base())->latest()->paginate(12)->withQueryString();
+        $topRatedModels = $applySearch($base())->orderByDesc('likes_count')->paginate(12)->withQueryString();
 
         $totalModels = Post::count();
         $newToday    = Post::whereDate('created_at', today())->count();
 
-        // IDs of users that the current user is following (empty array if guest)
         /** @var User|null $authUser */
         $authUser     = Auth::user();
         $followingIds = ($userId && $authUser)
             ? $authUser->following()->pluck('following_id')->toArray()
             : [];
 
+        $followingModels = null;
+        if ($userId && count($followingIds) > 0) {
+            $followingModels = $applySearch(
+                Post::with(['user', 'images'])
+                    ->withCount(['likes', 'comments'])
+                    ->whereIn('user_id', $followingIds)
+                    ->withExists(['likes as liked_by_user'     => fn($q) => $q->where('user_id', $userId)])
+                    ->withExists(['favorites as faved_by_user' => fn($q) => $q->where('user_id', $userId)])
+            )->latest()->paginate(12)->withQueryString();
+        }
+
         return view('gallery.gallery', compact(
             'recentModels',
             'topRatedModels',
+            'followingModels',
             'totalModels',
             'newToday',
-            'followingIds'
+            'followingIds',
+            'search'
         ));
     }
 }

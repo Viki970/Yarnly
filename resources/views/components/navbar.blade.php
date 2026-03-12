@@ -411,8 +411,8 @@
             </div>
         </div>
 
-        <!-- Mobile actions: Theme, Menu -->
-        <div class="flex items-center gap-2 ml-auto xl:hidden">
+        <!-- Mobile actions: Theme, Notifications, Menu -->
+        <div class="flex items-center gap-2 ml-auto xl:hidden relative">
             <!-- Theme Toggle (Mobile) -->
             <button type="button" id="theme-toggle-mobile" class="relative flex h-10 w-10 items-center justify-center rounded-lg text-zinc-600 transition-all duration-300 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 cursor-pointer">
                 <!-- Sun Icon (visible in dark mode) -->
@@ -424,6 +424,11 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                 </svg>
             </button>
+
+            <!-- Notification Bell (Mobile) -->
+            @auth
+            @livewire('notification-bell')
+            @endauth
 
             <!-- Mobile menu button -->
             <button type="button" data-navbar-toggle data-target="{{ $navbarId }}" class="inline-flex items-center justify-center rounded-md border border-zinc-200 p-2 text-zinc-600 transition hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2 focus:ring-offset-white dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:focus:ring-violet-500 dark:focus:ring-offset-zinc-900 cursor-pointer" aria-expanded="false" aria-controls="{{ $navbarId }}">
