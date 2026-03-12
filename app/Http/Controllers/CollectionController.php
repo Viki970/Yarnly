@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Collection;
+use App\Notifications\NewCollectionFromFollowedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -97,6 +98,13 @@ class CollectionController extends Controller
 
         // Attach patterns to collection
         $collection->patterns()->attach($request->pattern_ids);
+
+        // Notify all followers about the new collection
+        /** @var \App\Models\User $creator */
+        $creator = Auth::user();
+        foreach ($creator->followers as $follower) {
+            $follower->notify(new NewCollectionFromFollowedNotification($creator, $collection));
+        }
 
         return redirect()->route('my-collections')
             ->with('success', 'Collection created successfully!');

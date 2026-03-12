@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\User;
+use App\Services\NotificationPreferenceService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
@@ -16,7 +17,10 @@ class NewFollowNotification extends Notification
 
     public function via(object $notifiable): array
     {
-        return ['database'];
+        $allowed = app(NotificationPreferenceService::class)
+            ->check($notifiable, 'notify_followers');
+
+        return $allowed ? ['database'] : [];
     }
 
     public function toDatabase(object $notifiable): array

@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Services\NotificationPreferenceService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
@@ -18,7 +19,10 @@ class NewLikeNotification extends Notification
 
     public function via(object $notifiable): array
     {
-        return ['database'];
+        $allowed = app(NotificationPreferenceService::class)
+            ->check($notifiable, 'notify_likes');
+
+        return $allowed ? ['database'] : [];
     }
 
     public function toDatabase(object $notifiable): array

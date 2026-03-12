@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use App\Models\Pattern;
 use App\Models\User;
+use App\Services\NotificationPreferenceService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
@@ -18,7 +19,10 @@ class NewPatternFromFollowedNotification extends Notification
 
     public function via(object $notifiable): array
     {
-        return ['database'];
+        $allowed = app(NotificationPreferenceService::class)
+            ->check($notifiable, 'notify_new_patterns');
+
+        return $allowed ? ['database'] : [];
     }
 
     public function toDatabase(object $notifiable): array

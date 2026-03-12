@@ -189,34 +189,64 @@
                                 <p class="text-xs text-zinc-400">Choose what you want to be notified about.</p>
                             </div>
                         </div>
-                        <div class="space-y-3 max-w-md">
-                            @foreach ([
-                                ['label' => 'New followers',      'desc' => 'When someone follows you',            'on' => true],
-                                ['label' => 'Post likes',         'desc' => 'When someone likes your post',        'on' => true],
-                                ['label' => 'Post saved',         'desc' => 'When someone saves your post',        'on' => true],
-                                ['label' => 'New patterns',       'desc' => 'New patterns from people you follow', 'on' => false],
-                                ['label' => 'Promotional emails', 'desc' => 'Tips, tutorials and special offers',  'on' => false],
-                            ] as $item)
-                            <div class="flex items-center justify-between gap-4 px-4 py-3.5 bg-zinc-800 rounded-xl"
-                                 x-data="{ on: {{ $item['on'] ? 'true' : 'false' }} }">
-                                <div>
-                                    <p class="text-sm font-medium text-white">{{ $item['label'] }}</p>
-                                    <p class="text-xs text-zinc-400 mt-0.5">{{ $item['desc'] }}</p>
+
+                        @if(session('notification_prefs_saved'))
+                        <div class="mb-4 flex items-center gap-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 px-4 py-2.5 text-sm text-emerald-400">
+                            <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Preferences saved successfully.
+                        </div>
+                        @endif
+
+                        <form method="POST" action="{{ route('profile.notifications.save') }}"
+                              x-data="{
+                                  prefs: {
+                                      notify_followers:       {{ $notificationPrefs['notify_followers']       ? 'true' : 'false' }},
+                                      notify_likes:           {{ $notificationPrefs['notify_likes']           ? 'true' : 'false' }},
+                                      notify_comments:        {{ $notificationPrefs['notify_comments']        ? 'true' : 'false' }},
+                                      notify_new_posts:       {{ $notificationPrefs['notify_new_posts']       ? 'true' : 'false' }},
+                                      notify_new_patterns:    {{ $notificationPrefs['notify_new_patterns']    ? 'true' : 'false' }},
+                                      notify_new_collections: {{ $notificationPrefs['notify_new_collections'] ? 'true' : 'false' }},
+                                  }
+                              }">
+                            @csrf
+                            {{-- Hidden inputs driven by Alpine toggles --}}
+                            <template x-for="[key, val] in Object.entries(prefs)" :key="key">
+                                <input type="hidden" :name="key" :value="val ? '1' : '0'">
+                            </template>
+
+                            <div class="space-y-3 max-w-md">
+                                @foreach ([
+                                    ['key' => 'notify_followers',       'label' => 'New followers',    'desc' => 'When someone follows you'],
+                                    ['key' => 'notify_likes',           'label' => 'New likes',        'desc' => 'When someone likes your post'],
+                                    ['key' => 'notify_comments',        'label' => 'New comments',     'desc' => 'When someone comments on your post'],
+                                    ['key' => 'notify_new_posts',       'label' => 'New posts',        'desc' => 'New posts from people you follow'],
+                                    ['key' => 'notify_new_patterns',    'label' => 'New patterns',     'desc' => 'New patterns from people you follow'],
+                                    ['key' => 'notify_new_collections', 'label' => 'New collections',  'desc' => 'New collections from people you follow'],
+                                ] as $item)
+                                <div class="flex items-center justify-between gap-4 px-4 py-3.5 bg-zinc-800 rounded-xl">
+                                    <div>
+                                        <p class="text-sm font-medium text-white">{{ $item['label'] }}</p>
+                                        <p class="text-xs text-zinc-400 mt-0.5">{{ $item['desc'] }}</p>
+                                    </div>
+                                    <button type="button"
+                                            @click="prefs['{{ $item['key'] }}'] = !prefs['{{ $item['key'] }}']"
+                                            :class="prefs['{{ $item['key'] }}'] ? 'bg-violet-600' : 'bg-zinc-600'"
+                                            class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none">
+                                        <span :class="prefs['{{ $item['key'] }}'] ? 'translate-x-5' : 'translate-x-0'"
+                                              class="inline-block h-5 w-5 transform rounded-full bg-white shadow transition duration-200"></span>
+                                    </button>
                                 </div>
-                                <button type="button" @click="on = !on"
-                                        :class="on ? 'bg-violet-600' : 'bg-zinc-600'"
-                                        class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none">
-                                    <span :class="on ? 'translate-x-5' : 'translate-x-0'"
-                                          class="inline-block h-5 w-5 transform rounded-full bg-white shadow transition duration-200"></span>
+                                @endforeach
+                            </div>
+                            <div class="mt-6">
+                                <button type="submit"
+                                        class="px-8 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition-colors">
+                                    Save Preferences
                                 </button>
                             </div>
-                            @endforeach
-                        </div>
-                        <div class="mt-6">
-                            <button class="px-8 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition-colors">
-                                Save Preferences
-                            </button>
-                        </div>
+                        </form>
                     </div>
                 </div>
 

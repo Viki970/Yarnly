@@ -285,7 +285,7 @@
             </div>
 
             <!-- Right side: Theme Toggle, Account -->
-            <div class="flex items-center gap-2 ml-auto">
+            <div class="flex items-center gap-2 ml-auto relative">
                 <!-- Theme Toggle -->
                 <button type="button" id="theme-toggle" class="relative flex h-10 w-10 items-center justify-center rounded-lg text-zinc-600 transition-all duration-300 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 cursor-pointer">
                     <!-- Sun Icon (visible in dark mode) -->

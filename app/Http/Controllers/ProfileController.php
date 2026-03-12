@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Services\NotificationPreferenceService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -104,9 +105,25 @@ class ProfileController extends Controller
      */
     public function settings(Request $request): View
     {
-        return view('profile.settings', [
-            'user' => $request->user(),
-        ]);
+        /** @var User $user */
+        $user = $request->user();
+        $notificationPrefs = app(NotificationPreferenceService::class)->get($user);
+
+        return view('profile.settings', compact('user', 'notificationPrefs'));
+    }
+
+    /**
+     * Save notification preferences.
+     */
+    public function saveNotificationPreferences(Request $request): RedirectResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+
+        app(NotificationPreferenceService::class)->save($user->id, $request->all());
+
+        return Redirect::route('profile.settings', ['tab' => 'notifications'])
+            ->with('notification_prefs_saved', true);
     }
 
     /**
