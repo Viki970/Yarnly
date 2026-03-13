@@ -53,6 +53,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/collections/{collection}/download-all', [\App\Http\Controllers\CollectionController::class, 'downloadAll'])->name('collections.downloadAll');
     Route::delete('/collections/{collection}', [\App\Http\Controllers\CollectionController::class, 'destroy'])->name('collections.destroy');
     
+    // Post Collections (saved-post bookmarks organized into named collections)
+    Route::get('/saved-collections',                                          [\App\Http\Controllers\PostCollectionController::class, 'index'])     ->name('post-collections.index');
+    Route::post('/saved-collections',                                         [\App\Http\Controllers\PostCollectionController::class, 'store'])     ->name('post-collections.store');
+    Route::get('/saved-collections/all',                                      [\App\Http\Controllers\PostCollectionController::class, 'allPosts'])  ->name('post-collections.all');
+    Route::get('/saved-collections/{postCollection}',                         [\App\Http\Controllers\PostCollectionController::class, 'show'])      ->name('post-collections.show');
+    Route::delete('/saved-collections/{postCollection}',                      [\App\Http\Controllers\PostCollectionController::class, 'destroy'])   ->name('post-collections.destroy');
+    Route::patch('/saved-collections/{postCollection}/rename',                [\App\Http\Controllers\PostCollectionController::class, 'rename'])    ->name('post-collections.rename');
+    Route::post('/saved-collections/{postCollection}/posts',                  [\App\Http\Controllers\PostCollectionController::class, 'addPost'])   ->name('post-collections.add-post');
+    Route::delete('/saved-collections/{postCollection}/posts',                [\App\Http\Controllers\PostCollectionController::class, 'removePost'])->name('post-collections.remove-post');
+
     // Favorites routes
     Route::post('/patterns/{pattern}/toggle-favorite', [\App\Http\Controllers\PatternController::class, 'toggleFavorite'])->name('patterns.toggle-favorite');
     Route::post('/collections/{collection}/toggle-favorite', [\App\Http\Controllers\CollectionController::class, 'toggleFavorite'])->name('collections.toggle-favorite');
@@ -86,6 +96,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/posts/{post}/favorite', [PostController::class, 'unfavorite'])->name('posts.unfavorite');
     Route::post('/posts/{post}/comments',   [PostController::class, 'storeComment'])->name('posts.comments.store');
 });
+
+// ─── Public User Profiles ────────────────────────────────────────────────────
+Route::get('/users/{user}', [ProfileController::class, 'showUser'])->name('users.show');
 
 // ─── Follow ──────────────────────────────────────────────────────────────────
 Route::middleware('auth')->group(function () {

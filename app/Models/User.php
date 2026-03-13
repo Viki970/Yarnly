@@ -197,6 +197,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Post collections (saved-post bookmarks organized into named groups)
+     */
+    public function postCollections(): HasMany
+    {
+        return $this->hasMany(\App\Models\PostCollection::class);
+    }
+
+    /**
      * Users that this user is following
      */
     public function following(): BelongsToMany

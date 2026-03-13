@@ -5,11 +5,10 @@
 @section('content')
 
 @php
-$authUser   = auth()->user();
-// Build serialisable post data for JS modal
+$viewer = $authUser;
+// Build serialisable post data for the modal
 $allPostData = [];
-foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $post) {
-    if (isset($allPostData[$post->id])) continue;
+foreach ($posts->all() as $post) {
     $allPostData[$post->id] = [
         'id'          => $post->id,
         'images'      => $post->images->map(fn($i) => asset('storage/'.$i->image_path))->values()->all(),
@@ -18,10 +17,12 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
         'tags'        => $post->tags_array,
         'likes_count' => $post->likes_count,
         'author'      => $post->user->name,
+        'author_id'   => $post->user->id,
+        'author_url'  => route('users.show', $post->user),
         'initials'    => $post->user->initials(),
         'created_at'  => $post->created_at->diffForHumans(),
-        'is_liked'    => $authUser ? $post->isLikedBy($authUser) : false,
-        'is_faved'    => $authUser ? $post->isFavoritedBy($authUser) : false,
+        'is_liked'    => $viewer ? $post->isLikedBy($viewer) : false,
+        'is_faved'    => $viewer ? $post->isFavoritedBy($viewer) : false,
         'like_url'    => route('posts.like',       $post->id),
         'unlike_url'  => route('posts.unlike',     $post->id),
         'fav_url'     => route('posts.favorite',   $post->id),
@@ -76,6 +77,9 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
     #pm-track { display: flex; transition: transform .3s ease; height: 100%; }
     .pm-slide  { flex: none; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #000; }
     .pm-slide img { width: 100%; height: 100%; object-fit: contain; }
+
+    /* ── Follow button ── */
+    #follow-btn { transition: background-color .2s, color .2s, border-color .2s; }
 </style>
 
 <div class="min-h-screen bg-zinc-950 text-white">
@@ -100,13 +104,39 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
             {{-- Info --}}
             <div class="flex flex-col gap-4 min-w-0 flex-1">
 
-                {{-- Username + Edit button row --}}
+                {{-- Username + Follow button row --}}
                 <div class="flex flex-wrap items-center gap-3">
                     <h1 class="text-xl font-bold tracking-wide truncate">{{ $user->username }}</h1>
-                    <a href="{{ route('profile.edit') }}"
-                       class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-sm font-semibold text-white transition-colors duration-200 border border-zinc-700">
-                        Edit Profile
+
+                    @auth
+                    {{-- Follow / Unfollow button --}}
+                    <button id="follow-btn"
+                            data-user-id="{{ $user->id }}"
+                            data-following="{{ $isFollowing ? 'true' : 'false' }}"
+                            data-follow-url="{{ route('users.follow', $user) }}"
+                            data-unfollow-url="{{ route('users.unfollow', $user) }}"
+                            class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors duration-200 border
+                                {{ $isFollowing
+                                    ? 'bg-zinc-800 hover:bg-red-900/30 hover:text-red-400 hover:border-red-800 text-zinc-300 border-zinc-700'
+                                    : 'bg-violet-600 hover:bg-violet-700 text-white border-transparent' }}">
+                        <svg id="follow-btn-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            @if($isFollowing)
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            @else
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                            @endif
+                        </svg>
+                        <span id="follow-btn-label">{{ $isFollowing ? 'Following' : 'Follow' }}</span>
+                    </button>
+                    @else
+                    <a href="{{ route('login') }}"
+                       class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-700 text-sm font-semibold text-white transition-colors duration-200 border border-transparent">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Follow
                     </a>
+                    @endauth
                 </div>
 
                 {{-- Full name directly under username --}}
@@ -119,7 +149,7 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                         <span class="ml-1 text-sm text-zinc-300">{{ Str::plural('post', $postsCount) }}</span>
                     </div>
                     <button onclick="openFollowModal('followers')" class="text-center hover:opacity-80 transition-opacity">
-                        <span class="stat-num">{{ $followersCount }}</span>
+                        <span id="followers-count-desktop" class="stat-num">{{ $followersCount }}</span>
                         <span class="ml-1 text-sm text-zinc-300">{{ Str::plural('follower', $followersCount) }}</span>
                     </button>
                     <button onclick="openFollowModal('following')" class="text-center hover:opacity-80 transition-opacity">
@@ -137,7 +167,7 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                 <div class="stat-label">Posts</div>
             </div>
             <button onclick="openFollowModal('followers')" class="text-center hover:opacity-80">
-                <div class="stat-num">{{ $followersCount }}</div>
+                <div id="followers-count-mobile" class="stat-num">{{ $followersCount }}</div>
                 <div class="stat-label">{{ Str::plural('Follower', $followersCount) }}</div>
             </button>
             <button onclick="openFollowModal('following')" class="text-center hover:opacity-80">
@@ -160,26 +190,6 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                           d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
                 </svg>
                 <span class="hidden sm:inline">Posts</span>
-            </button>
-
-            {{-- Saved tab --}}
-            <button onclick="switchTab('saved')" id="tab-saved"
-                    class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-400">
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
-                </svg>
-                <span class="hidden sm:inline">Saved</span>
-            </button>
-
-            {{-- Liked tab --}}
-            <button onclick="switchTab('liked')" id="tab-liked"
-                    class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-400">
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                </svg>
-                <span class="hidden sm:inline">Liked</span>
             </button>
 
             {{-- Patterns tab --}}
@@ -214,10 +224,8 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
                     </svg>
                 </div>
-                <h3 class="text-2xl font-extrabold mb-2">Share Photos</h3>
-                <p class="text-zinc-400 text-sm mb-5">When you share photos, they will appear on your profile.</p>
-                <a href="{{ route('posts.create') }}"
-                   class="text-sm font-semibold text-sky-400 hover:text-sky-300 transition-colors">Share your first photo</a>
+                <h3 class="text-xl font-bold mb-2 text-zinc-300">No Posts Yet</h3>
+                <p class="text-zinc-500 text-sm">This user hasn't shared any posts.</p>
             </div>
             @else
             <div class="grid grid-cols-3 gap-0.5">
@@ -264,195 +272,6 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
             @endif
         </div>
 
-        {{-- ── Saved tab content ── --}}
-        <div id="panel-saved" class="hidden">
-
-            {{-- ── Collections section ── --}}
-            <div>
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Collections</h3>
-                    <button onclick="openNewCollectionModal(null)"
-                            class="flex items-center gap-1 text-sm font-semibold text-violet-400 hover:text-violet-300 transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
-                        </svg>
-                        New
-                    </button>
-                </div>
-
-                @if($savedPosts->isEmpty() && $postCollections->isEmpty())
-                <div class="flex flex-col items-center justify-center py-24 text-center">
-                    <div class="w-20 h-20 rounded-full border-2 border-zinc-600 flex items-center justify-center mb-5">
-                        <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                  d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-extrabold mb-2">Save Photos and Videos</h3>
-                    <p class="text-zinc-400 text-sm">Save things you want to see again. No one is notified, and only you can see what you've saved.</p>
-                </div>
-                @else
-                @php
-                    $allCoverImages = $savedPosts->map(fn($p) => $p->images->first())->filter()->take(4)->values();
-                    $allCoverCount  = $allCoverImages->count();
-                @endphp
-                <div id="post-collections-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {{-- Fixed "All Posts" card --}}
-                    <a href="{{ route('post-collections.all') }}"
-                       class="group block rounded-xl overflow-hidden bg-zinc-900 ring-1 ring-zinc-800 hover:ring-violet-500/50 transition-all">
-                        <div class="aspect-square overflow-hidden bg-zinc-800">
-                            @if($allCoverCount > 0)
-                            <div class="grid h-full w-full gap-0.5 {{ $allCoverCount === 1 ? 'grid-cols-1 grid-rows-1' : 'grid-cols-2 grid-rows-2' }}">
-                                @if($allCoverCount === 1)
-                                    <img src="{{ asset('storage/' . $allCoverImages[0]->image_path) }}"
-                                         class="h-full w-full object-cover" loading="lazy">
-                                @elseif($allCoverCount === 2)
-                                    <img src="{{ asset('storage/' . $allCoverImages[0]->image_path) }}"
-                                         class="col-span-2 row-span-1 h-full w-full object-cover" loading="lazy">
-                                    <img src="{{ asset('storage/' . $allCoverImages[1]->image_path) }}"
-                                         class="col-span-2 row-span-1 h-full w-full object-cover" loading="lazy">
-                                @elseif($allCoverCount === 3)
-                                    <img src="{{ asset('storage/' . $allCoverImages[0]->image_path) }}"
-                                         class="col-span-2 row-span-1 h-full w-full object-cover" loading="lazy">
-                                    <img src="{{ asset('storage/' . $allCoverImages[1]->image_path) }}"
-                                         class="col-span-1 row-span-1 h-full w-full object-cover" loading="lazy">
-                                    <img src="{{ asset('storage/' . $allCoverImages[2]->image_path) }}"
-                                         class="col-span-1 row-span-1 h-full w-full object-cover" loading="lazy">
-                                @else
-                                    @foreach($allCoverImages as $img)
-                                    <img src="{{ asset('storage/' . $img->image_path) }}"
-                                         class="col-span-1 row-span-1 h-full w-full object-cover" loading="lazy">
-                                    @endforeach
-                                @endif
-                            </div>
-                            @else
-                            <div class="h-full w-full flex items-center justify-center bg-gradient-to-br from-violet-900/40 to-purple-900/40">
-                                <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                          d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
-                                </svg>
-                            </div>
-                            @endif
-                        </div>
-                        <div class="px-3 py-2.5">
-                            <p class="text-sm font-semibold text-white">All Posts</p>
-                            <p class="text-xs text-zinc-400">{{ $savedPosts->count() }} {{ Str::plural('post', $savedPosts->count()) }}</p>
-                        </div>
-                    </a>
-                    @foreach($postCollections as $col)
-                    @php
-                        $coverImages = $col->posts
-                            ->map(fn($p) => $p->images->first())
-                            ->filter()
-                            ->take(4)
-                            ->values();
-                        $coverCount = $coverImages->count();
-                    @endphp
-                    <a href="{{ route('post-collections.show', $col) }}"
-                       class="group block rounded-xl overflow-hidden bg-zinc-900 ring-1 ring-zinc-800 hover:ring-violet-500/50 transition-all">
-                        {{-- Collage cover --}}
-                        <div class="aspect-square overflow-hidden bg-zinc-800">
-                            @if($coverCount > 0)
-                            <div class="grid h-full w-full gap-0.5 {{ $coverCount === 1 ? 'grid-cols-1 grid-rows-1' : 'grid-cols-2 grid-rows-2' }}">
-                                @if($coverCount === 1)
-                                    <img src="{{ asset('storage/' . $coverImages[0]->image_path) }}"
-                                         class="h-full w-full object-cover" loading="lazy">
-                                @elseif($coverCount === 2)
-                                    <img src="{{ asset('storage/' . $coverImages[0]->image_path) }}"
-                                         class="col-span-2 row-span-1 h-full w-full object-cover" loading="lazy">
-                                    <img src="{{ asset('storage/' . $coverImages[1]->image_path) }}"
-                                         class="col-span-2 row-span-1 h-full w-full object-cover" loading="lazy">
-                                @elseif($coverCount === 3)
-                                    <img src="{{ asset('storage/' . $coverImages[0]->image_path) }}"
-                                         class="col-span-2 row-span-1 h-full w-full object-cover" loading="lazy">
-                                    <img src="{{ asset('storage/' . $coverImages[1]->image_path) }}"
-                                         class="col-span-1 row-span-1 h-full w-full object-cover" loading="lazy">
-                                    <img src="{{ asset('storage/' . $coverImages[2]->image_path) }}"
-                                         class="col-span-1 row-span-1 h-full w-full object-cover" loading="lazy">
-                                @else
-                                    @foreach($coverImages as $img)
-                                    <img src="{{ asset('storage/' . $img->image_path) }}"
-                                         class="col-span-1 row-span-1 h-full w-full object-cover" loading="lazy">
-                                    @endforeach
-                                @endif
-                            </div>
-                            @else
-                            <div class="h-full w-full flex items-center justify-center bg-gradient-to-br from-violet-900/40 to-purple-900/40">
-                                <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                          d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                                </svg>
-                            </div>
-                            @endif
-                        </div>
-                        {{-- Name + count --}}
-                        <div class="px-3 py-2.5">
-                            <p class="text-sm font-semibold text-white truncate">{{ $col->name }}</p>
-                            <p class="text-xs text-zinc-400">{{ $col->posts_count }} {{ Str::plural('post', $col->posts_count) }}</p>
-                        </div>
-                    </a>
-                    @endforeach
-                </div>
-                @endif
-            </div>
-
-        </div>
-
-        {{-- ── Liked tab content ── --}}
-        <div id="panel-liked" class="hidden">
-            @if($likedPosts->isEmpty())
-            <div class="flex flex-col items-center justify-center py-24 text-center">
-                <div class="w-20 h-20 rounded-full border-2 border-zinc-600 flex items-center justify-center mb-5">
-                    <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                    </svg>
-                </div>
-                <h3 class="text-2xl font-extrabold mb-2">No Liked Posts Yet</h3>
-                <p class="text-zinc-400 text-sm">Posts you like will appear here.</p>
-            </div>
-            @else
-            <div class="grid grid-cols-3 gap-0.5">
-                @foreach($likedPosts as $post)
-                @php
-                    $firstImg = $post->images->first();
-                    $imgUrl   = $firstImg ? asset('storage/' . $firstImg->image_path) : null;
-                    $multiImg = $post->images->count() > 1;
-                @endphp
-                <button data-post-id="{{ $post->id }}" class="profile-thumb">
-                    @if($imgUrl)
-                        <img src="{{ $imgUrl }}" alt="Liked post" loading="lazy">
-                    @else
-                        <div class="w-full h-full bg-gradient-to-br from-violet-900/50 to-purple-900/50 flex items-center justify-center">
-                            <svg class="w-8 h-8 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                            </svg>
-                        </div>
-                    @endif
-                    {{-- Multi-image badge --}}
-                    @if($multiImg)
-                    <div class="absolute top-2 right-2 z-10">
-                        <svg class="w-5 h-5 text-white drop-shadow" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                            <rect x="7" y="3" width="14" height="14" rx="2"/>
-                            <path d="M3 7v12a2 2 0 002 2h12"/>
-                        </svg>
-                    </div>
-                    @endif
-                    <div class="thumb-overlay">
-                        <span class="thumb-stat">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                            </svg>
-                            {{ $post->likes_count }}
-                        </span>
-                    </div>
-                </button>
-                @endforeach
-            </div>
-            @endif
-        </div>
-
         {{-- ── Patterns tab content ── --}}
         <div id="panel-patterns" class="hidden">
             @if($patterns->isEmpty())
@@ -463,10 +282,8 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                               d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
                 </div>
-                <h3 class="text-2xl font-extrabold mb-2">No Patterns Yet</h3>
-                <p class="text-zinc-400 text-sm mb-5">Patterns you upload will appear here.</p>
-                <a href="{{ route('patterns.create') }}"
-                   class="text-sm font-semibold text-sky-400 hover:text-sky-300 transition-colors">Upload your first pattern</a>
+                <h3 class="text-xl font-bold mb-2 text-zinc-300">No Patterns Yet</h3>
+                <p class="text-zinc-500 text-sm">This user hasn't uploaded any patterns.</p>
             </div>
             @else
             <div x-data="{ craft: 'all' }">
@@ -520,10 +337,8 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                               d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                     </svg>
                 </div>
-                <h3 class="text-2xl font-extrabold mb-2">No Collections Yet</h3>
-                <p class="text-zinc-400 text-sm mb-5">Collections you create will appear here.</p>
-                <a href="{{ route('collections.create') }}"
-                   class="text-sm font-semibold text-sky-400 hover:text-sky-300 transition-colors">Create your first collection</a>
+                <h3 class="text-xl font-bold mb-2 text-zinc-300">No Public Collections</h3>
+                <p class="text-zinc-500 text-sm">This user hasn't shared any public collections.</p>
             </div>
             @else
             <div x-data="{ craft: 'all' }">
@@ -638,10 +453,12 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
 
                 {{-- Author header --}}
                 <div class="flex items-center gap-3 px-4 py-3 border-b border-zinc-800 shrink-0">
-                    <div id="pm-avatar" class="w-9 h-9 rounded-full bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center text-sm font-bold text-white shrink-0 select-none"></div>
+                    <a id="pm-author-link" href="#" class="w-9 h-9 rounded-full bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center text-sm font-bold text-white shrink-0 select-none hover:opacity-80 transition-opacity">
+                        <span id="pm-avatar"></span>
+                    </a>
                     <div class="min-w-0 flex-1">
-                        <p id="pm-author" class="text-sm font-semibold text-white truncate"></p>
-                        <p id="pm-time"   class="text-xs text-zinc-500"></p>
+                        <a id="pm-author-name-link" href="#" class="text-sm font-semibold text-white truncate hover:underline" id="pm-author"></a>
+                        <p id="pm-time" class="text-xs text-zinc-500"></p>
                     </div>
                     <span id="pm-badge" class="inline-flex items-center rounded-full bg-violet-900/40 text-violet-300 px-2.5 py-0.5 text-xs font-semibold capitalize shrink-0"></span>
                 </div>
@@ -684,7 +501,7 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                     {{-- Likes label --}}
                     <p id="pm-likes-label" class="text-xs text-zinc-500"></p>
 
-                    {{-- Comment input (decorative – no comments table yet) --}}
+                    {{-- Comment input --}}
                     <div class="flex items-center gap-2 pt-1 border-t border-zinc-800">
                         <svg class="w-6 h-6 text-zinc-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -738,28 +555,6 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
 
 </div>{{-- /bg-zinc-950 --}}
 
-{{-- ══════════════════════════════════════════════════════════
-     Post-Collection – "New Collection" Quick Create Modal
-     ══════════════════════════════════════════════════════════ --}}
-<div id="new-collection-modal"
-     class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-    <div class="bg-zinc-900 border border-zinc-700 rounded-2xl w-full max-w-sm p-6 shadow-2xl">
-        <h3 class="text-lg font-bold text-white mb-4">New Collection</h3>
-        <input id="nc-name" type="text" maxlength="100" placeholder="Collection name"
-               class="w-full rounded-xl bg-zinc-800 border border-zinc-700 text-white px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 mb-4">
-        <div class="flex gap-3 justify-end">
-            <button onclick="document.getElementById('new-collection-modal').classList.add('hidden')"
-                    class="px-4 py-2 text-sm font-semibold text-zinc-400 hover:text-white transition-colors">
-                Cancel
-            </button>
-            <button onclick="submitNewCollection()"
-                    class="px-5 py-2 text-sm font-semibold bg-violet-600 hover:bg-violet-500 text-white rounded-xl transition-colors">
-                Create
-            </button>
-        </div>
-    </div>
-</div>
-
 @php
 $followingUsers = $user->following()->get();
 $followingHTML  = '';
@@ -785,18 +580,24 @@ if (!$followingHTML) {
 @push('scripts')
 <script id="following-data" type="application/json">@json($followingHTML)</script>
 <script id="post-data"      type="application/json">@json($allPostData)</script>
+<script id="app-config"     type="application/json">@json(['isAuth' => Auth::check(), 'csrf' => csrf_token()])</script>
 <script>
-// ── Thumbnail click → open post modal ─────────────────────
+const _appConfig = JSON.parse(document.getElementById('app-config').textContent);
+const _isAuth    = _appConfig.isAuth;
+const _csrf      = _appConfig.csrf;
+
+// ── Thumbnail click → open post modal ─────────────────────────────────────
 document.addEventListener('click', function (e) {
     const btn = e.target.closest('[data-post-id]');
     if (btn) openPostModal(btn.dataset.postId);
 });
 
-// ── Tab switching
 // ═══════════════════════════════════════════════════════════
-const tabs = ['posts', 'saved', 'liked', 'patterns', 'collections'];
+// Tab switching
+// ═══════════════════════════════════════════════════════════
+const tabs = ['posts', 'patterns', 'collections'];
 function slideIndicator(name) {
-    const indEl = document.getElementById('tab-indicator');
+    const indEl     = document.getElementById('tab-indicator');
     const activeBtn = document.getElementById('tab-' + name);
     indEl.style.left  = activeBtn.offsetLeft + 'px';
     indEl.style.width = activeBtn.offsetWidth + 'px';
@@ -807,12 +608,10 @@ function switchTab(name) {
         const panel = document.getElementById('panel-' + t);
         const btn   = document.getElementById('tab-' + t);
         if (t === name) {
-            // Set starting state before unhiding
             panel.style.transition = 'none';
             panel.style.opacity    = '0';
             panel.style.transform  = 'translateY(12px)';
             panel.classList.remove('hidden');
-            // Double rAF ensures browser paints the start state before transitioning
             requestAnimationFrame(() => requestAnimationFrame(() => {
                 panel.style.transition = 'opacity .28s ease, transform .28s ease';
                 panel.style.opacity    = '1';
@@ -834,12 +633,11 @@ function switchTab(name) {
 
 // Init indicator on load
 (function initIndicator() {
-    const indEl = document.getElementById('tab-indicator');
+    const indEl    = document.getElementById('tab-indicator');
     const firstBtn = document.getElementById('tab-posts');
     indEl.style.transition = 'none';
     indEl.style.left  = firstBtn.offsetLeft + 'px';
     indEl.style.width = firstBtn.offsetWidth + 'px';
-    // Re-enable transition after placement
     requestAnimationFrame(() => { indEl.style.transition = ''; });
 })();
 
@@ -865,12 +663,61 @@ function closeFollowModal() {
 }
 
 // ═══════════════════════════════════════════════════════════
+// Follow / Unfollow button (AJAX)
+// ═══════════════════════════════════════════════════════════
+const followBtn = document.getElementById('follow-btn');
+
+if (_isAuth && followBtn) {
+    followBtn.addEventListener('click', async function () {
+        const isFollowing = followBtn.dataset.following === 'true';
+        const url         = isFollowing ? followBtn.dataset.unfollowUrl : followBtn.dataset.followUrl;
+        const method      = isFollowing ? 'DELETE' : 'POST';
+
+        try {
+            const res  = await fetch(url, {
+                method,
+                headers: { 'X-CSRF-TOKEN': _csrf, 'Accept': 'application/json' }
+            });
+            const data = await res.json();
+
+            // Update button state
+            const newFollowing = data.following;
+            followBtn.dataset.following = newFollowing ? 'true' : 'false';
+
+            const icon  = document.getElementById('follow-btn-icon');
+            const label = document.getElementById('follow-btn-label');
+
+            if (newFollowing) {
+                label.textContent = 'Following';
+                icon.innerHTML    = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>';
+                followBtn.className = followBtn.className
+                    .replace('bg-violet-600 hover:bg-violet-700 text-white border-transparent',
+                             'bg-zinc-800 hover:bg-red-900/30 hover:text-red-400 hover:border-red-800 text-zinc-300 border-zinc-700');
+            } else {
+                label.textContent = 'Follow';
+                icon.innerHTML    = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>';
+                followBtn.className = followBtn.className
+                    .replace('bg-zinc-800 hover:bg-red-900/30 hover:text-red-400 hover:border-red-800 text-zinc-300 border-zinc-700',
+                             'bg-violet-600 hover:bg-violet-700 text-white border-transparent');
+            }
+
+            // Update follower counts
+            const count = data.followers_count;
+            const desktop = document.getElementById('followers-count-desktop');
+            const mobile  = document.getElementById('followers-count-mobile');
+            if (desktop) desktop.textContent = count;
+            if (mobile)  mobile.textContent  = count;
+
+        } catch (err) { console.error('Follow error:', err); }
+    });
+}
+
+// ═══════════════════════════════════════════════════════════
 // Post modal
 // ═══════════════════════════════════════════════════════════
 const allPosts = JSON.parse(document.getElementById('post-data').textContent);
-const _csrf    = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
-let   _current = null;  // current post object
-let   _pmIndex = 0;     // current slide index
+let _current = null;
+let _pmIndex = 0;
 
 function openPostModal(postId) {
     const post = allPosts[postId];
@@ -878,11 +725,14 @@ function openPostModal(postId) {
     _current = post;
     _pmIndex = 0;
 
-    // Populate header
+    // Author header
     document.getElementById('pm-avatar').textContent = post.initials;
-    document.getElementById('pm-author').textContent = post.author;
-    document.getElementById('pm-time').textContent   = post.created_at;
-    document.getElementById('pm-badge').textContent  = post.craft_type;
+    const authorLink     = document.getElementById('pm-author-link');
+    const authorNameLink = document.getElementById('pm-author-name-link');
+    if (authorLink)     authorLink.href     = post.author_url;
+    if (authorNameLink) { authorNameLink.href = post.author_url; authorNameLink.textContent = post.author; }
+    document.getElementById('pm-time').textContent  = post.created_at;
+    document.getElementById('pm-badge').textContent = post.craft_type;
 
     // Description
     document.getElementById('pm-desc').textContent = post.description;
@@ -901,7 +751,7 @@ function openPostModal(postId) {
     pmSetLike(post.is_liked, post.likes_count);
     pmSetSave(post.is_faved);
 
-    // Build carousel slides
+    // Build carousel
     const track = document.getElementById('pm-track');
     const dots  = document.getElementById('pm-dots');
     track.innerHTML = '';
@@ -919,7 +769,6 @@ function openPostModal(postId) {
             slide.innerHTML = `<svg class="w-16 h-16 text-zinc-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`;
         }
         track.appendChild(slide);
-
         if (imgs.length > 1) {
             const dot = document.createElement('div');
             dot.className = 'w-1.5 h-1.5 rounded-full transition-all duration-200 ' + (i === 0 ? 'bg-white !w-2.5' : 'bg-white/40');
@@ -927,7 +776,6 @@ function openPostModal(postId) {
         }
     });
 
-    // Sync carousel track height
     const carouselEl = document.getElementById('pm-carousel');
     const parentH    = carouselEl.parentElement.offsetHeight || 560;
     carouselEl.style.height = parentH + 'px';
@@ -936,7 +784,6 @@ function openPostModal(postId) {
     pmUpdateArrows(imgs.length);
     pmGoTo(0);
 
-    // Show modal
     const modal = document.getElementById('post-modal');
     modal.classList.remove('hidden');
     modal.classList.add('flex');
@@ -949,7 +796,6 @@ function closePostModal() {
     document.body.style.overflow = '';
     _current = null;
 }
-
 function handlePostModalBackdrop(e) {
     if (e.target === document.getElementById('post-modal')) closePostModal();
 }
@@ -974,7 +820,7 @@ function pmUpdateArrows(total) {
 
 // ── Like helpers ──────────────────────────────────────────
 function pmSetLike(liked, count) {
-    const icon  = document.getElementById('pm-like-icon');
+    const icon    = document.getElementById('pm-like-icon');
     const countEl = document.getElementById('pm-like-count');
     const label   = document.getElementById('pm-likes-label');
     const btn     = document.getElementById('pm-like-btn');
@@ -988,7 +834,6 @@ function pmSetLike(liked, count) {
     if (countEl) countEl.textContent = count;
     if (label)   label.textContent   = count + (count === 1 ? ' like' : ' likes');
 }
-
 function pmSetSave(saved) {
     const icon = document.getElementById('pm-save-icon');
     const btn  = document.getElementById('pm-save-btn');
@@ -1001,7 +846,7 @@ function pmSetSave(saved) {
 }
 
 async function pmToggleLike() {
-    if (!_current) return;
+    if (!_isAuth || !_current) return;
     const liked  = _current.is_liked;
     const url    = liked ? _current.unlike_url : _current.like_url;
     const method = liked ? 'DELETE' : 'POST';
@@ -1017,7 +862,7 @@ async function pmToggleLike() {
 }
 
 async function pmToggleSave() {
-    if (!_current) return;
+    if (!_isAuth || !_current) return;
     const saved  = _current.is_faved;
     const url    = saved ? _current.unfav_url : _current.fav_url;
     const method = saved ? 'DELETE' : 'POST';
@@ -1034,7 +879,7 @@ async function pmToggleSave() {
 (function () {
     let sx = 0;
     const el = document.getElementById('pm-carousel');
-    el.addEventListener('touchstart', e => { sx = e.touches[0].clientX; },          { passive: true });
+    el.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
     el.addEventListener('touchend',   e => {
         const diff = sx - e.changedTouches[0].clientX;
         if (Math.abs(diff) > 40) pmGo(diff > 0 ? 1 : -1);
@@ -1052,36 +897,6 @@ document.addEventListener('keydown', e => {
     } else if (followOpen) {
         if (e.key === 'Escape') closeFollowModal();
     }
-});
-
-// ══════════════════════════════════════════════════════════
-// Post Collections – Create
-// ══════════════════════════════════════════════════════════
-function openNewCollectionModal() {
-    document.getElementById('nc-name').value = '';
-    document.getElementById('new-collection-modal').classList.remove('hidden');
-    setTimeout(() => document.getElementById('nc-name').focus(), 50);
-}
-
-async function submitNewCollection() {
-    const name = document.getElementById('nc-name').value.trim();
-    if (!name) return;
-
-    const res = await fetch('/saved-collections', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': _csrf },
-        body: JSON.stringify({ name }),
-    });
-
-    if (res.ok) {
-        document.getElementById('new-collection-modal').classList.add('hidden');
-        window.location.reload();
-    }
-}
-
-// Close modal on backdrop click
-document.getElementById('new-collection-modal').addEventListener('click', function(e) {
-    if (e.target === this) this.classList.add('hidden');
 });
 </script>
 @endpush

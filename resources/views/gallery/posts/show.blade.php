@@ -41,6 +41,7 @@
         {{-- Author row --}}
         <div class="flex items-center justify-between mb-4">
             <div class="flex items-center gap-3">
+                <a href="{{ route('users.show', $post->user) }}" class="block shrink-0">
                 @if($post->user->profile_picture)
                     <img src="{{ asset('storage/' . $post->user->profile_picture) }}"
                          alt="{{ $post->user->name }}"
@@ -50,8 +51,9 @@
                         {{ strtoupper(substr($post->user->name, 0, 1)) }}
                     </div>
                 @endif
+                </a>
                 <div>
-                    <p class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">{{ $post->user->name }}</p>
+                    <a href="{{ route('users.show', $post->user) }}" class="text-sm font-semibold text-zinc-800 dark:text-zinc-200 hover:underline">{{ $post->user->name }}</a>
                     <p class="text-xs text-zinc-400">{{ $post->created_at->diffForHumans() }}</p>
                 </div>
             </div>

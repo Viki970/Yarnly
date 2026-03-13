@@ -43,10 +43,10 @@
         {{-- Author + craft badge --}}
         <div class="flex items-center justify-between mb-3">
             <div class="flex items-center gap-2">
-                <div class="w-7 h-7 rounded-full bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold">
+                <a href="{{ route('users.show', $post->user) }}" class="w-7 h-7 rounded-full bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold">
                     {{ strtoupper(substr($post->user->name, 0, 1)) }}
-                </div>
-                <span class="text-sm font-medium text-zinc-700 dark:text-zinc-300">{{ $post->user->name }}</span>
+                </a>
+                <a href="{{ route('users.show', $post->user) }}" class="text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:underline">{{ $post->user->name }}</a>
                 @if($showFollowBtn)
                 <form method="POST"
                       action="{{ $isFollowing ? $unfollowUrl : $followUrl }}"

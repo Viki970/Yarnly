@@ -51,12 +51,31 @@ class ProfileController extends Controller
             ->latest()
             ->get();
 
-        // Collections tab – user's own collections
+        // Collections tab – user's own pattern collections
         $collections = $user->collections()
             ->with(['patterns' => fn($q) => $q->whereNotNull('image_path')])
             ->withCount('patterns')
             ->latest()
             ->get();
+
+        // Post collections – saved-post bookmark groups with cover images
+        $postCollections = $user->postCollections()
+            ->with(['posts' => fn($q) => $q->with('images')->latest('post_collection_post.created_at')])
+            ->withCount('posts')
+            ->latest()
+            ->get();
+
+        // Which post collections each saved post belongs to (for the picker modal)
+        $postCollectionMemberships = [];
+        if ($postCollections->isNotEmpty() && $savedPosts->isNotEmpty()) {
+            $postCollectionMemberships = \Illuminate\Support\Facades\DB::table('post_collection_post')
+                ->whereIn('post_collection_id', $postCollections->pluck('id'))
+                ->whereIn('post_id', $savedPosts->pluck('id'))
+                ->get(['post_collection_id', 'post_id'])
+                ->groupBy('post_id')
+                ->map(fn($rows) => $rows->pluck('post_collection_id')->all())
+                ->all();
+        }
 
         return view('profile.myprofile.show', compact(
             'user',
@@ -67,7 +86,9 @@ class ProfileController extends Controller
             'savedPosts',
             'likedPosts',
             'patterns',
-            'collections'
+            'collections',
+            'postCollections',
+            'postCollectionMemberships'
         ));
     }
 
@@ -159,5 +180,53 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    /**
+     * Display another user's public profile.
+     */
+    public function showUser(User $user): View|RedirectResponse
+    {
+        // Redirect to own profile if viewing self
+        if (Auth::check() && Auth::id() === $user->id) {
+            return Redirect::route('profile.show');
+        }
+
+        /** @var User|null $authUser */
+        $authUser    = Auth::user();
+        $isFollowing = $authUser ? $authUser->isFollowing($user) : false;
+
+        $postsCount     = $user->posts()->count();
+        $followersCount = $user->followers()->count();
+        $followingCount = $user->following()->count();
+
+        $posts = $user->posts()
+            ->with('images')
+            ->withCount('likes')
+            ->latest()
+            ->get();
+
+        $patterns = \App\Models\Pattern::where('user_id', $user->id)
+            ->latest()
+            ->get();
+
+        $collections = $user->collections()
+            ->where('is_public', true)
+            ->with(['patterns' => fn($q) => $q->whereNotNull('image_path')])
+            ->withCount('patterns')
+            ->latest()
+            ->get();
+
+        return view('profile.user.show', compact(
+            'user',
+            'authUser',
+            'isFollowing',
+            'postsCount',
+            'followersCount',
+            'followingCount',
+            'posts',
+            'patterns',
+            'collections'
+        ));
     }
 }

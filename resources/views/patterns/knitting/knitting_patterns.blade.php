@@ -1,4 +1,4 @@
-@extends('layout.app')
+﻿@extends('layout.app')
 
 @section('title', 'Yarnly - Knitting Patterns')
 
@@ -158,7 +158,7 @@
                                 @if($pattern->user)
                                     <p class="mt-1 flex items-center gap-1 text-xs text-zinc-400 dark:text-zinc-500">
                                         <svg class="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                                        <span>{{ $pattern->user->name }}</span>
+                                        <a href="{{ route('users.show', $pattern->user) }}" class="hover:underline">{{ $pattern->user->name }}</a>
                                     </p>
                                 @endif
                                 <div class="mt-4 flex items-center justify-between">
@@ -264,7 +264,7 @@
                                 @if($pattern->user)
                                     <p class="mt-1 flex items-center gap-1 text-xs text-zinc-400 dark:text-zinc-500">
                                         <svg class="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                                        <span>{{ $pattern->user->name }}</span>
+                                        <a href="{{ route('users.show', $pattern->user) }}" class="hover:underline">{{ $pattern->user->name }}</a>
                                     </p>
                                 @endif
                                 <div class="mt-4 flex items-center justify-between">
@@ -426,7 +426,7 @@
                         @if($collection->user)
                             <p class="mt-1 flex items-center gap-1 text-xs text-zinc-400 dark:text-zinc-500">
                                 <svg class="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                                <span>{{ $collection->user->name }}</span>
+                                <a href="{{ route('users.show', $collection->user) }}" class="hover:underline">{{ $collection->user->name }}</a>
                             </p>
                         @endif
                         

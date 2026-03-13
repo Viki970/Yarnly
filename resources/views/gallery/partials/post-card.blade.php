@@ -51,6 +51,7 @@
     $isFollowing   = $showFollowBtn && isset($followingIds) && in_array($postAuthorId, $followingIds);
     $followUrl     = $showFollowBtn ? route('users.follow',   $postAuthorId) : '#';
     $unfollowUrl   = $showFollowBtn ? route('users.unfollow', $postAuthorId) : '#';
+    $authorProfileUrl = $postAuthorId ? route('users.show', $postAuthorId) : '#';
 @endphp
 
 <div class="gallery-item post-card group rounded-2xl bg-white ring-1 ring-zinc-200/80 shadow-sm hover:shadow-lg hover:ring-purple-200 transition-all duration-300 overflow-hidden dark:bg-zinc-800/70 dark:ring-zinc-700/60 dark:hover:ring-purple-700/50">
@@ -58,6 +59,7 @@
     {{-- ── Author header ── --}}
     <div class="flex items-center justify-between px-4 pt-4 pb-3">
         <div class="flex items-center gap-3">
+            <a href="{{ $authorProfileUrl }}" class="shrink-0 block">
             @if($authorAvatar)
                 <img src="{{ $authorAvatar }}" alt="{{ $authorName }}"
                      class="h-9 w-9 rounded-full object-cover">
@@ -66,9 +68,10 @@
                     {{ $authorInitial }}
                 </div>
             @endif
+            </a>
             <div>
                 <div class="flex items-center gap-2 min-w-0">
-                    <p class="text-sm font-semibold text-zinc-900 dark:text-white leading-none truncate">{{ $authorName }}</p>
+                    <a href="{{ $authorProfileUrl }}" class="text-sm font-semibold text-zinc-900 dark:text-white leading-none truncate hover:underline">{{ $authorName }}</a>
                     @if($showFollowBtn)
                     <button
                         data-author-id="{{ $postAuthorId }}"
@@ -381,6 +384,13 @@ async function postToggleFav(btn) {
         svg.setAttribute('fill', data.favorited ? 'currentColor' : 'none');
         btn.classList.toggle('text-purple-500', data.favorited);
         btn.classList.toggle('text-zinc-400',   !data.favorited);
+
+        // After saving (not unsaving), offer to add to a collection
+        if (data.favorited) {
+            _showCollectionQuickPicker(btn, parseInt(btn.dataset.postId));
+        } else {
+            _hideCollectionQuickPicker();
+        }
     } catch (e) { console.error(e); }
 }
 
@@ -422,7 +432,112 @@ async function postToggleFollow(btn) {
     } catch (e) { console.error(e); }
 }
 
-// ─── Touch / swipe support ───────────────────────────────────────────────────
+// ─── Collection Quick Picker ────────────────────────────────────────────────
+let _cpqPostId = null;
+
+function _getOrCreateQuickPicker() {
+    let el = document.getElementById('cp-quick-picker');
+    if (el) return el;
+    el = document.createElement('div');
+    el.id = 'cp-quick-picker';
+    el.className = 'fixed z-[200] bg-zinc-900 border border-zinc-700 rounded-2xl shadow-2xl w-56 overflow-hidden pointer-events-none';
+    el.style.cssText = 'opacity:0; transform:scale(0.95) translateY(-4px); transition:opacity 80ms ease,transform 80ms ease; transform-origin:top right;';
+    el.innerHTML = `
+        <div class="px-4 py-2.5 border-b border-zinc-800">
+            <p class="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Save to collection</p>
+        </div>
+        <div id="cpq-list" class="max-h-52 overflow-y-auto divide-y divide-zinc-800/50"></div>
+    `;
+    document.body.appendChild(el);
+    return el;
+}
+
+function _hideCollectionQuickPicker() {
+    const el = document.getElementById('cp-quick-picker');
+    if (!el) return;
+    el.style.opacity   = '0';
+    el.style.transform = 'scale(0.95) translateY(-4px)';
+    el.style.pointerEvents = 'none';
+    _cpqPostId = null;
+}
+
+async function _showCollectionQuickPicker(btn, postId) {
+    // Fetch the user's named collections
+    let collections = [];
+    try {
+        const res = await fetch('/saved-collections', { headers: { 'Accept': 'application/json' } });
+        const data = await res.json();
+        collections = data.collections ?? [];
+    } catch (e) { return; }
+
+    // Only show if the user has at least one named collection
+    if (!collections.length) return;
+
+    _cpqPostId = postId;
+    const picker = _getOrCreateQuickPicker();
+    const list   = document.getElementById('cpq-list');
+
+    list.innerHTML = collections.map(col => `
+        <button class="cpq-col-btn w-full text-left px-4 py-2.5 text-sm text-white hover:bg-zinc-800 transition-colors flex items-center gap-3"
+                data-col-id="${col.id}">
+            <svg class="w-4 h-4 text-zinc-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+            </svg>
+            <span>${col.name}</span>
+        </button>
+    `).join('');
+
+    // Position near the bookmark button (fixed = viewport-relative, no scroll offset)
+    const rect  = btn.getBoundingClientRect();
+    const pW    = 224; // matches w-56
+    const pHEst = 40 + collections.length * 42;
+    let top  = rect.bottom + 8;
+    let left = rect.right  - pW;
+    if (left < 8) left = 8;
+    if (left + pW > window.innerWidth - 8) left = window.innerWidth - pW - 8;
+    if (top + pHEst > window.innerHeight - 8) top = rect.top - pHEst - 8;
+    picker.style.top  = top  + 'px';
+    picker.style.left = left + 'px';
+
+    // Animate in
+    picker.style.opacity      = '0';
+    picker.style.transform    = 'scale(0.95) translateY(-4px)';
+    picker.style.pointerEvents = 'auto';
+    // Force reflow so the start state is painted before the transition fires
+    picker.getBoundingClientRect();
+    picker.style.opacity   = '1';
+    picker.style.transform = 'scale(1) translateY(0)';
+}
+
+// Handle collection selection
+document.addEventListener('click', async function(e) {
+    const colBtn = e.target.closest('.cpq-col-btn');
+    if (colBtn && _cpqPostId) {
+        const colId = parseInt(colBtn.dataset.colId);
+        colBtn.disabled = true;
+        try {
+            await fetch(`/saved-collections/${colId}/posts`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': _csrf },
+                body: JSON.stringify({ post_id: _cpqPostId }),
+            });
+        } catch (e) { console.error(e); }
+        // Visual tick feedback then close
+        colBtn.innerHTML = `<svg class="w-4 h-4 text-violet-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg><span class="text-violet-400">${colBtn.querySelector('span').textContent}</span>`;
+        setTimeout(_hideCollectionQuickPicker, 700);
+        return;
+    }
+
+    // Close picker on outside click (not on the bookmark button itself)
+    const picker = document.getElementById('cp-quick-picker');
+    if (picker && picker.style.opacity !== '0' && parseFloat(picker.style.opacity) > 0 &&
+        !picker.contains(e.target) && !e.target.closest('.fav-btn')) {
+        _hideCollectionQuickPicker();
+    }
+});
+
+
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
         const id = wrapper.id;
