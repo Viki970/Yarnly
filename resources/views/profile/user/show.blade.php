@@ -29,6 +29,30 @@ foreach ($posts->all() as $post) {
         'unfav_url'   => route('posts.unfavorite', $post->id),
     ];
 }
+// Include liked/saved posts in modal data
+$extraPosts = collect()->merge($likedPosts)->merge($savedPosts)->unique('id');
+foreach ($extraPosts->all() as $post) {
+    if (isset($allPostData[$post->id])) continue;
+    $allPostData[$post->id] = [
+        'id'          => $post->id,
+        'images'      => $post->images->map(fn($i) => asset('storage/'.$i->image_path))->values()->all(),
+        'description' => $post->description ?? '',
+        'craft_type'  => $post->craft_type  ?? '',
+        'tags'        => $post->tags_array,
+        'likes_count' => $post->likes_count,
+        'author'      => $post->user->name,
+        'author_id'   => $post->user->id,
+        'author_url'  => route('users.show', $post->user),
+        'initials'    => $post->user->initials(),
+        'created_at'  => $post->created_at->diffForHumans(),
+        'is_liked'    => $viewer ? $post->isLikedBy($viewer) : false,
+        'is_faved'    => $viewer ? $post->isFavoritedBy($viewer) : false,
+        'like_url'    => route('posts.like',       $post->id),
+        'unlike_url'  => route('posts.unlike',     $post->id),
+        'fav_url'     => route('posts.favorite',   $post->id),
+        'unfav_url'   => route('posts.unfavorite', $post->id),
+    ];
+}
 @endphp
 
 <style>
@@ -211,6 +235,30 @@ foreach ($posts->all() as $post) {
                 </svg>
                 <span class="hidden sm:inline">Collections</span>
             </button>
+
+            {{-- Saved tab --}}
+            @if($hasSavedTab)
+            <button onclick="switchTab('saved')" id="tab-saved"
+                    class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-400">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+                </svg>
+                <span class="hidden sm:inline">Saved</span>
+            </button>
+            @endif
+
+            {{-- Liked tab --}}
+            @if($canShowLikedPosts)
+            <button onclick="switchTab('liked')" id="tab-liked"
+                    class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-400">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                </svg>
+                <span class="hidden sm:inline">Liked</span>
+            </button>
+            @endif
         </div>
 
         {{-- ── Posts tab content ── --}}
@@ -326,6 +374,281 @@ foreach ($posts->all() as $post) {
             </div>
             @endif
         </div>
+
+        {{-- ── Liked tab content ── --}}
+        @if($canShowLikedPosts)
+        <div id="panel-liked" class="hidden">
+            @if($likedPosts->isEmpty())
+            <div class="flex flex-col items-center justify-center py-24 text-center">
+                <div class="w-20 h-20 rounded-full border-2 border-zinc-600 flex items-center justify-center mb-5">
+                    <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-2 text-zinc-300">No Liked Posts</h3>
+                <p class="text-zinc-500 text-sm">This user hasn't liked any posts yet.</p>
+            </div>
+            @else
+            <div class="grid grid-cols-3 gap-0.5">
+                @foreach($likedPosts as $post)
+                @php
+                    $firstImg = $post->images->first();
+                    $imgUrl   = $firstImg ? asset('storage/' . $firstImg->image_path) : null;
+                    $multiImg = $post->images->count() > 1;
+                @endphp
+                <button data-post-id="{{ $post->id }}" class="profile-thumb">
+                    @if($imgUrl)
+                        <img src="{{ $imgUrl }}" alt="Liked post" loading="lazy">
+                    @else
+                        <div class="w-full h-full bg-gradient-to-br from-violet-900/50 to-purple-900/50 flex items-center justify-center">
+                            <svg class="w-8 h-8 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                    @endif
+                    @if($multiImg)
+                    <div class="absolute top-2 right-2 z-10">
+                        <svg class="w-5 h-5 text-white drop-shadow" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <rect x="7" y="3" width="14" height="14" rx="2"/>
+                            <path d="M3 7v12a2 2 0 002 2h12"/>
+                        </svg>
+                    </div>
+                    @endif
+                    <div class="thumb-overlay">
+                        <span class="thumb-stat">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                            </svg>
+                            {{ $post->likes_count }}
+                        </span>
+                    </div>
+                </button>
+                @endforeach
+            </div>
+            @endif
+        </div>
+        @endif
+
+        {{-- ── Saved tab content ── --}}
+        @if($hasSavedTab)
+        @php
+            $firstSavedTab = $canShowSavedPosts ? 'posts' : ($canShowSavedPatterns ? 'patterns' : 'collections');
+        @endphp
+        <div id="panel-saved" class="hidden">
+            <div x-data="{ savedTab: '{{ $firstSavedTab }}' }">
+
+                {{-- Sub-tab bar --}}
+                <div class="flex items-center gap-2 py-3 overflow-x-auto scrollbar-none">
+                    @if($canShowSavedPosts)
+                    <button @click="savedTab = 'posts'"
+                            :class="savedTab === 'posts' ? 'bg-violet-600 text-white border-violet-600' : 'bg-transparent text-zinc-400 border-zinc-700 hover:border-zinc-500 hover:text-zinc-200'"
+                            class="shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200">
+                        Posts
+                    </button>
+                    @endif
+                    @if($canShowSavedPatterns)
+                    <button @click="savedTab = 'patterns'"
+                            :class="savedTab === 'patterns' ? 'bg-violet-600 text-white border-violet-600' : 'bg-transparent text-zinc-400 border-zinc-700 hover:border-zinc-500 hover:text-zinc-200'"
+                            class="shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200">
+                        Patterns
+                    </button>
+                    @endif
+                    @if($canShowSavedCollections)
+                    <button @click="savedTab = 'collections'"
+                            :class="savedTab === 'collections' ? 'bg-violet-600 text-white border-violet-600' : 'bg-transparent text-zinc-400 border-zinc-700 hover:border-zinc-500 hover:text-zinc-200'"
+                            class="shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200">
+                        Collections
+                    </button>
+                    @endif
+                </div>
+
+                {{-- Posts sub-tab --}}
+                @if($canShowSavedPosts)
+                <div x-show="savedTab === 'posts'" x-transition>
+                    @if($savedPosts->isEmpty())
+                    <div class="flex flex-col items-center justify-center py-24 text-center">
+                        <div class="w-20 h-20 rounded-full border-2 border-zinc-600 flex items-center justify-center mb-5">
+                            <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                      d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-zinc-300">No Saved Posts</h3>
+                        <p class="text-zinc-500 text-sm">This user hasn't saved any posts yet.</p>
+                    </div>
+                    @else
+                    <div class="grid grid-cols-3 gap-0.5">
+                        @foreach($savedPosts as $post)
+                        @php
+                            $firstImg = $post->images->first();
+                            $imgUrl   = $firstImg ? asset('storage/' . $firstImg->image_path) : null;
+                            $multiImg = $post->images->count() > 1;
+                        @endphp
+                        <button data-post-id="{{ $post->id }}" class="profile-thumb">
+                            @if($imgUrl)
+                                <img src="{{ $imgUrl }}" alt="Saved post" loading="lazy">
+                            @else
+                                <div class="w-full h-full bg-gradient-to-br from-violet-900/50 to-purple-900/50 flex items-center justify-center">
+                                    <svg class="w-8 h-8 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                </div>
+                            @endif
+                            @if($multiImg)
+                            <div class="absolute top-2 right-2 z-10">
+                                <svg class="w-5 h-5 text-white drop-shadow" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                                    <rect x="7" y="3" width="14" height="14" rx="2"/>
+                                    <path d="M3 7v12a2 2 0 002 2h12"/>
+                                </svg>
+                            </div>
+                            @endif
+                            <div class="thumb-overlay">
+                                <span class="thumb-stat">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                    </svg>
+                                    {{ $post->likes_count }}
+                                </span>
+                            </div>
+                        </button>
+                        @endforeach
+                    </div>
+                    @endif
+                </div>
+                @endif
+
+                {{-- Patterns sub-tab --}}
+                @if($canShowSavedPatterns)
+                <div x-show="savedTab === 'patterns'" x-transition>
+                    @if($favoritePatterns->isEmpty())
+                    <div class="flex flex-col items-center justify-center py-24 text-center">
+                        <div class="w-20 h-20 rounded-full border-2 border-zinc-600 flex items-center justify-center mb-5">
+                            <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-zinc-300">No Saved Patterns</h3>
+                        <p class="text-zinc-500 text-sm">This user hasn't favourited any patterns yet.</p>
+                    </div>
+                    @else
+                    <div x-data="{ craft: 'all' }">
+                        <div class="flex items-center gap-2 py-3 overflow-x-auto scrollbar-none">
+                            @foreach(['all' => 'All', 'crochet' => 'Crochet', 'knitting' => 'Knitting', 'embroidery' => 'Embroidery'] as $val => $label)
+                            <button @click="craft = '{{ $val }}'"
+                                    :class="craft === '{{ $val }}' ? 'bg-violet-600 text-white border-violet-600' : 'bg-transparent text-zinc-400 border-zinc-700 hover:border-zinc-500 hover:text-zinc-200'"
+                                    class="shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200">
+                                {{ $label }}
+                            </button>
+                            @endforeach
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            @foreach($favoritePatterns as $pattern)
+                            <a href="{{ route('patterns.view', $pattern) }}"
+                               x-show="craft === 'all' || craft === '{{ $pattern->craft_type }}'"
+                               x-transition
+                               class="group relative rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800 hover:border-violet-500/50 transition-all duration-200">
+                                @if($pattern->image_path)
+                                    <img src="{{ asset('storage/' . $pattern->image_path) }}" alt="{{ $pattern->title }}"
+                                         class="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                                @else
+                                    <div class="w-full aspect-square bg-gradient-to-br from-violet-900/40 to-purple-900/40 flex items-center justify-center">
+                                        <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                        </svg>
+                                    </div>
+                                @endif
+                                <div class="p-2.5">
+                                    <p class="text-sm font-semibold text-white truncate">{{ $pattern->title }}</p>
+                                    <p class="text-xs text-zinc-400 capitalize mt-0.5">{{ $pattern->craft_type }} · {{ $pattern->difficulty }}</p>
+                                </div>
+                            </a>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
+                </div>
+                @endif
+
+                {{-- Collections sub-tab --}}
+                @if($canShowSavedCollections)
+                <div x-show="savedTab === 'collections'" x-transition>
+                    @if($favoriteCollections->isEmpty())
+                    <div class="flex flex-col items-center justify-center py-24 text-center">
+                        <div class="w-20 h-20 rounded-full border-2 border-zinc-600 flex items-center justify-center mb-5">
+                            <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                      d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-zinc-300">No Saved Collections</h3>
+                        <p class="text-zinc-500 text-sm">This user hasn't favourited any collections yet.</p>
+                    </div>
+                    @else
+                    <div x-data="{ craft: 'all' }">
+                        <div class="flex items-center gap-2 py-3 overflow-x-auto scrollbar-none">
+                            @foreach(['all' => 'All', 'crochet' => 'Crochet', 'knitting' => 'Knitting', 'embroidery' => 'Embroidery'] as $val => $label)
+                            <button @click="craft = '{{ $val }}'"
+                                    :class="craft === '{{ $val }}' ? 'bg-violet-600 text-white border-violet-600' : 'bg-transparent text-zinc-400 border-zinc-700 hover:border-zinc-500 hover:text-zinc-200'"
+                                    class="shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200">
+                                {{ $label }}
+                            </button>
+                            @endforeach
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            @foreach($favoriteCollections as $collection)
+                            <a href="{{ route('collections.show', $collection) }}"
+                               x-show="craft === 'all' || craft === '{{ $collection->craft_type }}'"
+                               x-transition
+                               class="group relative rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800 hover:border-violet-500/50 transition-all duration-200">
+                                <div class="w-full aspect-square overflow-hidden">
+                                    @if($collection->cover_image_path)
+                                        <img src="{{ asset('storage/' . $collection->cover_image_path) }}" alt="{{ $collection->name }}"
+                                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                                    @elseif($collection->patterns->isNotEmpty())
+                                        @php $imgs = $collection->patterns->take(4)->values(); @endphp
+                                        <div class="grid h-full w-full gap-0.5 {{ $imgs->count() === 1 ? 'grid-cols-1 grid-rows-1' : 'grid-cols-2 grid-rows-2' }}">
+                                            @if($imgs->count() === 1)
+                                                <img src="{{ asset('storage/' . $imgs[0]->image_path) }}" class="w-full h-full object-cover" loading="lazy">
+                                            @elseif($imgs->count() === 2)
+                                                <img src="{{ asset('storage/' . $imgs[0]->image_path) }}" class="col-span-2 row-span-1 w-full h-full object-cover" loading="lazy">
+                                                <img src="{{ asset('storage/' . $imgs[1]->image_path) }}" class="col-span-2 row-span-1 w-full h-full object-cover" loading="lazy">
+                                            @elseif($imgs->count() === 3)
+                                                <img src="{{ asset('storage/' . $imgs[0]->image_path) }}" class="col-span-2 row-span-1 w-full h-full object-cover" loading="lazy">
+                                                <img src="{{ asset('storage/' . $imgs[1]->image_path) }}" class="col-span-1 row-span-1 w-full h-full object-cover" loading="lazy">
+                                                <img src="{{ asset('storage/' . $imgs[2]->image_path) }}" class="col-span-1 row-span-1 w-full h-full object-cover" loading="lazy">
+                                            @else
+                                                @foreach($imgs as $p)
+                                                    <img src="{{ asset('storage/' . $p->image_path) }}" class="col-span-1 row-span-1 w-full h-full object-cover" loading="lazy">
+                                                @endforeach
+                                            @endif
+                                        </div>
+                                    @else
+                                        <div class="w-full h-full bg-gradient-to-br from-sky-900/40 to-indigo-900/40 flex items-center justify-center">
+                                            <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                                            </svg>
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="p-2.5">
+                                    <p class="text-sm font-semibold text-white truncate">{{ $collection->name }}</p>
+                                    <p class="text-xs text-zinc-400 mt-0.5">{{ $collection->patterns_count }} {{ Str::plural('pattern', $collection->patterns_count) }}</p>
+                                </div>
+                            </a>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
+                </div>
+                @endif
+
+            </div>
+        </div>
+        @endif
 
         {{-- ── Collections tab content ── --}}
         <div id="panel-collections" class="hidden">
@@ -575,12 +898,18 @@ foreach ($followingUsers as $fu) {
 if (!$followingHTML) {
     $followingHTML = '<p class="px-4 py-6 text-sm text-zinc-500 text-center">Not following anyone yet.</p>';
 }
+$tabsConfig = array_merge(
+    ['posts', 'patterns', 'collections'],
+    $hasSavedTab             ? ['saved']       : [],
+    $canShowLikedPosts       ? ['liked']       : []
+);
 @endphp
 
 @push('scripts')
 <script id="following-data" type="application/json">@json($followingHTML)</script>
 <script id="post-data"      type="application/json">@json($allPostData)</script>
 <script id="app-config"     type="application/json">@json(['isAuth' => Auth::check(), 'csrf' => csrf_token()])</script>
+<script id="tabs-config"    type="application/json">@json($tabsConfig)</script>
 <script>
 const _appConfig = JSON.parse(document.getElementById('app-config').textContent);
 const _isAuth    = _appConfig.isAuth;
@@ -595,7 +924,7 @@ document.addEventListener('click', function (e) {
 // ═══════════════════════════════════════════════════════════
 // Tab switching
 // ═══════════════════════════════════════════════════════════
-const tabs = ['posts', 'patterns', 'collections'];
+const tabs = JSON.parse(document.getElementById('tabs-config').textContent);
 function slideIndicator(name) {
     const indEl     = document.getElementById('tab-indicator');
     const activeBtn = document.getElementById('tab-' + name);
@@ -607,6 +936,7 @@ function switchTab(name) {
     tabs.forEach(t => {
         const panel = document.getElementById('panel-' + t);
         const btn   = document.getElementById('tab-' + t);
+        if (!panel || !btn) return;
         if (t === name) {
             panel.style.transition = 'none';
             panel.style.opacity    = '0';

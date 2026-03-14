@@ -7,8 +7,15 @@ use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('homepage.home');
+    $stats = [
+        'patterns' => \App\Models\Pattern::count(),
+        'users'    => \App\Models\User::count(),
+        'posts'    => \App\Models\Post::count(),
+    ];
+    return view('homepage.home', compact('stats'));
 })->name('home');
+
+Route::get('/search/users', [\App\Http\Controllers\SearchController::class, 'users'])->name('search.users');
 
 Route::get('/patterns/crochet', [\App\Http\Controllers\PatternController::class, 'crochet'])->name('patterns.crochet');
 Route::get('/patterns/crochet/{category}', [\App\Http\Controllers\PatternController::class, 'crochetByCategory'])->name('patterns.crochet.category');
@@ -31,6 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/settings', [ProfileController::class, 'settings'])->name('profile.settings');
     Route::post('/settings/notifications', [ProfileController::class, 'saveNotificationPreferences'])->name('profile.notifications.save');
+    Route::post('/settings/privacy',       [ProfileController::class, 'savePrivacyPreferences'])->name('profile.privacy.save');
     
     // Pattern creation routes
     Route::get('/patterns/create', [\App\Http\Controllers\PatternController::class, 'create'])->name('patterns.create');

@@ -162,26 +162,6 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                 <span class="hidden sm:inline">Posts</span>
             </button>
 
-            {{-- Saved tab --}}
-            <button onclick="switchTab('saved')" id="tab-saved"
-                    class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-400">
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
-                </svg>
-                <span class="hidden sm:inline">Saved</span>
-            </button>
-
-            {{-- Liked tab --}}
-            <button onclick="switchTab('liked')" id="tab-liked"
-                    class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-400">
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                </svg>
-                <span class="hidden sm:inline">Liked</span>
-            </button>
-
             {{-- Patterns tab --}}
             <button onclick="switchTab('patterns')" id="tab-patterns"
                     class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-400">
@@ -200,6 +180,26 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                           d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                 </svg>
                 <span class="hidden sm:inline">Collections</span>
+            </button>
+
+            {{-- Saved tab --}}
+            <button onclick="switchTab('saved')" id="tab-saved"
+                    class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-400">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+                </svg>
+                <span class="hidden sm:inline">Saved</span>
+            </button>
+
+            {{-- Liked tab --}}
+            <button onclick="switchTab('liked')" id="tab-liked"
+                    class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-400">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                </svg>
+                <span class="hidden sm:inline">Liked</span>
             </button>
         </div>
 
@@ -266,136 +266,277 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
 
         {{-- ── Saved tab content ── --}}
         <div id="panel-saved" class="hidden">
+            <div x-data="{ savedTab: 'posts' }">
 
-            {{-- ── Collections section ── --}}
-            <div>
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Collections</h3>
-                    <button onclick="openNewCollectionModal(null)"
-                            class="flex items-center gap-1 text-sm font-semibold text-violet-400 hover:text-violet-300 transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
-                        </svg>
-                        New
+                {{-- Sub-tab bar --}}
+                <div class="flex items-center gap-2 py-3 overflow-x-auto scrollbar-none">
+                    @foreach(['posts' => 'Posts', 'patterns' => 'Patterns', 'collections' => 'Collections'] as $val => $label)
+                    <button @click="savedTab = '{{ $val }}'"
+                            :class="savedTab === '{{ $val }}'
+                                ? 'bg-violet-600 text-white border-violet-600'
+                                : 'bg-transparent text-zinc-400 border-zinc-700 hover:border-zinc-500 hover:text-zinc-200'"
+                            class="shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200">
+                        {{ $label }}
                     </button>
-                </div>
-
-                @if($savedPosts->isEmpty() && $postCollections->isEmpty())
-                <div class="flex flex-col items-center justify-center py-24 text-center">
-                    <div class="w-20 h-20 rounded-full border-2 border-zinc-600 flex items-center justify-center mb-5">
-                        <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                  d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-extrabold mb-2">Save Photos and Videos</h3>
-                    <p class="text-zinc-400 text-sm">Save things you want to see again. No one is notified, and only you can see what you've saved.</p>
-                </div>
-                @else
-                @php
-                    $allCoverImages = $savedPosts->map(fn($p) => $p->images->first())->filter()->take(4)->values();
-                    $allCoverCount  = $allCoverImages->count();
-                @endphp
-                <div id="post-collections-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {{-- Fixed "All Posts" card --}}
-                    <a href="{{ route('post-collections.all') }}"
-                       class="group block rounded-xl overflow-hidden bg-zinc-900 ring-1 ring-zinc-800 hover:ring-violet-500/50 transition-all">
-                        <div class="aspect-square overflow-hidden bg-zinc-800">
-                            @if($allCoverCount > 0)
-                            <div class="grid h-full w-full gap-0.5 {{ $allCoverCount === 1 ? 'grid-cols-1 grid-rows-1' : 'grid-cols-2 grid-rows-2' }}">
-                                @if($allCoverCount === 1)
-                                    <img src="{{ asset('storage/' . $allCoverImages[0]->image_path) }}"
-                                         class="h-full w-full object-cover" loading="lazy">
-                                @elseif($allCoverCount === 2)
-                                    <img src="{{ asset('storage/' . $allCoverImages[0]->image_path) }}"
-                                         class="col-span-2 row-span-1 h-full w-full object-cover" loading="lazy">
-                                    <img src="{{ asset('storage/' . $allCoverImages[1]->image_path) }}"
-                                         class="col-span-2 row-span-1 h-full w-full object-cover" loading="lazy">
-                                @elseif($allCoverCount === 3)
-                                    <img src="{{ asset('storage/' . $allCoverImages[0]->image_path) }}"
-                                         class="col-span-2 row-span-1 h-full w-full object-cover" loading="lazy">
-                                    <img src="{{ asset('storage/' . $allCoverImages[1]->image_path) }}"
-                                         class="col-span-1 row-span-1 h-full w-full object-cover" loading="lazy">
-                                    <img src="{{ asset('storage/' . $allCoverImages[2]->image_path) }}"
-                                         class="col-span-1 row-span-1 h-full w-full object-cover" loading="lazy">
-                                @else
-                                    @foreach($allCoverImages as $img)
-                                    <img src="{{ asset('storage/' . $img->image_path) }}"
-                                         class="col-span-1 row-span-1 h-full w-full object-cover" loading="lazy">
-                                    @endforeach
-                                @endif
-                            </div>
-                            @else
-                            <div class="h-full w-full flex items-center justify-center bg-gradient-to-br from-violet-900/40 to-purple-900/40">
-                                <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                          d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
-                                </svg>
-                            </div>
-                            @endif
-                        </div>
-                        <div class="px-3 py-2.5">
-                            <p class="text-sm font-semibold text-white">All Posts</p>
-                            <p class="text-xs text-zinc-400">{{ $savedPosts->count() }} {{ Str::plural('post', $savedPosts->count()) }}</p>
-                        </div>
-                    </a>
-                    @foreach($postCollections as $col)
-                    @php
-                        $coverImages = $col->posts
-                            ->map(fn($p) => $p->images->first())
-                            ->filter()
-                            ->take(4)
-                            ->values();
-                        $coverCount = $coverImages->count();
-                    @endphp
-                    <a href="{{ route('post-collections.show', $col) }}"
-                       class="group block rounded-xl overflow-hidden bg-zinc-900 ring-1 ring-zinc-800 hover:ring-violet-500/50 transition-all">
-                        {{-- Collage cover --}}
-                        <div class="aspect-square overflow-hidden bg-zinc-800">
-                            @if($coverCount > 0)
-                            <div class="grid h-full w-full gap-0.5 {{ $coverCount === 1 ? 'grid-cols-1 grid-rows-1' : 'grid-cols-2 grid-rows-2' }}">
-                                @if($coverCount === 1)
-                                    <img src="{{ asset('storage/' . $coverImages[0]->image_path) }}"
-                                         class="h-full w-full object-cover" loading="lazy">
-                                @elseif($coverCount === 2)
-                                    <img src="{{ asset('storage/' . $coverImages[0]->image_path) }}"
-                                         class="col-span-2 row-span-1 h-full w-full object-cover" loading="lazy">
-                                    <img src="{{ asset('storage/' . $coverImages[1]->image_path) }}"
-                                         class="col-span-2 row-span-1 h-full w-full object-cover" loading="lazy">
-                                @elseif($coverCount === 3)
-                                    <img src="{{ asset('storage/' . $coverImages[0]->image_path) }}"
-                                         class="col-span-2 row-span-1 h-full w-full object-cover" loading="lazy">
-                                    <img src="{{ asset('storage/' . $coverImages[1]->image_path) }}"
-                                         class="col-span-1 row-span-1 h-full w-full object-cover" loading="lazy">
-                                    <img src="{{ asset('storage/' . $coverImages[2]->image_path) }}"
-                                         class="col-span-1 row-span-1 h-full w-full object-cover" loading="lazy">
-                                @else
-                                    @foreach($coverImages as $img)
-                                    <img src="{{ asset('storage/' . $img->image_path) }}"
-                                         class="col-span-1 row-span-1 h-full w-full object-cover" loading="lazy">
-                                    @endforeach
-                                @endif
-                            </div>
-                            @else
-                            <div class="h-full w-full flex items-center justify-center bg-gradient-to-br from-violet-900/40 to-purple-900/40">
-                                <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                          d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                                </svg>
-                            </div>
-                            @endif
-                        </div>
-                        {{-- Name + count --}}
-                        <div class="px-3 py-2.5">
-                            <p class="text-sm font-semibold text-white truncate">{{ $col->name }}</p>
-                            <p class="text-xs text-zinc-400">{{ $col->posts_count }} {{ Str::plural('post', $col->posts_count) }}</p>
-                        </div>
-                    </a>
                     @endforeach
                 </div>
-                @endif
-            </div>
 
+                {{-- Posts sub-tab --}}
+                <div x-show="savedTab === 'posts'" x-transition>
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Collections</h3>
+                        <button onclick="openNewCollectionModal(null)"
+                                class="flex items-center gap-1 text-sm font-semibold text-violet-400 hover:text-violet-300 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
+                            </svg>
+                            New
+                        </button>
+                    </div>
+
+                    @if($savedPosts->isEmpty() && $postCollections->isEmpty())
+                    <div class="flex flex-col items-center justify-center py-24 text-center">
+                        <div class="w-20 h-20 rounded-full border-2 border-zinc-600 flex items-center justify-center mb-5">
+                            <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                      d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-extrabold mb-2">Save Photos and Videos</h3>
+                        <p class="text-zinc-400 text-sm">Save things you want to see again. No one is notified, and only you can see what you've saved.</p>
+                    </div>
+                    @else
+                    @php
+                        $allCoverImages = $savedPosts->map(fn($p) => $p->images->first())->filter()->take(4)->values();
+                        $allCoverCount  = $allCoverImages->count();
+                    @endphp
+                    <div id="post-collections-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        {{-- Fixed "All Posts" card --}}
+                        <a href="{{ route('post-collections.all') }}"
+                           class="group block rounded-xl overflow-hidden bg-zinc-900 ring-1 ring-zinc-800 hover:ring-violet-500/50 transition-all">
+                            <div class="aspect-square overflow-hidden bg-zinc-800">
+                                @if($allCoverCount > 0)
+                                <div class="grid h-full w-full gap-0.5 {{ $allCoverCount === 1 ? 'grid-cols-1 grid-rows-1' : 'grid-cols-2 grid-rows-2' }}">
+                                    @if($allCoverCount === 1)
+                                        <img src="{{ asset('storage/' . $allCoverImages[0]->image_path) }}"
+                                             class="h-full w-full object-cover" loading="lazy">
+                                    @elseif($allCoverCount === 2)
+                                        <img src="{{ asset('storage/' . $allCoverImages[0]->image_path) }}"
+                                             class="col-span-2 row-span-1 h-full w-full object-cover" loading="lazy">
+                                        <img src="{{ asset('storage/' . $allCoverImages[1]->image_path) }}"
+                                             class="col-span-2 row-span-1 h-full w-full object-cover" loading="lazy">
+                                    @elseif($allCoverCount === 3)
+                                        <img src="{{ asset('storage/' . $allCoverImages[0]->image_path) }}"
+                                             class="col-span-2 row-span-1 h-full w-full object-cover" loading="lazy">
+                                        <img src="{{ asset('storage/' . $allCoverImages[1]->image_path) }}"
+                                             class="col-span-1 row-span-1 h-full w-full object-cover" loading="lazy">
+                                        <img src="{{ asset('storage/' . $allCoverImages[2]->image_path) }}"
+                                             class="col-span-1 row-span-1 h-full w-full object-cover" loading="lazy">
+                                    @else
+                                        @foreach($allCoverImages as $img)
+                                        <img src="{{ asset('storage/' . $img->image_path) }}"
+                                             class="col-span-1 row-span-1 h-full w-full object-cover" loading="lazy">
+                                        @endforeach
+                                    @endif
+                                </div>
+                                @else
+                                <div class="h-full w-full flex items-center justify-center bg-gradient-to-br from-violet-900/40 to-purple-900/40">
+                                    <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                              d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+                                    </svg>
+                                </div>
+                                @endif
+                            </div>
+                            <div class="px-3 py-2.5">
+                                <p class="text-sm font-semibold text-white">All Posts</p>
+                                <p class="text-xs text-zinc-400">{{ $savedPosts->count() }} {{ Str::plural('post', $savedPosts->count()) }}</p>
+                            </div>
+                        </a>
+                        @foreach($postCollections as $col)
+                        @php
+                            $coverImages = $col->posts
+                                ->map(fn($p) => $p->images->first())
+                                ->filter()
+                                ->take(4)
+                                ->values();
+                            $coverCount = $coverImages->count();
+                        @endphp
+                        <a href="{{ route('post-collections.show', $col) }}"
+                           class="group block rounded-xl overflow-hidden bg-zinc-900 ring-1 ring-zinc-800 hover:ring-violet-500/50 transition-all">
+                            <div class="aspect-square overflow-hidden bg-zinc-800">
+                                @if($coverCount > 0)
+                                <div class="grid h-full w-full gap-0.5 {{ $coverCount === 1 ? 'grid-cols-1 grid-rows-1' : 'grid-cols-2 grid-rows-2' }}">
+                                    @if($coverCount === 1)
+                                        <img src="{{ asset('storage/' . $coverImages[0]->image_path) }}"
+                                             class="h-full w-full object-cover" loading="lazy">
+                                    @elseif($coverCount === 2)
+                                        <img src="{{ asset('storage/' . $coverImages[0]->image_path) }}"
+                                             class="col-span-2 row-span-1 h-full w-full object-cover" loading="lazy">
+                                        <img src="{{ asset('storage/' . $coverImages[1]->image_path) }}"
+                                             class="col-span-2 row-span-1 h-full w-full object-cover" loading="lazy">
+                                    @elseif($coverCount === 3)
+                                        <img src="{{ asset('storage/' . $coverImages[0]->image_path) }}"
+                                             class="col-span-2 row-span-1 h-full w-full object-cover" loading="lazy">
+                                        <img src="{{ asset('storage/' . $coverImages[1]->image_path) }}"
+                                             class="col-span-1 row-span-1 h-full w-full object-cover" loading="lazy">
+                                        <img src="{{ asset('storage/' . $coverImages[2]->image_path) }}"
+                                             class="col-span-1 row-span-1 h-full w-full object-cover" loading="lazy">
+                                    @else
+                                        @foreach($coverImages as $img)
+                                        <img src="{{ asset('storage/' . $img->image_path) }}"
+                                             class="col-span-1 row-span-1 h-full w-full object-cover" loading="lazy">
+                                        @endforeach
+                                    @endif
+                                </div>
+                                @else
+                                <div class="h-full w-full flex items-center justify-center bg-gradient-to-br from-violet-900/40 to-purple-900/40">
+                                    <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                              d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                                    </svg>
+                                </div>
+                                @endif
+                            </div>
+                            <div class="px-3 py-2.5">
+                                <p class="text-sm font-semibold text-white truncate">{{ $col->name }}</p>
+                                <p class="text-xs text-zinc-400">{{ $col->posts_count }} {{ Str::plural('post', $col->posts_count) }}</p>
+                            </div>
+                        </a>
+                        @endforeach
+                    </div>
+                    @endif
+                </div>
+
+                {{-- Patterns sub-tab --}}
+                <div x-show="savedTab === 'patterns'" x-transition>
+                    @if($favoritePatterns->isEmpty())
+                    <div class="flex flex-col items-center justify-center py-24 text-center">
+                        <div class="w-20 h-20 rounded-full border-2 border-zinc-600 flex items-center justify-center mb-5">
+                            <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-extrabold mb-2">No Saved Patterns</h3>
+                        <p class="text-zinc-400 text-sm">Patterns you favourite will appear here.</p>
+                    </div>
+                    @else
+                    <div x-data="{ craft: 'all' }">
+                        <div class="flex items-center gap-2 py-3 overflow-x-auto scrollbar-none">
+                            @foreach(['all' => 'All', 'crochet' => 'Crochet', 'knitting' => 'Knitting', 'embroidery' => 'Embroidery'] as $val => $label)
+                            <button @click="craft = '{{ $val }}'"
+                                    :class="craft === '{{ $val }}'
+                                        ? 'bg-violet-600 text-white border-violet-600'
+                                        : 'bg-transparent text-zinc-400 border-zinc-700 hover:border-zinc-500 hover:text-zinc-200'"
+                                    class="shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200">
+                                {{ $label }}
+                            </button>
+                            @endforeach
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            @foreach($favoritePatterns as $pattern)
+                            <a href="{{ route('patterns.view', $pattern) }}"
+                               x-show="craft === 'all' || craft === '{{ $pattern->craft_type }}'"
+                               x-transition
+                               class="group relative rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800 hover:border-violet-500/50 transition-all duration-200">
+                                @if($pattern->image_path)
+                                    <img src="{{ asset('storage/' . $pattern->image_path) }}" alt="{{ $pattern->title }}"
+                                         class="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                                @else
+                                    <div class="w-full aspect-square bg-gradient-to-br from-violet-900/40 to-purple-900/40 flex items-center justify-center">
+                                        <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                        </svg>
+                                    </div>
+                                @endif
+                                <div class="p-2.5">
+                                    <p class="text-sm font-semibold text-white truncate">{{ $pattern->title }}</p>
+                                    <p class="text-xs text-zinc-400 capitalize mt-0.5">{{ $pattern->craft_type }} · {{ $pattern->difficulty }}</p>
+                                </div>
+                            </a>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
+                </div>
+
+                {{-- Collections sub-tab --}}
+                <div x-show="savedTab === 'collections'" x-transition>
+                    @if($favoriteCollections->isEmpty())
+                    <div class="flex flex-col items-center justify-center py-24 text-center">
+                        <div class="w-20 h-20 rounded-full border-2 border-zinc-600 flex items-center justify-center mb-5">
+                            <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                      d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-extrabold mb-2">No Saved Collections</h3>
+                        <p class="text-zinc-400 text-sm">Collections you favourite will appear here.</p>
+                    </div>
+                    @else
+                    <div x-data="{ craft: 'all' }">
+                        <div class="flex items-center gap-2 py-3 overflow-x-auto scrollbar-none">
+                            @foreach(['all' => 'All', 'crochet' => 'Crochet', 'knitting' => 'Knitting', 'embroidery' => 'Embroidery'] as $val => $label)
+                            <button @click="craft = '{{ $val }}'"
+                                    :class="craft === '{{ $val }}'
+                                        ? 'bg-violet-600 text-white border-violet-600'
+                                        : 'bg-transparent text-zinc-400 border-zinc-700 hover:border-zinc-500 hover:text-zinc-200'"
+                                    class="shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200">
+                                {{ $label }}
+                            </button>
+                            @endforeach
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            @foreach($favoriteCollections as $collection)
+                            <a href="{{ route('collections.show', $collection) }}"
+                               x-show="craft === 'all' || craft === '{{ $collection->craft_type }}'"
+                               x-transition
+                               class="group relative rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800 hover:border-violet-500/50 transition-all duration-200">
+                                <div class="w-full aspect-square overflow-hidden">
+                                    @if($collection->cover_image_path)
+                                        <img src="{{ asset('storage/' . $collection->cover_image_path) }}"
+                                             alt="{{ $collection->name }}"
+                                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                                    @elseif($collection->patterns->isNotEmpty())
+                                        @php $imgs = $collection->patterns->take(4)->values(); @endphp
+                                        <div class="grid h-full w-full gap-0.5
+                                            {{ $imgs->count() === 1 ? 'grid-cols-1 grid-rows-1' : 'grid-cols-2 grid-rows-2' }}">
+                                            @if($imgs->count() === 1)
+                                                <img src="{{ asset('storage/' . $imgs[0]->image_path) }}" class="w-full h-full object-cover" loading="lazy">
+                                            @elseif($imgs->count() === 2)
+                                                <img src="{{ asset('storage/' . $imgs[0]->image_path) }}" class="col-span-2 row-span-1 w-full h-full object-cover" loading="lazy">
+                                                <img src="{{ asset('storage/' . $imgs[1]->image_path) }}" class="col-span-2 row-span-1 w-full h-full object-cover" loading="lazy">
+                                            @elseif($imgs->count() === 3)
+                                                <img src="{{ asset('storage/' . $imgs[0]->image_path) }}" class="col-span-2 row-span-1 w-full h-full object-cover" loading="lazy">
+                                                <img src="{{ asset('storage/' . $imgs[1]->image_path) }}" class="col-span-1 row-span-1 w-full h-full object-cover" loading="lazy">
+                                                <img src="{{ asset('storage/' . $imgs[2]->image_path) }}" class="col-span-1 row-span-1 w-full h-full object-cover" loading="lazy">
+                                            @else
+                                                @foreach($imgs as $p)
+                                                    <img src="{{ asset('storage/' . $p->image_path) }}" class="col-span-1 row-span-1 w-full h-full object-cover" loading="lazy">
+                                                @endforeach
+                                            @endif
+                                        </div>
+                                    @else
+                                        <div class="w-full h-full bg-gradient-to-br from-sky-900/40 to-indigo-900/40 flex items-center justify-center">
+                                            <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                                            </svg>
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="p-2.5">
+                                    <p class="text-sm font-semibold text-white truncate">{{ $collection->name }}</p>
+                                    <p class="text-xs text-zinc-400 mt-0.5">{{ $collection->patterns_count }} {{ Str::plural('pattern', $collection->patterns_count) }}</p>
+                                </div>
+                            </a>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
+                </div>
+
+            </div>
         </div>
 
         {{-- ── Liked tab content ── --}}

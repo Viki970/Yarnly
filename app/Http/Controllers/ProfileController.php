@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Services\NotificationPreferenceService;
+use App\Services\PrivacyPreferenceService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -65,6 +66,16 @@ class ProfileController extends Controller
             ->latest()
             ->get();
 
+        // Saved tab – favorited patterns
+        $favoritePatterns = $user->favoritePatterns()->latest('user_favorites.created_at')->get();
+
+        // Saved tab – favorited pattern collections
+        $favoriteCollections = $user->favoriteCollections()
+            ->with(['patterns' => fn($q) => $q->whereNotNull('image_path')])
+            ->withCount('patterns')
+            ->latest('collection_favorites.created_at')
+            ->get();
+
         // Which post collections each saved post belongs to (for the picker modal)
         $postCollectionMemberships = [];
         if ($postCollections->isNotEmpty() && $savedPosts->isNotEmpty()) {
@@ -88,7 +99,9 @@ class ProfileController extends Controller
             'patterns',
             'collections',
             'postCollections',
-            'postCollectionMemberships'
+            'postCollectionMemberships',
+            'favoritePatterns',
+            'favoriteCollections'
         ));
     }
 
@@ -143,8 +156,23 @@ class ProfileController extends Controller
         /** @var User $user */
         $user = $request->user();
         $notificationPrefs = app(NotificationPreferenceService::class)->get($user);
+        $privacyPrefs = app(PrivacyPreferenceService::class)->get($user);
 
-        return view('profile.settings', compact('user', 'notificationPrefs'));
+        return view('profile.settings', compact('user', 'notificationPrefs', 'privacyPrefs'));
+    }
+
+    /**
+     * Save privacy preferences.
+     */
+    public function savePrivacyPreferences(Request $request): RedirectResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+
+        app(PrivacyPreferenceService::class)->save($user->id, $request->all());
+
+        return Redirect::route('profile.settings', ['tab' => 'privacy'])
+            ->with('privacy_prefs_saved', true);
     }
 
     /**
@@ -210,12 +238,52 @@ class ProfileController extends Controller
             ->latest()
             ->get();
 
-        $collections = $user->collections()
-            ->where('is_public', true)
-            ->with(['patterns' => fn($q) => $q->whereNotNull('image_path')])
-            ->withCount('patterns')
-            ->latest()
-            ->get();
+        $privacyService          = app(PrivacyPreferenceService::class);
+        $canShowLikedPosts       = $privacyService->check($user, 'show_liked_posts');
+        $canShowSavedPosts       = $privacyService->check($user, 'show_saved_posts');
+        $canShowSavedPatterns    = $privacyService->check($user, 'show_saved_patterns');
+        $canShowSavedCollections = $privacyService->check($user, 'show_saved_collections');
+        $hasSavedTab             = $canShowSavedPosts || $canShowSavedPatterns || $canShowSavedCollections;
+
+        // Standalone Collections tab is always visible (shows user's own public collections)
+        $canShowCollections = true;
+
+        $collections = $canShowCollections
+            ? $user->collections()
+                ->where('is_public', true)
+                ->with(['patterns' => fn($q) => $q->whereNotNull('image_path')])
+                ->withCount('patterns')
+                ->latest()
+                ->get()
+            : collect();
+
+        $likedPosts = $canShowLikedPosts
+            ? $user->likedPosts()
+                ->with(['images', 'user'])
+                ->withCount('likes')
+                ->latest('post_likes.created_at')
+                ->get()
+            : collect();
+
+        $savedPosts = $canShowSavedPosts
+            ? $user->favoritedPosts()
+                ->with(['images', 'user'])
+                ->withCount('likes')
+                ->latest('post_favorites.created_at')
+                ->get()
+            : collect();
+
+        $favoritePatterns = $canShowSavedPatterns
+            ? $user->favoritePatterns()->latest('user_favorites.created_at')->get()
+            : collect();
+
+        $favoriteCollections = $canShowSavedCollections
+            ? $user->favoriteCollections()
+                ->with(['patterns' => fn($q) => $q->whereNotNull('image_path')])
+                ->withCount('patterns')
+                ->latest('collection_favorites.created_at')
+                ->get()
+            : collect();
 
         return view('profile.user.show', compact(
             'user',
@@ -226,7 +294,17 @@ class ProfileController extends Controller
             'followingCount',
             'posts',
             'patterns',
-            'collections'
+            'collections',
+            'canShowCollections',
+            'canShowLikedPosts',
+            'canShowSavedPosts',
+            'canShowSavedPatterns',
+            'canShowSavedCollections',
+            'hasSavedTab',
+            'likedPosts',
+            'savedPosts',
+            'favoritePatterns',
+            'favoriteCollections',
         ));
     }
 }

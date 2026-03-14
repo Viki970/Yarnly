@@ -268,32 +268,47 @@
                                 <p class="text-xs text-zinc-400">Control who can see and interact with your content.</p>
                             </div>
                         </div>
-                        <div class="space-y-3 max-w-md">
-                            @foreach ([
-                                ['label' => 'Searchable profile',    'desc' => 'Let your profile appear in search and explore results',    'on' => true],
-                                ['label' => 'Show liked posts',      'desc' => 'Let others see which posts you\'ve liked',                 'on' => false],
-                                ['label' => 'Show saved collections','desc' => 'Let others browse the collections you\'ve created',        'on' => true],
-                            ] as $item)
-                            <div class="flex items-center justify-between gap-4 px-4 py-3.5 bg-zinc-800 rounded-xl"
-                                 x-data="{ on: {{ $item['on'] ? 'true' : 'false' }} }">
-                                <div>
-                                    <p class="text-sm font-medium text-white">{{ $item['label'] }}</p>
-                                    <p class="text-xs text-zinc-400 mt-0.5">{{ $item['desc'] }}</p>
+                        <form method="POST" action="{{ route('profile.privacy.save') }}">
+                            @csrf
+                            @if (session('privacy_prefs_saved'))
+                            <div class="mb-4 flex items-center gap-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 px-4 py-2.5 text-sm text-emerald-400">
+                                <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                Privacy preferences saved.
+                            </div>
+                            @endif
+                            <div class="space-y-3 max-w-md">
+                                @foreach ([
+                                    ['key' => 'searchable_profile',     'label' => 'Searchable profile',     'desc' => 'Let your profile appear in search and explore results'],
+                                    ['key' => 'show_liked_posts',       'label' => 'Show liked posts',       'desc' => 'Let others see which posts you\'ve liked'],
+                                    ['key' => 'show_saved_posts',       'label' => 'Show saved posts',       'desc' => 'Let others see which posts you\'ve saved'],
+                                    ['key' => 'show_saved_patterns',    'label' => 'Show saved patterns',    'desc' => 'Let others see which patterns you\'ve favourited'],
+                                    ['key' => 'show_saved_collections', 'label' => 'Show saved collections', 'desc' => 'Let others browse the collections you\'ve created'],
+                                ] as $item)
+                                @php $isOn = $privacyPrefs[$item['key']] ?? true; @endphp
+                                <div class="flex items-center justify-between gap-4 px-4 py-3.5 bg-zinc-800 rounded-xl"
+                                     x-data="{ on: {{ $isOn ? 'true' : 'false' }} }">
+                                    <div>
+                                        <p class="text-sm font-medium text-white">{{ $item['label'] }}</p>
+                                        <p class="text-xs text-zinc-400 mt-0.5">{{ $item['desc'] }}</p>
+                                    </div>
+                                    <input type="hidden" :name="'{{ $item['key'] }}'" :value="on ? '1' : '0'">
+                                    <button type="button" @click="on = !on"
+                                            :class="on ? 'bg-violet-600' : 'bg-zinc-600'"
+                                            class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none">
+                                        <span :class="on ? 'translate-x-5' : 'translate-x-0'"
+                                              class="inline-block h-5 w-5 transform rounded-full bg-white shadow transition duration-200"></span>
+                                    </button>
                                 </div>
-                                <button type="button" @click="on = !on"
-                                        :class="on ? 'bg-violet-600' : 'bg-zinc-600'"
-                                        class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none">
-                                    <span :class="on ? 'translate-x-5' : 'translate-x-0'"
-                                          class="inline-block h-5 w-5 transform rounded-full bg-white shadow transition duration-200"></span>
+                                @endforeach
+                            </div>
+                            <div class="mt-6">
+                                <button type="submit" class="px-8 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition-colors">
+                                    Save Preferences
                                 </button>
                             </div>
-                            @endforeach
-                        </div>
-                        <div class="mt-6">
-                            <button class="px-8 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition-colors">
-                                Save Preferences
-                            </button>
-                        </div>
+                        </form>
                     </div>
                 </div>
 
