@@ -743,6 +743,19 @@ foreach ($extraPosts->all() as $post) {
          POST DETAIL MODAL
     ══════════════════════════════════════════════════ --}}
     <div id="post-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-2 sm:p-6 bg-black/80 backdrop-blur-sm" onclick="handlePostModalBackdrop(event)">
+
+        {{-- ◀ Prev post --}}
+        <button id="pm-nav-prev" onclick="profilePrevPost(); event.stopPropagation()" style="display:none"
+                class="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/90 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+
+        {{-- ▶ Next post --}}
+        <button id="pm-nav-next" onclick="profileNextPost(); event.stopPropagation()" style="display:none"
+                class="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/90 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+        </button>
+
         <div class="relative flex flex-col md:flex-row w-full max-w-6xl rounded-2xl overflow-hidden shadow-2xl ring-1 ring-zinc-700 bg-zinc-900" style="max-height:90vh;" onclick="event.stopPropagation()">
 
             {{-- ✕ close button --}}
@@ -916,10 +929,38 @@ const _isAuth    = _appConfig.isAuth;
 const _csrf      = _appConfig.csrf;
 
 // ── Thumbnail click → open post modal ─────────────────────────────────────
+let _profilePostList = [];  // ordered post IDs in the active grid
+let _profilePostIdx  = 0;  // current position in that list
+
 document.addEventListener('click', function (e) {
     const btn = e.target.closest('[data-post-id]');
-    if (btn) openPostModal(btn.dataset.postId);
+    if (!btn) return;
+    // Collect all visible thumbnails in the same grid as the clicked button
+    const grid = btn.closest('.grid');
+    if (grid) {
+        _profilePostList = Array.from(grid.querySelectorAll('[data-post-id]'))
+            .map(b => b.dataset.postId);
+        _profilePostIdx  = _profilePostList.indexOf(btn.dataset.postId);
+    } else {
+        _profilePostList = [btn.dataset.postId];
+        _profilePostIdx  = 0;
+    }
+    openPostModal(btn.dataset.postId);
 });
+
+function profileUpdateNavArrows() {
+    const prev = document.getElementById('pm-nav-prev');
+    const next = document.getElementById('pm-nav-next');
+    if (!prev || !next) return;
+    prev.style.display = (_profilePostList.length > 1 && _profilePostIdx > 0)                           ? 'flex' : 'none';
+    next.style.display = (_profilePostList.length > 1 && _profilePostIdx < _profilePostList.length - 1) ? 'flex' : 'none';
+}
+function profilePrevPost() {
+    if (_profilePostIdx > 0) { _profilePostIdx--; openPostModal(_profilePostList[_profilePostIdx]); }
+}
+function profileNextPost() {
+    if (_profilePostIdx < _profilePostList.length - 1) { _profilePostIdx++; openPostModal(_profilePostList[_profilePostIdx]); }
+}
 
 // ═══════════════════════════════════════════════════════════
 // Tab switching
@@ -1118,6 +1159,7 @@ function openPostModal(postId) {
     modal.classList.remove('hidden');
     modal.classList.add('flex');
     document.body.style.overflow = 'hidden';
+    profileUpdateNavArrows();
 }
 
 function closePostModal() {
@@ -1222,8 +1264,11 @@ document.addEventListener('keydown', e => {
     const followOpen = !document.getElementById('follow-modal').classList.contains('hidden');
     if (postOpen) {
         if (e.key === 'Escape')     closePostModal();
-        if (e.key === 'ArrowLeft')  pmGo(-1);
-        if (e.key === 'ArrowRight') pmGo(1);
+        // ArrowLeft/Right navigate image carousel; Shift+Arrow navigates between posts
+        if (e.key === 'ArrowLeft'  && e.shiftKey) profilePrevPost();
+        else if (e.key === 'ArrowRight' && e.shiftKey) profileNextPost();
+        else if (e.key === 'ArrowLeft')  pmGo(-1);
+        else if (e.key === 'ArrowRight') pmGo(1);
     } else if (followOpen) {
         if (e.key === 'Escape') closeFollowModal();
     }

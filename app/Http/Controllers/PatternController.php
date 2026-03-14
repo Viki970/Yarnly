@@ -523,11 +523,35 @@ class PatternController extends Controller
                     ->withExists(['favorites as faved_by_user' => fn($q) => $q->where('user_id', $userId)])
             );
 
-        $recentModels   = $applySearch($base())->latest()->paginate(12)->withQueryString();
-        $topRatedModels = $applySearch($base())->orderByDesc('likes_count')->paginate(12)->withQueryString();
+        $recentModels   = $applySearch($base())
+            ->when($userId, fn($q) => $q->where('user_id', '!=', $userId))
+            ->latest()
+            ->paginate(12)->withQueryString();
+
+        $topRatedModels = $applySearch($base())
+            ->when($userId, fn($q) => $q->where('user_id', '!=', $userId))
+            ->orderByDesc('likes_count')
+            ->latest()
+            ->paginate(12)->withQueryString();
 
         $totalModels = Post::count();
         $newToday    = Post::whereDate('created_at', today())->count();
+
+        // Compute top 8 trending tags from all posts
+        $tagCounts = [];
+        Post::whereNotNull('tags')->pluck('tags')->each(function ($tagStr) use (&$tagCounts) {
+            // Split by comma, then by spaces — handles both "amigurumi, crochet" and "#crochet #toothless"
+            foreach (explode(',', $tagStr) as $chunk) {
+                foreach (preg_split('/\s+/', trim($chunk)) as $raw) {
+                    $tag = strtolower(ltrim(trim($raw), '#'));
+                    if ($tag !== '') {
+                        $tagCounts[$tag] = ($tagCounts[$tag] ?? 0) + 1;
+                    }
+                }
+            }
+        });
+        arsort($tagCounts);
+        $trendingTags = array_keys(array_slice($tagCounts, 0, 8));
 
         /** @var User|null $authUser */
         $authUser     = Auth::user();
@@ -553,7 +577,8 @@ class PatternController extends Controller
             'totalModels',
             'newToday',
             'followingIds',
-            'search'
+            'search',
+            'trendingTags'
         ));
     }
 }

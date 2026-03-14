@@ -12,6 +12,15 @@
     ];
     $accent = $accentMap[$craftType] ?? $accentMap['model'];
 
+    // SVG icons per craft type (same as navbar)
+    $craftIcons = [
+        'crochet'    => '<svg class="h-4 w-4 transform rotate-45" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2c-1.2 0-2.2.8-2.2 1.8v8.4c-.2.1-.4.3-.4.6l-.3 8.4c0 .2.1.3.2.4.1.1.3.2.4.2h1.8c.2 0 .3-.1.4-.2.1-.1.2-.2.2-.4l-.3-8.4c0-.2-.1-.4-.3-.5V4.6c0-.1 0-.1 0-.1 0 0 .1 0 .1 0 .1 0 .2.1.2.2v.6c0 .3.3.6.6.6.7 0 1.2-.5 1.2-1.2v-.3C13.2 2.8 12.4 2 12 2z" /></svg>',
+        'knitting'   => '<svg class="h-4 w-5" fill="currentColor" viewBox="0 0 512 768"><path d="M506.267,495.415l-224.299-78.02l121.182-42.146c10.795,15.573,28.774,25.822,49.118,25.822c32.93,0,59.733-26.803,59.733-59.733c0-32.93-26.803-59.733-59.733-59.733c-32.93,0-59.733,26.803-59.733,59.733c0,6.46,1.067,12.672,2.97,18.5l-139.503,48.529l-139.503-48.529c1.903-5.828,2.97-12.041,2.97-18.5c0-32.93-26.803-59.733-59.733-59.733S0.002,308.407,0.002,341.337c0,32.93,26.803,59.733,59.733,59.733c20.343,0,38.323-10.24,49.118-25.822l121.182,42.146L5.736,495.415c-4.463,1.545-6.81,6.409-5.257,10.854c1.22,3.524,4.523,5.734,8.055,5.734c0.93,0,1.877-0.154,2.799-0.478l244.668-85.103l244.668,85.103c0.922,0.324,1.869,0.478,2.799,0.478c3.533,0,6.835-2.21,8.055-5.734C513.077,501.823,510.73,496.959,506.267,495.415z M460.802,315.737c4.719,0,8.533,3.814,8.533,8.533c0,4.719-3.814,8.533-8.533,8.533c-9.412,0-17.067,7.654-17.067,17.067c0,4.719-3.814,8.533-8.533,8.533s-8.533-3.814-8.533-8.533C426.668,331.046,441.977,315.737,460.802,315.737z M68.268,332.803c-9.412,0-17.067,7.654-17.067,17.067c0,4.719-3.814,8.533-8.533,8.533s-8.533-3.814-8.533-8.533c0-18.825,15.309-34.133,34.133-34.133c4.719,0,8.533,3.814,8.533,8.533C76.802,328.989,72.987,332.803,68.268,332.803z" /></svg>',
+        'embroidery' => '<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 274 274"><path d="M262.353,170.603c-0.792-2.288-19.578-56.177-45.5-69.878c-1.554-0.818-3.18-1.652-4.847-2.501c7.783-26.139,10.299-47.996,5.188-66.953c-4.981-18.491-22.059-32.213-38.856-31.219c-14.794,0.865-25.295,12.718-28.097,31.701c-0.88,5.965-0.834,11.387-0.171,16.43c-3.469,4.836-5.841,9.036-6.543,10.325L13.143,266.149c-0.997,1.579-2.231,3.547-0.955,5.872l1.229,2.206h2.509c2.201,0,3.379-1.476,4.513-2.895L170.42,83.093c9.569,8.114,21.034,14.245,31.375,19.49c-4.635,14.333-10.776,30.049-18.046,47.328c-19.957,47.483-10.657,86.687,3.401,95.64c0.705,0.451,1.492,0.663,2.279,0.663c1.402,0,2.77-0.694,3.583-1.968c1.248-1.973,0.673-4.604-1.305-5.852c-9.896-6.302-18.662-41.109-0.135-85.19c7.13-16.953,13.204-32.467,17.875-46.753c1.186,0.605,2.34,1.201,3.453,1.786c22.96,12.138,41.26,64.612,41.436,65.136c0.767,2.217,3.18,3.392,5.396,2.631C261.934,175.227,263.115,172.814,262.353,170.603z M153.986,80.063l-8.353,6.902l3.299-10.325c0.973-3.024,2.791-8.383,5.203-14.131c1.885,4.085,4.272,7.819,7.048,11.236C157.973,76.713,155.27,79.002,153.986,80.063z M167.345,67.781c-3.671-4.722-6.426-10.077-7.954-16.181c4.106-7.322,9.021-13.241,14.209-13.241c1.435,0,2.817,0.409,4.096,1.222c2.123,1.341,3.319,3.365,3.48,5.851C181.564,51.579,174.481,60.464,167.345,67.781z M204.333,94.345c-9.823-5.007-20.164-10.651-28.589-17.891c5.634-7.28,16.669-23.229,15.198-34.932c-0.513-4.096-2.517-7.482-5.789-9.792c-2.714-1.9-5.686-2.874-8.839-2.874c-6.551,0-12.868,4.339-18.201,9.704c0.083-1.802,0.232-3.646,0.518-5.571c2.2-14.934,9.569-23.855,20.205-24.477c0.378-0.021,0.771-0.037,1.16-0.037c11.143,0,24.72,9.088,29.013,24.995C213.57,50.414,211.343,70.354,204.333,94.345z" /></svg>',
+        'model'      => '<svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"/><line x1="12" y1="22" x2="12" y2="15.5"/><polyline points="22 8.5 12 15.5 2 8.5"/></svg>',
+    ];
+    $craftIcon = $craftIcons[$craftType] ?? $craftIcons['model'];
+
     $authorName    = $model->user->name ?? 'Anonymous';
     $authorAvatar  = ($model->user->profile_picture ?? null)
                         ? asset('storage/' . $model->user->profile_picture)
@@ -54,11 +63,11 @@
     $authorProfileUrl = $postAuthorId ? route('users.show', $postAuthorId) : '#';
 @endphp
 
-<div class="gallery-item post-card group rounded-2xl bg-white ring-1 ring-zinc-200/80 shadow-sm hover:shadow-lg hover:ring-purple-200 transition-all duration-300 overflow-hidden dark:bg-zinc-800/70 dark:ring-zinc-700/60 dark:hover:ring-purple-700/50">
+<div class="gallery-item post-card group rounded-xl sm:rounded-2xl bg-white ring-1 ring-zinc-200/80 shadow-sm hover:shadow-lg hover:ring-purple-200 transition-all duration-300 overflow-hidden dark:bg-zinc-800/70 dark:ring-zinc-700/60 dark:hover:ring-purple-700/50">
 
     {{-- ── Author header ── --}}
-    <div class="flex items-center justify-between px-4 pt-4 pb-3">
-        <div class="flex items-center gap-3">
+    <div class="flex items-center justify-between px-3 sm:px-4 pt-3 sm:pt-4 pb-2 sm:pb-3">
+        <div class="flex items-center gap-3 min-w-0 flex-1">
             <a href="{{ $authorProfileUrl }}" class="shrink-0 block">
             @if($authorAvatar)
                 <img src="{{ $authorAvatar }}" alt="{{ $authorName }}"
@@ -69,9 +78,9 @@
                 </div>
             @endif
             </a>
-            <div>
+            <div class="min-w-0 flex-1">
                 <div class="flex items-center gap-2 min-w-0">
-                    <a href="{{ $authorProfileUrl }}" class="text-sm font-semibold text-zinc-900 dark:text-white leading-none truncate hover:underline">{{ $authorName }}</a>
+                    <a href="{{ $authorProfileUrl }}" class="text-xs sm:text-sm font-semibold text-zinc-900 dark:text-white leading-none truncate hover:underline">{{ $authorName }}</a>
                     @if($showFollowBtn)
                     <button
                         data-author-id="{{ $postAuthorId }}"
@@ -79,19 +88,16 @@
                         data-follow-url="{{ $followUrl }}"
                         data-unfollow-url="{{ $unfollowUrl }}"
                         onclick="postToggleFollow(this)"
-                        class="follow-btn flex-shrink-0 text-xs font-semibold leading-none px-2 py-0.5 rounded-full border transition-colors duration-200
-                               {{ $isFollowing
-                                   ? 'border-zinc-300 text-zinc-500 hover:border-red-400 hover:text-red-500 dark:border-zinc-600 dark:text-zinc-400 dark:hover:border-red-500 dark:hover:text-red-400'
-                                   : 'border-purple-400 text-purple-600 hover:bg-purple-500 hover:text-white dark:border-purple-500 dark:text-purple-400 dark:hover:bg-purple-600 dark:hover:text-white' }}">
-                        {{ $isFollowing ? 'Following' : '+ Follow' }}
+                        class="follow-btn flex-shrink-0 text-xs font-semibold leading-none px-2 py-0.5 rounded-full border border-purple-400 text-purple-600 hover:bg-purple-500 hover:text-white dark:border-purple-500 dark:text-purple-400 dark:hover:bg-purple-600 dark:hover:text-white transition-colors duration-200 {{ $isFollowing ? 'hidden' : '' }}">
+                        + Follow
                     </button>
                     @endif
                 </div>
                 <p class="mt-0.5 text-xs text-zinc-400 dark:text-zinc-500">{{ $timeAgo }}</p>
             </div>
         </div>
-        <span class="inline-flex items-center rounded-full {{ $accent['light'] }} {{ $accent['dark_bg'] }} {{ $accent['text'] }} {{ $accent['dark_text'] }} px-2.5 py-0.5 text-xs font-semibold capitalize">
-            {{ $craftType }}
+        <span class="flex-shrink-0 inline-flex items-center justify-center rounded-full {{ $accent['light'] }} {{ $accent['dark_bg'] }} {{ $accent['text'] }} {{ $accent['dark_text'] }} p-1.5" title="{{ ucfirst($craftType) }}">
+            {!! $craftIcon !!}
         </span>
     </div>
 
@@ -153,8 +159,8 @@
     @endif
 
     {{-- ── Actions row ── --}}
-    <div class="flex items-center justify-between px-4 pt-3 pb-2">
-        <div class="flex items-center gap-4">
+    <div class="flex items-center justify-between px-3 sm:px-4 pt-2 sm:pt-3 pb-2">
+        <div class="flex items-center gap-3 sm:gap-4">
 
             {{-- Heart --}}
             @auth
@@ -227,8 +233,8 @@
 
     {{-- ── Caption (Instagram style: bold username + description inline) ── --}}
     @if($modelDesc)
-        <div class="px-4 pb-3">
-            <p class="text-sm text-zinc-700 dark:text-zinc-300 line-clamp-3">
+        <div class="px-3 sm:px-4 pb-3">
+            <p class="text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 line-clamp-3">
                 <span class="font-semibold text-zinc-900 dark:text-white mr-1">{{ $authorName }}</span>{{ $modelDesc }}
             </p>
         </div>
@@ -241,14 +247,14 @@
         <div id="mc-loading-{{ $cardUid }}" class="hidden justify-center py-4">
             <div class="h-4 w-4 animate-spin rounded-full border-2 border-zinc-200 border-t-purple-500"></div>
         </div>
-        <div id="mc-list-{{ $cardUid }}" class="px-4 pt-3 space-y-3"></div>
+        <div id="mc-list-{{ $cardUid }}" class="px-3 sm:px-4 pt-3 space-y-3"></div>
         @auth
         {{-- Replying-to pill --}}
-        <div id="mc-reply-banner-{{ $cardUid }}" class="hidden items-center gap-2 px-4 pb-1 text-xs text-zinc-500 dark:text-zinc-400">
+        <div id="mc-reply-banner-{{ $cardUid }}" class="hidden items-center gap-2 px-3 sm:px-4 pb-1 text-xs text-zinc-500 dark:text-zinc-400">
             <span>Replying to <span id="mc-reply-to-{{ $cardUid }}" class="text-purple-500 font-semibold"></span></span>
             <button onclick="mcCancelReply('{{ $cardUid }}')" class="ml-auto text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors">✕</button>
         </div>
-        <div class="flex items-center gap-2 px-4 pt-2 pb-3 mt-2 border-t border-zinc-100 dark:border-zinc-700">
+        <div class="flex items-center gap-2 px-3 sm:px-4 pt-2 pb-3 mt-2 border-t border-zinc-100 dark:border-zinc-700">
             <div class="w-7 h-7 rounded-full bg-gradient-to-br from-violet-400 to-purple-500 flex-none flex items-center justify-center text-white text-xs font-bold select-none">
                 {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
             </div>
@@ -265,7 +271,7 @@
                     disabled>Post</button>
         </div>
         @else
-        <div class="px-4 pb-3 text-center">
+        <div class="px-3 sm:px-4 pb-3 text-center">
             <a href="{{ route('login') }}" class="text-sm text-purple-500 hover:underline">Sign in to comment</a>
         </div>
         @endauth
@@ -275,9 +281,9 @@
 
 @once
 @push('scripts')<style>
-/* Show carousel arrows on touch devices */
+/* Show carousel arrows always on touch devices */
 @media (hover: none) and (pointer: coarse) {
-    .carousel-wrapper .carousel-arrow { opacity: 0.65 !important; }
+    .carousel-wrapper .carousel-arrow { opacity: 0.75 !important; }
 }
 </style><script>
 // ─── Carousel ────────────────────────────────────────────────────────────────
@@ -406,28 +412,17 @@ async function postToggleFollow(btn) {
         const data = await res.json();
         const nowFollowing = data.following;
         btn.dataset.following = nowFollowing ? 'true' : 'false';
-        btn.textContent = nowFollowing ? 'Following' : '+ Follow';
-        // Swap styling
-        btn.classList.toggle('border-purple-400',  !nowFollowing);
-        btn.classList.toggle('text-purple-600',    !nowFollowing);
-        btn.classList.toggle('dark:border-purple-500', !nowFollowing);
-        btn.classList.toggle('dark:text-purple-400',   !nowFollowing);
-        btn.classList.toggle('hover:bg-purple-500',    !nowFollowing);
-        btn.classList.toggle('hover:text-white',       !nowFollowing);
-        btn.classList.toggle('dark:hover:bg-purple-600', !nowFollowing);
-        btn.classList.toggle('border-zinc-300',    nowFollowing);
-        btn.classList.toggle('text-zinc-500',      nowFollowing);
-        btn.classList.toggle('hover:border-red-400',   nowFollowing);
-        btn.classList.toggle('hover:text-red-500',     nowFollowing);
-        btn.classList.toggle('dark:border-zinc-600',   nowFollowing);
-        btn.classList.toggle('dark:text-zinc-400',     nowFollowing);
-        btn.classList.toggle('dark:hover:border-red-500', nowFollowing);
-        btn.classList.toggle('dark:hover:text-red-400',   nowFollowing);
-        // Update ALL follow buttons for the same author on the page
+        // Hide when following, show when unfollowing
+        if (nowFollowing) {
+            btn.classList.add('hidden');
+        } else {
+            btn.classList.remove('hidden');
+        }
+        // Sync ALL follow buttons for the same author on the page
         document.querySelectorAll(`.follow-btn[data-author-id="${btn.dataset.authorId}"]`).forEach(b => {
-            if (b === btn) return;
             b.dataset.following = nowFollowing ? 'true' : 'false';
-            b.textContent = nowFollowing ? 'Following' : '+ Follow';
+            if (nowFollowing) { b.classList.add('hidden'); }
+            else              { b.classList.remove('hidden'); }
         });
     } catch (e) { console.error(e); }
 }

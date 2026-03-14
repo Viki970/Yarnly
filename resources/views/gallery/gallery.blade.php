@@ -1,4 +1,5 @@
 @extends('layout.app')
+@php $htmlClass = ''; @endphp
 
 @section('title', 'Yarnly - Models Gallery')
 
@@ -36,15 +37,17 @@
     /* Masonry-style columns */
     .gallery-columns {
         columns: 1;
-        column-gap: 1.25rem;
+        column-gap: 1rem;
     }
-    @media (min-width: 640px)  { .gallery-columns { columns: 2; } }
-    @media (min-width: 1024px) { .gallery-columns { columns: 3; } }
+    @media (min-width: 480px)  { .gallery-columns { columns: 2; column-gap: 1rem; } }
+    @media (min-width: 748px)  { .gallery-columns { columns: 3; column-gap: 1.25rem; } }
+    @media (min-width: 1024px) { .gallery-columns { columns: 4; column-gap: 1.25rem; } }
 
     .gallery-item {
         break-inside: avoid;
-        margin-bottom: 1.25rem;
+        margin-bottom: 1rem;
     }
+    @media (min-width: 768px) { .gallery-item { margin-bottom: 1.25rem; } }
 
     /* Skeleton loader */
     .skeleton { animation: shimmer 1.4s infinite; background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%); background-size: 200% 100%; }
@@ -74,13 +77,23 @@
             border-radius: 0 !important;
         }
         #gal-post-modal .gal-image-panel {
-            height: 45vh !important;
+            height: 50vh !important;
             min-height: 0 !important;
-            max-height: 45vh !important;
+            max-height: 50vh !important;
         }
         #gal-post-modal .gal-detail-panel {
-            max-height: 55vh !important;
+            max-height: 50vh !important;
             flex: 1 1 auto;
+        }
+    }
+    /* ── Very small screens (< 360px) ── */
+    @media (max-width: 359px) {
+        #gal-post-modal .gal-image-panel {
+            height: 42vh !important;
+            max-height: 42vh !important;
+        }
+        #gal-post-modal .gal-detail-panel {
+            max-height: 58vh !important;
         }
     }
 
@@ -136,6 +149,8 @@ foreach ($allGalleryModels as $model) {
         'unlike_url'     => route('posts.unlike',         $model->id),
         'fav_url'        => route('posts.favorite',       $model->id),
         'unfav_url'      => route('posts.unfavorite',     $model->id),
+        'delete_url'     => auth()->check() && isset($model->user_id) && $model->user_id === auth()->id()
+                            ? route('posts.destroy', $model->id) : null,
         'comments_count' => $model->comments_count ?? 0,
         'comments_url'   => route('posts.comments',       $model->id),
         'comment_url'    => route('posts.comments.store', $model->id),
@@ -144,18 +159,18 @@ foreach ($allGalleryModels as $model) {
 @endphp
 
 <!-- ─── Hero ─── -->
-<section class="relative overflow-hidden bg-gradient-to-br from-purple-950 via-violet-950 to-indigo-950 py-8 sm:py-14">
-    <div class="absolute -left-20 top-0 h-72 w-72 rounded-full bg-purple-600/20 blur-3xl"></div>
-    <div class="absolute -right-16 bottom-0 h-72 w-72 rounded-full bg-violet-600/20 blur-3xl"></div>
-    <div class="absolute left-1/2 top-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-500/10 blur-3xl"></div>
+<section class="relative overflow-hidden bg-gradient-to-br from-purple-100 via-violet-50 to-indigo-100 dark:from-purple-950 dark:via-violet-950 dark:to-indigo-950 py-6 sm:py-10 lg:py-14">
+    <div class="absolute -left-20 top-0 h-72 w-72 rounded-full bg-purple-400/25 dark:bg-purple-600/20 blur-3xl"></div>
+    <div class="absolute -right-16 bottom-0 h-72 w-72 rounded-full bg-violet-400/25 dark:bg-violet-600/20 blur-3xl"></div>
+    <div class="absolute left-1/2 top-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-300/15 dark:bg-purple-500/10 blur-3xl"></div>
 
-    <div class="relative max-w-3xl mx-auto px-6 lg:px-12 text-center">
+    <div class="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-12 text-center">
 
         {{-- Headline --}}
-        <h1 class="text-2xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
+        <h1 class="text-xl font-extrabold tracking-tight text-purple-950 dark:text-white sm:text-3xl lg:text-4xl xl:text-5xl">
             Discover what crafters <br class="hidden sm:block">are making right now
         </h1>
-        <p class="mt-3 text-sm sm:text-base text-purple-200/70">
+        <p class="mt-3 text-sm sm:text-base text-purple-700/80 dark:text-purple-200/70">
             {{ $totalModels ?? 0 }} models shared &middot; {{ $newToday ?? 0 }} new today
             <span class="inline-flex items-center gap-1 ml-2">
                 <span class="inline-flex h-1.5 w-1.5 rounded-full bg-green-400 animate-pulse"></span>
@@ -164,8 +179,8 @@ foreach ($allGalleryModels as $model) {
         </p>
 
         {{-- Search bar --}}
-        <div class="mt-8 flex items-center gap-2 rounded-2xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur focus-within:ring-purple-400/60 transition-all duration-200">
-            <svg class="h-5 w-5 shrink-0 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="mt-5 sm:mt-8 flex items-center gap-2 rounded-xl sm:rounded-2xl bg-white/80 shadow-sm px-3 sm:px-4 py-2.5 sm:py-3 ring-1 ring-purple-200 backdrop-blur focus-within:ring-purple-500 dark:bg-white/10 dark:ring-white/15 dark:focus-within:ring-purple-400/60 transition-all duration-200">
+            <svg class="h-5 w-5 shrink-0 text-purple-500 dark:text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
             </svg>
             <input
@@ -174,14 +189,14 @@ foreach ($allGalleryModels as $model) {
                 name="q"
                 value="{{ $search ?? '' }}"
                 placeholder="Search models, crafters, tags…"
-                class="w-full bg-transparent text-sm text-white placeholder-purple-300/60 outline-none"
+                class="w-full bg-transparent text-sm text-zinc-900 placeholder-purple-400/60 outline-none dark:text-white dark:placeholder-purple-300/60"
                 onkeydown="if(event.key==='Enter'){event.preventDefault();galSearch(this.value);}"
                 oninput="document.getElementById('gal-search-clear').classList.toggle('hidden', this.value.trim()==='');"
             >
             @if(!empty($search))
             <button id="gal-search-clear"
                     onclick="galSearch('')"
-                    class="shrink-0 text-purple-300/70 hover:text-white transition-colors"
+                    class="shrink-0 text-purple-500/70 hover:text-purple-900 dark:text-purple-300/70 dark:hover:text-white transition-colors"
                     title="Clear search">
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
@@ -190,7 +205,7 @@ foreach ($allGalleryModels as $model) {
             @else
             <button id="gal-search-clear"
                     onclick="galSearch(document.getElementById('gallery-search').value)"
-                    class="hidden shrink-0 text-purple-300/70 hover:text-white transition-colors"
+                    class="hidden shrink-0 text-purple-500/70 hover:text-purple-900 dark:text-purple-300/70 dark:hover:text-white transition-colors"
                     title="Clear search">
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
@@ -200,26 +215,57 @@ foreach ($allGalleryModels as $model) {
         </div>
 
         {{-- Trending tags --}}
-        <div class="mt-5 flex flex-wrap items-center justify-center gap-2">
-            <span class="text-xs font-semibold text-purple-400 uppercase tracking-wide">Trending:</span>
-            @foreach(['amigurumi', 'blanket', 'sweater', 'cross-stitch', 'beanie', 'tote-bag'] as $tag)
+        <div id="trending-tags" style="display:none" class="mt-5 flex flex-wrap items-center justify-center gap-2">
+            <span class="text-xs font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wide">Trending:</span>
+            @foreach($trendingTags as $tag)
                 <button
                     onclick="galSearch('{{ $tag }}')"
                     class="rounded-full px-3 py-1 text-xs font-medium ring-1 transition-all duration-200
                         {{ ($search ?? '') === $tag
                             ? 'bg-purple-500/60 text-white ring-purple-400/70'
-                            : 'bg-white/10 text-purple-200 ring-white/10 hover:bg-purple-500/30 hover:text-white hover:ring-purple-400/50' }}">
+                            : 'bg-purple-100 text-purple-700 ring-purple-200/50 hover:bg-purple-200 hover:text-purple-900 hover:ring-purple-300 dark:bg-white/10 dark:text-purple-200 dark:ring-white/10 dark:hover:bg-purple-500/30 dark:hover:text-white dark:hover:ring-purple-400/50' }}">
                     #{{ $tag }}
                 </button>
             @endforeach
         </div>
+        <script>
+        (function() {
+            var row = document.getElementById('trending-tags');
+            if (!row) return;
+
+            function trimAndShow() {
+                row.style.cssText = 'visibility:hidden;';
+                row.offsetHeight; // force synchronous reflow with real fonts + Tailwind
+                var btns = Array.from(row.querySelectorAll('button'));
+                if (!btns.length) { row.style.cssText = ''; return; }
+                var firstTop = btns[0].getBoundingClientRect().top;
+                btns.forEach(function(b) {
+                    if (b.getBoundingClientRect().top > firstTop + 4) b.remove();
+                });
+                row.style.cssText = '';
+            }
+
+            // Wait for fonts (accurate text width) then for Tailwind CSS (accurate padding/radius)
+            (document.fonts ? document.fonts.ready : Promise.resolve()).then(function() {
+                (function checkTailwind() {
+                    var btn = row.querySelector('button');
+                    if (!btn) { row.style.cssText = ''; return; }
+                    if (parseFloat(window.getComputedStyle(btn).borderTopLeftRadius) > 0) {
+                        requestAnimationFrame(trimAndShow);
+                    } else {
+                        requestAnimationFrame(checkTailwind);
+                    }
+                })();
+            });
+        })();
+        </script>
 
     </div>
 </section>
 
 <!-- ─── Sticky tab bar ─── -->
 <div id="gallery-feed" class="sticky top-[65px] z-40 border-b border-zinc-200/80 bg-white/90 backdrop-blur dark:border-zinc-800/70 dark:bg-zinc-900/90">
-    <div class="max-w-6xl mx-auto px-3 sm:px-6 lg:px-12">
+    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-12">
         <div class="flex items-center justify-between py-2 sm:py-3 gap-2 sm:gap-4">
 
             <!-- Sliding pill tabs -->
@@ -281,8 +327,8 @@ foreach ($allGalleryModels as $model) {
 </div>
 
 <!-- ─── Feed ─── -->
-<section class="bg-white py-6 sm:py-10 dark:bg-zinc-900 min-h-screen">
-    <div class="max-w-6xl mx-auto px-3 sm:px-6 lg:px-12">
+<section class="bg-white py-4 sm:py-8 lg:py-10 dark:bg-zinc-900 min-h-screen">
+    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-12">
 
         <!-- ─ Recently Added feed ─ -->
         <div id="feed-recently-added" class="gallery-feed-section">
@@ -365,7 +411,7 @@ foreach ($allGalleryModels as $model) {
 <!-- ─── Login modal (guest) ─── -->
 <div id="login-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center">
     <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeLoginModal()"></div>
-    <div class="relative w-full max-w-sm rounded-2xl bg-white p-8 shadow-2xl dark:bg-zinc-900">
+    <div class="relative w-full max-w-sm mx-4 rounded-2xl bg-white p-6 sm:p-8 shadow-2xl dark:bg-zinc-900">
         <div class="text-center">
             <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-900/40">
                 <svg class="h-7 w-7 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -384,6 +430,34 @@ foreach ($allGalleryModels as $model) {
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
             </svg>
         </button>
+    </div>
+</div>
+
+<!-- ─── Delete confirmation modal ─── -->
+<div id="gal-delete-confirm-modal"
+     class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+    <div class="bg-zinc-900 border border-zinc-700 rounded-2xl w-full max-w-sm p-6 shadow-2xl">
+        <div class="flex items-center gap-3 mb-4">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-red-900/40 flex items-center justify-center">
+                <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m-9 0h14"/>
+                </svg>
+            </div>
+            <div>
+                <h3 class="text-base font-semibold text-white">Delete Post</h3>
+                <p class="text-sm text-zinc-400">This action cannot be undone.</p>
+            </div>
+        </div>
+        <div class="flex gap-3 justify-end">
+            <button id="gal-delete-confirm-cancel"
+                    class="px-4 py-2 text-sm font-semibold text-zinc-400 hover:text-white transition-colors">
+                Cancel
+            </button>
+            <button id="gal-delete-confirm-ok"
+                    class="px-5 py-2 text-sm font-semibold bg-red-600 hover:bg-red-500 text-white rounded-xl transition-colors">
+                Delete
+            </button>
+        </div>
     </div>
 </div>
 
@@ -478,11 +552,18 @@ foreach ($allGalleryModels as $model) {
                     @endauth
 
                     @auth
-                    <button id="gal-pm-save-btn" onclick="galPmToggleSave()" class="text-zinc-400 hover:text-purple-400 transition-colors duration-200">
-                        <svg id="gal-pm-save-icon" class="w-6 h-6 stroke-2 hover:scale-110 transition-transform duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
-                        </svg>
-                    </button>
+                    <div class="flex items-center gap-3">
+                        <button id="gal-pm-save-btn" onclick="galPmToggleSave()" class="text-zinc-400 hover:text-purple-400 transition-colors duration-200">
+                            <svg id="gal-pm-save-icon" class="w-6 h-6 stroke-2 hover:scale-110 transition-transform duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+                            </svg>
+                        </button>
+                        <button id="gal-pm-delete-btn" onclick="galPmDeletePost()" class="hidden text-zinc-400 hover:text-red-400 transition-colors duration-200" title="Delete post">
+                            <svg class="w-6 h-6 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m-9 0h14"/>
+                            </svg>
+                        </button>
+                    </div>
                     @else
                     <button onclick="openLoginModal()" class="text-zinc-600 hover:text-purple-400 transition-colors duration-200">
                         <svg class="w-6 h-6 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -593,12 +674,14 @@ document.addEventListener('click', function (e) {
 });
 </script>
 <script id="gallery-post-data" type="application/json">@json($galleryPostData)</script>
+<script id="gallery-auth-data" type="application/json">@json(auth()->id())</script>
 <script>
 // ═══════════════════════════════════════════════════════════
 // Gallery post modal
 // ═══════════════════════════════════════════════════════════
-const _galPosts  = JSON.parse(document.getElementById('gallery-post-data').textContent);
-const _galCsrf   = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
+const _galPosts      = JSON.parse(document.getElementById('gallery-post-data').textContent);
+const _galCsrf       = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
+const _galAuthUserId = JSON.parse(document.getElementById('gallery-auth-data').textContent);
 let   _galCurr   = null;
 let   _galIdx    = 0;
 
@@ -681,6 +764,9 @@ function galOpenModal(postId) {
 
     galPmSetLike(post.is_liked, post.likes_count);
     galPmSetSave(post.is_faved);
+
+    const delBtn = document.getElementById('gal-pm-delete-btn');
+    if (delBtn) delBtn.classList.toggle('hidden', !post.delete_url);
 
     // Build carousel
     const track = document.getElementById('gal-pm-track');
@@ -838,6 +924,44 @@ async function galPmToggleSave() {
         _galPosts[_galCurr.id].is_faved = data.favorited;
         galPmSetSave(data.favorited);
     } catch (err) { console.error(err); }
+}
+
+async function galPmDeletePost() {
+    if (!_galCurr || !_galCurr.delete_url) return;
+    const confirmed = await galShowDeleteConfirm();
+    if (!confirmed) return;
+    try {
+        const res = await fetch(_galCurr.delete_url, {
+            method: 'DELETE',
+            headers: { 'X-CSRF-TOKEN': _galCsrf, 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+            document.querySelectorAll(`[data-open-post="${_galCurr.id}"]`).forEach(el => {
+                const card = el.closest('.post-card');
+                if (card) card.remove(); else el.remove();
+            });
+            galCloseModal();
+        }
+    } catch (err) { console.error('Delete error:', err); }
+}
+
+function galShowDeleteConfirm() {
+    return new Promise(resolve => {
+        const modal  = document.getElementById('gal-delete-confirm-modal');
+        const okBtn  = document.getElementById('gal-delete-confirm-ok');
+        const canBtn = document.getElementById('gal-delete-confirm-cancel');
+        modal.classList.remove('hidden');
+        const done = (result) => {
+            modal.classList.add('hidden');
+            okBtn.removeEventListener('click', onOk);
+            canBtn.removeEventListener('click', onCancel);
+            resolve(result);
+        };
+        const onOk     = () => done(true);
+        const onCancel = () => done(false);
+        okBtn.addEventListener('click',  onOk);
+        canBtn.addEventListener('click', onCancel);
+    });
 }
 
 // ─── Comments ────────────────────────────────────────────────────────────────

@@ -451,12 +451,8 @@
                             <p class="text-sm font-semibold text-white mb-3">Display Language</p>
                             <div class="space-y-2 max-w-md">
                                 @foreach ([
-                                    ['value' => 'en', 'label' => 'English',  'native' => 'English',  'flag' => 'рџ‡єрџ‡ё'],
-                                    ['value' => 'ar', 'label' => 'Arabic',   'native' => 'Ш§Щ„Ш№Ш±ШЁЩЉШ©',  'flag' => 'рџ‡ёрџ‡¦'],
-                                    ['value' => 'fr', 'label' => 'French',   'native' => 'FranГ§ais', 'flag' => 'рџ‡«рџ‡·'],
-                                    ['value' => 'de', 'label' => 'German',   'native' => 'Deutsch',  'flag' => 'рџ‡©рџ‡Є'],
-                                    ['value' => 'es', 'label' => 'Spanish',  'native' => 'EspaГ±ol',  'flag' => 'рџ‡Єрџ‡ё'],
-                                    ['value' => 'tr', 'label' => 'Turkish',  'native' => 'TГјrkГ§e',   'flag' => 'рџ‡№рџ‡·'],
+                                    ['value' => 'en', 'label' => 'English',   'native' => 'English',    'flag' => '🇬🇧'],
+                                    ['value' => 'bg', 'label' => 'Bulgarian', 'native' => 'Български', 'flag' => '🇧🇬'],
                                 ] as $l)
                                 <button type="button"
                                         @click="lang = '{{ $l['value'] }}'"
@@ -475,34 +471,6 @@
                                     </div>
                                     <span x-show="lang === '{{ $l['value'] }}'"
                                           class="text-xs text-violet-400 font-semibold">Active</span>
-                                </button>
-                                @endforeach
-                            </div>
-                        </div>
-
-                        {{-- Date format --}}
-                        <div>
-                            <p class="text-sm font-semibold text-white mb-3">Date Format</p>
-                            <div class="space-y-2 max-w-md">
-                                @foreach ([
-                                    ['value' => 'mdy', 'label' => 'MM / DD / YYYY', 'example' => '03 / 11 / 2026'],
-                                    ['value' => 'dmy', 'label' => 'DD / MM / YYYY', 'example' => '11 / 03 / 2026'],
-                                    ['value' => 'ymd', 'label' => 'YYYY / MM / DD', 'example' => '2026 / 03 / 11'],
-                                ] as $d)
-                                <button type="button"
-                                        @click="fmt = '{{ $d['value'] }}'"
-                                        :class="fmt === '{{ $d['value'] }}'
-                                            ? 'border-violet-500 bg-violet-500/10'
-                                            : 'border-zinc-700 hover:border-zinc-500'"
-                                        class="w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all focus:outline-none text-left cursor-pointer">
-                                    <div :class="fmt === '{{ $d['value'] }}' ? 'border-violet-500' : 'border-zinc-600'"
-                                         class="w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0">
-                                        <div x-show="fmt === '{{ $d['value'] }}'" class="w-2 h-2 rounded-full bg-violet-500"></div>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm font-medium text-white">{{ $d['label'] }}</p>
-                                        <p class="text-xs text-zinc-400">e.g. {{ $d['example'] }}</p>
-                                    </div>
                                 </button>
                                 @endforeach
                             </div>

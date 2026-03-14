@@ -26,6 +26,7 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
         'unlike_url'  => route('posts.unlike',     $post->id),
         'fav_url'     => route('posts.favorite',   $post->id),
         'unfav_url'   => route('posts.unfavorite', $post->id),
+        'delete_url'  => route('posts.destroy',    $post->id),
     ];
 }
 @endphp
@@ -746,6 +747,19 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
          POST DETAIL MODAL
     ══════════════════════════════════════════════════ --}}
     <div id="post-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-2 sm:p-6 bg-black/80 backdrop-blur-sm" onclick="handlePostModalBackdrop(event)">
+
+        {{-- ◀ Prev post --}}
+        <button id="pm-nav-prev" onclick="profilePrevPost(); event.stopPropagation()" style="display:none"
+                class="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/90 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+
+        {{-- ▶ Next post --}}
+        <button id="pm-nav-next" onclick="profileNextPost(); event.stopPropagation()" style="display:none"
+                class="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/90 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+        </button>
+
         <div class="relative flex flex-col md:flex-row w-full max-w-6xl rounded-2xl overflow-hidden shadow-2xl ring-1 ring-zinc-700 bg-zinc-900" style="max-height:90vh;" onclick="event.stopPropagation()">
 
             {{-- ✕ close button --}}
@@ -812,13 +826,20 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                         </div>
                         @endauth
 
-                        {{-- Save --}}
+                        {{-- Save + Delete --}}
                         @auth
-                        <button id="pm-save-btn" onclick="pmToggleSave()" class="text-zinc-400 transition-colors duration-200 hover:text-violet-400">
-                            <svg id="pm-save-icon" class="w-6 h-6 stroke-2 hover:scale-110 transition-transform duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
-                            </svg>
-                        </button>
+                        <div class="flex items-center gap-3">
+                            <button id="pm-save-btn" onclick="pmToggleSave()" class="text-zinc-400 transition-colors duration-200 hover:text-violet-400">
+                                <svg id="pm-save-icon" class="w-6 h-6 stroke-2 hover:scale-110 transition-transform duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+                                </svg>
+                            </button>
+                            <button id="pm-delete-btn" onclick="pmDeletePost()" class="text-zinc-400 transition-colors duration-200 hover:text-red-400" title="Delete post">
+                                <svg class="w-6 h-6 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m-9 0h14"/>
+                                </svg>
+                            </button>
+                        </div>
                         @endauth
                     </div>
 
@@ -880,6 +901,36 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
 </div>{{-- /bg-zinc-950 --}}
 
 {{-- ══════════════════════════════════════════════════════════
+     Delete Confirmation Modal
+     ══════════════════════════════════════════════════════════ --}}
+<div id="delete-confirm-modal"
+     class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+    <div class="bg-zinc-900 border border-zinc-700 rounded-2xl w-full max-w-sm p-6 shadow-2xl">
+        <div class="flex items-center gap-3 mb-4">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-red-900/40 flex items-center justify-center">
+                <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m-9 0h14"/>
+                </svg>
+            </div>
+            <div>
+                <h3 class="text-base font-semibold text-white">Delete Post</h3>
+                <p class="text-sm text-zinc-400">This action cannot be undone.</p>
+            </div>
+        </div>
+        <div class="flex gap-3 justify-end">
+            <button id="delete-confirm-cancel"
+                    class="px-4 py-2 text-sm font-semibold text-zinc-400 hover:text-white transition-colors">
+                Cancel
+            </button>
+            <button id="delete-confirm-ok"
+                    class="px-5 py-2 text-sm font-semibold bg-red-600 hover:bg-red-500 text-white rounded-xl transition-colors">
+                Delete
+            </button>
+        </div>
+    </div>
+</div>
+
+{{-- ══════════════════════════════════════════════════════════
      Post-Collection – "New Collection" Quick Create Modal
      ══════════════════════════════════════════════════════════ --}}
 <div id="new-collection-modal"
@@ -927,11 +978,39 @@ if (!$followingHTML) {
 <script id="following-data" type="application/json">@json($followingHTML)</script>
 <script id="post-data"      type="application/json">@json($allPostData)</script>
 <script>
-// ── Thumbnail click → open post modal ─────────────────────
+// ── Thumbnail click → open post modal ─────────────────────────────────────
+let _profilePostList = [];  // ordered post IDs in the active grid
+let _profilePostIdx  = 0;  // current position in that list
+
 document.addEventListener('click', function (e) {
     const btn = e.target.closest('[data-post-id]');
-    if (btn) openPostModal(btn.dataset.postId);
+    if (!btn) return;
+    // Collect all visible thumbnails in the same grid as the clicked button
+    const grid = btn.closest('.grid');
+    if (grid) {
+        _profilePostList = Array.from(grid.querySelectorAll('[data-post-id]'))
+            .map(b => b.dataset.postId);
+        _profilePostIdx  = _profilePostList.indexOf(btn.dataset.postId);
+    } else {
+        _profilePostList = [btn.dataset.postId];
+        _profilePostIdx  = 0;
+    }
+    openPostModal(btn.dataset.postId);
 });
+
+function profileUpdateNavArrows() {
+    const prev = document.getElementById('pm-nav-prev');
+    const next = document.getElementById('pm-nav-next');
+    if (!prev || !next) return;
+    prev.style.display = (_profilePostList.length > 1 && _profilePostIdx > 0)                           ? 'flex' : 'none';
+    next.style.display = (_profilePostList.length > 1 && _profilePostIdx < _profilePostList.length - 1) ? 'flex' : 'none';
+}
+function profilePrevPost() {
+    if (_profilePostIdx > 0) { _profilePostIdx--; openPostModal(_profilePostList[_profilePostIdx]); }
+}
+function profileNextPost() {
+    if (_profilePostIdx < _profilePostList.length - 1) { _profilePostIdx++; openPostModal(_profilePostList[_profilePostIdx]); }
+}
 
 // ── Tab switching
 // ═══════════════════════════════════════════════════════════
@@ -1082,6 +1161,7 @@ function openPostModal(postId) {
     modal.classList.remove('hidden');
     modal.classList.add('flex');
     document.body.style.overflow = 'hidden';
+    profileUpdateNavArrows();
 }
 
 function closePostModal() {
@@ -1171,6 +1251,41 @@ async function pmToggleSave() {
     } catch (err) { console.error('Save error:', err); }
 }
 
+async function pmDeletePost() {
+    if (!_current) return;
+    const confirmed = await showDeleteConfirm();
+    if (!confirmed) return;
+    try {
+        const res = await fetch(_current.delete_url, {
+            method: 'DELETE',
+            headers: { 'X-CSRF-TOKEN': _csrf, 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+            document.querySelectorAll(`[data-post-id="${_current.id}"]`).forEach(el => el.remove());
+            closePostModal();
+        }
+    } catch (err) { console.error('Delete error:', err); }
+}
+
+function showDeleteConfirm() {
+    return new Promise(resolve => {
+        const modal  = document.getElementById('delete-confirm-modal');
+        const okBtn  = document.getElementById('delete-confirm-ok');
+        const canBtn = document.getElementById('delete-confirm-cancel');
+        modal.classList.remove('hidden');
+        const done = (result) => {
+            modal.classList.add('hidden');
+            okBtn.removeEventListener('click', onOk);
+            canBtn.removeEventListener('click', onCancel);
+            resolve(result);
+        };
+        const onOk     = () => done(true);
+        const onCancel = () => done(false);
+        okBtn.addEventListener('click',  onOk);
+        canBtn.addEventListener('click', onCancel);
+    });
+}
+
 // Touch swipe on carousel
 (function () {
     let sx = 0;
@@ -1188,8 +1303,11 @@ document.addEventListener('keydown', e => {
     const followOpen = !document.getElementById('follow-modal').classList.contains('hidden');
     if (postOpen) {
         if (e.key === 'Escape')     closePostModal();
-        if (e.key === 'ArrowLeft')  pmGo(-1);
-        if (e.key === 'ArrowRight') pmGo(1);
+        // ArrowLeft/Right navigate image carousel; Shift+Arrow navigates between posts
+        if (e.key === 'ArrowLeft'  && e.shiftKey) profilePrevPost();
+        else if (e.key === 'ArrowRight' && e.shiftKey) profileNextPost();
+        else if (e.key === 'ArrowLeft')  pmGo(-1);
+        else if (e.key === 'ArrowRight') pmGo(1);
     } else if (followOpen) {
         if (e.key === 'Escape') closeFollowModal();
     }

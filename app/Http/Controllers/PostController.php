@@ -128,7 +128,7 @@ class PostController extends Controller
         ], 201);
     }
 
-    public function destroy(Post $post): RedirectResponse
+    public function destroy(Post $post): RedirectResponse|JsonResponse
     {
         /** @var User $user */
         $user = Auth::user();
@@ -143,6 +143,10 @@ class PostController extends Controller
         }
 
         $post->delete();
+
+        if (request()->wantsJson()) {
+            return response()->json(['deleted' => true]);
+        }
 
         return redirect()->route('models.gallery')
                          ->with('success', 'Post deleted.');

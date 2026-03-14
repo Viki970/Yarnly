@@ -1,4 +1,4 @@
-@php($navbarId = uniqid('navbar'))
+﻿@php($navbarId = uniqid('navbar'))
 
 <nav class="sticky top-0 z-50 border-b border-zinc-200/70 bg-white/80 shadow-sm backdrop-blur lg:border-transparent lg:bg-white/70 dark:border-zinc-800/70 dark:bg-zinc-900/80 dark:shadow-[0_1px_0_rgba(255,255,255,0.05)] dark:lg:bg-zinc-900/70">
     <div class="mx-auto flex max-w-full items-center gap-4 px-5 py-4 xl:px-8">
@@ -79,116 +79,6 @@
                     </svg>
                     <span class="font-medium">Gallery</span>
                 </a>
-
-                <!-- Tutorials Dropdown -->
-                <div class="relative">
-                    <button type="button" data-dropdown-toggle="tutorials-dropdown" class="flex items-center gap-2 px-2 py-2 rounded-lg transition-all duration-200 hover:text-zinc-900 hover:bg-zinc-100/50 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800/50 cursor-pointer">
-                        <svg class="h-5 w-5 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                        <span class="font-medium">Tutorials</span>
-                        <svg class="h-4 w-4 transition-transform duration-300 ease-out dropdown-arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
-                    <div id="tutorials-dropdown" class="hidden absolute left-0 top-full mt-6 w-64 origin-top-left">
-                        <div class="rounded-xl bg-white/95 backdrop-blur-xl shadow-xl ring-1 ring-black/5 border border-white/20 dark:bg-zinc-900/95 dark:ring-white/10 dark:border-zinc-700/50">
-                            <div class="p-2">
-                                <a href="#beginner-course" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 hover:text-green-700 dark:text-zinc-200 dark:hover:from-green-900/20 dark:hover:to-emerald-900/20 dark:hover:text-green-300">
-                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-green-100 text-green-600 group-hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400 dark:group-hover:bg-green-800/40">
-                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5v14l11-7z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="font-semibold">Beginner Course</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Start your journey</div>
-                                    </div>
-                                </a>
-                                <a href="#stitches" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 hover:text-blue-700 dark:text-zinc-200 dark:hover:from-blue-900/20 dark:hover:to-cyan-900/20 dark:hover:text-blue-300">
-                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-600 group-hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:group-hover:bg-blue-800/40">
-                                        <svg class="h-4 w-4 transform rotate-45" fill="currentColor" viewBox="0 0 307 307">
-                                            <path d="M96.111,153.428c0-9.445-7.656-17.111-17.106-17.111c-3.824,0-7.316,1.31-10.165,3.425h5.774    c7.542,0,13.68,6.128,13.68,13.681c0,7.542-6.139,13.684-13.68,13.684H68.84c2.848,2.117,6.341,3.428,10.165,3.428    C88.455,170.539,96.111,162.875,96.111,153.428z" />
-                                            <path d="M85.04,153.428c0-5.398-4.375-9.779-9.779-9.779H18.245c-5.398,0-9.779,4.375-9.779,9.779    c0,5.409,4.381,9.774,9.779,9.774h57.016C80.665,163.202,85.04,158.836,85.04,153.428z" />
-                                            <path d="M27.275,167.116h-7.562c-7.55,0-13.686-6.141-13.686-13.688c0-7.552,6.136-13.681,13.686-13.681h7.562    c-2.848-2.115-6.343-3.425-10.165-3.425C7.661,136.322,0,143.983,0,153.433c0,9.447,7.656,17.11,17.111,17.11    C20.927,170.539,24.422,169.234,27.275,167.116z" />
-                                            <path d="M200.704,153.428c0-9.445-7.653-17.111-17.108-17.111c-3.821,0-7.322,1.31-10.17,3.425h5.773    c7.544,0,13.686,6.128,13.686,13.681c0,7.542-6.142,13.684-13.686,13.684h-5.773c2.848,2.117,6.349,3.428,10.17,3.428    C193.04,170.539,200.704,162.875,200.704,153.428z" />
-                                            <path d="M189.628,153.428c0-5.398-4.376-9.779-9.776-9.779H122.83c-5.398,0-9.773,4.375-9.773,9.779    c0,5.409,4.375,9.774,9.773,9.774h57.021C185.252,163.202,189.628,158.836,189.628,153.428z" />
-                                            <path d="M110.612,153.428c0-7.552,6.141-13.681,13.686-13.681h7.563c-2.848-2.115-6.343-3.425-10.167-3.425    c-9.442,0-17.108,7.661-17.108,17.111c0,9.447,7.661,17.11,17.108,17.11c3.824,0,7.319-1.305,10.167-3.428h-7.563    C116.759,167.116,110.612,160.975,110.612,153.428z" />
-                                            <path d="M289.747,136.322c-3.821,0-7.312,1.31-10.16,3.425h5.769c7.54,0,13.691,6.128,13.691,13.681    c0,7.547-6.151,13.688-13.691,13.688h-5.769c2.849,2.113,6.339,3.423,10.16,3.423c9.45,0,17.113-7.658,17.113-17.111    C306.855,143.983,299.197,136.322,289.747,136.322z" />
-                                            <path d="M295.774,153.428c0-5.398-4.371-9.779-9.776-9.779h-57.012c-5.396,0-9.771,4.375-9.771,9.779    c0,5.409,4.375,9.774,9.771,9.774h57.021C291.403,163.202,295.774,158.836,295.774,153.428z" />
-                                            <path d="M227.853,170.539c3.816,0,7.316-1.305,10.16-3.423h-7.556c-7.55,0-13.69-6.141-13.69-13.688    c0-7.552,6.141-13.681,13.69-13.681h7.556c-2.844-2.115-6.344-3.425-10.16-3.425c-9.45,0-17.113,7.661-17.113,17.111    C210.739,162.875,218.402,170.539,227.853,170.539z" />
-                                        </svg>
-                                        <svg class="h-4 w-4 absolute" fill="currentColor" viewBox="0 0 307 307" style="transform: rotate(135deg);">
-                                            <path d="M96.111,153.428c0-9.445-7.656-17.111-17.106-17.111c-3.824,0-7.316,1.31-10.165,3.425h5.774    c7.542,0,13.68,6.128,13.68,13.681c0,7.542-6.139,13.684-13.68,13.684H68.84c2.848,2.117,6.341,3.428,10.165,3.428    C88.455,170.539,96.111,162.875,96.111,153.428z" />
-                                            <path d="M85.04,153.428c0-5.398-4.375-9.779-9.779-9.779H18.245c-5.398,0-9.779,4.375-9.779,9.779    c0,5.409,4.381,9.774,9.779,9.774h57.016C80.665,163.202,85.04,158.836,85.04,153.428z" />
-                                            <path d="M27.275,167.116h-7.562c-7.55,0-13.686-6.141-13.686-13.688c0-7.552,6.136-13.681,13.686-13.681h7.562    c-2.848-2.115-6.343-3.425-10.165-3.425C7.661,136.322,0,143.983,0,153.433c0,9.447,7.656,17.11,17.111,17.11    C20.927,170.539,24.422,169.234,27.275,167.116z" />
-                                            <path d="M200.704,153.428c0-9.445-7.653-17.111-17.108-17.111c-3.821,0-7.322,1.31-10.17,3.425h5.773    c7.544,0,13.686,6.128,13.686,13.681c0,7.542-6.142,13.684-13.686,13.684h-5.773c2.848,2.117,6.349,3.428,10.17,3.428    C193.04,170.539,200.704,162.875,200.704,153.428z" />
-                                            <path d="M189.628,153.428c0-5.398-4.376-9.779-9.776-9.779H122.83c-5.398,0-9.773,4.375-9.773,9.779    c0,5.409,4.375,9.774,9.773,9.774h57.021C185.252,163.202,189.628,158.836,189.628,153.428z" />
-                                            <path d="M110.612,153.428c0-7.552,6.141-13.681,13.686-13.681h7.563c-2.848-2.115-6.343-3.425-10.167-3.425    c-9.442,0-17.108,7.661-17.108,17.111c0,9.447,7.661,17.11,17.108,17.11c3.824,0,7.319-1.305,10.167-3.428h-7.563    C116.759,167.116,110.612,160.975,110.612,153.428z" />
-                                            <path d="M289.747,136.322c-3.821,0-7.312,1.31-10.16,3.425h5.769c7.54,0,13.691,6.128,13.691,13.681    c0,7.547-6.151,13.688-13.691,13.688h-5.769c2.849,2.113,6.339,3.423,10.16,3.423c9.45,0,17.113-7.658,17.113-17.111    C306.855,143.983,299.197,136.322,289.747,136.322z" />
-                                            <path d="M295.774,153.428c0-5.398-4.371-9.779-9.776-9.779h-57.012c-5.396,0-9.771,4.375-9.771,9.779    c0,5.409,4.375,9.774,9.771,9.774h57.021C291.403,163.202,295.774,158.836,295.774,153.428z" />
-                                            <path d="M227.853,170.539c3.816,0,7.316-1.305,10.16-3.423h-7.556c-7.55,0-13.69-6.141-13.69-13.688    c0-7.552,6.141-13.681,13.69-13.681h7.556c-2.844-2.115-6.344-3.425-10.16-3.425c-9.45,0-17.113,7.661-17.113,17.111    C210.739,162.875,218.402,170.539,227.853,170.539z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="font-semibold">Stitches</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Learn basic stitches</div>
-                                    </div>
-                                </a>
-                                <a href="#techniques" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-purple-50 hover:to-violet-50 hover:text-purple-700 dark:text-zinc-200 dark:hover:from-purple-900/20 dark:hover:to-violet-900/20 dark:hover:text-purple-300">
-                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100 text-purple-600 group-hover:bg-purple-200 dark:bg-purple-900/30 dark:text-purple-400 dark:group-hover:bg-purple-800/40">
-                                        <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 512 512">
-                                            <path d="M222.837,164.727v-17.752h0.001c0-15.645-12.728-28.373-28.374-28.373c-4.702,0-9.138,1.157-13.047,3.19v-1.994    c0-15.645-12.728-28.373-28.373-28.373c-4.807,0-9.338,1.206-13.309,3.325c-1.868-13.849-13.758-24.563-28.109-24.563    c-8.164,0-15.529,3.471-20.711,9.008c-5.181-5.538-12.546-9.008-20.71-9.008c-15.645,0-28.373,12.728-28.373,28.373v111.764    c-4.007-2.169-8.593-3.403-13.462-3.403C12.728,206.922,0,219.65,0,235.294v91.996c0,0.956,0.179,1.904,0.528,2.793    l41.834,106.855c1.149,2.938,3.981,4.87,7.135,4.87h128.317c24.994,0,45.328-20.334,45.328-45.328V256.836L222.837,164.727z     M207.819,396.48h-0.002c0,16.543-13.459,30.002-30.002,30.002H54.727L15.326,325.843v-90.549c0-7.194,5.853-13.047,13.047-13.047    S41.42,228.1,41.42,235.294v51.409c0,3.653,2.617,6.805,6.198,7.522c1.501,0.3,36.754,7.855,36.754,51.278    c0,4.232,3.43,7.663,7.663,7.663c4.233,0,7.663-3.431,7.663-7.663c0-29.26-13.284-45.754-24.428-54.439    c-6.857-5.344-13.754-8.423-18.523-10.103v-4.559c0.265-0.777,0.415-1.605,0.415-2.472V98.561c0-7.194,5.853-13.047,13.047-13.047    s13.045,5.854,13.045,13.047v63.14v70.582c0,4.232,3.43,7.663,7.663,7.663c4.233,0,7.663-3.431,7.663-7.663v-70.582v-63.14    c0-7.194,5.854-13.047,13.048-13.047s13.047,5.853,13.047,13.047v21.237v17.751v94.785c0,4.232,3.43,7.663,7.663,7.663    c4.233,0,7.663-3.431,7.663-7.663v-94.785v-17.751c0-7.194,5.853-13.047,13.047-13.047s13.047,5.853,13.047,13.047v27.177v17.751    v67.608c0,4.232,3.43,7.663,7.663,7.663c4.233,0,7.663-3.431,7.663-7.663v-67.608v-17.751c0-7.194,5.853-13.047,13.047-13.047    c7.194,0,13.048,5.853,13.048,13.047v17.776l0.305,92.109V396.48z" />
-                                            <path d="M483.627,206.922c-4.869,0-9.454,1.234-13.463,3.403V98.561c0-15.645-12.728-28.373-28.373-28.373    c-8.164,0-15.529,3.471-20.71,9.008c-5.181-5.538-12.546-9.008-20.71-9.008c-14.353,0-26.243,10.714-28.111,24.563    c-3.971-2.119-8.502-3.325-13.309-3.325c-15.645,0-28.373,12.728-28.373,28.373v1.995c-3.909-2.033-8.344-3.19-13.047-3.19    c-15.645,0-28.373,12.728-28.373,28.373v17.725l-0.115,35.077c-0.237,1.054-0.25,2.169-0.011,3.282l-0.178,53.801v47.026    c0,0.017,0,0.034,0,0.051v92.542c0,24.994,20.333,45.328,45.327,45.328h128.317c3.154,0,5.985-1.932,7.135-4.87l41.835-106.855    c0.349-0.891,0.528-1.838,0.528-2.794v-91.996C512,219.65,499.272,206.922,483.627,206.922z M358.953,106.751    c7.194,0,13.047,5.853,13.047,13.047v17.751v33.419l-26.093,7.775v-14.016v-17.751v-27.177h-0.001    C345.907,112.604,351.759,106.751,358.953,106.751z M304.488,146.975c0-7.194,5.853-13.047,13.047-13.047    c7.194,0,13.047,5.853,13.047,13.047v17.751v18.583l-26.179,7.8l0.087-26.383v-17.751H304.488z M496.677,325.843h-0.003    l-39.402,100.639H334.184c-16.542,0-30.001-13.459-30.001-30.002v-86.767l61.514-18.328c4.056-1.209,6.365-5.476,5.156-9.532    c-1.209-4.056-5.479-6.366-9.532-5.156l-57.138,17.024v-36.835l0.165-49.77l26.233-7.816v33.034c0,4.232,3.43,7.663,7.663,7.663    c4.233,0,7.663-3.431,7.663-7.663v-37.601l26.093-7.775v45.375c0,4.232,3.43,7.663,7.663,7.663s7.663-3.431,7.663-7.663v-49.942    l12.306-3.667c4.056-1.209,6.365-5.476,5.156-9.532c-1.209-4.056-5.48-6.365-9.532-5.156l-7.93,2.362v-28.851v-17.751V98.561    c0-7.194,5.854-13.047,13.048-13.047s13.047,5.853,13.047,13.047v63.14v70.582c0,4.232,3.43,7.663,7.663,7.663    c4.233,0,7.663-3.431,7.663-7.663v-70.582v-63.14c0-7.194,5.853-13.047,13.047-13.047c7.194,0,13.047,5.853,13.047,13.047V273.93    c0,0.866,0.15,1.695,0.415,2.472v4.559c-4.77,1.681-11.666,4.759-18.523,10.103c-11.144,8.685-24.428,25.179-24.428,54.439    c0,4.232,3.43,7.663,7.663,7.663c4.233,0,7.663-3.431,7.663-7.663c0-43.424,35.253-50.977,36.717-51.271    c3.617-0.686,6.236-3.848,6.236-7.529v-51.409c0-7.194,5.854-13.047,13.048-13.047s13.047,5.853,13.047,13.047V325.843z" />
-                                            <path d="M185.826,324.207c-2.275-3.568-7.012-4.615-10.581-2.34l-52.315,33.366c-3.568,2.275-4.616,7.013-2.34,10.581    c1.462,2.292,3.938,3.543,6.468,3.543c1.41,0,2.836-0.389,4.114-1.204l52.315-33.366    C187.055,332.513,188.103,327.775,185.826,324.207z" />
-                                            <path d="M185.826,357.574c-2.276-3.568-7.011-4.616-10.581-2.34L122.93,388.6c-3.568,2.275-4.616,7.013-2.34,10.581    c1.462,2.291,3.938,3.543,6.468,3.543c1.41,0,2.836-0.388,4.114-1.204l52.315-33.366    C187.055,365.879,188.103,361.141,185.826,357.574z" />
-                                            <path d="M383.779,308.945c-1.209-4.056-5.482-6.365-9.533-5.156l-43.052,12.828c-4.056,1.209-6.365,5.476-5.156,9.532    c0.991,3.326,4.039,5.477,7.341,5.477c0.724,0,1.462-0.104,2.192-0.321l43.052-12.828    C382.68,317.268,384.988,313.002,383.779,308.945z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="font-semibold">Techniques</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Advanced methods</div>
-                                    </div>
-                                </a>
-                                <a href="#video-lessons" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-red-50 hover:to-rose-50 hover:text-red-700 dark:text-zinc-200 dark:hover:from-red-900/20 dark:hover:to-rose-900/20 dark:hover:text-red-300">
-                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100 text-red-600 group-hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400 dark:group-hover:bg-red-800/40">
-                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <circle cx="12" cy="12" r="10" />
-                                            <polygon points="10,8 16,12 10,16" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="font-semibold">Video Lessons</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Step-by-step guides</div>
-                                    </div>
-                                </a>
-                                <a href="#progress" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-orange-50 hover:to-amber-50 hover:text-orange-700 dark:text-zinc-200 dark:hover:from-orange-900/20 dark:hover:to-amber-900/20 dark:hover:text-orange-300">
-                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-100 text-orange-600 group-hover:bg-orange-200 dark:bg-orange-900/30 dark:text-orange-400 dark:group-hover:bg-orange-800/40">
-                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="font-semibold">Progress</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Track your learning</div>
-                                    </div>
-                                </a>
-                                <a href="{{ route('patterns.favorites') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-pink-50 hover:to-rose-50 hover:text-pink-700 dark:text-zinc-200 dark:hover:from-pink-900/20 dark:hover:to-rose-900/20 dark:hover:text-pink-300">
-                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-pink-100 text-pink-600 group-hover:bg-pink-200 dark:bg-pink-900/30 dark:text-pink-400 dark:group-hover:bg-pink-800/40">
-                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="font-semibold">Favorites</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Saved patterns</div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 @auth
                 <!-- Admin Panel (only for admins) -->
@@ -376,17 +266,6 @@
                                         <div class="text-xs text-zinc-500 dark:text-zinc-400">Saved patterns</div>
                                     </div>
                                 </a>
-                                <a href="#courses" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-orange-50 hover:to-amber-50 hover:text-orange-700 dark:text-zinc-200 dark:hover:from-orange-900/20 dark:hover:to-amber-900/20 dark:hover:text-orange-300">
-                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-100 text-orange-600 group-hover:bg-orange-200 dark:bg-orange-900/30 dark:text-orange-400 dark:group-hover:bg-orange-800/40">
-                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="font-semibold">Courses</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Learning progress</div>
-                                    </div>
-                                </a>
                                 <a href="{{ route('profile.settings') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-gray-50 hover:to-zinc-50 hover:text-gray-700 dark:text-zinc-200 dark:hover:from-gray-900/20 dark:hover:to-zinc-900/20 dark:hover:text-gray-300">
                                     <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-600 group-hover:bg-gray-200 dark:bg-gray-900/30 dark:text-gray-400 dark:group-hover:bg-gray-800/40">
                                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -523,122 +402,6 @@
                     <span class="font-medium">Gallery</span>
                 </a>
 
-                <!-- Tutorials Mobile Dropdown -->
-                <div class="relative">
-                    <button type="button" data-mobile-dropdown-toggle="mobile-tutorials-dropdown" class="flex w-full items-center justify-between gap-3 rounded-lg px-4 py-3 transition-all duration-200 hover:bg-zinc-100/80 hover:text-zinc-900 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100 cursor-pointer">
-                        <div class="flex items-center gap-3">
-                            <svg class="h-5 w-5 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                            <span class="font-medium">Tutorials</span>
-                        </div>
-                        <svg class="h-4 w-4 transition-transform duration-300 ease-out mobile-dropdown-arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
-                    <div id="mobile-tutorials-dropdown" class="hidden mt-3 bg-white/95 backdrop-blur-xl rounded-xl shadow-lg ring-1 ring-black/5 border border-white/20 dark:bg-zinc-900/95 dark:ring-white/10 dark:border-zinc-700/50">
-                        <div class="p-2">
-                            <a href="#beginner-course" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 hover:text-green-700 dark:text-zinc-200 dark:hover:from-green-900/20 dark:hover:to-emerald-900/20 dark:hover:text-green-300">
-                                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-green-100 text-green-600 group-hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400 dark:group-hover:bg-green-800/40">
-                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5v14l11-7z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <div class="font-semibold">Beginner Course</div>
-                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">Start your journey</div>
-                                </div>
-                            </a>
-                            <a href="#stitches" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 hover:text-blue-700 dark:text-zinc-200 dark:hover:from-blue-900/20 dark:hover:to-cyan-900/20 dark:hover:text-blue-300">
-                                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-600 group-hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:group-hover:bg-blue-800/40">
-                                    <svg class="h-4 w-4 transform rotate-45" fill="currentColor" viewBox="0 0 307 307" style="transform: scale(0.7) rotate(45deg);">
-                                        <path d="M96.111,153.428c0-9.445-7.656-17.111-17.106-17.111c-3.824,0-7.316,1.31-10.165,3.425h5.774    c7.542,0,13.68,6.128,13.68,13.681c0,7.542-6.139,13.684-13.68,13.684H68.84c2.848,2.117,6.341,3.428,10.165,3.428    C88.455,170.539,96.111,162.875,96.111,153.428z" />
-                                        <path d="M85.04,153.428c0-5.398-4.375-9.779-9.779-9.779H18.245c-5.398,0-9.779,4.375-9.779,9.779    c0,5.409,4.381,9.774,9.779,9.774h57.016C80.665,163.202,85.04,158.836,85.04,153.428z" />
-                                        <path d="M27.275,167.116h-7.562c-7.55,0-13.686-6.141-13.686-13.688c0-7.552,6.136-13.681,13.686-13.681h7.562    c-2.848-2.115-6.343-3.425-10.165-3.425C7.661,136.322,0,143.983,0,153.433c0,9.447,7.656,17.11,17.111,17.11    C20.927,170.539,24.422,169.234,27.275,167.116z" />
-                                        <path d="M200.704,153.428c0-9.445-7.653-17.111-17.108-17.111c-3.821,0-7.322,1.31-10.17,3.425h5.773    c7.544,0,13.686,6.128,13.686,13.681c0,7.542-6.142,13.684-13.686,13.684h-5.773c2.848,2.117,6.349,3.428,10.17,3.428    C193.04,170.539,200.704,162.875,200.704,153.428z" />
-                                        <path d="M189.628,153.428c0-5.398-4.376-9.779-9.776-9.779H122.83c-5.398,0-9.773,4.375-9.773,9.779    c0,5.409,4.375,9.774,9.773,9.774h57.021C185.252,163.202,189.628,158.836,189.628,153.428z" />
-                                        <path d="M110.612,153.428c0-7.552,6.141-13.681,13.686-13.681h7.563c-2.848-2.115-6.343-3.425-10.167-3.425    c-9.442,0-17.108,7.661-17.108,17.111c0,9.447,7.661,17.11,17.108,17.11c3.824,0,7.319-1.305,10.167-3.428h-7.563    C116.759,167.116,110.612,160.975,110.612,153.428z" />
-                                        <path d="M289.747,136.322c-3.821,0-7.312,1.31-10.16,3.425h5.769c7.54,0,13.691,6.128,13.691,13.681    c0,7.547-6.151,13.688-13.691,13.688h-5.769c2.849,2.113,6.339,3.423,10.16,3.423c9.45,0,17.113-7.658,17.113-17.111    C306.855,143.983,299.197,136.322,289.747,136.322z" />
-                                        <path d="M295.774,153.428c0-5.398-4.371-9.779-9.776-9.779h-57.012c-5.396,0-9.771,4.375-9.771,9.779    c0,5.409,4.375,9.774,9.771,9.774h57.021C291.403,163.202,295.774,158.836,295.774,153.428z" />
-                                        <path d="M227.853,170.539c3.816,0,7.316-1.305,10.16-3.423h-7.556c-7.55,0-13.69-6.141-13.69-13.688    c0-7.552,6.141-13.681,13.69-13.681h7.556c-2.844-2.115-6.344-3.425-10.16-3.425c-9.45,0-17.113,7.661-17.113,17.111    C210.739,162.875,218.402,170.539,227.853,170.539z" />
-                                    </svg>
-                                    <svg class="h-4 w-4 absolute" fill="currentColor" viewBox="0 0 307 307" style="transform: scale(0.7) rotate(315deg);">
-                                        <path d="M96.111,153.428c0-9.445-7.656-17.111-17.106-17.111c-3.824,0-7.316,1.31-10.165,3.425h5.774    c7.542,0,13.68,6.128,13.68,13.681c0,7.542-6.139,13.684-13.68,13.684H68.84c2.848,2.117,6.341,3.428,10.165,3.428    C88.455,170.539,96.111,162.875,96.111,153.428z" />
-                                        <path d="M85.04,153.428c0-5.398-4.375-9.779-9.779-9.779H18.245c-5.398,0-9.779,4.375-9.779,9.779    c0,5.409,4.381,9.774,9.779,9.774h57.016C80.665,163.202,85.04,158.836,85.04,153.428z" />
-                                        <path d="M27.275,167.116h-7.562c-7.55,0-13.686-6.141-13.686-13.688c0-7.552,6.136-13.681,13.686-13.681h7.562    c-2.848-2.115-6.343-3.425-10.165-3.425C7.661,136.322,0,143.983,0,153.433c0,9.447,7.656,17.11,17.111,17.11    C20.927,170.539,24.422,169.234,27.275,167.116z" />
-                                        <path d="M200.704,153.428c0-9.445-7.653-17.111-17.108-17.111c-3.821,0-7.322,1.31-10.17,3.425h5.773    c7.544,0,13.686,6.128,13.686,13.681c0,7.542-6.142,13.684-13.686,13.684h-5.773c2.848,2.117,6.349,3.428,10.17,3.428    C193.04,170.539,200.704,162.875,200.704,153.428z" />
-                                        <path d="M189.628,153.428c0-5.398-4.376-9.779-9.776-9.779H122.83c-5.398,0-9.773,4.375-9.773,9.779    c0,5.409,4.375,9.774,9.773,9.774h57.021C185.252,163.202,189.628,158.836,189.628,153.428z" />
-                                        <path d="M110.612,153.428c0-7.552,6.141-13.681,13.686-13.681h7.563c-2.848-2.115-6.343-3.425-10.167-3.425    c-9.442,0-17.108,7.661-17.108,17.111c0,9.447,7.661,17.11,17.108,17.11c3.824,0,7.319-1.305,10.167-3.428h-7.563    C116.759,167.116,110.612,160.975,110.612,153.428z" />
-                                        <path d="M289.747,136.322c-3.821,0-7.312,1.31-10.16,3.425h5.769c7.54,0,13.691,6.128,13.691,13.681    c0,7.547-6.151,13.688-13.691,13.688h-5.769c2.849,2.113,6.339,3.423,10.16,3.423c9.45,0,17.113-7.658,17.113-17.111    C306.855,143.983,299.197,136.322,289.747,136.322z" />
-                                        <path d="M295.774,153.428c0-5.398-4.371-9.779-9.776-9.779h-57.012c-5.396,0-9.771,4.375-9.771,9.779    c0,5.409,4.375,9.774,9.771,9.774h57.021C291.403,163.202,295.774,158.836,295.774,153.428z" />
-                                        <path d="M227.853,170.539c3.816,0,7.316-1.305,10.16-3.423h-7.556c-7.55,0-13.69-6.141-13.69-13.688    c0-7.552,6.141-13.681,13.69-13.681h7.556c-2.844-2.115-6.344-3.425-10.16-3.425c-9.45,0-17.113,7.661-17.113,17.111    C210.739,162.875,218.402,170.539,227.853,170.539z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <div class="font-semibold">Stitches</div>
-                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">Learn basic stitches</div>
-                                </div>
-                            </a>
-                            <a href="#techniques" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-purple-50 hover:to-violet-50 hover:text-purple-700 dark:text-zinc-200 dark:hover:from-purple-900/20 dark:hover:to-violet-900/20 dark:hover:text-purple-300">
-                                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100 text-purple-600 group-hover:bg-purple-200 dark:bg-purple-900/30 dark:text-purple-400 dark:group-hover:bg-purple-800/40">
-                                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 512 512" style="transform: scale(0.7);">
-
-                                        <path d="M222.837,164.727v-17.752h0.001c0-15.645-12.728-28.373-28.374-28.373c-4.702,0-9.138,1.157-13.047,3.19v-1.994    c0-15.645-12.728-28.373-28.373-28.373c-4.807,0-9.338,1.206-13.309,3.325c-1.868-13.849-13.758-24.563-28.109-24.563    c-8.164,0-15.529,3.471-20.711,9.008c-5.181-5.538-12.546-9.008-20.71-9.008c-15.645,0-28.373,12.728-28.373,28.373v111.764    c-4.007-2.169-8.593-3.403-13.462-3.403C12.728,206.922,0,219.65,0,235.294v91.996c0,0.956,0.179,1.904,0.528,2.793    l41.834,106.855c1.149,2.938,3.981,4.87,7.135,4.87h128.317c24.994,0,45.328-20.334,45.328-45.328V256.836L222.837,164.727z     M207.819,396.48h-0.002c0,16.543-13.459,30.002-30.002,30.002H54.727L15.326,325.843v-90.549c0-7.194,5.853-13.047,13.047-13.047    S41.42,228.1,41.42,235.294v51.409c0,3.653,2.617,6.805,6.198,7.522c1.501,0.3,36.754,7.855,36.754,51.278    c0,4.232,3.43,7.663,7.663,7.663c4.233,0,7.663-3.431,7.663-7.663c0-29.26-13.284-45.754-24.428-54.439    c-6.857-5.344-13.754-8.423-18.523-10.103v-4.559c0.265-0.777,0.415-1.605,0.415-2.472V98.561c0-7.194,5.853-13.047,13.047-13.047    s13.045,5.854,13.045,13.047v63.14v70.582c0,4.232,3.43,7.663,7.663,7.663c4.233,0,7.663-3.431,7.663-7.663v-70.582v-63.14    c0-7.194,5.854-13.047,13.048-13.047s13.047,5.853,13.047,13.047v21.237v17.751v94.785c0,4.232,3.43,7.663,7.663,7.663    c4.233,0,7.663-3.431,7.663-7.663v-94.785v-17.751c0-7.194,5.853-13.047,13.047-13.047s13.047,5.853,13.047,13.047v27.177v17.751    v67.608c0,4.232,3.43,7.663,7.663,7.663c4.233,0,7.663-3.431,7.663-7.663v-67.608v-17.751c0-7.194,5.853-13.047,13.047-13.047    c7.194,0,13.048,5.853,13.048,13.047v17.776l0.305,92.109V396.48z" />
-
-                                        <path d="M483.627,206.922c-4.869,0-9.454,1.234-13.463,3.403V98.561c0-15.645-12.728-28.373-28.373-28.373    c-8.164,0-15.529,3.471-20.71,9.008c-5.181-5.538-12.546-9.008-20.71-9.008c-14.353,0-26.243,10.714-28.111,24.563    c-3.971-2.119-8.502-3.325-13.309-3.325c-15.645,0-28.373,12.728-28.373,28.373v1.995c-3.909-2.033-8.344-3.19-13.047-3.19    c-15.645,0-28.373,12.728-28.373,28.373v17.725l-0.115,35.077c-0.237,1.054-0.25,2.169-0.011,3.282l-0.178,53.801v47.026    c0,0.017,0,0.034,0,0.051v92.542c0,24.994,20.333,45.328,45.327,45.328h128.317c3.154,0,5.985-1.932,7.135-4.87l41.835-106.855    c0.349-0.891,0.528-1.838,0.528-2.794v-91.996C512,219.65,499.272,206.922,483.627,206.922z M358.953,106.751    c7.194,0,13.047,5.853,13.047,13.047v17.751v33.419l-26.093,7.775v-14.016v-17.751v-27.177h-0.001    C345.907,112.604,351.759,106.751,358.953,106.751z M304.488,146.975c0-7.194,5.853-13.047,13.047-13.047    c7.194,0,13.047,5.853,13.047,13.047v17.751v18.583l-26.179,7.8l0.087-26.383v-17.751H304.488z M496.677,325.843h-0.003    l-39.402,100.639H334.184c-16.542,0-30.001-13.459-30.001-30.002v-86.767l61.514-18.328c4.056-1.209,6.365-5.476,5.156-9.532    c-1.209-4.056-5.479-6.366-9.532-5.156l-57.138,17.024v-36.835l0.165-49.77l26.233-7.816v33.034c0,4.232,3.43,7.663,7.663,7.663    c4.233,0,7.663-3.431,7.663-7.663v-37.601l26.093-7.775v45.375c0,4.232,3.43,7.663,7.663,7.663s7.663-3.431,7.663-7.663v-49.942    l12.306-3.667c4.056-1.209,6.365-5.476,5.156-9.532c-1.209-4.056-5.48-6.365-9.532-5.156l-7.93,2.362v-28.851v-17.751V98.561    c0-7.194,5.854-13.047,13.048-13.047s13.047,5.853,13.047,13.047v63.14v70.582c0,4.232,3.43,7.663,7.663,7.663    c4.233,0,7.663-3.431,7.663-7.663v-70.582v-63.14c0-7.194,5.853-13.047,13.047-13.047c7.194,0,13.047,5.853,13.047,13.047V273.93    c0,0.866,0.15,1.695,0.415,2.472v4.559c-4.77,1.681-11.666,4.759-18.523,10.103c-11.144,8.685-24.428,25.179-24.428,54.439    c0,4.232,3.43,7.663,7.663,7.663c4.233,0,7.663-3.431,7.663-7.663c0-43.424,35.253-50.977,36.717-51.271    c3.617-0.686,6.236-3.848,6.236-7.529v-51.409c0-7.194,5.854-13.047,13.048-13.047s13.047,5.853,13.047,13.047V325.843z" />
-
-                                        <path d="M185.826,324.207c-2.275-3.568-7.012-4.615-10.581-2.34l-52.315,33.366c-3.568,2.275-4.616,7.013-2.34,10.581    c1.462,2.292,3.938,3.543,6.468,3.543c1.41,0,2.836-0.389,4.114-1.204l52.315-33.366    C187.055,332.513,188.103,327.775,185.826,324.207z" />
-
-                                        <path d="M185.826,357.574c-2.276-3.568-7.011-4.616-10.581-2.34L122.93,388.6c-3.568,2.275-4.616,7.013-2.34,10.581    c1.462,2.291,3.938,3.543,6.468,3.543c1.41,0,2.836-0.388,4.114-1.204l52.315-33.366    C187.055,365.879,188.103,361.141,185.826,357.574z" />
-
-                                        <path d="M383.779,308.945c-1.209-4.056-5.482-6.365-9.533-5.156l-43.052,12.828c-4.056,1.209-6.365,5.476-5.156,9.532    c0.991,3.326,4.039,5.477,7.341,5.477c0.724,0,1.462-0.104,2.192-0.321l43.052-12.828    C382.68,317.268,384.988,313.002,383.779,308.945z" />
-
-                                    </svg>
-                                </div>
-                                <div>
-                                    <div class="font-semibold">Techniques</div>
-                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">Advanced methods</div>
-                                </div>
-                            </a>
-                            <a href="#video-lessons" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-red-50 hover:to-rose-50 hover:text-red-700 dark:text-zinc-200 dark:hover:from-red-900/20 dark:hover:to-rose-900/20 dark:hover:text-red-300">
-                                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100 text-red-600 group-hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400 dark:group-hover:bg-red-800/40">
-                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <circle cx="12" cy="12" r="10" />
-                                        <polygon points="10,8 16,12 10,16" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <div class="font-semibold">Video Lessons</div>
-                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">Step-by-step guides</div>
-                                </div>
-                            </a>
-                            <a href="#progress" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-orange-50 hover:to-amber-50 hover:text-orange-700 dark:text-zinc-200 dark:hover:from-orange-900/20 dark:hover:to-amber-900/20 dark:hover:text-orange-300">
-                                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-100 text-orange-600 group-hover:bg-orange-200 dark:bg-orange-900/30 dark:text-orange-400 dark:group-hover:bg-orange-800/40">
-                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <div class="font-semibold">Progress</div>
-                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">Track your learning</div>
-                                </div>
-                            </a>
-                            <a href="{{ route('patterns.favorites') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-pink-50 hover:to-rose-50 hover:text-pink-700 dark:text-zinc-200 dark:hover:from-pink-900/20 dark:hover:to-rose-900/20 dark:hover:text-pink-300">
-                                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-pink-100 text-pink-600 group-hover:bg-pink-200 dark:bg-pink-900/30 dark:text-pink-400 dark:group-hover:bg-pink-800/40">
-                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <div class="font-semibold">Favorites</div>
-                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">Saved patterns</div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
                 @auth
                 <!-- Admin Panel Mobile Dropdown (only for admins) -->
                 @if(auth()->user()->isAdmin ?? false)
@@ -699,7 +462,7 @@
                 </div>
                 @endif
 
-                <!-- 👤 Account Mobile Dropdown -->
+                <!-- рџ‘¤ Account Mobile Dropdown -->
                 <div class="relative">
                     <button type="button" data-mobile-dropdown-toggle="mobile-account-dropdown" class="flex w-full items-center justify-between gap-3 rounded-lg px-4 py-3 transition-all duration-200 hover:bg-zinc-100/80 hover:text-zinc-900 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100 cursor-pointer">
                         <div class="flex items-center gap-3">
@@ -736,12 +499,6 @@
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                             </svg>
                             <span>Favorites</span>
-                        </a>
-                        <a href="#courses" class="flex items-center gap-3 rounded-lg px-4 py-2 text-sm transition-all duration-200 hover:bg-orange-50 hover:text-orange-700 dark:hover:bg-orange-900/20 dark:hover:text-orange-300">
-                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
-                            </svg>
-                            <span>Courses</span>
                         </a>
                         <a href="{{ route('profile.settings') }}" class="flex items-center gap-3 rounded-lg px-4 py-2 text-sm transition-all duration-200 hover:bg-gray-50 hover:text-gray-700 dark:hover:bg-gray-900/20 dark:hover:text-gray-300">
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
