@@ -23,8 +23,8 @@
 
         {{-- Header --}}
         <div class="mb-8">
-            <h1 class="text-xl font-bold">Settings</h1>
-            <p class="text-sm text-zinc-400 mt-0.5">Manage your account preferences</p>
+            <h1 class="text-xl font-bold">{{ __('Settings') }}</h1>
+            <p class="text-sm text-zinc-400 mt-0.5">{{ __('Manage your account preferences') }}</p>
         </div>
 
         <div class="flex gap-8 max-lg:flex-col">
@@ -35,17 +35,17 @@
 
                     @php
                     $tabs = [
-                        ['id' => 'password',      'label' => 'Password & Security',
+                        ['id' => 'password',      'label' => __('Password & Security'),
                          'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>'],
-                        ['id' => 'notifications', 'label' => 'Notifications',
+                        ['id' => 'notifications', 'label' => __('Notifications'),
                          'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>'],
-                        ['id' => 'privacy',       'label' => 'Privacy',
+                        ['id' => 'privacy',       'label' => __('Privacy'),
                          'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>'],
-                        ['id' => 'theme',         'label' => 'Theme',
+                        ['id' => 'theme',         'label' => __('Theme'),
                          'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>'],
-                        ['id' => 'language',      'label' => 'Language',
+                        ['id' => 'language',      'label' => __('Language'),
                          'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>'],
-                        ['id' => 'danger',        'label' => 'Danger Zone',
+                        ['id' => 'danger',        'label' => __('Danger Zone'),
                          'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>'],
                     ];
                     @endphp
@@ -89,27 +89,27 @@
                                 </svg>
                             </div>
                             <div>
-                                <h2 class="text-base font-bold">Change Password</h2>
-                                <p class="text-xs text-zinc-400">Use a long, random password to stay secure.</p>
+                                <h2 class="text-base font-bold">{{ __('Change Password') }}</h2>
+                                <p class="text-xs text-zinc-400">{{ __('Use a long, random password to stay secure.') }}</p>
                             </div>
                         </div>
                         <form method="post" action="{{ route('password.update') }}" class="space-y-5 max-w-md">
                             @csrf
                             @method('put')
                             <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">Current Password</label>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">{{ __('Current Password') }}</label>
                                 <input type="password" name="current_password" autocomplete="current-password"
                                        class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
                                 <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">New Password</label>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">{{ __('New Password') }}</label>
                                 <input type="password" name="password" autocomplete="new-password"
                                        class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
                                 <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">Confirm New Password</label>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">{{ __('Confirm New Password') }}</label>
                                 <input type="password" name="password_confirmation" autocomplete="new-password"
                                        class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
                                 <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
@@ -117,12 +117,12 @@
                             <div class="flex items-center gap-4 pt-1">
                                 <button type="submit"
                                         class="px-8 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition-colors">
-                                    Update Password
+                                    {{ __('Update Password') }}
                                 </button>
                                 @if (session('status') === 'password-updated')
                                     <span x-data="{ show: true }" x-show="show" x-transition
                                           x-init="setTimeout(() => show = false, 2000)"
-                                          class="text-sm text-green-400">Password updated!</span>
+                                          class="text-sm text-green-400">{{ __('Password updated!') }}</span>
                                 @endif
                             </div>
                         </form>
@@ -136,8 +136,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <h2 class="text-base font-bold">Account Email</h2>
-                                <p class="text-xs text-zinc-400">Change your login email address.</p>
+                                <h2 class="text-base font-bold">{{ __('Account Email') }}</h2>
+                                <p class="text-xs text-zinc-400">{{ __('Change your login email address.') }}</p>
                             </div>
                         </div>
                         <form method="post" action="{{ route('profile.update') }}" class="space-y-4 max-w-md">
@@ -145,18 +145,18 @@
                             @method('patch')
                             <input type="hidden" name="_from" value="settings">
                             <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">Email Address</label>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">{{ __('Email Address') }}</label>
                                 <input type="email" name="email" value="{{ old('email', auth()->user()->email) }}" required
                                        class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
                                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
                                 @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! auth()->user()->hasVerifiedEmail())
                                     <p class="mt-2 text-xs text-zinc-400">
-                                        Your email is unverified.
+                                        {{ __('Your email is unverified.') }}
                                         <form id="send-verification" method="post" action="{{ route('verification.send') }}" class="inline">@csrf</form>
-                                        <button form="send-verification" class="underline text-violet-400 hover:text-violet-300 ml-1">Resend verification</button>
+                                        <button form="send-verification" class="underline text-violet-400 hover:text-violet-300 ml-1">{{ __('Resend verification') }}</button>
                                     </p>
                                     @if (session('status') === 'verification-link-sent')
-                                        <p class="mt-1 text-xs text-green-400">Verification link sent!</p>
+                                        <p class="mt-1 text-xs text-green-400">{{ __('Verification link sent!') }}</p>
                                     @endif
                                 @endif
                             </div>
@@ -165,7 +165,7 @@
                             <input type="hidden" name="username" value="{{ auth()->user()->username }}">
                             <button type="submit"
                                     class="px-8 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition-colors">
-                                Update Email
+                                {{ __('Update Email') }}
                             </button>
                         </form>
                     </div>
@@ -185,8 +185,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <h2 class="text-base font-bold">Notification Preferences</h2>
-                                <p class="text-xs text-zinc-400">Choose what you want to be notified about.</p>
+                                <h2 class="text-base font-bold">{{ __('Notification Preferences') }}</h2>
+                                <p class="text-xs text-zinc-400">{{ __('Choose what you want to be notified about.') }}</p>
                             </div>
                         </div>
 
@@ -195,7 +195,7 @@
                             <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                             </svg>
-                            Preferences saved successfully.
+                            {{ __('Preferences saved successfully.') }}
                         </div>
                         @endif
 
@@ -218,12 +218,12 @@
 
                             <div class="space-y-3 max-w-md">
                                 @foreach ([
-                                    ['key' => 'notify_followers',       'label' => 'New followers',    'desc' => 'When someone follows you'],
-                                    ['key' => 'notify_likes',           'label' => 'New likes',        'desc' => 'When someone likes your post'],
-                                    ['key' => 'notify_comments',        'label' => 'New comments',     'desc' => 'When someone comments on your post'],
-                                    ['key' => 'notify_new_posts',       'label' => 'New posts',        'desc' => 'New posts from people you follow'],
-                                    ['key' => 'notify_new_patterns',    'label' => 'New patterns',     'desc' => 'New patterns from people you follow'],
-                                    ['key' => 'notify_new_collections', 'label' => 'New collections',  'desc' => 'New collections from people you follow'],
+                                    ['key' => 'notify_followers',       'label' => __('New followers'),    'desc' => __('When someone follows you')],
+                                    ['key' => 'notify_likes',           'label' => __('New likes'),        'desc' => __('When someone likes your post')],
+                                    ['key' => 'notify_comments',        'label' => __('New comments'),     'desc' => __('When someone comments on your post')],
+                                    ['key' => 'notify_new_posts',       'label' => __('New posts'),        'desc' => __('New posts from people you follow')],
+                                    ['key' => 'notify_new_patterns',    'label' => __('New patterns'),     'desc' => __('New patterns from people you follow')],
+                                    ['key' => 'notify_new_collections', 'label' => __('New collections'),  'desc' => __('New collections from people you follow')],
                                 ] as $item)
                                 <div class="flex items-center justify-between gap-4 px-4 py-3.5 bg-zinc-800 rounded-xl">
                                     <div>
@@ -243,14 +243,14 @@
                             <div class="mt-6">
                                 <button type="submit"
                                         class="px-8 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition-colors">
-                                    Save Preferences
+                                    {{ __('Save Preferences') }}
                                 </button>
                             </div>
                         </form>
                     </div>
                 </div>
 
-                {{-- в•ђв•ђв•ђ PRIVACY в•ђв•ђв•ђ --}}
+                {{-- ═══ PRIVACY ═══ --}}
                 <div x-show="activeTab === 'privacy'" x-cloak
                      x-transition:enter="transition ease-out duration-150"
                      x-transition:enter-start="opacity-0 translate-y-1"
@@ -264,8 +264,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <h2 class="text-base font-bold">Privacy Settings</h2>
-                                <p class="text-xs text-zinc-400">Control who can see and interact with your content.</p>
+                                <h2 class="text-base font-bold">{{ __('Privacy Settings') }}</h2>
+                                <p class="text-xs text-zinc-400">{{ __('Control who can see and interact with your content.') }}</p>
                             </div>
                         </div>
                         <form method="POST" action="{{ route('profile.privacy.save') }}">
@@ -275,16 +275,16 @@
                                 <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                 </svg>
-                                Privacy preferences saved.
+                                {{ __('Privacy preferences saved.') }}
                             </div>
                             @endif
                             <div class="space-y-3 max-w-md">
                                 @foreach ([
-                                    ['key' => 'searchable_profile',     'label' => 'Searchable profile',     'desc' => 'Let your profile appear in search and explore results'],
-                                    ['key' => 'show_liked_posts',       'label' => 'Show liked posts',       'desc' => 'Let others see which posts you\'ve liked'],
-                                    ['key' => 'show_saved_posts',       'label' => 'Show saved posts',       'desc' => 'Let others see which posts you\'ve saved'],
-                                    ['key' => 'show_saved_patterns',    'label' => 'Show saved patterns',    'desc' => 'Let others see which patterns you\'ve favourited'],
-                                    ['key' => 'show_saved_collections', 'label' => 'Show saved collections', 'desc' => 'Let others browse the collections you\'ve created'],
+                                    ['key' => 'searchable_profile',     'label' => __('Searchable profile'),     'desc' => __('Let your profile appear in search and explore results')],
+                                    ['key' => 'show_liked_posts',       'label' => __('Show liked posts'),       'desc' => __('Let others see which posts you\'ve liked')],
+                                    ['key' => 'show_saved_posts',       'label' => __('Show saved posts'),       'desc' => __('Let others see which posts you\'ve saved')],
+                                    ['key' => 'show_saved_patterns',    'label' => __('Show saved patterns'),    'desc' => __('Let others see which patterns you\'ve favourited')],
+                                    ['key' => 'show_saved_collections', 'label' => __('Show saved collections'), 'desc' => __('Let others browse the collections you\'ve created')],
                                 ] as $item)
                                 @php $isOn = $privacyPrefs[$item['key']] ?? true; @endphp
                                 <div class="flex items-center justify-between gap-4 px-4 py-3.5 bg-zinc-800 rounded-xl"
@@ -305,7 +305,7 @@
                             </div>
                             <div class="mt-6">
                                 <button type="submit" class="px-8 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition-colors">
-                                    Save Preferences
+                                    {{ __('Save Preferences') }}
                                 </button>
                             </div>
                         </form>
@@ -331,19 +331,19 @@
                                 </svg>
                             </div>
                             <div>
-                                <h2 class="text-base font-bold">Appearance</h2>
-                                <p class="text-xs text-zinc-400">Choose how Yarnly looks for you.</p>
+                                <h2 class="text-base font-bold">{{ __('Appearance') }}</h2>
+                                <p class="text-xs text-zinc-400">{{ __('Choose how Yarnly looks for you.') }}</p>
                             </div>
                         </div>
 
                         {{-- Colour mode --}}
                         <div>
-                            <p class="text-sm font-semibold text-white mb-3">Colour Mode</p>
+                            <p class="text-sm font-semibold text-white mb-3">{{ __('Colour Mode') }}</p>
                             <div class="grid grid-cols-3 gap-3 max-w-sm">
                                 @foreach ([
-                                    ['value' => 'dark',   'label' => 'Dark',   'bg' => 'bg-zinc-900',  'bar' => 'bg-zinc-700'],
-                                    ['value' => 'light',  'label' => 'Light',  'bg' => 'bg-white',     'bar' => 'bg-zinc-200'],
-                                    ['value' => 'system', 'label' => 'System', 'bg' => 'bg-gradient-to-br from-zinc-900 to-white', 'bar' => 'bg-gradient-to-r from-zinc-700 to-zinc-200'],
+                                    ['value' => 'dark',   'label' => __('Dark'),   'bg' => 'bg-zinc-900',  'bar' => 'bg-zinc-700'],
+                                    ['value' => 'light',  'label' => __('Light'),  'bg' => 'bg-white',     'bar' => 'bg-zinc-200'],
+                                    ['value' => 'system', 'label' => __('System'), 'bg' => 'bg-gradient-to-br from-zinc-900 to-white', 'bar' => 'bg-gradient-to-r from-zinc-700 to-zinc-200'],
                                 ] as $t)
                                 <button type="button"
                                         @click="theme = '{{ $t['value'] }}'; localStorage.setItem('yarnly-theme', '{{ $t['value'] }}')"
@@ -366,16 +366,16 @@
 
                         {{-- Accent colour --}}
                         <div>
-                            <p class="text-sm font-semibold text-white mb-3">Accent Colour</p>
+                            <p class="text-sm font-semibold text-white mb-3">{{ __('Accent Colour') }}</p>
                             <div class="flex items-center gap-3 flex-wrap">
                                 @foreach ([
-                                    ['value' => 'default', 'label' => 'Default', 'bg' => 'bg-[conic-gradient(from_0deg,_#f43f5e,_#f97316,_#eab308,_#22c55e,_#06b6d4,_#6366f1,_#a855f7,_#f43f5e)]'],
-                                    ['value' => 'violet',  'label' => 'Violet',  'bg' => 'bg-violet-500'],
-                                    ['value' => 'indigo',  'label' => 'Indigo',  'bg' => 'bg-indigo-500'],
-                                    ['value' => 'rose',    'label' => 'Rose',    'bg' => 'bg-rose-500'],
-                                    ['value' => 'emerald', 'label' => 'Emerald', 'bg' => 'bg-emerald-500'],
-                                    ['value' => 'amber',   'label' => 'Amber',   'bg' => 'bg-amber-500'],
-                                    ['value' => 'sky',     'label' => 'Sky',     'bg' => 'bg-sky-500'],
+                                    ['value' => 'default', 'label' => __('Default'), 'bg' => 'bg-[conic-gradient(from_0deg,_#f43f5e,_#f97316,_#eab308,_#22c55e,_#06b6d4,_#6366f1,_#a855f7,_#f43f5e)]'],
+                                    ['value' => 'violet',  'label' => __('Violet'),  'bg' => 'bg-violet-500'],
+                                    ['value' => 'indigo',  'label' => __('Indigo'),  'bg' => 'bg-indigo-500'],
+                                    ['value' => 'rose',    'label' => __('Rose'),    'bg' => 'bg-rose-500'],
+                                    ['value' => 'emerald', 'label' => __('Emerald'), 'bg' => 'bg-emerald-500'],
+                                    ['value' => 'amber',   'label' => __('Amber'),   'bg' => 'bg-amber-500'],
+                                    ['value' => 'sky',     'label' => __('Sky'),     'bg' => 'bg-sky-500'],
                                 ] as $a)
                                 <div class="flex flex-col items-center gap-1.5">
                                     <button type="button"
@@ -392,12 +392,12 @@
 
                         {{-- Font size --}}
                         <div>
-                            <p class="text-sm font-semibold text-white mb-3">Font Size</p>
+                            <p class="text-sm font-semibold text-white mb-3">{{ __('Font Size') }}</p>
                             <div class="space-y-2 max-w-md">
                                 @foreach ([
-                                    ['value' => 'small',  'label' => 'Small',  'preview' => 'Aa', 'size' => 'text-sm',  'desc' => 'Compact — fits more on screen'],
-                                    ['value' => 'medium', 'label' => 'Medium', 'preview' => 'Aa', 'size' => 'text-base','desc' => 'Default — balanced readability'],
-                                    ['value' => 'large',  'label' => 'Large',  'preview' => 'Aa', 'size' => 'text-lg',  'desc' => 'Comfortable — easier on the eyes'],
+                                    ['value' => 'small',  'label' => __('Small'),  'preview' => 'Aa', 'size' => 'text-sm',  'desc' => __('Compact — fits more on screen')],
+                                    ['value' => 'medium', 'label' => __('Medium'), 'preview' => 'Aa', 'size' => 'text-base','desc' => __('Default — balanced readability')],
+                                    ['value' => 'large',  'label' => __('Large'),  'preview' => 'Aa', 'size' => 'text-lg',  'desc' => __('Comfortable — easier on the eyes')],
                                 ] as $f)
                                 <button type="button"
                                         @click="size = '{{ $f['value'] }}'; localStorage.setItem('yarnly-font', '{{ $f['value'] }}'); document.documentElement.style.fontSize = ({ small: '13px', medium: '15px', large: '17px' })['{{ $f['value'] }}']"
@@ -421,7 +421,7 @@
                         </div>
 
                         <button class="px-8 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition-colors">
-                            Save Appearance
+                            {{ __('Save Appearance') }}
                         </button>
                     </div>
                 </div>
@@ -431,7 +431,7 @@
                      x-transition:enter="transition ease-out duration-150"
                      x-transition:enter-start="opacity-0 translate-y-1"
                      x-transition:enter-end="opacity-100 translate-y-0"
-                     x-data="{ lang: '{{ app()->getLocale() }}', fmt: 'mdy' }">
+                     x-data="{ lang: '{{ app()->getLocale() }}' }">
                     <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-8">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 rounded-xl bg-blue-500/20 flex items-center justify-center">
@@ -441,44 +441,60 @@
                                 </svg>
                             </div>
                             <div>
-                                <h2 class="text-base font-bold">Language & Region</h2>
-                                <p class="text-xs text-zinc-400">Set your preferred language and regional format.</p>
+                                <h2 class="text-base font-bold">{{ __('Language & Region') }}</h2>
+                                <p class="text-xs text-zinc-400">{{ __('Set your preferred language and regional format.') }}</p>
                             </div>
                         </div>
 
-                        {{-- Language list --}}
-                        <div>
-                            <p class="text-sm font-semibold text-white mb-3">Display Language</p>
-                            <div class="space-y-2 max-w-md">
-                                @foreach ([
-                                    ['value' => 'en', 'label' => 'English',   'native' => 'English',    'flag' => '🇬🇧'],
-                                    ['value' => 'bg', 'label' => 'Bulgarian', 'native' => 'Български', 'flag' => '🇧🇬'],
-                                ] as $l)
-                                <button type="button"
-                                        @click="lang = '{{ $l['value'] }}'"
-                                        :class="lang === '{{ $l['value'] }}'
-                                            ? 'border-violet-500 bg-violet-500/10'
-                                            : 'border-zinc-700 hover:border-zinc-500'"
-                                        class="w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all focus:outline-none text-left cursor-pointer">
-                                    <div :class="lang === '{{ $l['value'] }}' ? 'border-violet-500' : 'border-zinc-600'"
-                                         class="w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0">
-                                        <div x-show="lang === '{{ $l['value'] }}'" class="w-2 h-2 rounded-full bg-violet-500"></div>
-                                    </div>
-                                    <span class="text-lg leading-none">{{ $l['flag'] }}</span>
-                                    <div class="flex-1">
-                                        <p class="text-sm font-medium text-white">{{ $l['label'] }}</p>
-                                        <p class="text-xs text-zinc-400">{{ $l['native'] }}</p>
-                                    </div>
-                                    <span x-show="lang === '{{ $l['value'] }}'"
-                                          class="text-xs text-violet-400 font-semibold">Active</span>
+                        @if(session('language_saved'))
+                        <div class="flex items-center gap-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 px-4 py-2.5 text-sm text-emerald-400">
+                            <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            {{ __('Language preference saved.') }}
+                        </div>
+                        @endif
+
+                        <form method="POST" action="{{ route('profile.language.save') }}">
+                            @csrf
+                            <input type="hidden" name="locale" :value="lang">
+
+                            {{-- Language list --}}
+                            <div>
+                                <p class="text-sm font-semibold text-white mb-3">{{ __('Display Language') }}</p>
+                                <div class="space-y-2 max-w-md">
+                                    @foreach ([
+                                        ['value' => 'en', 'label' => 'English',   'native' => 'English',    'flag' => '🇬🇧'],
+                                        ['value' => 'bg', 'label' => 'Bulgarian', 'native' => 'Български', 'flag' => '🇧🇬'],
+                                    ] as $l)
+                                    <button type="button"
+                                            @click="lang = '{{ $l['value'] }}'"
+                                            :class="lang === '{{ $l['value'] }}'
+                                                ? 'border-violet-500 bg-violet-500/10'
+                                                : 'border-zinc-700 hover:border-zinc-500'"
+                                            class="w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all focus:outline-none text-left cursor-pointer">
+                                        <div :class="lang === '{{ $l['value'] }}' ? 'border-violet-500' : 'border-zinc-600'"
+                                             class="w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0">
+                                            <div x-show="lang === '{{ $l['value'] }}'" class="w-2 h-2 rounded-full bg-violet-500"></div>
+                                        </div>
+                                        <span class="text-lg leading-none">{{ $l['flag'] }}</span>
+                                        <div class="flex-1">
+                                            <p class="text-sm font-medium text-white">{{ $l['label'] }}</p>
+                                            <p class="text-xs text-zinc-400">{{ $l['native'] }}</p>
+                                        </div>
+                                        <span x-show="lang === '{{ $l['value'] }}'"
+                                              class="text-xs text-violet-400 font-semibold">{{ __('Active') }}</span>
+                                    </button>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                            <div class="pt-2">
+                                <button type="submit" class="px-8 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition-colors">
+                                    {{ __('Save Language') }}
                                 </button>
-                                @endforeach
                             </div>
-                        </div>
-
-                        <button class="px-8 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition-colors">
-                            Save Language
-                        </button>
+                        </form>
                     </div>
                 </div>
 
@@ -497,21 +513,20 @@
                                 </svg>
                             </div>
                             <div>
-                                <h2 class="text-base font-bold text-red-400">Danger Zone</h2>
-                                <p class="text-xs text-zinc-400">Irreversible and destructive actions.</p>
+                                <h2 class="text-base font-bold text-red-400">{{ __('Danger Zone') }}</h2>
+                                <p class="text-xs text-zinc-400">{{ __('Irreversible and destructive actions.') }}</p>
                             </div>
                         </div>
                         <div class="flex items-start justify-between gap-6 p-4 bg-zinc-800 rounded-xl border border-red-900/30">
                             <div>
-                                <p class="text-sm font-semibold text-white">Delete Account</p>
+                                <p class="text-sm font-semibold text-white">{{ __('Delete Account') }}</p>
                                 <p class="text-xs text-zinc-400 mt-1 leading-relaxed">
-                                    Once your account is deleted, all of its resources and data will be permanently removed.
-                                    This action cannot be undone.
+                                    {{ __('Once your account is deleted, all of its resources and data will be permanently removed. This action cannot be undone.') }}
                                 </p>
                             </div>
                             <button type="button" @click="confirmingDeletion = true"
                                     class="shrink-0 px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-sm font-semibold transition-colors whitespace-nowrap">
-                                Delete Account
+                                {{ __('Delete Account') }}
                             </button>
                         </div>
                         <div x-show="confirmingDeletion"
@@ -525,28 +540,27 @@
                              style="display: none;">
                             <div @click.outside="confirmingDeletion = false"
                                  class="w-full max-w-md bg-zinc-900 border border-zinc-700 rounded-2xl shadow-2xl p-6 space-y-4">
-                                <h2 class="text-lg font-bold text-white">Are you sure?</h2>
+                                <h2 class="text-lg font-bold text-white">{{ __('Are you sure?') }}</h2>
                                 <p class="text-sm text-zinc-400">
-                                    Once your account is deleted, all of its resources and data will be permanently deleted.
-                                    Please enter your password to confirm.
+                                    {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm.') }}
                                 </p>
                                 <form method="post" action="{{ route('profile.destroy') }}" class="space-y-4 mt-2">
                                     @csrf
                                     @method('delete')
                                     <div>
-                                        <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">Password</label>
-                                        <input type="password" name="password" placeholder="Enter your password"
+                                        <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">{{ __('Password') }}</label>
+                                        <input type="password" name="password" placeholder="{{ __('Enter your password') }}"
                                                class="w-full bg-zinc-800 border border-zinc-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition">
                                         <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
                                     </div>
                                     <div class="flex justify-end gap-3 pt-1">
                                         <button type="button" @click="confirmingDeletion = false"
                                                 class="px-5 py-2.5 rounded-xl bg-zinc-700 hover:bg-zinc-600 text-white text-sm font-semibold transition-colors">
-                                            Cancel
+                                            {{ __('Cancel') }}
                                         </button>
                                         <button type="submit"
                                                 class="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white text-sm font-semibold transition-colors">
-                                            Delete Account
+                                            {{ __('Delete Account') }}
                                         </button>
                                     </div>
                                 </form>

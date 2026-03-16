@@ -12,16 +12,16 @@
             </div>
             <h1 class="text-5xl font-extrabold tracking-tight mb-3">
                 <span class="bg-gradient-to-r from-teal-700 via-emerald-500 to-teal-500 dark:from-teal-300 dark:via-emerald-200 dark:to-teal-200 bg-clip-text text-transparent">
-                    Create New Collection
+                    {{ __('Create New Collection') }}
                 </span>
             </h1>
             <div class="flex items-center justify-center gap-2 mb-3">
                 <span class="h-px w-12 bg-gradient-to-r from-transparent to-teal-400 dark:to-teal-400 rounded-full"></span>
-                <span class="text-teal-600 dark:text-teal-300 text-xs font-semibold uppercase tracking-widest">Curate your craft</span>
+                <span class="text-teal-600 dark:text-teal-300 text-xs font-semibold uppercase tracking-widest">{{ __('Curate your craft') }}</span>
                 <span class="h-px w-12 bg-gradient-to-l from-transparent to-teal-400 dark:to-teal-400 rounded-full"></span>
             </div>
             <p class="text-zinc-500 dark:text-zinc-400 text-base">
-                Organize your selected patterns into a beautiful collection
+                {{ __('Organize your selected patterns into a beautiful collection') }}
             </p>
         </div>
 
@@ -40,7 +40,7 @@
         <!-- Selected Patterns Preview -->
         <div class="mb-8">
             <h3 class="text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-4 uppercase tracking-widest">
-                Selected Patterns ({{ $patterns->count() }})
+                {{ __('Selected Patterns') }} ({{ $patterns->count() }})
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($patterns as $pattern)
@@ -101,7 +101,7 @@
                 <!-- Collection Name -->
                 <div>
                     <label for="name" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3">
-                        Collection Name <span class="text-red-500">*</span>
+                        {{ __('Collection Name') }} <span class="text-red-500">*</span>
                     </label>
                     <input type="text" 
                            id="name" 
@@ -109,7 +109,7 @@
                            value="{{ old('name') }}"
                            required
                            class="w-full px-4 py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
-                           placeholder="e.g., Summer Crochet Projects">
+                           placeholder="{{ __('e.g., Summer Crochet Projects') }}">
                     @error('name')
                         <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                     @enderror
@@ -118,13 +118,13 @@
                 <!-- Description -->
                 <div>
                     <label for="description" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3">
-                        Description
+                        {{ __('Description') }}
                     </label>
                     <textarea id="description" 
                               name="description" 
                               rows="4"
                               class="w-full px-4 py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
-                              placeholder="Describe your collection...">{{ old('description') }}</textarea>
+                              placeholder="{{ __('Describe your collection...') }}">{{ old('description') }}</textarea>
                     @error('description')
                         <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                     @enderror
@@ -133,15 +133,15 @@
                 <!-- Craft Type -->
                 <div>
                     <label for="craft_type" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3">
-                        Craft Type <span class="text-red-500">*</span>
+                        {{ __('Craft Type') }} <span class="text-red-500">*</span>
                     </label>
                     <select id="craft_type" 
                             name="craft_type" 
                             required
                             class="w-full px-4 py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all">
-                        <option value="crochet" {{ old('craft_type') == 'crochet' ? 'selected' : '' }}>Crochet</option>
-                        <option value="knitting" {{ old('craft_type') == 'knitting' ? 'selected' : '' }}>Knitting</option>
-                        <option value="embroidery" {{ old('craft_type') == 'embroidery' ? 'selected' : '' }}>Embroidery</option>
+                        <option value="crochet" {{ old('craft_type') == 'crochet' ? 'selected' : '' }}>{{ __('Crochet') }}</option>
+                        <option value="knitting" {{ old('craft_type') == 'knitting' ? 'selected' : '' }}>{{ __('Knitting') }}</option>
+                        <option value="embroidery" {{ old('craft_type') == 'embroidery' ? 'selected' : '' }}>{{ __('Embroidery') }}</option>
                     </select>
                     @error('craft_type')
                         <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
@@ -151,7 +151,7 @@
                 <!-- Cover Image -->
                 <div>
                     <label for="cover_image" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3">
-                        Cover Image (Optional)
+                        {{ __('Cover Image (Optional)') }}
                     </label>
                     <div class="flex items-center gap-4">
                         <label for="cover_image" class="flex-1 cursor-pointer">
@@ -160,10 +160,10 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
                                 </svg>
                                 <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-                                    <span class="font-semibold text-teal-600 dark:text-teal-400">Click to upload</span> or drag and drop
+                                    <span class="font-semibold text-teal-600 dark:text-teal-400">{{ __('Click to upload') }}</span> {{ __('or drag and drop') }}
                                 </p>
-                                <p class="text-xs text-zinc-500 dark:text-zinc-500 mt-1">PNG, JPG, GIF up to 5MB</p>
-                                <p class="text-xs text-zinc-500 dark:text-zinc-500 mt-1">If no image is uploaded, a pattern image will be used</p>
+                                <p class="text-xs text-zinc-500 dark:text-zinc-500 mt-1">{{ __('PNG, JPG, GIF up to 5MB') }}</p>
+                                <p class="text-xs text-zinc-500 dark:text-zinc-500 mt-1">{{ __('If no image is uploaded, a pattern image will be used') }}</p>
                             </div>
                             <input id="cover_image" 
                                    name="cover_image" 
@@ -184,7 +184,7 @@
                 <!-- Visibility -->
                 <div>
                     <label class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3">
-                        Visibility <span class="text-red-500">*</span>
+                        {{ __('Visibility') }} <span class="text-red-500">*</span>
                     </label>
                     <div class="space-y-3">
                         <label class="flex items-start p-4 rounded-lg border-2 border-zinc-300 dark:border-zinc-700 cursor-pointer hover:border-teal-500 dark:hover:border-teal-400 transition-all">
@@ -194,8 +194,8 @@
                                    {{ old('is_public', '1') == '1' ? 'checked' : '' }}
                                    class="mt-1 w-4 h-4 text-teal-600 focus:ring-0 cursor-pointer">
                             <div class="ml-3">
-                                <span class="block font-semibold text-zinc-900 dark:text-white">Public</span>
-                                <span class="block text-sm text-zinc-600 dark:text-zinc-400">Anyone can view this collection</span>
+                                <span class="block font-semibold text-zinc-900 dark:text-white">{{ __('Public') }}</span>
+                                <span class="block text-sm text-zinc-600 dark:text-zinc-400">{{ __('Anyone can view this collection') }}</span>
                             </div>
                         </label>
                         <label class="flex items-start p-4 rounded-lg border-2 border-zinc-300 dark:border-zinc-700 cursor-pointer hover:border-teal-500 dark:hover:border-teal-400 transition-all">
@@ -205,8 +205,8 @@
                                    {{ old('is_public') == '0' ? 'checked' : '' }}
                                    class="mt-1 w-4 h-4 text-teal-600 focus:ring-0 cursor-pointer">
                             <div class="ml-3">
-                                <span class="block font-semibold text-zinc-900 dark:text-white">Private</span>
-                                <span class="block text-sm text-zinc-600 dark:text-zinc-400">Only you can view this collection</span>
+                                <span class="block font-semibold text-zinc-900 dark:text-white">{{ __('Private') }}</span>
+                                <span class="block text-sm text-zinc-600 dark:text-zinc-400">{{ __('Only you can view this collection') }}</span>
                             </div>
                         </label>
                     </div>
@@ -219,11 +219,11 @@
                 <div class="flex justify-end gap-4 mt-8 pt-6 border-t border-teal-100 dark:border-teal-900/40">
                     <a href="{{ route('collections.select-patterns') }}"
                         class="px-6 py-3 rounded-lg border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 font-semibold hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-all duration-200">
-                        Cancel
+                        {{ __('Cancel') }}
                     </a>
                     <button type="submit"
                         class="px-8 py-3 rounded-lg bg-gradient-to-r from-teal-600 to-emerald-500 text-white font-semibold hover:from-teal-700 hover:to-emerald-600 transform hover:scale-105 transition-all duration-200 shadow-lg shadow-teal-500/25">
-                        Create Collection
+                        {{ __('Create Collection') }}
                     </button>
                 </div>
                 </div><!-- end p-8 space-y-6 -->

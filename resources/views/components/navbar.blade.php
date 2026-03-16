@@ -17,7 +17,7 @@
                     <svg class="h-5 w-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                     </svg>
-                    <span class="font-medium">Home</span>
+                    <span class="font-medium">{{ __('Home') }}</span>
                 </a>
 
                 <!-- Patterns Dropdown -->
@@ -26,7 +26,7 @@
                         <svg class="h-5 w-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                         </svg>
-                        <span class="font-medium">Patterns</span>
+                        <span class="font-medium">{{ __('Patterns') }}</span>
                         <svg class="h-4 w-4 transition-transform duration-300 ease-out dropdown-arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
                         </svg>
@@ -41,8 +41,8 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="font-semibold">Crochet</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Blankets, amigurumi & more</div>
+                                        <div class="font-semibold">{{ __('Crochet') }}</div>
+                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Blankets, amigurumi & more') }}</div>
                                     </div>
                                 </a>
                                 <a href="{{ route('patterns.knitting') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-violet-50 hover:to-purple-50 hover:text-violet-700 dark:text-zinc-200 dark:hover:from-violet-900/20 dark:hover:to-purple-900/20 dark:hover:text-violet-300">
@@ -52,8 +52,8 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="font-semibold">Knitting</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Sweaters, scarves & more</div>
+                                        <div class="font-semibold">{{ __('Knitting') }}</div>
+                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Sweaters, scarves & more') }}</div>
                                     </div>
                                 </a>
                                 <a href="{{ route('patterns.embroidery') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-rose-50 hover:to-pink-50 hover:text-rose-700 dark:text-zinc-200 dark:hover:from-rose-900/20 dark:hover:to-pink-900/20 dark:hover:text-rose-300">
@@ -63,8 +63,8 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="font-semibold">Embroidery</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Cross stitch, needlepoint</div>
+                                        <div class="font-semibold">{{ __('Embroidery') }}</div>
+                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Cross stitch, needlepoint') }}</div>
                                     </div>
                                 </a>
                             </div>
@@ -77,7 +77,7 @@
                     <svg class="h-5 w-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    <span class="font-medium">Gallery</span>
+                    <span class="font-medium">{{ __('Gallery') }}</span>
                 </a>
 
                 @auth
@@ -89,7 +89,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
-                        <span class="font-medium">Admin Panel</span>
+                        <span class="font-medium">{{ __('Admin Panel') }}</span>
                         <svg class="h-4 w-4 transition-transform duration-300 ease-out dropdown-arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
                         </svg>
@@ -104,8 +104,8 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="font-semibold">Dashboard</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Admin overview</div>
+                                        <div class="font-semibold">{{ __('Dashboard') }}</div>
+                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Admin overview') }}</div>
                                     </div>
                                 </a>
                                 <a href="#approve-models" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 hover:text-green-700 dark:text-zinc-200 dark:hover:from-green-900/20 dark:hover:to-emerald-900/20 dark:hover:text-green-300">
@@ -115,8 +115,8 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="font-semibold">Approve Models</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Review submissions</div>
+                                        <div class="font-semibold">{{ __('Approve Models') }}</div>
+                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Review submissions') }}</div>
                                     </div>
                                 </a>
                                 <a href="#manage-users" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700 dark:text-zinc-200 dark:hover:from-blue-900/20 dark:hover:to-indigo-900/20 dark:hover:text-blue-300">
@@ -128,8 +128,8 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="font-semibold">Manage Users</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">User administration</div>
+                                        <div class="font-semibold">{{ __('Manage Users') }}</div>
+                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('User administration') }}</div>
                                     </div>
                                 </a>
                                 <a href="#manage-materials" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-purple-50 hover:to-violet-50 hover:text-purple-700 dark:text-zinc-200 dark:hover:from-purple-900/20 dark:hover:to-violet-900/20 dark:hover:text-purple-300">
@@ -139,8 +139,8 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="font-semibold">Add/Edit Materials</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Manage resources</div>
+                                        <div class="font-semibold">{{ __('Add/Edit Materials') }}</div>
+                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Manage resources') }}</div>
                                     </div>
                                 </a>
                                 <a href="#statistics" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-orange-50 hover:to-amber-50 hover:text-orange-700 dark:text-zinc-200 dark:hover:from-orange-900/20 dark:hover:to-amber-900/20 dark:hover:text-orange-300">
@@ -150,8 +150,8 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="font-semibold">Statistics</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Platform analytics</div>
+                                        <div class="font-semibold">{{ __('Statistics') }}</div>
+                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Platform analytics') }}</div>
                                     </div>
                                 </a>
                                 <a href="#notifications" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-yellow-50 hover:to-amber-50 hover:text-yellow-700 dark:text-zinc-200 dark:hover:from-yellow-900/20 dark:hover:to-amber-900/20 dark:hover:text-yellow-300">
@@ -162,8 +162,8 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="font-semibold">Notifications</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">System alerts</div>
+                                        <div class="font-semibold">{{ __('Notifications') }}</div>
+                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('System alerts') }}</div>
                                     </div>
                                 </a>
                                 <a href="#reports" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-red-50 hover:to-rose-50 hover:text-red-700 dark:text-zinc-200 dark:hover:from-red-900/20 dark:hover:to-rose-900/20 dark:hover:text-red-300">
@@ -173,8 +173,8 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="font-semibold">Reports</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Content moderation</div>
+                                        <div class="font-semibold">{{ __('Reports') }}</div>
+                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Content moderation') }}</div>
                                     </div>
                                 </a>
                             </div>
@@ -201,10 +201,10 @@
 
                 @guest
                 @if (Route::has('login'))
-                <a href="{{ route('login') }}" class="inline-flex items-center justify-center rounded-md border border-zinc-200 px-4 py-2 text-sm font-medium text-zinc-700 transition-all duration-200 hover:border-violet-300 hover:bg-violet-50 hover:text-violet-700 hover:shadow-md hover:scale-105 dark:border-zinc-700 dark:text-zinc-200 dark:hover:border-violet-500 dark:hover:bg-violet-900/20 dark:hover:text-violet-300">Log in</a>
+                <a href="{{ route('login') }}" class="inline-flex items-center justify-center rounded-md border border-zinc-200 px-4 py-2 text-sm font-medium text-zinc-700 transition-all duration-200 hover:border-violet-300 hover:bg-violet-50 hover:text-violet-700 hover:shadow-md hover:scale-105 dark:border-zinc-700 dark:text-zinc-200 dark:hover:border-violet-500 dark:hover:bg-violet-900/20 dark:hover:text-violet-300">{{ __('Log in') }}</a>
                 @endif
                 @if (Route::has('register'))
-                <a href="{{ route('register') }}" class="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-violet-500/40 transition-all duration-200 hover:shadow-lg hover:shadow-violet-500/60 hover:scale-105 hover:brightness-110 hover:-translate-y-0.5">Sign up</a>
+                <a href="{{ route('register') }}" class="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-violet-500/40 transition-all duration-200 hover:shadow-lg hover:shadow-violet-500/60 hover:scale-105 hover:brightness-110 hover:-translate-y-0.5">{{ __('Sign up') }}</a>
                 @endif
                 @else
                 <!-- Notification Bell -->
@@ -229,8 +229,8 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="font-semibold">My Profile</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">View and edit profile</div>
+                                        <div class="font-semibold">{{ __('My Profile') }}</div>
+                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('View and edit profile') }}</div>
                                     </div>
                                 </a>
                                 <a href="{{ route('my-patterns') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-teal-50 hover:text-emerald-700 dark:text-zinc-200 dark:hover:from-emerald-900/20 dark:hover:to-teal-900/20 dark:hover:text-emerald-300">
@@ -240,8 +240,8 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="font-semibold">My Patterns</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Created patterns</div>
+                                        <div class="font-semibold">{{ __('My Patterns') }}</div>
+                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Created patterns') }}</div>
                                     </div>
                                 </a>
                                 <a href="{{ route('my-collections') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-teal-50 hover:to-slate-50 hover:text-teal-700 dark:text-zinc-200 dark:hover:from-teal-900/20 dark:hover:to-slate-900/20 dark:hover:text-teal-300">
@@ -251,8 +251,8 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="font-semibold">My Collections</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Your pattern collections</div>
+                                        <div class="font-semibold">{{ __('My Collections') }}</div>
+                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Your pattern collections') }}</div>
                                     </div>
                                 </a>
                                 <a href="{{ route('patterns.favorites') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-pink-50 hover:to-rose-50 hover:text-pink-700 dark:text-zinc-200 dark:hover:from-pink-900/20 dark:hover:to-rose-900/20 dark:hover:text-pink-300">
@@ -262,8 +262,8 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="font-semibold">Favorites</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Saved patterns</div>
+                                        <div class="font-semibold">{{ __('Favorites') }}</div>
+                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Saved patterns') }}</div>
                                     </div>
                                 </a>
                                 <a href="{{ route('profile.settings') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-gray-50 hover:to-zinc-50 hover:text-gray-700 dark:text-zinc-200 dark:hover:from-gray-900/20 dark:hover:to-zinc-900/20 dark:hover:text-gray-300">
@@ -274,8 +274,8 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="font-semibold">Settings</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Account preferences</div>
+                                        <div class="font-semibold">{{ __('Settings') }}</div>
+                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Account preferences') }}</div>
                                     </div>
                                 </a>
                                 <div class="border-t border-zinc-200 dark:border-zinc-700 my-2"></div>
@@ -288,8 +288,8 @@
                                             </svg>
                                         </div>
                                         <div>
-                                            <div class="font-semibold">Logout</div>
-                                            <div class="text-xs text-zinc-500 dark:text-zinc-400">Sign out of account</div>
+                                            <div class="font-semibold">{{ __('Logout') }}</div>
+                                            <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Sign out of account') }}</div>
                                         </div>
                                     </button>
                                 </form>
@@ -339,7 +339,7 @@
                     <svg class="h-5 w-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                     </svg>
-                    <span class="font-medium">Home</span>
+                    <span class="font-medium">{{ __('Home') }}</span>
                 </a>
 
                 <!-- Patterns Mobile Dropdown -->
@@ -349,7 +349,7 @@
                             <svg class="h-5 w-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                             </svg>
-                            <span class="font-medium">Patterns</span>
+                            <span class="font-medium">{{ __('Patterns') }}</span>
                         </div>
                         <svg class="h-4 w-4 transition-transform duration-300 ease-out mobile-dropdown-arrow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
@@ -364,8 +364,8 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <div class="font-semibold">Crochet</div>
-                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">Blankets, amigurumi & more</div>
+                                    <div class="font-semibold">{{ __('Crochet') }}</div>
+                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Blankets, amigurumi & more') }}</div>
                                 </div>
                             </a>
                             <a href="{{ route('patterns.knitting') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-violet-50 hover:to-purple-50 hover:text-violet-700 dark:text-zinc-200 dark:hover:from-violet-900/20 dark:hover:to-purple-900/20 dark:hover:text-violet-300">
@@ -375,8 +375,8 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <div class="font-semibold">Knitting</div>
-                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">Sweaters, scarves & more</div>
+                                    <div class="font-semibold">{{ __('Knitting') }}</div>
+                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Sweaters, scarves & more') }}</div>
                                 </div>
                             </a>
                             <a href="{{ route('patterns.embroidery') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-rose-50 hover:to-pink-50 hover:text-rose-700 dark:text-zinc-200 dark:hover:from-rose-900/20 dark:hover:to-pink-900/20 dark:hover:text-rose-300">
@@ -386,8 +386,8 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <div class="font-semibold">Embroidery</div>
-                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">Cross stitch, needlepoint</div>
+                                    <div class="font-semibold">{{ __('Embroidery') }}</div>
+                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Cross stitch, needlepoint') }}</div>
                                 </div>
                             </a>
                         </div>
@@ -399,7 +399,7 @@
                     <svg class="h-5 w-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    <span class="font-medium">Gallery</span>
+                    <span class="font-medium">{{ __('Gallery') }}</span>
                 </a>
 
                 @auth
@@ -412,7 +412,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
-                            <span class="font-medium">Admin Panel</span>
+                    <span class="font-medium">{{ __('Admin Panel') }}</span>
                         </div>
                         <svg class="h-4 w-4 transition-transform duration-300 ease-out mobile-dropdown-arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
@@ -423,7 +423,7 @@
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                             </svg>
-                            <span>Approve Models</span>
+                            <span>{{ __('Approve Models') }}</span>
                         </a>
                         <a href="#manage-users" class="flex items-center gap-3 rounded-lg px-4 py-2 text-sm transition-all duration-200 hover:bg-blue-50 hover:text-blue-700 dark:hover:bg-blue-900/20 dark:hover:text-blue-300">
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -431,32 +431,32 @@
                                 <circle cx="9" cy="7" r="4" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
                             </svg>
-                            <span>Manage Users</span>
+                            <span>{{ __('Manage Users') }}</span>
                         </a>
                         <a href="#manage-materials" class="flex items-center gap-3 rounded-lg px-4 py-2 text-sm transition-all duration-200 hover:bg-purple-50 hover:text-purple-700 dark:hover:bg-purple-900/20 dark:hover:text-purple-300">
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                             </svg>
-                            <span>Add/Edit Materials</span>
+                            <span>{{ __('Add/Edit Materials') }}</span>
                         </a>
                         <a href="#statistics" class="flex items-center gap-3 rounded-lg px-4 py-2 text-sm transition-all duration-200 hover:bg-orange-50 hover:text-orange-700 dark:hover:bg-orange-900/20 dark:hover:text-orange-300">
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                             </svg>
-                            <span>Statistics</span>
+                            <span>{{ __('Statistics') }}</span>
                         </a>
                         <a href="#notifications" class="flex items-center gap-3 rounded-lg px-4 py-2 text-sm transition-all duration-200 hover:bg-yellow-50 hover:text-yellow-700 dark:hover:bg-yellow-900/20 dark:hover:text-yellow-300">
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.73 21a2 2 0 0 1-3.46 0" />
                             </svg>
-                            <span>Notifications</span>
+                            <span>{{ __('Notifications') }}</span>
                         </a>
                         <a href="#reports" class="flex items-center gap-3 rounded-lg px-4 py-2 text-sm transition-all duration-200 hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-900/20 dark:hover:text-red-300">
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
-                            <span>Reports</span>
+                            <span>{{ __('Reports') }}</span>
                         </a>
                     </div>
                 </div>
@@ -469,7 +469,7 @@
                             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
-                            <span class="font-medium">{{ Auth::user()->name ?? 'Account' }}</span>
+                    <span class="font-medium">{{ Auth::user()->name ?? __('Account') }}</span>
                         </div>
                         <svg class="h-4 w-4 transition-transform duration-300 ease-out mobile-dropdown-arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
@@ -480,32 +480,32 @@
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
-                            <span>My Profile</span>
+                            <span>{{ __('My Profile') }}</span>
                         </a>
                         <a href="{{ route('my-patterns') }}" class="flex items-center gap-3 rounded-lg px-4 py-2 text-sm transition-all duration-200 hover:bg-purple-50 hover:text-purple-700 dark:hover:bg-purple-900/20 dark:hover:text-purple-300">
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                             </svg>
-                            <span>My Patterns</span>
+                            <span>{{ __('My Patterns') }}</span>
                         </a>
                         <a href="{{ route('my-collections') }}" class="flex items-center gap-3 rounded-lg px-4 py-2 text-sm transition-all duration-200 hover:bg-teal-50 hover:text-teal-700 dark:hover:bg-teal-900/20 dark:hover:text-teal-300">
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                             </svg>
-                            <span>Collections</span>
+                            <span>{{ __('Collections') }}</span>
                         </a>
                         <a href="{{ route('patterns.favorites') }}" class="flex items-center gap-3 rounded-lg px-4 py-2 text-sm transition-all duration-200 hover:bg-pink-50 hover:text-pink-700 dark:hover:bg-pink-900/20 dark:hover:text-pink-300">
                             <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                             </svg>
-                            <span>Favorites</span>
+                            <span>{{ __('Favorites') }}</span>
                         </a>
                         <a href="{{ route('profile.settings') }}" class="flex items-center gap-3 rounded-lg px-4 py-2 text-sm transition-all duration-200 hover:bg-gray-50 hover:text-gray-700 dark:hover:bg-gray-900/20 dark:hover:text-gray-300">
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
-                            <span>Settings</span>
+                            <span>{{ __('Settings') }}</span>
                         </a>
                         <div class="border-t border-zinc-200 dark:border-zinc-700 my-2"></div>
                         <form method="POST" action="{{ route('logout') }}">
@@ -514,7 +514,7 @@
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                                 </svg>
-                                <span>Logout</span>
+                                <span>{{ __('Logout') }}</span>
                             </button>
                         </form>
                     </div>
@@ -524,12 +524,12 @@
                 <div class="border-t border-zinc-200/70 dark:border-zinc-800/70 pt-4">
                     @if (Route::has('login'))
                     <a href="{{ route('login') }}" class="flex items-center justify-center gap-2 rounded-lg border border-zinc-200 px-4 py-3 text-sm font-medium text-zinc-700 transition-all duration-200 hover:border-violet-300 hover:bg-violet-50 hover:text-violet-700 dark:border-zinc-700 dark:text-zinc-200 dark:hover:border-violet-500 dark:hover:bg-violet-900/20 dark:hover:text-violet-300">
-                        <span>Log in</span>
+                        <span>{{ __('Log in') }}</span>
                     </a>
                     @endif
                     @if (Route::has('register'))
                     <a href="{{ route('register') }}" class="mt-3 flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500 px-4 py-3 text-sm font-semibold text-white shadow-sm shadow-violet-500/40 transition-all duration-200 hover:brightness-110">
-                        <span>Sign up</span>
+                        <span>{{ __('Sign up') }}</span>
                     </a>
                     @endif
                 </div>

@@ -168,13 +168,13 @@ foreach ($allGalleryModels as $model) {
 
         {{-- Headline --}}
         <h1 class="text-xl font-extrabold tracking-tight text-purple-950 dark:text-white sm:text-3xl lg:text-4xl xl:text-5xl">
-            Discover what crafters <br class="hidden sm:block">are making right now
+            {{ __('Discover what crafters') }} <br class="hidden sm:block">{{ __('are making right now') }}
         </h1>
         <p class="mt-3 text-sm sm:text-base text-purple-700/80 dark:text-purple-200/70">
-            {{ $totalModels ?? 0 }} models shared &middot; {{ $newToday ?? 0 }} new today
+            {{ $totalModels ?? 0 }} {{ __('models shared') }} &middot; {{ $newToday ?? 0 }} {{ __('new today') }}
             <span class="inline-flex items-center gap-1 ml-2">
                 <span class="inline-flex h-1.5 w-1.5 rounded-full bg-green-400 animate-pulse"></span>
-                <span class="text-green-400 text-xs font-medium">live</span>
+                <span class="text-green-400 text-xs font-medium">{{ __('live') }}</span>
             </span>
         </p>
 
@@ -188,7 +188,7 @@ foreach ($allGalleryModels as $model) {
                 id="gallery-search"
                 name="q"
                 value="{{ $search ?? '' }}"
-                placeholder="Search models, crafters, tags…"
+                placeholder="{{ __('Search models, crafters, tags…') }}"
                 class="w-full bg-transparent text-sm text-zinc-900 placeholder-purple-400/60 outline-none dark:text-white dark:placeholder-purple-300/60"
                 onkeydown="if(event.key==='Enter'){event.preventDefault();galSearch(this.value);}"
                 oninput="document.getElementById('gal-search-clear').classList.toggle('hidden', this.value.trim()==='');"
@@ -216,7 +216,7 @@ foreach ($allGalleryModels as $model) {
 
         {{-- Trending tags --}}
         <div id="trending-tags" style="display:none" class="mt-5 flex flex-wrap items-center justify-center gap-2">
-            <span class="text-xs font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wide">Trending:</span>
+            <span class="text-xs font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wide">{{ __('Trending:') }}</span>
             @foreach($trendingTags as $tag)
                 <button
                     onclick="galSearch('{{ $tag }}')"
@@ -282,7 +282,7 @@ foreach ($allGalleryModels as $model) {
                     <svg class="h-4 w-4 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
-                    Recently Added
+                    {{ __('Recently Added') }}
                 </button>
                 <button
                     onclick="switchTab('top-rated')"
@@ -291,7 +291,7 @@ foreach ($allGalleryModels as $model) {
                     <svg class="h-4 w-4 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
                     </svg>
-                    Top Rated
+                    {{ __('Top Rated') }}
                 </button>
                 <button
                     onclick="switchTab('following')"
@@ -300,7 +300,7 @@ foreach ($allGalleryModels as $model) {
                     <svg class="h-4 w-4 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
                     </svg>
-                    Following
+                    {{ __('Following') }}
                 </button>
             </div>
 
@@ -311,7 +311,7 @@ foreach ($allGalleryModels as $model) {
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                     </svg>
-                    <span class="hidden sm:inline">Share Post</span>
+                    <span class="hidden sm:inline">{{ __('Share Post') }}</span>
                 </a>
             @else
                 <button onclick="openLoginModal()"
@@ -319,7 +319,7 @@ foreach ($allGalleryModels as $model) {
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                     </svg>
-                    <span class="hidden sm:inline">Share Post</span>
+                    <span class="hidden sm:inline">{{ __('Share Post') }}</span>
                 </button>
             @endauth
         </div>
@@ -383,8 +383,8 @@ foreach ($allGalleryModels as $model) {
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
                             </svg>
                         </div>
-                        <h3 class="text-xl font-bold text-zinc-900 dark:text-white">No one followed yet</h3>
-                        <p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400 max-w-xs">Follow some crafters and their latest posts will appear here.</p>
+                        <h3 class="text-xl font-bold text-zinc-900 dark:text-white">{{ __('No one followed yet') }}</h3>
+                        <p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400 max-w-xs">{{ __('Follow some crafters and their latest posts will appear here.') }}</p>
                     </div>
                 @else
                     @include('gallery.partials.empty-state', ['tab' => 'following'])
@@ -396,8 +396,8 @@ foreach ($allGalleryModels as $model) {
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold text-zinc-900 dark:text-white">Sign in to see your feed</h3>
-                    <p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400">Follow crafters and their latest work will appear here.</p>
+                    <h3 class="text-xl font-bold text-zinc-900 dark:text-white">{{ __('Sign in to see your feed') }}</h3>
+                    <p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400">{{ __('Follow crafters and their latest work will appear here.') }}</p>
                     <a href="{{ route('login') }}" class="mt-6 rounded-xl bg-gradient-to-r from-purple-600 to-violet-600 px-6 py-2.5 text-sm font-semibold text-white shadow-lg hover:from-purple-500 hover:to-violet-500 transition-all">
                         Sign in
                     </a>
@@ -418,11 +418,11 @@ foreach ($allGalleryModels as $model) {
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                 </svg>
             </div>
-            <h3 class="text-lg font-bold text-zinc-900 dark:text-white">Sign in required</h3>
-            <p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400">Create an account or sign in to share your models.</p>
+            <h3 class="text-lg font-bold text-zinc-900 dark:text-white">{{ __('Sign in required') }}</h3>
+            <p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400">{{ __('Create an account or sign in to share your models.') }}</p>
             <div class="mt-6 flex flex-col gap-3">
-                <a href="{{ route('login') }}" class="rounded-xl bg-gradient-to-r from-purple-600 to-violet-600 py-2.5 text-sm font-semibold text-white shadow hover:from-purple-500 hover:to-violet-500 transition-all">Sign in</a>
-                <a href="{{ route('register') }}" class="rounded-xl border border-zinc-200 py-2.5 text-sm font-semibold text-zinc-700 hover:bg-zinc-50 transition-all dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-800">Create account</a>
+                <a href="{{ route('login') }}" class="rounded-xl bg-gradient-to-r from-purple-600 to-violet-600 py-2.5 text-sm font-semibold text-white shadow hover:from-purple-500 hover:to-violet-500 transition-all">{{ __('Sign in') }}</a>
+                <a href="{{ route('register') }}" class="rounded-xl border border-zinc-200 py-2.5 text-sm font-semibold text-zinc-700 hover:bg-zinc-50 transition-all dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-800">{{ __('Create account') }}</a>
             </div>
         </div>
         <button onclick="closeLoginModal()" class="absolute right-4 top-4 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200">

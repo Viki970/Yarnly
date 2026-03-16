@@ -12,16 +12,16 @@
             </div>
             <h1 class="text-5xl font-extrabold tracking-tight mb-3">
                 <span class="bg-gradient-to-r from-teal-700 via-emerald-500 to-teal-500 dark:from-teal-300 dark:via-emerald-200 dark:to-teal-200 bg-clip-text text-transparent">
-                    Select Patterns for Collection
+                    {{ __('Select Patterns for Collection') }}
                 </span>
             </h1>
             <div class="flex items-center justify-center gap-2 mb-3">
                 <span class="h-px w-12 bg-gradient-to-r from-transparent to-teal-400 dark:to-teal-400 rounded-full"></span>
-                <span class="text-teal-600 dark:text-teal-300 text-xs font-semibold uppercase tracking-widest">Curate your craft</span>
+                <span class="text-teal-600 dark:text-teal-300 text-xs font-semibold uppercase tracking-widest">{{ __('Curate your craft') }}</span>
                 <span class="h-px w-12 bg-gradient-to-l from-transparent to-teal-400 dark:to-teal-400 rounded-full"></span>
             </div>
             <p class="text-zinc-500 dark:text-zinc-400 text-base">
-                Choose the patterns you want to add to your new collection
+                {{ __('Choose the patterns you want to add to your new collection') }}
             </p>
         </div>
 
@@ -40,9 +40,9 @@
                     </svg>
                 </div>
                 <div>
-                    <h3 class="text-lg font-semibold text-zinc-900 dark:text-white mb-1">How to Create a Collection</h3>
+                    <h3 class="text-lg font-semibold text-zinc-900 dark:text-white mb-1">{{ __('How to Create a Collection') }}</h3>
                     <p class="text-zinc-600 dark:text-zinc-400 text-sm">
-                        Select the patterns you want by clicking the checkboxes below. You can select multiple patterns to organize them into a themed collection.
+                        {{ __('Select the patterns you want by clicking the checkboxes below. You can select multiple patterns to organize them into a themed collection.') }}
                     </p>
                 </div>
             </div>
@@ -56,20 +56,20 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
                 </div>
-                <h3 class="text-2xl font-bold text-zinc-900 dark:text-white mb-2">No patterns yet</h3>
-                <p class="text-zinc-600 dark:text-zinc-400 mb-6">You need to create patterns before you can add them to collections.</p>
+                <h3 class="text-2xl font-bold text-zinc-900 dark:text-white mb-2">{{ __('No patterns yet') }}</h3>
+                <p class="text-zinc-600 dark:text-zinc-400 mb-6">{{ __('You need to create patterns before you can add them to collections.') }}</p>
                 <a href="{{ route('patterns.create') }}" 
                     class="inline-flex items-center px-6 py-3 rounded-lg bg-gradient-to-r from-teal-600 to-emerald-600 text-white font-semibold hover:from-teal-500 hover:to-emerald-500 transform hover:scale-105 transition-all duration-200 shadow-lg">
                     <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                     </svg>
-                    Create Your First Pattern
+                    {{ __('Create Your First Pattern') }}
                 </a>
             </div>
         @else
             <div class="mb-6 flex items-center justify-between">
                 <p class="text-zinc-600 dark:text-zinc-400">
-                    <span id="selected-count" class="font-semibold text-teal-600 dark:text-teal-400">0</span> pattern(s) selected
+                    <span id="selected-count" class="font-semibold text-teal-600 dark:text-teal-400">0</span> {{ __('pattern(s) selected') }}
                 </p>
                 <div class="flex gap-3">
                     @if($collections->count() > 0)
@@ -78,12 +78,12 @@
                             <svg class="inline-block h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                             </svg>
-                            Add to Existing Collection
+                            {{ __('Add to Existing Collection') }}
                         </button>
                     @endif
                     <button id="continue-btn" disabled
                         class="px-6 py-3 rounded-lg bg-gradient-to-r from-teal-600 to-emerald-600 text-white font-semibold hover:from-teal-500 hover:to-emerald-500 transform hover:scale-105 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
-                        Continue to Collection Details
+                        {{ __('Continue to Collection Details') }}
                         <svg class="inline-block h-5 w-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                         </svg>

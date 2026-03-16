@@ -27,16 +27,16 @@
             </div>
             <h1 class="text-5xl font-extrabold tracking-tight mb-3">
                 <span class="bg-gradient-to-r from-blue-700 via-sky-500 to-blue-500 dark:from-sky-300 dark:via-blue-200 dark:to-sky-200 bg-clip-text text-transparent">
-                    Create New Pattern
+                    {{ __('Create New Pattern') }}
                 </span>
             </h1>
             <div class="flex items-center justify-center gap-2 mb-3">
                 <span class="h-px w-12 bg-gradient-to-r from-transparent to-sky-400 dark:to-sky-400 rounded-full"></span>
-                <span class="text-sky-600 dark:text-sky-300 text-xs font-semibold uppercase tracking-widest">Share your craft</span>
+                <span class="text-sky-600 dark:text-sky-300 text-xs font-semibold uppercase tracking-widest">{{ __('Share your craft') }}</span>
                 <span class="h-px w-12 bg-gradient-to-l from-transparent to-sky-400 dark:to-sky-400 rounded-full"></span>
             </div>
             <p class="text-zinc-500 dark:text-zinc-400 text-base">
-                Upload your design and inspire the Yarnly community
+                {{ __('Upload your design and inspire the Yarnly community') }}
             </p>
         </div>
 
@@ -62,7 +62,7 @@
                     <!-- Title -->
                     <div>
                         <label for="title" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3">
-                            Pattern Title <span class="text-red-500">*</span>
+                            {{ __('Pattern Title') }} <span class="text-red-500">*</span>
                         </label>
                         <input type="text" id="title" name="title" value="{{ old('title') }}" required
                             class="w-full px-4 py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all">
@@ -74,7 +74,7 @@
                     <!-- Description -->
                     <div>
                         <label for="description" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3">
-                            Description
+                            {{ __('Description') }}
                         </label>
                         <textarea id="description" name="description" rows="4"
                             class="w-full px-4 py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all">{{ old('description') }}</textarea>
@@ -88,14 +88,14 @@
                         <!-- Craft Type -->
                         <div>
                             <label for="craft_type" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3">
-                                Craft Type <span class="text-red-500">*</span>
+                                {{ __('Craft Type') }} <span class="text-red-500">*</span>
                             </label>
                             <select id="craft_type" name="craft_type" required
                                 class="w-full px-4 py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all">
-                                <option value="">Select Craft</option>
+                                <option value="">{{ __('Select Craft') }}</option>
                                 @foreach(array_keys($categories) as $craft)
                                 <option value="{{ $craft }}" {{ old('craft_type') == $craft ? 'selected' : '' }}>
-                                    {{ ucfirst($craft) }}
+                                    {{ __(ucfirst($craft)) }}
                                 </option>
                                 @endforeach
                             </select>
@@ -107,11 +107,12 @@
                         <!-- Category -->
                         <div>
                             <label for="category" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3">
-                                Category <span class="text-red-500">*</span>
+                                {{ __('Category') }} <span class="text-red-500">*</span>
                             </label>
                             <select id="category" name="category" required
+                                data-placeholder="{{ __('Select Category') }}"
                                 class="w-full px-4 py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all">
-                                <option value="">Select Category</option>
+                                <option value="">{{ __('Select Category') }}</option>
                             </select>
                             @error('category')
                             <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
@@ -120,14 +121,14 @@
 
                         <div>
                             <label for="difficulty" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3">
-                                Difficulty <span class="text-red-500">*</span>
+                                {{ __('Difficulty') }} <span class="text-red-500">*</span>
                             </label>
                             <select id="difficulty" name="difficulty" required
                                 class="w-full px-4 py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all">
-                                <option value="">Select Difficulty</option>
-                                <option value="beginner" {{ old('difficulty') == 'beginner' ? 'selected' : '' }}>Beginner</option>
-                                <option value="intermediate" {{ old('difficulty') == 'intermediate' ? 'selected' : '' }}>Intermediate</option>
-                                <option value="advanced" {{ old('difficulty') == 'advanced' ? 'selected' : '' }}>Advanced</option>
+                                <option value="">{{ __('Select Difficulty') }}</option>
+                                <option value="beginner" {{ old('difficulty') == 'beginner' ? 'selected' : '' }}>{{ __('Beginner') }}</option>
+                                <option value="intermediate" {{ old('difficulty') == 'intermediate' ? 'selected' : '' }}>{{ __('Intermediate') }}</option>
+                                <option value="advanced" {{ old('difficulty') == 'advanced' ? 'selected' : '' }}>{{ __('Advanced') }}</option>
                             </select>
                             @error('difficulty')
                             <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
@@ -138,7 +139,7 @@
                     <!-- Estimated Hours -->
                     <div>
                         <label for="estimated_hours" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3">
-                            Estimated Hours
+                            {{ __('Estimated Hours') }}
                         </label>
                         <input type="number" id="estimated_hours" name="estimated_hours" value="{{ old('estimated_hours') }}"
                             min="1" max="200"
@@ -151,13 +152,13 @@
                     <!-- Tags -->
                     <div>
                         <label for="tags" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3">
-                            Tags (Optional)
-                            <span class="text-zinc-500 dark:text-zinc-400 text-xs ml-2">(Separate with commas, e.g., "easy, beginner, cute")</span>
+                            {{ __('Tags (Optional)') }}
+                            <span class="text-zinc-500 dark:text-zinc-400 text-xs ml-2">({{ __('Separate with commas, e.g., "easy, beginner, cute"') }})</span>
                         </label>
                         <input type="text" id="tags" name="tags" value="{{ old('tags') }}"
                             placeholder="cute, beginner-friendly, quick, colorful..."
                             class="w-full px-4 py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all">
-                        <p class="mt-2 text-xs text-zinc-500 dark:text-zinc-400">Tags help other users find your pattern more easily through search</p>
+                        <p class="mt-2 text-xs text-zinc-500 dark:text-zinc-400">{{ __('Tags help other users find your pattern more easily through search') }}</p>
                         @error('tags')
                         <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                         @enderror
@@ -168,8 +169,8 @@
                         <!-- PDF File -->
                         <div>
                             <label for="pdf_file" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3">
-                                Pattern PDF File <span class="text-red-500">*</span>
-                                <span class="text-zinc-500 dark:text-zinc-400 text-xs ml-2">(PDF only, max 10MB)</span>
+                                {{ __('Pattern PDF File') }} <span class="text-red-500">*</span>
+                                <span class="text-zinc-500 dark:text-zinc-400 text-xs ml-2">({{ __('PDF only, max 10MB') }})</span>
                             </label>
                             <input type="file" id="pdf_file" name="pdf_file" accept=".pdf" required
                                 class="w-full px-4 py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-sky-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 dark:file:bg-sky-900/40 dark:file:text-sky-300 transition-all">
@@ -182,8 +183,8 @@
                         <!-- Image File -->
                         <div>
                             <label for="image_file" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3">
-                                Pattern Image
-                                <span class="text-zinc-500 dark:text-zinc-400 text-xs ml-2">(PNG or JPG only, max 5MB)</span>
+                                {{ __('Pattern Image') }}
+                                <span class="text-zinc-500 dark:text-zinc-400 text-xs ml-2">({{ __('PNG or JPG only, max 5MB') }})</span>
                             </label>
                             <input type="file" id="image_file" name="image_file" accept=".png,.jpg,.jpeg"
                                 class="w-full px-4 py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-sky-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 dark:file:bg-sky-900/40 dark:file:text-sky-300 transition-all">
@@ -199,11 +200,11 @@
                 <div class="flex justify-end gap-4 mt-8 pt-6 border-t border-sky-100 dark:border-sky-900/40">
                     <a href="{{ route('patterns.crochet') }}"
                         class="px-6 py-3 rounded-lg border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 font-semibold hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-all duration-200">
-                        Cancel
+                        {{ __('Cancel') }}
                     </a>
                     <button type="submit"
                         class="px-8 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-sky-500 text-white font-semibold hover:from-blue-700 hover:to-sky-600 transform hover:scale-105 transition-all duration-200 shadow-lg shadow-blue-500/25">
-                        Create Pattern
+                        {{ __('Create Pattern') }}
                     </button>
                 </div>
             </form>
@@ -214,8 +215,16 @@
 @endsection
 
 @push('scripts')
+@php
+    $translatedCategories = [];
+    foreach ($categories as $craft => $cats) {
+        foreach ($cats as $key => $label) {
+            $translatedCategories[$craft][$key] = __($label);
+        }
+    }
+@endphp
 <script type="application/json" id="categories-data">
-    {!! json_encode($categories) !!}
+    {!! json_encode($translatedCategories) !!}
 </script>
 <script>
     const categories = JSON.parse(document.getElementById('categories-data').textContent);
@@ -225,8 +234,10 @@
     const craftSelect = document.getElementById('craft_type');
     const categorySelect = document.getElementById('category');
 
+    const selectCategoryLabel = categorySelect.dataset.placeholder;
+
     function populateCategories(craft) {
-        categorySelect.innerHTML = '<option value="">Select Category</option>';
+        categorySelect.innerHTML = '<option value="">' + selectCategoryLabel + '</option>';
         if (!craft || !categories[craft]) return;
         Object.entries(categories[craft]).forEach(([value, label]) => {
             const opt = document.createElement('option');

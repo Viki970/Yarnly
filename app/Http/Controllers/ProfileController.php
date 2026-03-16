@@ -176,6 +176,20 @@ class ProfileController extends Controller
     }
 
     /**
+     * Save language preference (stored in a long-lived cookie; no migration needed).
+     */
+    public function saveLanguage(Request $request): RedirectResponse
+    {
+        $locale = in_array($request->input('locale'), ['en', 'bg'], true)
+            ? $request->input('locale')
+            : 'en';
+
+        return Redirect::route('profile.settings', ['tab' => 'language'])
+            ->withCookie(cookie()->forever('locale', $locale))
+            ->with('language_saved', true);
+    }
+
+    /**
      * Save notification preferences.
      */
     public function saveNotificationPreferences(Request $request): RedirectResponse

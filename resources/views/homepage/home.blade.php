@@ -44,21 +44,20 @@
         {{-- Badge --}}
         <div class="hero-fade mb-8 inline-flex items-center gap-2 rounded-full border border-violet-500/25 bg-violet-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-violet-600 dark:text-violet-300">
             <span class="pulse-dot h-1.5 w-1.5 rounded-full bg-violet-400"></span>
-            The yarn·crafting community
+            {{ __('The yarn·crafting community') }}
         </div>
 
         {{-- Headline --}}
         <h1 class="hero-fade2 text-6xl font-black tracking-tight text-zinc-900 dark:text-white sm:text-7xl lg:text-8xl leading-[1.04]">
-            Where Yarn
+            {{ __('Where Yarn') }}
             <span class="block bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent">
-                Meets Creativity
+                {{ __('Meets Creativity') }}
             </span>
         </h1>
 
         {{-- Sub-heading --}}
         <p class="hero-fade2 mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-zinc-600 dark:text-zinc-400 sm:text-xl">
-            Explore thousands of patterns, share your creations, follow inspiring makers,
-            and build your crafting portfolio — all in one place.
+            {{ __('Explore thousands of patterns, share your creations, follow inspiring makers, and build your crafting portfolio — all in one place.') }}
         </p>
 
         {{-- CTA buttons --}}
@@ -72,7 +71,7 @@
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                     </svg>
-                    Start for free
+                    {{ __('Start for free') }}
                 </a>
                 @endif
                 @if(Route::has('login'))
@@ -80,7 +79,7 @@
                    class="inline-flex items-center gap-2 rounded-2xl border border-zinc-300 bg-zinc-100/60 dark:border-zinc-700 dark:bg-zinc-900/60
                           px-8 py-3.5 text-sm font-bold text-zinc-700 dark:text-zinc-200 backdrop-blur-md
                           transition-all duration-200 hover:border-zinc-400 hover:bg-zinc-200/80 dark:hover:border-zinc-500 dark:hover:bg-zinc-800/80">
-                    Sign in
+                    {{ __('Sign in') }}
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                     </svg>
@@ -92,7 +91,7 @@
                    class="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600
                           px-8 py-3.5 text-sm font-bold text-white shadow-lg shadow-violet-500/40
                           transition-all duration-200 hover:scale-105 hover:from-violet-500 hover:to-fuchsia-500">
-                    Explore Patterns
+                    {{ __('Explore Patterns') }}
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                     </svg>
@@ -101,7 +100,7 @@
                    class="inline-flex items-center gap-2 rounded-2xl border border-zinc-300 bg-zinc-100/60 dark:border-zinc-700 dark:bg-zinc-900/60
                           px-8 py-3.5 text-sm font-bold text-zinc-700 dark:text-zinc-200 backdrop-blur-md
                           transition-all duration-200 hover:border-zinc-400 hover:bg-zinc-200/80 dark:hover:border-zinc-500 dark:hover:bg-zinc-800/80">
-                    My Profile
+                    {{ __('My Profile') }}
                 </a>
                 @endif
             @endguest
@@ -144,7 +143,7 @@
                           d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
                 <input type="text"
-                       placeholder="Search creators by name or @username…"
+                       placeholder="{{ __('Search creators by name or @username…') }}"
                        x-model="query"
                        @input="search()"
                        @focus="if (query.length >= 1) open = true"
@@ -201,7 +200,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                               d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
-                    <p class="text-sm text-zinc-500">No creators found for
+                    <p class="text-sm text-zinc-500">{{ __('No creators found for') }}
                         "<span class="text-zinc-700 dark:text-zinc-300" x-text="query"></span>"
                     </p>
                 </div>
@@ -209,7 +208,7 @@
                 <div x-show="loading && results.length === 0"
                      class="flex items-center justify-center gap-2 px-4 py-5 text-sm text-zinc-500">
                     <div class="h-4 w-4 animate-spin rounded-full border-2 border-violet-400 border-t-transparent"></div>
-                    Searching…
+                    {{ __('Searching…') }}
                 </div>
             </div>
         </div>
@@ -218,7 +217,7 @@
     {{-- Scroll hint --}}
     <div class="pointer-events-none absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-zinc-400 dark:text-zinc-600"
          aria-hidden="true">
-        <span class="text-[10px] font-bold uppercase tracking-[.28em]">Scroll</span>
+        <span class="text-[10px] font-bold uppercase tracking-[.28em]">{{ __('Scroll') }}</span>
         <div class="h-8 w-px animate-pulse bg-gradient-to-b from-zinc-600 to-transparent"></div>
     </div>
 </section>
@@ -233,19 +232,19 @@
             <div class="text-4xl font-black tabular-nums text-zinc-900 dark:text-white sm:text-5xl">
                 {{ number_format($stats['patterns']) }}+
             </div>
-            <div class="mt-1 text-sm font-medium text-zinc-500">Patterns</div>
+            <div class="mt-1 text-sm font-medium text-zinc-500">{{ __('Patterns') }}</div>
         </div>
         <div>
             <div class="text-4xl font-black tabular-nums text-zinc-900 dark:text-white sm:text-5xl">
                 {{ number_format($stats['users']) }}+
             </div>
-            <div class="mt-1 text-sm font-medium text-zinc-500">Creators</div>
+            <div class="mt-1 text-sm font-medium text-zinc-500">{{ __('Creators') }}</div>
         </div>
         <div>
             <div class="text-4xl font-black tabular-nums text-zinc-900 dark:text-white sm:text-5xl">
                 {{ number_format($stats['posts']) }}+
             </div>
-            <div class="mt-1 text-sm font-medium text-zinc-500">Posts Shared</div>
+            <div class="mt-1 text-sm font-medium text-zinc-500">{{ __('Posts Shared') }}</div>
         </div>
     </div>
 </div>
@@ -258,10 +257,10 @@
     <div class="mx-auto max-w-6xl">
 
         <div class="mb-16 text-center">
-            <p class="mb-3 text-xs font-bold uppercase tracking-[.26em] text-violet-600 dark:text-violet-400">Everything you need</p>
-            <h2 class="text-4xl font-black tracking-tight text-zinc-900 dark:text-white sm:text-5xl">Built for makers</h2>
+            <p class="mb-3 text-xs font-bold uppercase tracking-[.26em] text-violet-600 dark:text-violet-400">{{ __('Everything you need') }}</p>
+            <h2 class="text-4xl font-black tracking-tight text-zinc-900 dark:text-white sm:text-5xl">{{ __('Built for makers') }}</h2>
             <p class="mx-auto mt-4 max-w-xl text-lg text-zinc-600 dark:text-zinc-400">
-                All your crafting tools in one beautiful, focused space.
+                {{ __('All your crafting tools in one beautiful, focused space.') }}
             </p>
         </div>
 
@@ -277,12 +276,12 @@
                               d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
                 </div>
-                <h3 class="mb-2 text-lg font-bold text-zinc-900 dark:text-white">Pattern Library</h3>
+                <h3 class="mb-2 text-lg font-bold text-zinc-900 dark:text-white">{{ __('Pattern Library') }}</h3>
                 <p class="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-                    Browse thousands of crochet, knitting, and embroidery patterns with step-by-step guides.
+                    {{ __('Browse thousands of crochet, knitting, and embroidery patterns with step-by-step guides.') }}
                 </p>
                 <div class="mt-5 flex items-center gap-1 text-sm font-semibold text-emerald-400 transition-all duration-200 group-hover:gap-2">
-                    Browse patterns
+                    {{ __('Browse patterns') }}
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                     </svg>
@@ -299,12 +298,12 @@
                               d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
                     </svg>
                 </div>
-                <h3 class="mb-2 text-lg font-bold text-zinc-900 dark:text-white">Community</h3>
+                <h3 class="mb-2 text-lg font-bold text-zinc-900 dark:text-white">{{ __('Community') }}</h3>
                 <p class="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-                    Share posts, follow inspiring makers, like and save creations, and build real connections.
+                    {{ __('Share posts, follow inspiring makers, like and save creations, and build real connections.') }}
                 </p>
                 <div class="mt-5 flex items-center gap-1 text-sm font-semibold text-violet-400 transition-all duration-200 group-hover:gap-2">
-                    Join community
+                    {{ __('Join community') }}
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                     </svg>
@@ -321,12 +320,12 @@
                               d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
                 </div>
-                <h3 class="mb-2 text-lg font-bold text-zinc-900 dark:text-white">Model Gallery</h3>
+                <h3 class="mb-2 text-lg font-bold text-zinc-900 dark:text-white">{{ __('Model Gallery') }}</h3>
                 <p class="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-                    Browse finished projects from the community and discover what others have created.
+                    {{ __('Browse finished projects from the community and discover what others have created.') }}
                 </p>
                 <div class="mt-5 flex items-center gap-1 text-sm font-semibold text-pink-400 transition-all duration-200 group-hover:gap-2">
-                    Explore gallery
+                    {{ __('Explore gallery') }}
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                     </svg>
@@ -343,12 +342,12 @@
                               d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                     </svg>
                 </div>
-                <h3 class="mb-2 text-lg font-bold text-zinc-900 dark:text-white">Collections</h3>
+                <h3 class="mb-2 text-lg font-bold text-zinc-900 dark:text-white">{{ __('Collections') }}</h3>
                 <p class="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-                    Organize your favorite patterns into personal collections and access them anytime.
+                    {{ __('Organize your favorite patterns into personal collections and access them anytime.') }}
                 </p>
                 <div class="mt-5 flex items-center gap-1 text-sm font-semibold text-sky-400 transition-all duration-200 group-hover:gap-2">
-                    My collections
+                    {{ __('My collections') }}
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                     </svg>
@@ -365,12 +364,12 @@
                               d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
                     </svg>
                 </div>
-                <h3 class="mb-2 text-lg font-bold text-zinc-900 dark:text-white">Share Patterns</h3>
+                <h3 class="mb-2 text-lg font-bold text-zinc-900 dark:text-white">{{ __('Share Patterns') }}</h3>
                 <p class="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-                    Upload your own patterns and let the community discover and download your unique designs.
+                    {{ __('Upload your own patterns and let the community discover and download your unique designs.') }}
                 </p>
                 <div class="mt-5 flex items-center gap-1 text-sm font-semibold text-amber-400 transition-all duration-200 group-hover:gap-2">
-                    Upload pattern
+                    {{ __('Upload pattern') }}
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                     </svg>
@@ -387,12 +386,12 @@
                               d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                     </svg>
                 </div>
-                <h3 class="mb-2 text-lg font-bold text-zinc-900 dark:text-white">Privacy Controls</h3>
+                <h3 class="mb-2 text-lg font-bold text-zinc-900 dark:text-white">{{ __('Privacy Controls') }}</h3>
                 <p class="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-                    Control your profile visibility, who sees your liked and saved posts, and your collections.
+                    {{ __('Control your profile visibility, who sees your liked and saved posts, and your collections.') }}
                 </p>
                 <div class="mt-5 flex items-center gap-1 text-sm font-semibold text-rose-400 transition-all duration-200 group-hover:gap-2">
-                    Manage privacy
+                    {{ __('Manage privacy') }}
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                     </svg>
@@ -411,33 +410,33 @@
     <div class="mx-auto max-w-4xl">
 
         <div class="mb-16 text-center">
-            <p class="mb-3 text-xs font-bold uppercase tracking-[.26em] text-fuchsia-600 dark:text-fuchsia-400">Get started in minutes</p>
-            <h2 class="text-4xl font-black tracking-tight text-zinc-900 dark:text-white sm:text-5xl">How Yarnly works</h2>
+            <p class="mb-3 text-xs font-bold uppercase tracking-[.26em] text-fuchsia-600 dark:text-fuchsia-400">{{ __('Get started in minutes') }}</p>
+            <h2 class="text-4xl font-black tracking-tight text-zinc-900 dark:text-white sm:text-5xl">{{ __('How Yarnly works') }}</h2>
         </div>
 
         <div class="grid gap-10 md:grid-cols-3">
             <div class="relative border-l-2 border-violet-500/30 pl-5 pt-1">
                 <div class="absolute -left-px top-0 h-8 w-0.5 bg-violet-500"></div>
                 <p class="select-none text-[4rem] font-black leading-none text-violet-500/15">01</p>
-                <h3 class="mt-1 text-lg font-bold text-zinc-900 dark:text-white">Create your account</h3>
+                <h3 class="mt-1 text-lg font-bold text-zinc-900 dark:text-white">{{ __('Create your account') }}</h3>
                 <p class="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-                    Sign up for free in seconds. Set up your crafter profile and let the community know what you love to make.
+                    {{ __('Sign up for free in seconds. Set up your crafter profile and let the community know what you love to make.') }}
                 </p>
             </div>
             <div class="relative border-l-2 border-fuchsia-500/30 pl-5 pt-1">
                 <div class="absolute -left-px top-0 h-8 w-0.5 bg-fuchsia-500"></div>
                 <p class="select-none text-[4rem] font-black leading-none text-fuchsia-500/15">02</p>
-                <h3 class="mt-1 text-lg font-bold text-zinc-900 dark:text-white">Discover &amp; organize</h3>
+                <h3 class="mt-1 text-lg font-bold text-zinc-900 dark:text-white">{{ __('Discover & organize') }}</h3>
                 <p class="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-                    Browse thousands of patterns, save your favorites into collections, and find creators to follow.
+                    {{ __('Browse thousands of patterns, save your favorites into collections, and find creators to follow.') }}
                 </p>
             </div>
             <div class="relative border-l-2 border-pink-500/30 pl-5 pt-1">
                 <div class="absolute -left-px top-0 h-8 w-0.5 bg-pink-500"></div>
                 <p class="select-none text-[4rem] font-black leading-none text-pink-500/15">03</p>
-                <h3 class="mt-1 text-lg font-bold text-zinc-900 dark:text-white">Share your creations</h3>
+                <h3 class="mt-1 text-lg font-bold text-zinc-900 dark:text-white">{{ __('Share your creations') }}</h3>
                 <p class="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-                    Post your finished projects, get likes and comments, and build your portfolio in the community.
+                    {{ __('Post your finished projects, get likes and comments, and build your portfolio in the community.') }}
                 </p>
             </div>
         </div>
@@ -455,10 +454,10 @@
             <div class="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-violet-600/15 blur-3xl" aria-hidden="true"></div>
             <div class="pointer-events-none absolute -bottom-20 -right-20 h-72 w-72 rounded-full bg-fuchsia-600/15 blur-3xl" aria-hidden="true"></div>
             <div class="relative">
-                <p class="mb-3 text-xs font-bold uppercase tracking-[.26em] text-violet-600 dark:text-violet-400">Free forever to join</p>
-                <h2 class="mb-5 text-4xl font-black tracking-tight text-zinc-900 dark:text-white sm:text-5xl">Ready to start crafting?</h2>
+                <p class="mb-3 text-xs font-bold uppercase tracking-[.26em] text-violet-600 dark:text-violet-400">{{ __('Free forever to join') }}</p>
+                <h2 class="mb-5 text-4xl font-black tracking-tight text-zinc-900 dark:text-white sm:text-5xl">{{ __('Ready to start crafting?') }}</h2>
                 <p class="mx-auto mb-8 max-w-lg text-lg text-zinc-600 dark:text-zinc-400">
-                    Join {{ number_format($stats['users']) }}+ makers who use Yarnly to discover patterns, share creations, and connect with the community.
+                    {{ __('Join :count+ makers who use Yarnly to discover patterns, share creations, and connect with the community.', ['count' => number_format($stats['users'])]) }}
                 </p>
                 @guest
                     @if(Route::has('register'))
@@ -466,7 +465,7 @@
                        class="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600
                               px-10 py-4 text-sm font-bold text-white shadow-lg shadow-violet-500/40
                               transition-all duration-200 hover:scale-105 hover:from-violet-500 hover:to-fuchsia-500">
-                        Create free account →
+                        {{ __('Create free account') }} →
                     </a>
                     @endif
                 @else
@@ -474,7 +473,7 @@
                        class="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600
                               px-10 py-4 text-sm font-bold text-white shadow-lg shadow-violet-500/40
                               transition-all duration-200 hover:scale-105 hover:from-violet-500 hover:to-fuchsia-500">
-                        Explore patterns →
+                        {{ __('Explore patterns') }} →
                     </a>
                 @endguest
             </div>

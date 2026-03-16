@@ -15,33 +15,33 @@
     <div class="absolute -right-12 bottom-10 h-64 w-64 rounded-full bg-pink-300/25 blur-3xl dark:bg-pink-700/25"></div>
     <div class="relative max-w-6xl mx-auto px-6 lg:px-12">
         <p class="inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-rose-700 ring-1 ring-rose-200 dark:bg-zinc-900/70 dark:text-rose-200 dark:ring-rose-800/60">
-            Embroidery Spotlight
+            {{ __('Embroidery Spotlight') }}
         </p>
         <div class="mt-6 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div class="max-w-3xl">
-                <h1 class="text-4xl font-bold tracking-tight text-rose-900 sm:text-5xl dark:text-white">Curated embroidery patterns</h1>
+                <h1 class="text-4xl font-bold tracking-tight text-rose-900 sm:text-5xl dark:text-white">{{ __('Curated embroidery patterns') }}</h1>
                 <p class="mt-4 text-lg leading-relaxed text-zinc-600 dark:text-zinc-300">
-                    Browse curated stitches, step-by-step project guides, and community favorites. Save patterns to your library and pick up where you left off.
+                    {{ __('Browse curated stitches, step-by-step project guides, and community favorites. Save patterns to your library and pick up where you left off.') }}
                 </p>
                 <div class="mt-6 flex flex-wrap gap-3">
-                    <a href="#collections" class="rounded-xl bg-rose-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-rose-500/25 transition hover:translate-y-[-1px] hover:shadow-rose-500/35">Browse patterns</a>
+                    <a href="#collections" class="rounded-xl bg-rose-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-rose-500/25 transition hover:translate-y-[-1px] hover:shadow-rose-500/35">{{ __('Browse patterns') }}</a>
                 </div>
             </div>
             <div class="grid w-full max-w-md grid-cols-2 gap-4 rounded-2xl bg-white/80 p-4 shadow-xl ring-1 ring-rose-100 backdrop-blur dark:bg-zinc-900/70 dark:ring-rose-900/40">
                 <div class="rounded-xl bg-gradient-to-br from-rose-500 to-pink-500 p-4 text-white shadow-lg">
-                    <p class="text-sm font-medium">New this week</p>
-                    <p class="mt-3 text-2xl font-bold">{{ $newThisWeek ?? 0 }} {{ Str::plural('pattern', $newThisWeek ?? 0) }}</p>
-                    <p class="mt-1 text-sm text-rose-100">Fresh patterns ready to start.</p>
+                    <p class="text-sm font-medium">{{ __('New this week') }}</p>
+                    <p class="mt-3 text-2xl font-bold">{{ $newThisWeek ?? 0 }} {{ ($newThisWeek ?? 0) == 1 ? __('pattern') : __('patterns') }}</p>
+                    <p class="mt-1 text-sm text-rose-100">{{ __('Fresh patterns ready to start.') }}</p>
                 </div>
                 <div class="flex flex-col justify-between rounded-xl bg-white p-4 ring-1 ring-rose-100 dark:bg-zinc-800 dark:ring-rose-900/50">
                     <div>
-                        <p class="text-sm font-semibold text-rose-800 dark:text-rose-100">Your queue</p>
+                        <p class="text-sm font-semibold text-rose-800 dark:text-rose-100">{{ __('Your queue') }}</p>
                         <p class="mt-2 text-3xl font-bold text-rose-900 dark:text-white" id="favorites-count">{{ $favoritesCount ?? 0 }}</p>
-                        <p class="text-sm text-zinc-600 dark:text-zinc-300">{{ Str::plural('Pattern', $favoritesCount ?? 0) }} ready to start.</p>
+                        <p class="text-sm text-zinc-600 dark:text-zinc-300">{{ ($favoritesCount ?? 0) == 1 ? __('pattern') : __('patterns') }} {{ __('ready to start.') }}</p>
                     </div>
                     <div class="mt-4 flex items-center gap-2 text-xs font-medium text-rose-700 dark:text-rose-200">
                         <span class="inline-flex h-2 w-2 rounded-full bg-rose-500"></span>
-                        Synced with your favourites
+                        {{ __('Synced with your favourites') }}
                     </div>
                 </div>
             </div>
@@ -53,38 +53,38 @@
     <div class="max-w-6xl mx-auto px-6 lg:px-12">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-                <p class="text-sm font-semibold text-rose-700 dark:text-rose-200">Pick your lane</p>
-                <h2 class="text-3xl font-bold text-zinc-900 dark:text-white">What embroidery are you into?</h2>
-                <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">Jump straight to the style you want. Each option links to curated picks below.</p>
+                <p class="text-sm font-semibold text-rose-700 dark:text-rose-200">{{ __('Pick your lane') }}</p>
+                <h2 class="text-3xl font-bold text-zinc-900 dark:text-white">{{ __('What embroidery are you into?') }}</h2>
+                <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">{{ __('Jump straight to the style you want. Each option links to curated picks below.') }}</p>
             </div>
             <div class="flex items-center gap-4">
                 @auth
                     <a href="{{ route('patterns.create') }}" 
-                        class="rounded-xl bg-gradient-to-r from-rose-600 to-pink-600 px-5 py-3 text-sm font-semibold text-white shadow-lg hover:from-rose-500 hover:to-pink-500 transition-all duration-200 transform hover:scale-105">
+                        class="rounded-xl bg-gradient-to-r from-rose-600 to-pink-600 px-5 py-3 text-sm font-semibold text-white shadow-lg hover:from-rose-500 hover:to-pink-500 transition-all duration-200 transform hover:scale-105 whitespace-nowrap">
                         <svg class="inline-block h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                         </svg>
-                        Create Pattern
+                        {{ __('Create Pattern') }}
                     </a>
                 @else
                     <button onclick="handleCreatePatternGuest()" 
-                        class="rounded-xl bg-gradient-to-r from-rose-600 to-pink-600 px-5 py-3 text-sm font-semibold text-white shadow-lg hover:from-rose-500 hover:to-pink-500 transition-all duration-200 transform hover:scale-105">
+                        class="rounded-xl bg-gradient-to-r from-rose-600 to-pink-600 px-5 py-3 text-sm font-semibold text-white shadow-lg hover:from-rose-500 hover:to-pink-500 transition-all duration-200 transform hover:scale-105 whitespace-nowrap">
                         <svg class="inline-block h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                         </svg>
-                        Create Pattern
+                        {{ __('Create Pattern') }}
                     </button>
                 @endauth
-                <a href="/" class="text-sm font-semibold text-zinc-600 underline-offset-4 hover:underline dark:text-zinc-300">Back to home</a>
+                <a href="/" class="text-sm font-semibold text-zinc-600 underline-offset-4 hover:underline dark:text-zinc-300">{{ __('Back to home') }}</a>
             </div>
         </div>
 
         <div class="mt-6 flex flex-wrap gap-3">
-            <a href="{{ route('patterns.embroidery') }}#patterns" class="rounded-full border @if(!$selectedCategory) border-rose-500 bg-rose-50 text-rose-900 dark:border-rose-400 dark:bg-rose-900/30 dark:text-rose-100 @else border-rose-200 bg-white text-rose-800 dark:border-rose-900/50 dark:bg-zinc-900 dark:text-rose-100 @endif px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 hover:shadow-sm">All</a>
-            <a href="{{ route('patterns.embroidery.category', 'clothing-embroidery') }}#patterns" class="rounded-full border @if($selectedCategory === 'clothing-embroidery') border-rose-500 bg-rose-50 text-rose-900 dark:border-rose-400 dark:bg-rose-900/30 dark:text-rose-100 @else border-rose-200 bg-white text-rose-800 dark:border-rose-900/50 dark:bg-zinc-900 dark:text-rose-100 @endif px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 hover:shadow-sm">Clothing Embroidery</a>
-            <a href="{{ route('patterns.embroidery.category', 'hoop-art-wall-decor') }}#patterns" class="rounded-full border @if($selectedCategory === 'hoop-art-wall-decor') border-rose-500 bg-rose-50 text-rose-900 dark:border-rose-400 dark:bg-rose-900/30 dark:text-rose-100 @else border-rose-200 bg-white text-rose-800 dark:border-rose-900/50 dark:bg-zinc-900 dark:text-rose-100 @endif px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 hover:shadow-sm">Hoop Art &amp; Wall Decor</a>
-            <a href="{{ route('patterns.embroidery.category', 'cross-stitch') }}#patterns" class="rounded-full border @if($selectedCategory === 'cross-stitch') border-rose-500 bg-rose-50 text-rose-900 dark:border-rose-400 dark:bg-rose-900/30 dark:text-rose-100 @else border-rose-200 bg-white text-rose-800 dark:border-rose-900/50 dark:bg-zinc-900 dark:text-rose-100 @endif px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 hover:shadow-sm">Cross Stitch</a>
-            <a href="{{ route('patterns.embroidery.category', 'hand-techniques') }}#patterns" class="rounded-full border @if($selectedCategory === 'hand-techniques') border-rose-500 bg-rose-50 text-rose-900 dark:border-rose-400 dark:bg-rose-900/30 dark:text-rose-100 @else border-rose-200 bg-white text-rose-800 dark:border-rose-900/50 dark:bg-zinc-900 dark:text-rose-100 @endif px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 hover:shadow-sm">Hand Techniques</a>
+            <a href="{{ route('patterns.embroidery') }}#patterns" class="rounded-full border @if(!$selectedCategory) border-rose-500 bg-rose-50 text-rose-900 dark:border-rose-400 dark:bg-rose-900/30 dark:text-rose-100 @else border-rose-200 bg-white text-rose-800 dark:border-rose-900/50 dark:bg-zinc-900 dark:text-rose-100 @endif px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 hover:shadow-sm">{{ __('All') }}</a>
+            <a href="{{ route('patterns.embroidery.category', 'clothing-embroidery') }}#patterns" class="rounded-full border @if($selectedCategory === 'clothing-embroidery') border-rose-500 bg-rose-50 text-rose-900 dark:border-rose-400 dark:bg-rose-900/30 dark:text-rose-100 @else border-rose-200 bg-white text-rose-800 dark:border-rose-900/50 dark:bg-zinc-900 dark:text-rose-100 @endif px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 hover:shadow-sm">{{ __('Clothing Embroidery') }}</a>
+            <a href="{{ route('patterns.embroidery.category', 'hoop-art-wall-decor') }}#patterns" class="rounded-full border @if($selectedCategory === 'hoop-art-wall-decor') border-rose-500 bg-rose-50 text-rose-900 dark:border-rose-400 dark:bg-rose-900/30 dark:text-rose-100 @else border-rose-200 bg-white text-rose-800 dark:border-rose-900/50 dark:bg-zinc-900 dark:text-rose-100 @endif px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 hover:shadow-sm">{{ __('Hoop Art & Wall Decor') }}</a>
+            <a href="{{ route('patterns.embroidery.category', 'cross-stitch') }}#patterns" class="rounded-full border @if($selectedCategory === 'cross-stitch') border-rose-500 bg-rose-50 text-rose-900 dark:border-rose-400 dark:bg-rose-900/30 dark:text-rose-100 @else border-rose-200 bg-white text-rose-800 dark:border-rose-900/50 dark:bg-zinc-900 dark:text-rose-100 @endif px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 hover:shadow-sm">{{ __('Cross Stitch') }}</a>
+            <a href="{{ route('patterns.embroidery.category', 'hand-techniques') }}#patterns" class="rounded-full border @if($selectedCategory === 'hand-techniques') border-rose-500 bg-rose-50 text-rose-900 dark:border-rose-400 dark:bg-rose-900/30 dark:text-rose-100 @else border-rose-200 bg-white text-rose-800 dark:border-rose-900/50 dark:bg-zinc-900 dark:text-rose-100 @endif px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 hover:shadow-sm">{{ __('Hand Techniques') }}</a>
         </div>
 
         @if($selectedCategory)
@@ -92,40 +92,40 @@
             <div id="patterns" class="mt-12">
                 <div class="flex items-center justify-between gap-4">
                     <div>
-                        <h3 class="mt-1 text-2xl font-bold text-zinc-900 dark:text-white">{{ ucfirst(str_replace('-', ' ', $selectedCategory)) }} patterns</h3>
+                        <h3 class="mt-1 text-2xl font-bold text-zinc-900 dark:text-white">{{ ucfirst(str_replace('-', ' ', $selectedCategory)) }} {{ __('patterns') }}</h3>
                     </div>
-                    <a href="{{ route('patterns.embroidery') }}" class="text-sm font-semibold text-rose-700 underline-offset-4 hover:underline dark:text-rose-200">View all</a>
+                    <a href="{{ route('patterns.embroidery') }}" class="text-sm font-semibold text-rose-700 underline-offset-4 hover:underline dark:text-rose-200">{{ __('View all') }}</a>
                 </div>
                 
                 <!-- Sorting Controls -->
                 <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
                     <div class="flex flex-wrap items-center gap-3">
-                        <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">Sort by:</span>
+                        <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">{{ __('Sort by:') }}</span>
                         <select id="sortSelect" class="rounded-lg border border-rose-200 bg-white px-3 py-2 text-sm font-medium text-zinc-700 transition focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500/20 dark:border-rose-800 dark:bg-zinc-800 dark:text-zinc-200">
-                            <option value="newest">Newest first</option>
-                            <option value="oldest">Oldest first</option>
-                            <option value="title-asc">Title A-Z</option>
-                            <option value="title-desc">Title Z-A</option>
-                            <option value="popular">Most popular</option>
+                            <option value="newest">{{ __('Newest first') }}</option>
+                            <option value="oldest">{{ __('Oldest first') }}</option>
+                            <option value="title-asc">{{ __('Title A-Z') }}</option>
+                            <option value="title-desc">{{ __('Title Z-A') }}</option>
+                            <option value="popular">{{ __('Most popular') }}</option>
                         </select>
                         
-                        <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">Time:</span>
+                        <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">{{ __('Time:') }}</span>
                         <select id="timeFilter" class="rounded-lg border border-rose-200 bg-white px-3 py-2 text-sm font-medium text-zinc-700 transition focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500/20 dark:border-rose-800 dark:bg-zinc-800 dark:text-zinc-200">
-                            <option value="all">All times</option>
-                            <option value="shortest">Shortest first</option>
-                            <option value="longest">Longest first</option>
+                            <option value="all">{{ __('All times') }}</option>
+                            <option value="shortest">{{ __('Shortest first') }}</option>
+                            <option value="longest">{{ __('Longest first') }}</option>
                         </select>
                         
-                        <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">Difficulty:</span>
+                        <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">{{ __('Difficulty:') }}</span>
                         <select id="difficultyFilter" class="rounded-lg border border-rose-200 bg-white px-3 py-2 text-sm font-medium text-zinc-700 transition focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500/20 dark:border-rose-800 dark:bg-zinc-800 dark:text-zinc-200">
-                            <option value="all">All levels</option>
-                            <option value="beginner">Beginner</option>
-                            <option value="intermediate">Intermediate</option>
-                            <option value="advanced">Advanced</option>
+                            <option value="all">{{ __('All levels') }}</option>
+                            <option value="beginner">{{ __('Beginner') }}</option>
+                            <option value="intermediate">{{ __('Intermediate') }}</option>
+                            <option value="advanced">{{ __('Advanced') }}</option>
                         </select>
                     </div>
                     <div class="text-sm text-zinc-500 dark:text-zinc-400">
-                        <span id="patternCount">{{ $patterns ? $patterns->count() : 0 }}</span> {{ Str::plural('pattern', $patterns ? $patterns->count() : 0) }}
+                        <span id="patternCount">{{ $patterns ? $patterns->count() : 0 }}</span> {{ ($patterns ? $patterns->count() : 0) == 1 ? __('pattern') : __('patterns') }}
                     </div>
                 </div>
 
@@ -170,7 +170,7 @@
                                 <div class="mt-4 flex items-center justify-between">
                                     <div class="flex items-center gap-3 text-xs font-semibold text-rose-700 dark:text-rose-200">
                                         <span class="inline-flex h-2 w-2 rounded-full bg-rose-500"></span>
-                                        <span class="makers-saved-{{ $pattern->id }}">{{ $pattern->makers_saved }}</span> users saved
+                                        <span class="makers-saved-{{ $pattern->id }}">{{ $pattern->makers_saved }}</span> {{ __('users saved') }}
                                     </div>
                                     @auth
                                         <button class="favorite-btn p-2 rounded-full transition-all duration-200 hover:scale-110 {{ Auth::user()->hasFavorited($pattern) ? 'text-pink-600 hover:text-pink-700' : 'text-zinc-400 hover:text-pink-500' }}"
@@ -184,20 +184,20 @@
                                 </div>
                                 @if($pattern->pdf_file)
                                     <div class="mt-5 flex gap-2">
-                                        <a href="{{ route('patterns.view', $pattern->id) }}" class="flex-1 rounded-lg bg-pink-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-pink-700">View Pattern</a>
-                                        <a href="{{ route('patterns.download', $pattern) }}" class="flex-1 rounded-lg bg-rose-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-rose-700 dark:hover:bg-rose-500">Download PDF</a>
+                                        <a href="{{ route('patterns.view', $pattern->id) }}" class="flex-1 rounded-lg bg-pink-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-pink-700">{{ __('View Pattern') }}</a>
+                                        <a href="{{ route('patterns.download', $pattern) }}" class="flex-1 rounded-lg bg-rose-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-rose-700 dark:hover:bg-rose-500">{{ __('Download PDF') }}</a>
                                     </div>
                                 @else
-                                    <button disabled class="mt-5 block w-full rounded-lg bg-zinc-200 px-4 py-2 text-center text-sm font-semibold text-zinc-500 cursor-not-allowed dark:bg-zinc-700 dark:text-zinc-400">PDF Coming Soon</button>
+                                    <button disabled class="mt-5 block w-full rounded-lg bg-zinc-200 px-4 py-2 text-center text-sm font-semibold text-zinc-500 cursor-not-allowed dark:bg-zinc-700 dark:text-zinc-400">{{ __('PDF Coming Soon') }}</button>
                                 @endif
                             </article>
                         @endforeach
                     </div>
                 @else
                     <div class="mt-8 rounded-2xl border border-dashed border-rose-200 bg-rose-50 p-12 text-center dark:border-rose-900/40 dark:bg-zinc-900/70">
-                        <h3 class="text-lg font-bold text-rose-900 dark:text-white">No patterns yet</h3>
+                        <h3 class="text-lg font-bold text-rose-900 dark:text-white">{{ __('No patterns yet') }}</h3>
                         <p class="mt-2 text-sm text-rose-700 dark:text-rose-300">More {{ str_replace('-', ' ', $selectedCategory) }} patterns coming soon!</p>
-                        <a href="{{ route('patterns.embroidery') }}" class="mt-4 inline-block rounded-lg bg-rose-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-rose-700">View all categories</a>
+                        <a href="{{ route('patterns.embroidery') }}" class="mt-4 inline-block rounded-lg bg-rose-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-rose-700">{{ __('View all categories') }}</a>
                     </div>
                 @endif
             </div>
@@ -206,39 +206,39 @@
             <div id="patterns" class="mt-12">
                 <div class="flex items-center justify-between gap-4">
                     <div>
-                        <h3 class="mt-1 text-2xl font-bold text-zinc-900 dark:text-white">Newest embroidery patterns</h3>
+                        <h3 class="mt-1 text-2xl font-bold text-zinc-900 dark:text-white">{{ __('Newest embroidery patterns') }}</h3>
                     </div>
                 </div>
                 
                 <!-- Sorting Controls -->
                 <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
                     <div class="flex flex-wrap items-center gap-3">
-                        <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">Sort by:</span>
+                        <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">{{ __('Sort by:') }}</span>
                         <select id="sortSelectAll" class="rounded-lg border border-rose-200 bg-white px-3 py-2 text-sm font-medium text-zinc-700 transition focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500/20 dark:border-rose-800 dark:bg-zinc-800 dark:text-zinc-200">
-                            <option value="newest">Newest first</option>
-                            <option value="oldest">Oldest first</option>
-                            <option value="title-asc">Title A-Z</option>
-                            <option value="title-desc">Title Z-A</option>
-                            <option value="popular">Most popular</option>
+                            <option value="newest">{{ __('Newest first') }}</option>
+                            <option value="oldest">{{ __('Oldest first') }}</option>
+                            <option value="title-asc">{{ __('Title A-Z') }}</option>
+                            <option value="title-desc">{{ __('Title Z-A') }}</option>
+                            <option value="popular">{{ __('Most popular') }}</option>
                         </select>
                         
-                        <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">Time:</span>
+                        <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">{{ __('Time:') }}</span>
                         <select id="timeFilter" class="rounded-lg border border-rose-200 bg-white px-3 py-2 text-sm font-medium text-zinc-700 transition focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500/20 dark:border-rose-800 dark:bg-zinc-800 dark:text-zinc-200">
-                            <option value="all">All times</option>
-                            <option value="shortest">Shortest first</option>
-                            <option value="longest">Longest first</option>
+                            <option value="all">{{ __('All times') }}</option>
+                            <option value="shortest">{{ __('Shortest first') }}</option>
+                            <option value="longest">{{ __('Longest first') }}</option>
                         </select>
                         
-                        <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">Difficulty:</span>
+                        <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300">{{ __('Difficulty:') }}</span>
                         <select id="difficultyFilter" class="rounded-lg border border-rose-200 bg-white px-3 py-2 text-sm font-medium text-zinc-700 transition focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500/20 dark:border-rose-800 dark:bg-zinc-800 dark:text-zinc-200">
-                            <option value="all">All levels</option>
-                            <option value="beginner">Beginner</option>
-                            <option value="intermediate">Intermediate</option>
-                            <option value="advanced">Advanced</option>
+                            <option value="all">{{ __('All levels') }}</option>
+                            <option value="beginner">{{ __('Beginner') }}</option>
+                            <option value="intermediate">{{ __('Intermediate') }}</option>
+                            <option value="advanced">{{ __('Advanced') }}</option>
                         </select>
                     </div>
                     <div class="text-sm text-zinc-500 dark:text-zinc-400">
-                        <span id="patternCount">{{ $newest ? $newest->count() : 0 }}</span> {{ Str::plural('pattern', $newest ? $newest->count() : 0) }}
+                        <span id="patternCount">{{ $newest ? $newest->count() : 0 }}</span> {{ ($newest ? $newest->count() : 0) == 1 ? __('pattern') : __('patterns') }}
                     </div>
                 </div>
 
@@ -283,7 +283,7 @@
                                 <div class="mt-4 flex items-center justify-between">
                                     <div class="flex items-center gap-3 text-xs font-semibold text-rose-700 dark:text-rose-200">
                                         <span class="inline-flex h-2 w-2 rounded-full bg-rose-500"></span>
-                                        <span class="makers-saved-{{ $pattern->id }}">{{ $pattern->makers_saved }}</span> users saved
+                                        <span class="makers-saved-{{ $pattern->id }}">{{ $pattern->makers_saved }}</span> {{ __('users saved') }}
                                     </div>
                                     @auth
                                         <button class="favorite-btn p-2 rounded-full transition-all duration-200 hover:scale-110 {{ Auth::user()->hasFavorited($pattern) ? 'text-pink-600 hover:text-pink-700' : 'text-zinc-400 hover:text-pink-500' }}"
@@ -297,19 +297,19 @@
                                 </div>
                                 @if($pattern->pdf_file)
                                     <div class="mt-5 flex gap-2">
-                                        <a href="{{ route('patterns.view', $pattern->id) }}" class="flex-1 rounded-lg bg-pink-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-pink-700">View Pattern</a>
-                                        <a href="{{ route('patterns.download', $pattern) }}" class="flex-1 rounded-lg bg-rose-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-rose-700 dark:hover:bg-rose-500">Download PDF</a>
+                                        <a href="{{ route('patterns.view', $pattern->id) }}" class="flex-1 rounded-lg bg-pink-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-pink-700">{{ __('View Pattern') }}</a>
+                                        <a href="{{ route('patterns.download', $pattern) }}" class="flex-1 rounded-lg bg-rose-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-rose-700 dark:hover:bg-rose-500">{{ __('Download PDF') }}</a>
                                     </div>
                                 @else
-                                    <button disabled class="mt-5 block w-full rounded-lg bg-zinc-200 px-4 py-2 text-center text-sm font-semibold text-zinc-500 cursor-not-allowed dark:bg-zinc-700 dark:text-zinc-400">PDF Coming Soon</button>
+                                    <button disabled class="mt-5 block w-full rounded-lg bg-zinc-200 px-4 py-2 text-center text-sm font-semibold text-zinc-500 cursor-not-allowed dark:bg-zinc-700 dark:text-zinc-400">{{ __('PDF Coming Soon') }}</button>
                                 @endif
                             </article>
                         @endforeach
                     </div>
                 @else
                     <div class="mt-8 rounded-2xl border border-dashed border-rose-200 bg-rose-50 p-12 text-center dark:border-rose-900/40 dark:bg-zinc-900/70">
-                        <h3 class="text-lg font-bold text-rose-900 dark:text-white">No patterns yet</h3>
-                        <p class="mt-2 text-sm text-rose-700 dark:text-rose-300">New patterns will appear here soon!</p>
+                        <h3 class="text-lg font-bold text-rose-900 dark:text-white">{{ __('No patterns yet') }}</h3>
+                        <p class="mt-2 text-sm text-rose-700 dark:text-rose-300">{{ __('New patterns will appear here soon!') }}</p>
                     </div>
                 @endif
             </div>
@@ -323,27 +323,27 @@
     <div class="max-w-6xl mx-auto px-6 lg:px-12">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-                <p class="text-sm font-semibold text-rose-700 dark:text-rose-200">Community sets</p>
-                <h2 class="text-3xl font-bold text-zinc-900 dark:text-white">Collections you can start tonight</h2>
-                <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">Curated collections of patterns organized by theme, skill level, and project type.</p>
+                <p class="text-sm font-semibold text-rose-700 dark:text-rose-200">{{ __('Community sets') }}</p>
+                <h2 class="text-3xl font-bold text-zinc-900 dark:text-white">{{ __('Collections you can start tonight') }}</h2>
+                <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">{{ __('Curated collections of patterns organized by theme, skill level, and project type.') }}</p>
             </div>
             <div class="flex items-center gap-4">
                 @auth
-                    <a href="{{ route('collections.select-patterns') }}" class="rounded-xl bg-gradient-to-r from-rose-800 to-rose-900 px-5 py-3 text-sm font-semibold text-white shadow-lg hover:from-rose-700 hover:to-rose-800 transition-all duration-200 transform hover:scale-105">
+                    <a href="{{ route('collections.select-patterns') }}" class="rounded-xl bg-gradient-to-r from-rose-800 to-rose-900 px-5 py-3 text-sm font-semibold text-white shadow-lg hover:from-rose-700 hover:to-rose-800 transition-all duration-200 transform hover:scale-105 whitespace-nowrap">
                         <svg class="inline-block h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                         </svg>
-                        Add Collection
+                        {{ __('Add Collection') }}
                     </a>
                 @else
-                    <button onclick="handleCreateCollectionGuest()" class="rounded-xl bg-gradient-to-r from-rose-800 to-rose-900 px-5 py-3 text-sm font-semibold text-white shadow-lg hover:from-rose-700 hover:to-rose-800 transition-all duration-200 transform hover:scale-105">
+                    <button onclick="handleCreateCollectionGuest()" class="rounded-xl bg-gradient-to-r from-rose-800 to-rose-900 px-5 py-3 text-sm font-semibold text-white shadow-lg hover:from-rose-700 hover:to-rose-800 transition-all duration-200 transform hover:scale-105 whitespace-nowrap">
                         <svg class="inline-block h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                         </svg>
-                        Add Collection
+                        {{ __('Add Collection') }}
                     </button>
                 @endauth
-                <a href="/" class="text-sm font-semibold text-zinc-600 underline-offset-4 hover:underline dark:text-zinc-300">Back to home</a>
+                <a href="/" class="text-sm font-semibold text-zinc-600 underline-offset-4 hover:underline dark:text-zinc-300">{{ __('Back to home') }}</a>
             </div>
         </div>
 
@@ -431,7 +431,7 @@
                                 {{ ucfirst($collection->craft_type ?? 'embroidery') }}
                             </div>
                             <span class="text-xs font-medium text-rose-700 dark:text-rose-200">
-                                {{ $collection->patterns->count() }} {{ Str::plural('pattern', $collection->patterns->count()) }}
+                                {{ $collection->patterns->count() }} {{ $collection->patterns->count() == 1 ? __('pattern') : __('patterns') }}
                             </span>
                         </div>
                         
@@ -446,7 +446,7 @@
                         <div class="mt-4 flex items-center justify-between">
                             <div class="flex items-center gap-3 text-xs font-semibold text-rose-700 dark:text-rose-200">
                                 <span class="inline-flex h-2 w-2 rounded-full bg-rose-500"></span>
-                                <span class="favorites-count-{{ $collection->id }}">{{ $collection->favorites_count }}</span> users saved
+                                <span class="favorites-count-{{ $collection->id }}">{{ $collection->favorites_count }}</span> {{ __('users saved') }}
                             </div>
                             @auth
                                 <button class="favorite-collection-btn p-2 rounded-full transition-all duration-200 hover:scale-110 {{ Auth::user()->hasFavoritedCollection($collection) ? 'text-pink-600 hover:text-pink-700' : 'text-zinc-400 hover:text-pink-500' }}"
@@ -460,7 +460,7 @@
                         </div>
 
                         <a href="{{ route('collections.show', $collection) }}" class="mt-5 block w-full rounded-lg bg-rose-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-rose-700">
-                            View Collection
+                            {{ __('View Collection') }}
                         </a>
                     </article>
                 @endforeach
@@ -471,12 +471,12 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                         </svg>
                     </div>
-                    <h3 class="text-lg font-bold text-zinc-900 dark:text-white">No collections yet</h3>
-                    <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">Be the first to create a collection and organize your favorite patterns!</p>
+                    <h3 class="text-lg font-bold text-zinc-900 dark:text-white">{{ __('No collections yet') }}</h3>
+                    <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">{{ __('Be the first to create a collection and organize your favorite patterns!') }}</p>
                     @auth
-                        <a href="{{ route('collections.select-patterns') }}" class="mt-4 inline-block rounded-lg bg-rose-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-rose-700">Create Collection</a>
+                        <a href="{{ route('collections.select-patterns') }}" class="mt-4 inline-block rounded-lg bg-rose-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-rose-700">{{ __('Create Collection') }}</a>
                     @else
-                        <button onclick="handleCreateCollectionGuest()" class="mt-4 inline-block rounded-lg bg-rose-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-rose-700">Create Collection</button>
+                        <button onclick="handleCreateCollectionGuest()" class="mt-4 inline-block rounded-lg bg-rose-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-rose-700">{{ __('Create Collection') }}</button>
                     @endauth
                 </div>
             @endif

@@ -13,7 +13,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                 </svg>
             </a>
-            <h1 class="text-xl font-bold">Edit Profile</h1>
+            <h1 class="text-xl font-bold">{{ __('Edit Profile') }}</h1>
         </div>
 
         {{-- Avatar preview --}}
@@ -39,9 +39,9 @@
             </div>
             <button type="button" onclick="document.getElementById('profile_picture').click()"
                     class="mt-3 text-sm font-semibold text-violet-400 hover:text-violet-300 transition-colors">
-                Change photo
+                {{ __('Change photo') }}
             </button>
-            <p class="mt-1 text-xs text-zinc-500">jpg, jpeg, png, gif, webp &mdash; max 5 MB</p>
+            <p class="mt-1 text-xs text-zinc-500">{{ __('jpg, jpeg, png, gif, webp — max 5 MB') }}</p>
         </div>
 
         {{-- Profile Info Form --}}
@@ -60,7 +60,7 @@
 
             {{-- Username --}}
             <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">Username</label>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">{{ __('Username') }}</label>
                 <input type="text" name="username" value="{{ old('username', auth()->user()->username) }}" required
                        class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
                 @error('username')
@@ -70,7 +70,7 @@
 
             {{-- Full name --}}
             <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">Full Name</label>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">{{ __('Full Name') }}</label>
                 <input type="text" name="name" value="{{ old('name', auth()->user()->name) }}" required
                        class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
                 @error('name')
@@ -80,15 +80,15 @@
 
             {{-- Email (read-only) --}}
             <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">Email</label>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">{{ __('Email') }}</label>
                 <div class="flex items-center gap-3 px-4 py-3.5 bg-zinc-900 border border-zinc-700 rounded-xl">
                     <svg class="w-5 h-5 text-zinc-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                     </svg>
                     <span class="text-base text-zinc-300">{{ auth()->user()->email }}</span>
-                    <span class="ml-auto text-sm text-zinc-500 whitespace-nowrap">Change in
-                        <a href="{{ route('profile.settings') }}?tab=password" class="text-violet-400 hover:text-violet-300 underline underline-offset-2">Settings</a>
+                    <span class="ml-auto text-sm text-zinc-500 whitespace-nowrap">{{ __('Change in') }}
+                        <a href="{{ route('profile.settings') }}?tab=password" class="text-violet-400 hover:text-violet-300 underline underline-offset-2">{{ __('Settings') }}</a>
                     </span>
                 </div>
             </div>
@@ -97,7 +97,7 @@
             <div class="pt-2">
                 <button type="submit"
                         class="px-8 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition-colors">
-                    Save
+                    {{ __('Save') }}
                 </button>
             </div>
         </form>
