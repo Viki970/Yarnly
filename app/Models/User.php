@@ -104,6 +104,11 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
+    public function patterns(): HasMany
+    {
+        return $this->hasMany(Pattern::class);
+    }
+
     /**
      * Get the patterns this user has favorited
      */

@@ -94,10 +94,10 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    <div id="admin-dropdown" class="hidden absolute right-0 top-full mt-6 w-94 origin-top-right">
+                    <div id="admin-dropdown" class="hidden absolute left-0 top-full mt-6 w-94 origin-top-left">
                         <div class="rounded-xl bg-white/95 backdrop-blur-xl shadow-xl ring-1 ring-black/5 border border-white/20 dark:bg-zinc-900/95 dark:ring-white/10 dark:border-zinc-700/50">
                             <div class="p-2">
-                                <a href="{{ route('dashboard') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-violet-50 hover:to-purple-50 hover:text-violet-700 dark:text-zinc-200 dark:hover:from-violet-900/20 dark:hover:to-purple-900/20 dark:hover:text-violet-300">
+                                <a href="{{ route('admin.dashboard') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-violet-50 hover:to-purple-50 hover:text-violet-700 dark:text-zinc-200 dark:hover:from-violet-900/20 dark:hover:to-purple-900/20 dark:hover:text-violet-300">
                                     <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-100 text-violet-600 group-hover:bg-violet-200 dark:bg-violet-900/30 dark:text-violet-400 dark:group-hover:bg-violet-800/40">
                                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -108,18 +108,7 @@
                                         <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Admin overview') }}</div>
                                     </div>
                                 </a>
-                                <a href="#approve-models" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 hover:text-green-700 dark:text-zinc-200 dark:hover:from-green-900/20 dark:hover:to-emerald-900/20 dark:hover:text-green-300">
-                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-green-100 text-green-600 group-hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400 dark:group-hover:bg-green-800/40">
-                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="font-semibold">{{ __('Approve Models') }}</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Review submissions') }}</div>
-                                    </div>
-                                </a>
-                                <a href="#manage-users" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700 dark:text-zinc-200 dark:hover:from-blue-900/20 dark:hover:to-indigo-900/20 dark:hover:text-blue-300">
+                                <a href="{{ route('admin.users') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700 dark:text-zinc-200 dark:hover:from-blue-900/20 dark:hover:to-indigo-900/20 dark:hover:text-blue-300">
                                     <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-600 group-hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:group-hover:bg-blue-800/40">
                                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
@@ -130,51 +119,6 @@
                                     <div>
                                         <div class="font-semibold">{{ __('Manage Users') }}</div>
                                         <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('User administration') }}</div>
-                                    </div>
-                                </a>
-                                <a href="#manage-materials" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-purple-50 hover:to-violet-50 hover:text-purple-700 dark:text-zinc-200 dark:hover:from-purple-900/20 dark:hover:to-violet-900/20 dark:hover:text-purple-300">
-                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100 text-purple-600 group-hover:bg-purple-200 dark:bg-purple-900/30 dark:text-purple-400 dark:group-hover:bg-purple-800/40">
-                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="font-semibold">{{ __('Add/Edit Materials') }}</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Manage resources') }}</div>
-                                    </div>
-                                </a>
-                                <a href="#statistics" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-orange-50 hover:to-amber-50 hover:text-orange-700 dark:text-zinc-200 dark:hover:from-orange-900/20 dark:hover:to-amber-900/20 dark:hover:text-orange-300">
-                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-100 text-orange-600 group-hover:bg-orange-200 dark:bg-orange-900/30 dark:text-orange-400 dark:group-hover:bg-orange-800/40">
-                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="font-semibold">{{ __('Statistics') }}</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Platform analytics') }}</div>
-                                    </div>
-                                </a>
-                                <a href="#notifications" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-yellow-50 hover:to-amber-50 hover:text-yellow-700 dark:text-zinc-200 dark:hover:from-yellow-900/20 dark:hover:to-amber-900/20 dark:hover:text-yellow-300">
-                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-yellow-100 text-yellow-600 group-hover:bg-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:group-hover:bg-yellow-800/40">
-                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.73 21a2 2 0 0 1-3.46 0" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="font-semibold">{{ __('Notifications') }}</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('System alerts') }}</div>
-                                    </div>
-                                </a>
-                                <a href="#reports" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-red-50 hover:to-rose-50 hover:text-red-700 dark:text-zinc-200 dark:hover:from-red-900/20 dark:hover:to-rose-900/20 dark:hover:text-red-300">
-                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100 text-red-600 group-hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400 dark:group-hover:bg-red-800/40">
-                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="font-semibold">{{ __('Reports') }}</div>
-                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Content moderation') }}</div>
                                     </div>
                                 </a>
                             </div>
@@ -222,6 +166,17 @@
                     <div id="account-dropdown" class="hidden absolute right-0 top-full mt-6 w-64 origin-top-right">
                         <div class="rounded-xl bg-white/95 backdrop-blur-xl shadow-xl ring-1 ring-black/5 border border-white/20 dark:bg-zinc-900/95 dark:ring-white/10 dark:border-zinc-700/50">
                             <div class="p-2">
+                                <a href="{{ route('dashboard') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-violet-50 hover:to-purple-50 hover:text-violet-700 dark:text-zinc-200 dark:hover:from-violet-900/20 dark:hover:to-purple-900/20 dark:hover:text-violet-300">
+                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-100 text-violet-600 group-hover:bg-violet-200 dark:bg-violet-900/30 dark:text-violet-400 dark:group-hover:bg-violet-800/40">
+                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold">{{ __('Dashboard') }}</div>
+                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Your personal overview') }}</div>
+                                    </div>
+                                </a>
                                 <a href="{{ route('profile.show') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700 dark:text-zinc-200 dark:hover:from-blue-900/20 dark:hover:to-indigo-900/20 dark:hover:text-blue-300">
                                     <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-600 group-hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:group-hover:bg-blue-800/40">
                                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -425,7 +380,7 @@
                             </svg>
                             <span>{{ __('Approve Models') }}</span>
                         </a>
-                        <a href="#manage-users" class="flex items-center gap-3 rounded-lg px-4 py-2 text-sm transition-all duration-200 hover:bg-blue-50 hover:text-blue-700 dark:hover:bg-blue-900/20 dark:hover:text-blue-300">
+                        <a href="{{ route('admin.users') }}" class="flex items-center gap-3 rounded-lg px-4 py-2 text-sm transition-all duration-200 hover:bg-blue-50 hover:text-blue-700 dark:hover:bg-blue-900/20 dark:hover:text-blue-300">
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
                                 <circle cx="9" cy="7" r="4" />

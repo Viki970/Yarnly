@@ -28,8 +28,130 @@ Route::get('/patterns/{pattern}/view', [\App\Http\Controllers\PatternController:
 Route::get('/patterns/{pattern}/download', [\App\Http\Controllers\PatternController::class, 'download'])->name('patterns.download');
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    /** @var \App\Models\User $user */
+    $user = \Illuminate\Support\Facades\Auth::user();
+
+    $now     = now();
+    $postIds = $user->posts()->pluck('id');
+    $weekStart = now()->startOfWeek();
+
+    $likesThisWeek     = \App\Models\PostLike::whereIn('post_id', $postIds)->where('created_at', '>=', $weekStart)->count();
+    $commentsThisWeek  = \App\Models\PostComment::whereIn('post_id', $postIds)->where('created_at', '>=', $weekStart)->count();
+    $followersThisWeek = \Illuminate\Support\Facades\DB::table('follows')->where('following_id', $user->id)->where('created_at', '>=', $weekStart)->count();
+
+    return view('dashboard', [
+        'patternsCount'    => $user->patterns()->count(),
+        'postsCount'       => $user->posts()->count(),
+        'followersCount'   => $user->followers()->count(),
+        'followingCount'   => $user->following()->count(),
+        'recentPatterns'   => $user->patterns()->latest()->take(5)->get(),
+        'recentPosts'      => $user->posts()->with('images')->latest()->take(4)->get(),
+        // activity stats
+        'likesReceived'    => \App\Models\PostLike::whereIn('post_id', $postIds)->count(),
+        'commentsReceived' => \App\Models\PostComment::whereIn('post_id', $postIds)->count(),
+        'commentsGiven'    => $user->postComments()->count(),
+        'patternsSaved'    => \App\Models\PostFavorite::whereIn('post_id', $postIds)->count()
+                             + \Illuminate\Support\Facades\DB::table('user_favorites')
+                                   ->join('patterns', 'user_favorites.pattern_id', '=', 'patterns.id')
+                                   ->where('patterns.user_id', $user->id)
+                                   ->count(),
+        'patternsThisMonth'=> $user->patterns()->whereMonth('created_at', $now->month)->whereYear('created_at', $now->year)->count(),
+        'postsThisMonth'   => $user->posts()->whereMonth('created_at', $now->month)->whereYear('created_at', $now->year)->count(),
+        // this week
+        'likesThisWeek'     => $likesThisWeek,
+        'commentsThisWeek'  => $commentsThisWeek,
+        'followersThisWeek' => $followersThisWeek,
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/admin/dashboard', function () {
+    $now = now();
+
+    $stats = [
+        'total_users'          => \App\Models\User::count(),
+        'new_users_month'      => \App\Models\User::whereMonth('created_at', $now->month)->whereYear('created_at', $now->year)->count(),
+        'new_users_today'      => \App\Models\User::whereDate('created_at', today())->count(),
+        'admin_count'          => \App\Models\User::where('role', 'admin')->count(),
+
+        'total_patterns'       => \App\Models\Pattern::count(),
+        'new_patterns_month'   => \App\Models\Pattern::whereMonth('created_at', $now->month)->whereYear('created_at', $now->year)->count(),
+        'patterns_by_type'     => \App\Models\Pattern::selectRaw('category, count(*) as total')
+                                      ->groupBy('category')
+                                      ->pluck('total', 'category')
+                                      ->toArray(),
+
+        'total_posts'          => \App\Models\Post::count(),
+        'new_posts_month'      => \App\Models\Post::whereMonth('created_at', $now->month)->whereYear('created_at', $now->year)->count(),
+        'posts_by_craft'       => \App\Models\Post::selectRaw('craft_type, count(*) as total')
+                                      ->groupBy('craft_type')
+                                      ->pluck('total', 'craft_type')
+                                      ->toArray(),
+
+        'total_collections'    => \App\Models\Collection::count(),
+        'new_collections_month'=> \App\Models\Collection::whereMonth('created_at', $now->month)->whereYear('created_at', $now->year)->count(),
+
+        'total_likes'          => \App\Models\PostLike::count(),
+        'total_comments'       => \App\Models\PostComment::count(),
+    ];
+
+    $recentUsers = \App\Models\User::withCount('patterns')
+        ->latest()
+        ->take(10)
+        ->get();
+
+    $recentPatterns = \App\Models\Pattern::with('user')
+        ->latest()
+        ->take(15)
+        ->get();
+
+    return view('adminPanel.dashboard', compact('stats', 'recentUsers', 'recentPatterns'));
+})->middleware(['auth', 'verified'])->name('admin.dashboard');
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/admin/users', function () {
+        $query = \App\Models\User::withCount(['patterns', 'posts']);
+
+        if ($search = request('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        if ($role = request('role')) {
+            $query->where('role', $role);
+        }
+
+        match (request('sort', 'newest')) {
+            'oldest'   => $query->oldest(),
+            'name'     => $query->orderBy('name'),
+            'patterns' => $query->orderByDesc('patterns_count'),
+            'posts'    => $query->orderByDesc('posts_count'),
+            default    => $query->latest(),
+        };
+
+        return view('adminPanel.users', [
+            'users' => $query->paginate(20),
+            'total' => \App\Models\User::count(),
+        ]);
+    })->name('admin.users');
+
+    Route::patch('/admin/users/{user}/toggle-role', function (\App\Models\User $user) {
+        if ($user->id === \Illuminate\Support\Facades\Auth::id()) {
+            abort(403, 'Cannot change your own role.');
+        }
+        $user->update(['role' => $user->role === 'admin' ? 'user' : 'admin']);
+        return back()->with('status', "Role updated for {$user->name}.");
+    })->name('admin.users.toggle-role');
+
+    Route::delete('/admin/users/{user}', function (\App\Models\User $user) {
+        if ($user->id === \Illuminate\Support\Facades\Auth::id()) {
+            abort(403, 'Cannot delete yourself.');
+        }
+        $user->delete();
+        return back()->with('status', "{$user->name} has been deleted.");
+    })->name('admin.users.delete');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/my-profile', [ProfileController::class, 'show'])->name('profile.show');
