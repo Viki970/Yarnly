@@ -110,8 +110,8 @@
     @endif
     
     <div class="mt-4 flex items-center justify-between">
-        <div class="flex items-center gap-3 text-xs font-semibold text-emerald-700 dark:text-emerald-200">
-            <span class="inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+        <div class="flex items-center gap-3 text-xs font-semibold text-pink-700 dark:text-pink-200">
+            <span class="inline-flex h-2 w-2 rounded-full bg-pink-400"></span>
             <span class="favorites-count-{{ $collection->id }}">{{ $collection->favorites_count }}</span> users saved
         </div>
         @auth
@@ -128,11 +128,11 @@
     <div class="mt-5 flex gap-2">
         <a href="{{ route('collections.show', $collection) }}"
             class="flex-1 text-center px-4 py-2 rounded-lg bg-{{ $color }}-600 text-white font-semibold text-sm hover:bg-{{ $color }}-700 transition">
-            View Collection
+            {{ __('View Collection') }}
         </a>
         <a href="{{ route('collections.edit', $collection) }}" 
             class="px-4 py-2 rounded-lg border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 font-semibold text-sm hover:bg-zinc-50 dark:hover:bg-zinc-800 transition">
-            Edit
+            {{ __('Edit') }}
         </a>
     </div>
 </article>

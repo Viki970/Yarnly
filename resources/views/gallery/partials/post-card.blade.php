@@ -22,9 +22,10 @@
     $craftIcon = $craftIcons[$craftType] ?? $craftIcons['model'];
 
     $authorName    = $model->user->name ?? 'Anonymous';
-    $authorAvatar  = ($model->user->profile_picture ?? null)
+    $authorAvatar  = ($model->user ?? null) && $model->user->hasProfileImage()
                         ? asset('storage/' . $model->user->profile_picture)
                         : null;
+    $authorAvatarColor = ($model->user ?? null) ? $model->user->avatarColor() : null;
     $authorInitial = strtoupper(substr($authorName, 0, 1));
 
     $createdAt = $model->created_at ?? now();
@@ -73,7 +74,8 @@
                 <img src="{{ $authorAvatar }}" alt="{{ $authorName }}"
                      class="h-9 w-9 rounded-full object-cover">
             @else
-                <div class="flex h-9 w-9 items-center justify-center rounded-full {{ $accent['bg'] }} text-sm font-bold text-white shadow">
+                <div class="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white shadow {{ $authorAvatarColor ? '' : $accent['bg'] }}"
+                     {!! $authorAvatarColor ? 'style="background-color: ' . e($authorAvatarColor) . '"' : '' !!}>
                     {{ $authorInitial }}
                 </div>
             @endif
@@ -255,9 +257,16 @@
             <button onclick="mcCancelReply('{{ $cardUid }}')" class="ml-auto text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors">✕</button>
         </div>
         <div class="flex items-center gap-2 px-3 sm:px-4 pt-2 pb-3 mt-2 border-t border-zinc-100 dark:border-zinc-700">
-            <div class="w-7 h-7 rounded-full bg-gradient-to-br from-violet-400 to-purple-500 flex-none flex items-center justify-center text-white text-xs font-bold select-none">
+            @php $mcAuthColor = auth()->user()->avatarColor(); @endphp
+            @if(auth()->user()->hasProfileImage())
+            <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}"
+                 class="w-7 h-7 rounded-full object-cover flex-none" alt="">
+            @else
+            <div class="w-7 h-7 rounded-full flex-none flex items-center justify-center text-white text-xs font-bold select-none {{ $mcAuthColor ? '' : 'bg-gradient-to-br from-violet-400 to-purple-500' }}"
+                 {!! $mcAuthColor ? 'style="background-color: ' . e($mcAuthColor) . '"' : '' !!}>
                 {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
             </div>
+            @endif
             <input type="text"
                    id="mc-input-{{ $cardUid }}"
                    placeholder="Add a comment…"

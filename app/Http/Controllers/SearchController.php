@@ -33,9 +33,10 @@ class SearchController extends Controller
             ->map(fn ($user) => [
                 'name'            => $user->name,
                 'username'        => $user->username,
-                'profile_picture' => $user->profile_picture
+                'profile_picture' => $user->hasProfileImage()
                     ? asset('storage/' . $user->profile_picture)
                     : null,
+                'avatar_color'    => $user->avatarColor(),
                 'initials'        => $user->initials(),
                 'profile_url'     => route('users.show', $user),
             ])

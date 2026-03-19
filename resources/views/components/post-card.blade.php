@@ -43,9 +43,17 @@
         {{-- Author + craft badge --}}
         <div class="flex items-center justify-between mb-3">
             <div class="flex items-center gap-2">
-                <a href="{{ route('users.show', $post->user) }}" class="w-7 h-7 rounded-full bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold">
+                @php $pcAvatarColor = $post->user->avatarColor(); @endphp
+                @if($post->user->hasProfileImage())
+                <a href="{{ route('users.show', $post->user) }}" class="w-7 h-7 rounded-full overflow-hidden">
+                    <img src="{{ asset('storage/' . $post->user->profile_picture) }}" class="w-full h-full object-cover" alt="{{ $post->user->name }}">
+                </a>
+                @else
+                <a href="{{ route('users.show', $post->user) }}" class="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold {{ $pcAvatarColor ? '' : 'bg-gradient-to-br from-violet-400 to-purple-500' }}"
+                   {!! $pcAvatarColor ? 'style="background-color: ' . e($pcAvatarColor) . '"' : '' !!}>
                     {{ strtoupper(substr($post->user->name, 0, 1)) }}
                 </a>
+                @endif
                 <a href="{{ route('users.show', $post->user) }}" class="text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:underline">{{ $post->user->name }}</a>
                 @if($showFollowBtn)
                 <form method="POST"

@@ -178,6 +178,12 @@
                             @endif
                         </div>
                         <h3 class="mt-4 text-lg font-bold text-zinc-900 dark:text-white">{{ $pattern->title }}</h3>
+                        @if($pattern->user)
+                            <p class="mt-1 flex items-center gap-1 text-xs text-zinc-400 dark:text-zinc-500">
+                                <svg class="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                                <a href="{{ route('users.show', $pattern->user) }}" class="hover:underline">{{ $pattern->user->name }}</a>
+                            </p>
+                        @endif
                         <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">{{ Str::limit($pattern->description, 80) }}</p>
                         <div class="mt-4 flex items-center justify-between">
                             <div class="flex items-center gap-3 text-xs font-semibold text-pink-700 dark:text-pink-200">

@@ -19,13 +19,16 @@
         {{-- Avatar preview --}}
         <div class="flex flex-col items-center mb-8">
             <div class="relative group cursor-pointer" onclick="document.getElementById('profile_picture').click()">
-                @if(auth()->user()->profile_picture)
+                @if(auth()->user()->hasProfileImage())
                     <img id="avatar-preview"
                          src="{{ asset('storage/' . auth()->user()->profile_picture) }}"
                          alt="Profile picture"
                          class="w-24 h-24 rounded-full object-cover ring-2 ring-zinc-700">
                 @else
-                    <div id="avatar-initials" class="w-24 h-24 rounded-full bg-gradient-to-br from-violet-500 via-purple-500 to-indigo-500 flex items-center justify-center text-3xl font-bold text-white ring-2 ring-zinc-700">
+                    @php $initBg = auth()->user()->avatarColor() ? 'background-color: ' . auth()->user()->avatarColor() : 'background: linear-gradient(135deg, #8b5cf6, #a855f7, #6366f1)'; @endphp
+                    <div id="avatar-initials"
+                         class="w-24 h-24 rounded-full flex items-center justify-center text-3xl font-bold text-white ring-2 ring-zinc-700"
+                         style="<?= e($initBg) ?>">
                         {{ auth()->user()->initials() }}
                     </div>
                     <img id="avatar-preview" src="" alt="Profile picture" class="w-24 h-24 rounded-full object-cover ring-2 ring-zinc-700 hidden">
@@ -42,12 +45,58 @@
                 {{ __('Change photo') }}
             </button>
             <p class="mt-1 text-xs text-zinc-500">{{ __('jpg, jpeg, png, gif, webp — max 5 MB') }}</p>
+
+            {{-- Color picker — only shown when there is no real profile photo --}}
+            @if(!auth()->user()->hasProfileImage())
+            <div id="color-picker-section" class="mt-5 w-full">
+                <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-3 text-center">{{ __('Or choose a circle color') }}</p>
+                <div class="flex flex-wrap justify-center gap-2" id="color-swatches">
+                    @php
+                        $swatches = [
+                            '#ef4444' => 'Red',
+                            '#f97316' => 'Orange',
+                            '#f59e0b' => 'Amber',
+                            '#84cc16' => 'Lime',
+                            '#10b981' => 'Emerald',
+                            '#14b8a6' => 'Teal',
+                            '#06b6d4' => 'Cyan',
+                            '#3b82f6' => 'Blue',
+                            '#6366f1' => 'Indigo',
+                            '#8b5cf6' => 'Violet',
+                            '#e879f9' => 'Fuchsia',
+                            '#ec4899' => 'Pink',
+                        ];
+                        $currentColor = auth()->user()->avatarColor() ?? '#8b5cf6';
+                    @endphp
+                    @foreach($swatches as $hex => $label)
+                        @php $swatchStyle = 'background-color: ' . $hex; @endphp
+                        <button type="button"
+                                onclick="selectColor('{{ $hex }}')"
+                                title="{{ $label }}"
+                                class="swatch-btn w-8 h-8 rounded-full transition-all duration-150 ring-2 {{ $currentColor === $hex ? 'ring-white scale-110' : 'ring-transparent hover:scale-105' }}"
+                                style="<?= e($swatchStyle) ?>"
+                                data-color="{{ $hex }}">
+                        </button>
+                    @endforeach
+                    {{-- Custom color input --}}
+                    <label class="w-8 h-8 rounded-full ring-2 ring-zinc-600 hover:ring-zinc-400 overflow-hidden cursor-pointer transition-all" title="Custom color">
+                        <input type="color" id="custom-color-input"
+                               value="{{ $currentColor }}"
+                               onchange="selectColor(this.value)"
+                               class="opacity-0 w-0 h-0 absolute">
+                        <span class="flex w-full h-full items-center justify-center text-zinc-400 text-lg">+</span>
+                    </label>
+                </div>
+            </div>
+            @endif
         </div>
 
         {{-- Profile Info Form --}}
-        <form method="post" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="space-y-5">
+        <form id="profile-update-form" method="post" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="space-y-5">
             @csrf
             @method('patch')
+
+            <input type="hidden" name="avatar_color" id="avatar_color_input" value="{{ $currentColor }}">
 
             <input id="profile_picture" name="profile_picture" type="file"
                    accept="image/jpeg,image/png,image/gif,image/webp,image/bmp"
@@ -115,8 +164,31 @@ function previewAvatar(input) {
         preview.src = e.target.result;
         preview.classList.remove('hidden');
         if (initials) initials.classList.add('hidden');
+        // Hide color picker once a photo is chosen
+        const section = document.getElementById('color-picker-section');
+        if (section) section.classList.add('hidden');
     };
     reader.readAsDataURL(input.files[0]);
+}
+
+function selectColor(hex) {
+    const initials = document.getElementById('avatar-initials');
+    if (initials) {
+        initials.style.background = hex;
+    }
+    // Update hidden input
+    const input = document.getElementById('avatar_color_input');
+    if (input) input.value = hex;
+    // Update custom color picker value
+    const customInput = document.getElementById('custom-color-input');
+    if (customInput) customInput.value = hex;
+    // Update swatch ring
+    document.querySelectorAll('.swatch-btn').forEach(btn => {
+        const isActive = btn.dataset.color === hex;
+        btn.classList.toggle('ring-white', isActive);
+        btn.classList.toggle('scale-110', isActive);
+        btn.classList.toggle('ring-transparent', !isActive);
+    });
 }
 </script>
 @endsection

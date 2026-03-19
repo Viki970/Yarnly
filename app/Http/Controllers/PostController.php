@@ -80,14 +80,15 @@ class PostController extends Controller
             ->with('user')
             ->get()
             ->map(fn($c) => [
-                'id'         => $c->id,
-                'body'       => $c->body,
-                'author'     => $c->user->name,
-                'initials'   => strtoupper(substr($c->user->name, 0, 1)),
-                'avatar'     => $c->user->profile_picture
+                'id'           => $c->id,
+                'body'         => $c->body,
+                'author'       => $c->user->name,
+                'initials'     => strtoupper(substr($c->user->name, 0, 1)),
+                'avatar'       => $c->user->hasProfileImage()
                                     ? asset('storage/' . $c->user->profile_picture)
                                     : null,
-                'created_at' => $c->created_at->diffForHumans(),
+                'avatar_color' => $c->user->avatarColor(),
+                'created_at'   => $c->created_at->diffForHumans(),
             ]);
 
         return response()->json(['comments' => $comments]);
@@ -116,14 +117,15 @@ class PostController extends Controller
 
         return response()->json([
             'comment' => [
-                'id'         => $comment->id,
-                'body'       => $comment->body,
-                'author'     => $comment->user->name,
-                'initials'   => strtoupper(substr($comment->user->name, 0, 1)),
-                'avatar'     => $comment->user->profile_picture
+                'id'           => $comment->id,
+                'body'         => $comment->body,
+                'author'       => $comment->user->name,
+                'initials'     => strtoupper(substr($comment->user->name, 0, 1)),
+                'avatar'       => $comment->user->hasProfileImage()
                                     ? asset('storage/' . $comment->user->profile_picture)
                                     : null,
-                'created_at' => $comment->created_at->diffForHumans(),
+                'avatar_color' => $comment->user->avatarColor(),
+                'created_at'   => $comment->created_at->diffForHumans(),
             ],
         ], 201);
     }

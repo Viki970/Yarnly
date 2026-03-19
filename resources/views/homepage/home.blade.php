@@ -178,8 +178,9 @@
                                      class="h-9 w-9 shrink-0 rounded-full object-cover ring-1 ring-zinc-700">
                             </template>
                             <template x-if="!user.profile_picture">
-                                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full
-                                            bg-gradient-to-br from-violet-500 to-purple-600 text-xs font-bold text-white"
+                                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
+                                     :class="user.avatar_color ? '' : 'bg-gradient-to-br from-violet-500 to-purple-600'"
+                                     :style="user.avatar_color ? 'background-color:' + user.avatar_color : ''"
                                      x-text="user.initials"></div>
                             </template>
                             <div class="min-w-0 flex-1 text-left">

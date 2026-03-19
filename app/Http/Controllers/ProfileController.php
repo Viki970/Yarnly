@@ -124,13 +124,24 @@ class ProfileController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('profile_picture')) {
-            // Delete old picture if present
+            // Delete old uploaded image if present
             if ($user->profile_picture) {
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($user->profile_picture);
             }
             $data['profile_picture'] = $request->file('profile_picture')->store('profile-pictures', 'public');
+            $data['avatar_color'] = null; // clear colour when a real photo is uploaded
+        } elseif ($request->filled('avatar_color')) {
+            // Colour chosen — delete uploaded photo if any
+            if ($user->profile_picture) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($user->profile_picture);
+                $data['profile_picture'] = null;
+            } else {
+                unset($data['profile_picture']);
+            }
+            $data['avatar_color'] = $request->input('avatar_color');
         } else {
             unset($data['profile_picture']);
+            unset($data['avatar_color']);
         }
 
         $user->fill($data);

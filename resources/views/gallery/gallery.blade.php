@@ -142,6 +142,10 @@ foreach ($allGalleryModels as $model) {
         'likes_count' => $model->likes_count ?? 0,
         'author'      => $model->user->name ?? 'Anonymous',
         'initials'    => strtoupper(substr($model->user->name ?? 'A', 0, 1)),
+        'avatar'      => isset($model->user) && $model->user->hasProfileImage()
+                            ? asset('storage/' . $model->user->profile_picture)
+                            : null,
+        'avatar_color' => isset($model->user) ? $model->user->avatarColor() : null,
         'created_at'  => $model->created_at->diffForHumans(),
         'is_liked'    => (bool)($model->liked_by_user ?? false),
         'is_faved'    => (bool)($model->faved_by_user ?? false),
@@ -509,7 +513,7 @@ foreach ($allGalleryModels as $model) {
 
             {{-- Author header --}}
             <div class="flex items-center gap-3 px-4 py-3 border-b border-zinc-800 shrink-0">
-                <div id="gal-pm-avatar" class="w-9 h-9 rounded-full bg-gradient-to-br from-purple-500 to-violet-500 flex items-center justify-center text-sm font-bold text-white shrink-0 select-none"></div>
+                <div id="gal-pm-avatar" class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0 select-none overflow-hidden"></div>
                 <div class="min-w-0 flex-1">
                     <p id="gal-pm-author" class="text-sm font-semibold text-white truncate"></p>
                     <p id="gal-pm-time"   class="text-xs text-zinc-500"></p>
@@ -586,9 +590,16 @@ foreach ($allGalleryModels as $model) {
                     </button>
                 </div>
                 <div class="flex items-center gap-2 pt-1 border-t border-zinc-800">
-                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-violet-400 to-purple-500 flex-none flex items-center justify-center text-white text-xs font-bold select-none">
+                    @php $galAuthColor = auth()->user()->avatarColor(); @endphp
+                    @if(auth()->user()->hasProfileImage())
+                    <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}"
+                         class="w-6 h-6 rounded-full object-cover flex-none" alt="">
+                    @else
+                    <div class="w-6 h-6 rounded-full flex-none flex items-center justify-center text-white text-xs font-bold select-none {{ $galAuthColor ? '' : 'bg-gradient-to-br from-violet-400 to-purple-500' }}"
+                         {!! $galAuthColor ? 'style="background-color: ' . e($galAuthColor) . '"' : '' !!}>
                         {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                     </div>
+                    @endif
                     <input id="gal-pm-comment-input" type="text" placeholder="Add a comment…"
                            class="flex-1 bg-transparent text-sm text-zinc-300 placeholder-zinc-600 outline-none py-1"
                            maxlength="500"
@@ -747,7 +758,24 @@ function galOpenModal(postId) {
     _galPostListIdx = _galPostList.indexOf(String(postId));
     galUpdateNavArrows();
 
-    document.getElementById('gal-pm-avatar').textContent = post.initials;
+    // Modal author avatar
+    const galAvEl = document.getElementById('gal-pm-avatar');
+    if (post.avatar) {
+        galAvEl.innerHTML = '';
+        galAvEl.style.backgroundImage = `url(${post.avatar})`;
+        galAvEl.style.backgroundSize = 'cover';
+        galAvEl.style.backgroundPosition = 'center';
+        galAvEl.style.backgroundColor = '';
+    } else {
+        galAvEl.style.backgroundImage = '';
+        if (post.avatar_color) {
+            galAvEl.style.backgroundColor = post.avatar_color;
+        } else {
+            galAvEl.style.backgroundColor = '';
+            galAvEl.classList.add('bg-gradient-to-br', 'from-purple-500', 'to-violet-500');
+        }
+        galAvEl.textContent = post.initials;
+    }
     document.getElementById('gal-pm-author').textContent = post.author;
     document.getElementById('gal-pm-time').textContent   = post.created_at;
     document.getElementById('gal-pm-badge').textContent  = post.craft_type;
@@ -1076,7 +1104,12 @@ function galBuildCommentEl(c, isReply) {
         av.className = isReply ? 'w-6 h-6 rounded-full object-cover flex-none' : 'w-7 h-7 rounded-full object-cover flex-none';
     } else {
         av = document.createElement('div');
-        av.className = (isReply ? 'w-6 h-6' : 'w-7 h-7') + ' rounded-full bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold flex-none';
+        av.className = (isReply ? 'w-6 h-6' : 'w-7 h-7') + ' rounded-full flex items-center justify-center text-white text-xs font-bold flex-none';
+        if (c.avatar_color) {
+            av.style.backgroundColor = c.avatar_color;
+        } else {
+            av.classList.add('bg-gradient-to-br', 'from-violet-400', 'to-purple-500');
+        }
         av.textContent = c.initials;
     }
 
@@ -1383,7 +1416,12 @@ function mcBuildCommentEl(cardUid, c, isReply) {
         av.className = isReply ? 'w-6 h-6 rounded-full object-cover flex-none' : 'w-7 h-7 rounded-full object-cover flex-none';
     } else {
         av = document.createElement('div');
-        av.className = (isReply ? 'w-6 h-6' : 'w-7 h-7') + ' rounded-full bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold flex-none';
+        av.className = (isReply ? 'w-6 h-6' : 'w-7 h-7') + ' rounded-full flex items-center justify-center text-white text-xs font-bold flex-none';
+        if (c.avatar_color) {
+            av.style.backgroundColor = c.avatar_color;
+        } else {
+            av.classList.add('bg-gradient-to-br', 'from-violet-400', 'to-purple-500');
+        }
         av.textContent = c.initials;
     }
 

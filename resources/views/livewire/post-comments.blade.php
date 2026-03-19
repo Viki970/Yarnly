@@ -56,12 +56,14 @@ new class extends Component {
         @forelse($comments as $comment)
         <div class="flex gap-3">
             {{-- Avatar --}}
-            @if($comment->user->profile_picture)
+            @if($comment->user->hasProfileImage())
                 <img src="{{ asset('storage/' . $comment->user->profile_picture) }}"
                      alt="{{ $comment->user->name }}"
                      class="flex-shrink-0 w-8 h-8 rounded-full object-cover">
             @else
-                <div class="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold">
+                @php $cAvatarColor = $comment->user->avatarColor(); @endphp
+                <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold {{ $cAvatarColor ? '' : 'bg-gradient-to-br from-violet-400 to-purple-500' }}"
+                     {!! $cAvatarColor ? 'style="background-color: ' . e($cAvatarColor) . '"' : '' !!}>
                     {{ strtoupper(substr($comment->user->name, 0, 1)) }}
                 </div>
             @endif
@@ -84,12 +86,14 @@ new class extends Component {
     @auth
     <form wire:submit.prevent="addComment" class="flex gap-3">
         {{-- Commenter avatar --}}
-        @if(Auth::user()->profile_picture)
+        @if(Auth::user()->hasProfileImage())
             <img src="{{ asset('storage/' . Auth::user()->profile_picture) }}"
                  alt="{{ Auth::user()->name }}"
                  class="flex-shrink-0 w-8 h-8 rounded-full object-cover mt-1">
         @else
-            <div class="flex-shrink-0 w-8 h-8 mt-1 rounded-full bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold">
+            @php $authAvatarColor = Auth::user()->avatarColor(); @endphp
+            <div class="flex-shrink-0 w-8 h-8 mt-1 rounded-full flex items-center justify-center text-white text-xs font-bold {{ $authAvatarColor ? '' : 'bg-gradient-to-br from-violet-400 to-purple-500' }}"
+                 {!! $authAvatarColor ? 'style="background-color: ' . e($authAvatarColor) . '"' : '' !!}>
                 {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
             </div>
         @endif

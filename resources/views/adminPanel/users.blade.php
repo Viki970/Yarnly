@@ -16,14 +16,14 @@
         {{-- Header --}}
         <div class="fade-up mb-8 flex flex-wrap items-center justify-between gap-4">
             <div>
-                <h1 class="text-3xl font-black text-zinc-900 dark:text-white tracking-tight">Manage Users</h1>
+                <h1 class="text-3xl font-black text-zinc-900 dark:text-white tracking-tight">{{ __('Manage Users') }}</h1>
                 <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-                    {{ number_format($total) }} total users
+                    {{ number_format($total) }} {{ __('total users') }}
                 </p>
             </div>
             <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition">
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-                Back to Dashboard
+                {{ __('Back to Dashboard') }}
             </a>
         </div>
 
@@ -35,25 +35,25 @@
                     type="text"
                     name="search"
                     value="{{ request('search') }}"
-                    placeholder="Search by name or email…"
+                    placeholder="{{ __('Search by name or email…') }}"
                     class="w-full rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 pl-9 pr-4 py-2.5 text-sm text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-violet-500"
                 >
             </div>
             <select name="role" class="rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2.5 text-sm text-zinc-700 dark:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-violet-500">
-                <option value="">All roles</option>
-                <option value="user"  @selected(request('role') === 'user')>Users</option>
-                <option value="admin" @selected(request('role') === 'admin')>Admins</option>
+                <option value="">{{ __('All roles') }}</option>
+                <option value="user"  @selected(request('role') === 'user')>{{ __('Users') }}</option>
+                <option value="admin" @selected(request('role') === 'admin')>{{ __('Admins') }}</option>
             </select>
             <select name="sort" class="rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2.5 text-sm text-zinc-700 dark:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-violet-500">
-                <option value="newest"  @selected(request('sort','newest') === 'newest')>Newest first</option>
-                <option value="oldest"  @selected(request('sort') === 'oldest')>Oldest first</option>
-                <option value="name"    @selected(request('sort') === 'name')>Name A–Z</option>
-                <option value="patterns" @selected(request('sort') === 'patterns')>Most patterns</option>
-                <option value="posts"   @selected(request('sort') === 'posts')>Most posts</option>
+                <option value="newest"  @selected(request('sort','newest') === 'newest')>{{ __('Newest first') }}</option>
+                <option value="oldest"  @selected(request('sort') === 'oldest')>{{ __('Oldest first') }}</option>
+                <option value="name"    @selected(request('sort') === 'name')>{{ __('Name A–Z') }}</option>
+                <option value="patterns" @selected(request('sort') === 'patterns')>{{ __('Most patterns') }}</option>
+                <option value="posts"   @selected(request('sort') === 'posts')>{{ __('Most posts') }}</option>
             </select>
-            <button type="submit" class="rounded-xl bg-violet-600 hover:bg-violet-700 px-5 py-2.5 text-sm font-semibold text-white transition">Apply</button>
+            <button type="submit" class="rounded-xl bg-violet-600 hover:bg-violet-700 px-5 py-2.5 text-sm font-semibold text-white transition">{{ __('Apply') }}</button>
             @if(request()->hasAny(['search','role','sort']))
-                <a href="{{ route('admin.users') }}" class="rounded-xl border border-zinc-200 dark:border-zinc-700 px-4 py-2.5 text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition">Clear</a>
+                <a href="{{ route('admin.users') }}" class="rounded-xl border border-zinc-200 dark:border-zinc-700 px-4 py-2.5 text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition">{{ __('Clear') }}</a>
             @endif
         </form>
 
@@ -62,12 +62,12 @@
             <table class="w-full text-sm">
                 <thead>
                     <tr class="border-b border-zinc-100 dark:border-zinc-800">
-                        <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">User</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Role</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 hidden md:table-cell">Patterns</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 hidden md:table-cell">Posts</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 hidden lg:table-cell">Joined</th>
-                        <th class="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Actions</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">{{ __('User') }}</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">{{ __('Role') }}</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 hidden md:table-cell">{{ __('Patterns') }}</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 hidden md:table-cell">{{ __('Posts') }}</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 hidden lg:table-cell">{{ __('Joined') }}</th>
+                        <th class="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">{{ __('Actions') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-zinc-50 dark:divide-zinc-800/60">
@@ -90,9 +90,9 @@
                         </td>
                         <td class="px-6 py-4">
                             @if($u->role === 'admin')
-                                <span class="inline-flex items-center rounded-full bg-violet-100 dark:bg-violet-900/30 px-2.5 py-0.5 text-xs font-semibold text-violet-700 dark:text-violet-300">Admin</span>
+                                <span class="inline-flex items-center rounded-full bg-violet-100 dark:bg-violet-900/30 px-2.5 py-0.5 text-xs font-semibold text-violet-700 dark:text-violet-300">{{ __('Admin') }}</span>
                             @else
-                                <span class="inline-flex items-center rounded-full bg-zinc-100 dark:bg-zinc-800 px-2.5 py-0.5 text-xs font-medium text-zinc-600 dark:text-zinc-400">User</span>
+                                <span class="inline-flex items-center rounded-full bg-zinc-100 dark:bg-zinc-800 px-2.5 py-0.5 text-xs font-medium text-zinc-600 dark:text-zinc-400">{{ __('User') }}</span>
                             @endif
                         </td>
                         <td class="px-6 py-4 text-zinc-700 dark:text-zinc-300 hidden md:table-cell">{{ $u->patterns_count }}</td>
@@ -111,7 +111,7 @@
                                                 ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20 dark:hover:text-red-400'
                                                 : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-violet-50 hover:text-violet-600 dark:hover:bg-violet-900/20 dark:hover:text-violet-400' }}
                                             disabled:opacity-40 disabled:cursor-not-allowed">
-                                        {{ $u->role === 'admin' ? 'Revoke Admin' : 'Make Admin' }}
+                                        {{ $u->role === 'admin' ? __('Revoke Admin') : __('Make Admin') }}
                                     </button>
                                 </form>
                                 {{-- Delete --}}
@@ -122,7 +122,7 @@
                                     <button type="submit"
                                         @if($u->id === auth()->id()) disabled title="Cannot delete yourself" @endif
                                         class="rounded-lg px-3 py-1.5 text-xs font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20 dark:hover:text-red-400 transition disabled:opacity-40 disabled:cursor-not-allowed">
-                                        Delete
+                                        {{ __('Delete') }}
                                     </button>
                                 </form>
                             </div>
@@ -131,7 +131,7 @@
                     @empty
                     <tr>
                         <td colspan="6" class="px-6 py-16 text-center text-zinc-400 dark:text-zinc-500">
-                            No users found.
+                            {{ __('No users found.') }}
                         </td>
                     </tr>
                     @endforelse

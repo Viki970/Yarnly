@@ -28,19 +28,19 @@
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8">
             <div>
                 <div class="flex items-center gap-3 mb-2">
-                    <div class="rounded-lg px-3 py-1 text-xs font-semibold @if($pattern->difficulty === 'beginner') bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200 @elseif($pattern->difficulty === 'intermediate') bg-teal-100 text-teal-800 dark:bg-teal-900/40 dark:text-teal-200 @else bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-200 @endif">
+                    <div class="rounded-lg px-3 py-1 text-xs font-semibold @if($pattern->difficulty === 'beginner') bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-200 @elseif($pattern->difficulty === 'intermediate') bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-200 @else bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-200 @endif">
                         {{ ucfirst($pattern->difficulty) }}
                     </div>
                     @if($pattern->estimated_hours)
-                        <span class="text-xs font-medium text-emerald-700 dark:text-emerald-200">≈ {{ $pattern->estimated_hours }} hrs</span>
+                        <span class="text-xs font-medium text-blue-700 dark:text-blue-200">≈ {{ $pattern->estimated_hours }} hrs</span>
                     @endif
                 </div>
                 <h1 class="text-3xl font-bold text-zinc-900 dark:text-white">{{ $pattern->title }}</h1>
                 <p class="mt-2 text-zinc-600 dark:text-zinc-300">{{ $pattern->description }}</p>
                 <div class="mt-3 flex items-center justify-between">
-                    <div class="flex items-center gap-3 text-sm font-semibold text-emerald-700 dark:text-emerald-200">
-                        <span class="inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
-                        <span class="makers-saved-{{ $pattern->id }}">{{ $pattern->makers_saved }}</span> makers saved
+                    <div class="flex items-center gap-3 text-sm font-semibold text-blue-700 dark:text-blue-200">
+                        <span class="inline-flex h-2 w-2 rounded-full bg-blue-500"></span>
+                        <span class="makers-saved-{{ $pattern->id }}">{{ $pattern->makers_saved }}</span> {{ __('makers saved') }}
                     </div>
                     @auth
                         <button class="favorite-btn p-2 rounded-full transition-all duration-200 hover:scale-110 {{ Auth::user()->hasFavorited($pattern) ? 'text-pink-600 hover:text-pink-700' : 'text-zinc-400 hover:text-pink-500' }}"
@@ -56,11 +56,11 @@
             
             <!-- Action Buttons -->
             <div class="flex gap-3">
-                <a href="{{ route('patterns.download', $pattern) }}" class="rounded-lg bg-emerald-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700">
-                    Download PDF
+                <a href="{{ route('patterns.download', $pattern) }}" class="rounded-lg bg-gradient-to-r from-blue-600 to-sky-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition hover:from-blue-700 hover:to-sky-600">
+                    {{ __('Download PDF') }}
                 </a>
-                <a href="{{ route('patterns.crochet') }}" class="rounded-lg border border-emerald-200 bg-white px-6 py-3 text-sm font-semibold text-emerald-800 transition hover:bg-emerald-50 dark:border-emerald-800 dark:bg-zinc-900 dark:text-emerald-200 dark:hover:bg-zinc-800">
-                    Back to Patterns
+                <a href="{{ route('patterns.crochet') }}" class="rounded-lg border border-blue-200 bg-white px-6 py-3 text-sm font-semibold text-blue-800 transition hover:bg-blue-50 dark:border-blue-800 dark:bg-zinc-900 dark:text-blue-200 dark:hover:bg-zinc-800">
+                    {{ __('Back to Patterns') }}
                 </a>
             </div>
         </div>
@@ -72,28 +72,28 @@
                 type="application/pdf"
                 title="{{ $pattern->title }} Pattern">
                 <p class="p-8 text-center text-zinc-600 dark:text-zinc-300">
-                    Your browser doesn't support PDF viewing. 
-                    <a href="{{ route('patterns.download', $pattern) }}" class="font-semibold text-emerald-600 hover:underline">Download the PDF</a> instead.
+                    {{ __("Your browser doesn't support PDF viewing.") }} 
+                    <a href="{{ route('patterns.download', $pattern) }}" class="font-semibold text-blue-600 hover:underline">{{ __('Download the PDF') }}</a> instead.
                 </p>
             </iframe>
         </div>
 
         <!-- Pattern Info -->
         <div class="mt-8 grid gap-6 md:grid-cols-3">
-            <div class="rounded-2xl border border-emerald-100 bg-white p-6 dark:border-emerald-900/40 dark:bg-zinc-900/70">
-                <h3 class="font-semibold text-zinc-900 dark:text-white">Category</h3>
-                <p class="mt-1 text-emerald-700 dark:text-emerald-200">{{ ucfirst(str_replace('-', ' ', $pattern->category)) }}</p>
+            <div class="rounded-2xl border border-blue-100 bg-white p-6 dark:border-blue-900/40 dark:bg-zinc-900/70">
+                <h3 class="font-semibold text-zinc-900 dark:text-white">{{ __('Category') }}</h3>
+                <p class="mt-1 text-blue-700 dark:text-blue-200">{{ ucfirst(str_replace('-', ' ', $pattern->category)) }}</p>
             </div>
             
-            <div class="rounded-2xl border border-emerald-100 bg-white p-6 dark:border-emerald-900/40 dark:bg-zinc-900/70">
-                <h3 class="font-semibold text-zinc-900 dark:text-white">Difficulty</h3>
-                <p class="mt-1 text-emerald-700 dark:text-emerald-200">{{ ucfirst($pattern->difficulty) }}</p>
+            <div class="rounded-2xl border border-blue-100 bg-white p-6 dark:border-blue-900/40 dark:bg-zinc-900/70">
+                <h3 class="font-semibold text-zinc-900 dark:text-white">{{ __('Difficulty') }}</h3>
+                <p class="mt-1 text-blue-700 dark:text-blue-200">{{ ucfirst($pattern->difficulty) }}</p>
             </div>
             
             @if($pattern->estimated_hours)
-            <div class="rounded-2xl border border-emerald-100 bg-white p-6 dark:border-emerald-900/40 dark:bg-zinc-900/70">
-                <h3 class="font-semibold text-zinc-900 dark:text-white">Estimated Time</h3>
-                <p class="mt-1 text-emerald-700 dark:text-emerald-200">≈ {{ $pattern->estimated_hours }} hours</p>
+            <div class="rounded-2xl border border-blue-100 bg-white p-6 dark:border-blue-900/40 dark:bg-zinc-900/70">
+                <h3 class="font-semibold text-zinc-900 dark:text-white">{{ __('Estimated Time') }}</h3>
+                <p class="mt-1 text-blue-700 dark:text-blue-200">≈ {{ $pattern->estimated_hours }} {{ __('hours') }}</p>
             </div>
             @endif
         </div>

@@ -57,6 +57,7 @@ class User extends Authenticatable
         'password',
         'role',
         'profile_picture',
+        'avatar_color',
     ];
 
     /**
@@ -94,6 +95,24 @@ class User extends Authenticatable
             ->take(2)
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
+    }
+
+    /**
+     * Returns the background color hex for the avatar initials circle.
+     * Stored in the dedicated avatar_color column as "#rrggbb".
+     * Returns null when no colour is set (falls back to the default CSS gradient).
+     */
+    public function avatarColor(): ?string
+    {
+        return $this->avatar_color ?: null;
+    }
+
+    /**
+     * True when the user has an actual uploaded profile image.
+     */
+    public function hasProfileImage(): bool
+    {
+        return (bool) $this->profile_picture;
     }
 
     /**

@@ -21,15 +21,15 @@
         <div class="fade-up mb-8 flex items-center justify-between">
             <div>
                 <h1 class="text-3xl font-black text-zinc-900 dark:text-white tracking-tight">
-                    Admin Dashboard
+                    {{ __('Admin Dashboard') }}
                 </h1>
                 <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-                    Platform overview &amp; statistics — as of {{ now()->format('F j, Y') }}
+                    {{ __('Platform overview & statistics') }} — {{ now()->format('F j, Y') }}
                 </p>
             </div>
             <span class="inline-flex items-center gap-1.5 rounded-full bg-violet-100 px-3 py-1 text-xs font-semibold text-violet-700 dark:bg-violet-900/30 dark:text-violet-300 ring-1 ring-violet-200 dark:ring-violet-700">
                 <span class="h-1.5 w-1.5 rounded-full bg-violet-500 animate-pulse"></span>
-                Live
+                {{ __('Live') }}
             </span>
         </div>
 
@@ -39,7 +39,7 @@
             {{-- Users --}}
             <div class="stat-card rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-5 shadow-sm">
                 <div class="flex items-center justify-between mb-3">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Total Users</span>
+                    <span class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">{{ __('Total Users') }}</span>
                     <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-100 dark:bg-violet-900/30">
                         <svg class="h-4 w-4 text-violet-600 dark:text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
@@ -47,13 +47,13 @@
                     </div>
                 </div>
                 <p class="stat-val text-4xl font-black text-zinc-900 dark:text-white">{{ number_format($stats['total_users']) }}</p>
-                <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">+{{ $stats['new_users_month'] }} this month</p>
+                <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">+{{ $stats['new_users_month'] }} {{ __('this month') }}</p>
             </div>
 
             {{-- Patterns --}}
             <div class="stat-card rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-5 shadow-sm">
                 <div class="flex items-center justify-between mb-3">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Patterns</span>
+                    <span class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">{{ __('Patterns') }}</span>
                     <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-100 dark:bg-emerald-900/30">
                         <svg class="h-4 w-4 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -61,13 +61,13 @@
                     </div>
                 </div>
                 <p class="stat-val text-4xl font-black text-zinc-900 dark:text-white">{{ number_format($stats['total_patterns']) }}</p>
-                <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">+{{ $stats['new_patterns_month'] }} this month</p>
+                <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">+{{ $stats['new_patterns_month'] }} {{ __('this month') }}</p>
             </div>
 
             {{-- Posts --}}
             <div class="stat-card rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-5 shadow-sm">
                 <div class="flex items-center justify-between mb-3">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Posts</span>
+                    <span class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">{{ __('Posts') }}</span>
                     <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-100 dark:bg-blue-900/30">
                         <svg class="h-4 w-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
@@ -75,13 +75,13 @@
                     </div>
                 </div>
                 <p class="stat-val text-4xl font-black text-zinc-900 dark:text-white">{{ number_format($stats['total_posts']) }}</p>
-                <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">+{{ $stats['new_posts_month'] }} this month</p>
+                <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">+{{ $stats['new_posts_month'] }} {{ __('this month') }}</p>
             </div>
 
             {{-- Collections --}}
             <div class="stat-card rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-5 shadow-sm">
                 <div class="flex items-center justify-between mb-3">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Collections</span>
+                    <span class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">{{ __('Collections') }}</span>
                     <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-100 dark:bg-amber-900/30">
                         <svg class="h-4 w-4 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
@@ -89,7 +89,7 @@
                     </div>
                 </div>
                 <p class="stat-val text-4xl font-black text-zinc-900 dark:text-white">{{ number_format($stats['total_collections']) }}</p>
-                <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">+{{ $stats['new_collections_month'] }} this month</p>
+                <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">+{{ $stats['new_collections_month'] }} {{ __('this month') }}</p>
             </div>
 
         </div>
@@ -98,22 +98,22 @@
         <div class="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4 fade-up" style="animation-delay:.1s">
 
             <div class="stat-card rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-5 shadow-sm">
-                <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-2">Total Likes</p>
+                <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-2">{{ __('Total Likes') }}</p>
                 <p class="text-3xl font-black text-pink-500">{{ number_format($stats['total_likes']) }}</p>
             </div>
 
             <div class="stat-card rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-5 shadow-sm">
-                <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-2">Total Comments</p>
+                <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-2">{{ __('Total Comments') }}</p>
                 <p class="text-3xl font-black text-sky-500">{{ number_format($stats['total_comments']) }}</p>
             </div>
 
             <div class="stat-card rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-5 shadow-sm">
-                <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-2">Admin Users</p>
+                <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-2">{{ __('Admin Users') }}</p>
                 <p class="text-3xl font-black text-violet-500">{{ number_format($stats['admin_count']) }}</p>
             </div>
 
             <div class="stat-card rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-5 shadow-sm">
-                <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-2">New Users Today</p>
+                <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-2">{{ __('New Users Today') }}</p>
                 <p class="text-3xl font-black text-teal-500">{{ number_format($stats['new_users_today']) }}</p>
             </div>
 
@@ -123,7 +123,7 @@
         <div class="mt-8 grid gap-6 md:grid-cols-2 fade-up" style="animation-delay:.15s">
 
             <div class="rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-6 shadow-sm">
-                <h2 class="text-base font-bold text-zinc-900 dark:text-white mb-4">Patterns by Type</h2>
+                <h2 class="text-base font-bold text-zinc-900 dark:text-white mb-4">{{ __('Patterns by Type') }}</h2>
                 <div class="space-y-3">
                     @foreach($stats['patterns_by_type'] as $type => $count)
                     @php
@@ -144,7 +144,7 @@
 
             {{-- Posts by craft type --}}
             <div class="rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-6 shadow-sm">
-                <h2 class="text-base font-bold text-zinc-900 dark:text-white mb-4">Posts by Craft Type</h2>
+                <h2 class="text-base font-bold text-zinc-900 dark:text-white mb-4">{{ __('Posts by Craft Type') }}</h2>
                 <div class="space-y-3">
                     @foreach($stats['posts_by_craft'] as $craft => $count)
                     @php
@@ -169,18 +169,18 @@
         <div class="mt-8 fade-up" style="animation-delay:.2s">
             <div class="rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 shadow-sm overflow-hidden">
                 <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
-                    <h2 class="text-base font-bold text-zinc-900 dark:text-white">Recently Joined Users</h2>
-                    <a href="#manage-users" class="text-xs font-semibold text-violet-600 dark:text-violet-400 hover:underline">View all →</a>
+                    <h2 class="text-base font-bold text-zinc-900 dark:text-white">{{ __('Recently Joined Users') }}</h2>
+                    <a href="#manage-users" class="text-xs font-semibold text-violet-600 dark:text-violet-400 hover:underline">{{ __('View all →') }}</a>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="text-left text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 bg-zinc-50 dark:bg-zinc-900/60">
-                                <th class="px-6 py-3">User</th>
-                                <th class="px-6 py-3">Email</th>
-                                <th class="px-6 py-3">Role</th>
-                                <th class="px-6 py-3">Joined</th>
-                                <th class="px-6 py-3 text-right">Patterns</th>
+                                <th class="px-6 py-3">{{ __('User') }}</th>
+                                <th class="px-6 py-3">{{ __('Email') }}</th>
+                                <th class="px-6 py-3">{{ __('Role') }}</th>
+                                <th class="px-6 py-3">{{ __('Joined') }}</th>
+                                <th class="px-6 py-3 text-right">{{ __('Patterns') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
@@ -202,9 +202,9 @@
                                 <td class="px-6 py-3 text-zinc-500 dark:text-zinc-400">{{ $user->email }}</td>
                                 <td class="px-6 py-3">
                                     @if($user->role === 'admin')
-                                        <span class="inline-flex rounded-full bg-violet-100 dark:bg-violet-900/30 px-2 py-0.5 text-xs font-semibold text-violet-700 dark:text-violet-300">Admin</span>
+                                        <span class="inline-flex rounded-full bg-violet-100 dark:bg-violet-900/30 px-2 py-0.5 text-xs font-semibold text-violet-700 dark:text-violet-300">{{ __('Admin') }}</span>
                                     @else
-                                        <span class="inline-flex rounded-full bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 text-xs font-semibold text-zinc-600 dark:text-zinc-400">User</span>
+                                        <span class="inline-flex rounded-full bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 text-xs font-semibold text-zinc-600 dark:text-zinc-400">{{ __('User') }}</span>
                                     @endif
                                 </td>
                                 <td class="px-6 py-3 text-zinc-500 dark:text-zinc-400">{{ $user->created_at->format('M j, Y') }}</td>
@@ -212,7 +212,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="5" class="px-6 py-8 text-center text-zinc-400 dark:text-zinc-500">No users yet.</td>
+                                <td colspan="5" class="px-6 py-8 text-center text-zinc-400 dark:text-zinc-500">{{ __('No users yet.') }}</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -225,17 +225,17 @@
         <div class="mt-8 fade-up" style="animation-delay:.25s">
             <div class="rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 shadow-sm overflow-hidden">
                 <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800">
-                    <h2 class="text-base font-bold text-zinc-900 dark:text-white">Recently Uploaded Patterns</h2>
+                    <h2 class="text-base font-bold text-zinc-900 dark:text-white">{{ __('Recently Uploaded Patterns') }}</h2>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="text-left text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 bg-zinc-50 dark:bg-zinc-900/60">
-                                <th class="px-6 py-3">Title</th>
-                                <th class="px-6 py-3">Category</th>
-                                <th class="px-6 py-3">Difficulty</th>
-                                <th class="px-6 py-3">Author</th>
-                                <th class="px-6 py-3">Uploaded</th>
+                                <th class="px-6 py-3">{{ __('Title') }}</th>
+                                <th class="px-6 py-3">{{ __('Category') }}</th>
+                                <th class="px-6 py-3">{{ __('Difficulty') }}</th>
+                                <th class="px-6 py-3">{{ __('Author') }}</th>
+                                <th class="px-6 py-3">{{ __('Uploaded') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
@@ -255,7 +255,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="5" class="px-6 py-8 text-center text-zinc-400 dark:text-zinc-500">No patterns yet.</td>
+                                <td colspan="5" class="px-6 py-8 text-center text-zinc-400 dark:text-zinc-500">{{ __('No patterns yet.') }}</td>
                             </tr>
                             @endforelse
                         </tbody>

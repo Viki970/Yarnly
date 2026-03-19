@@ -15,7 +15,7 @@ class PatternController extends Controller
 {
     public function crochet()
     {
-        $newest = Pattern::where('craft_type', 'crochet')->latest()->limit(6)->get();
+        $newest = Pattern::where('craft_type', 'crochet')->latest()->limit(30)->get();
 
         // Calculate patterns created this week
         $startOfWeek = now()->startOfWeek();
@@ -35,7 +35,7 @@ class PatternController extends Controller
             ->where('craft_type', 'crochet')
             ->with(['patterns', 'user'])
             ->latest()
-            ->limit(6)
+            ->limit(30)
             ->get();
 
         return view('patterns.crochet.crochet_patterns', [
@@ -56,7 +56,7 @@ class PatternController extends Controller
         }
 
         $patterns = Pattern::where('craft_type', 'crochet')->where('category', $category)->with('user')->latest()->get();
-        $newest = Pattern::where('craft_type', 'crochet')->with('user')->latest()->limit(6)->get();
+        $newest = Pattern::where('craft_type', 'crochet')->with('user')->latest()->limit(30)->get();
 
         // Calculate patterns created this week
         $startOfWeek = now()->startOfWeek();
@@ -76,7 +76,7 @@ class PatternController extends Controller
             ->where('craft_type', 'crochet')
             ->with(['patterns', 'user'])
             ->latest()
-            ->limit(6)
+            ->limit(30)
             ->get();
 
         return view('patterns.crochet.crochet_patterns', [
@@ -91,7 +91,7 @@ class PatternController extends Controller
 
     public function knitting()
     {
-        $newest = Pattern::where('craft_type', 'knitting')->with('user')->latest()->limit(6)->get();
+        $newest = Pattern::where('craft_type', 'knitting')->with('user')->latest()->limit(30)->get();
 
         // Calculate patterns created this week
         $startOfWeek = now()->startOfWeek();
@@ -111,7 +111,7 @@ class PatternController extends Controller
             ->where('craft_type', 'knitting')
             ->with(['patterns', 'user'])
             ->latest()
-            ->limit(6)
+            ->limit(30)
             ->get();
 
         return view('patterns.knitting.knitting_patterns', [
@@ -132,7 +132,7 @@ class PatternController extends Controller
         }
 
         $patterns = Pattern::where('craft_type', 'knitting')->where('category', $category)->with('user')->latest()->get();
-        $newest = Pattern::where('craft_type', 'knitting')->with('user')->latest()->limit(6)->get();
+        $newest = Pattern::where('craft_type', 'knitting')->with('user')->latest()->limit(30)->get();
 
         // Calculate patterns created this week
         $startOfWeek = now()->startOfWeek();
@@ -152,7 +152,7 @@ class PatternController extends Controller
             ->where('craft_type', 'knitting')
             ->with(['patterns', 'user'])
             ->latest()
-            ->limit(6)
+            ->limit(30)
             ->get();
 
         return view('patterns.knitting.knitting_patterns', [
@@ -167,7 +167,7 @@ class PatternController extends Controller
 
     public function embroidery()
     {
-        $newest = Pattern::where('craft_type', 'embroidery')->with('user')->latest()->limit(6)->get();
+        $newest = Pattern::where('craft_type', 'embroidery')->with('user')->latest()->limit(30)->get();
 
         // Calculate patterns created this week
         $startOfWeek = now()->startOfWeek();
@@ -187,7 +187,7 @@ class PatternController extends Controller
             ->where('craft_type', 'embroidery')
             ->with(['patterns', 'user'])
             ->latest()
-            ->limit(6)
+            ->limit(30)
             ->get();
 
         return view('patterns.embroidery.embroidery_patterns', [
@@ -208,7 +208,7 @@ class PatternController extends Controller
         }
 
         $patterns = Pattern::where('craft_type', 'embroidery')->where('category', $category)->with('user')->latest()->get();
-        $newest = Pattern::where('craft_type', 'embroidery')->with('user')->latest()->limit(6)->get();
+        $newest = Pattern::where('craft_type', 'embroidery')->with('user')->latest()->limit(30)->get();
 
         // Calculate patterns created this week
         $startOfWeek = now()->startOfWeek();
@@ -228,7 +228,7 @@ class PatternController extends Controller
             ->where('craft_type', 'embroidery')
             ->with(['patterns', 'user'])
             ->latest()
-            ->limit(6)
+            ->limit(30)
             ->get();
 
         return view('patterns.embroidery.embroidery_patterns', [
@@ -368,11 +368,10 @@ class PatternController extends Controller
 
     public function myPatterns()
     {
-        $patterns = Pattern::where('user_id', Auth::id())
-            ->latest()
-            ->get();
+        $patterns = Pattern::where('user_id', Auth::id())->latest()->get();
+        $totalPatterns = $patterns->count();
 
-        return view('profile.my-patterns', compact('patterns'));
+        return view('profile.my-patterns', compact('patterns', 'totalPatterns'));
     }
 
     /**

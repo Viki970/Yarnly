@@ -42,12 +42,14 @@
         <div class="flex items-center justify-between mb-4">
             <div class="flex items-center gap-3">
                 <a href="{{ route('users.show', $post->user) }}" class="block shrink-0">
-                @if($post->user->profile_picture)
+                @if($post->user->hasProfileImage())
                     <img src="{{ asset('storage/' . $post->user->profile_picture) }}"
                          alt="{{ $post->user->name }}"
                          class="w-10 h-10 rounded-full object-cover">
                 @else
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center text-white text-sm font-bold">
+                    @php $pAvatarColor = $post->user->avatarColor(); @endphp
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold {{ $pAvatarColor ? '' : 'bg-gradient-to-br from-violet-400 to-purple-500' }}"
+                         {!! $pAvatarColor ? 'style="background-color: ' . e($pAvatarColor) . '"' : '' !!}>
                         {{ strtoupper(substr($post->user->name, 0, 1)) }}
                     </div>
                 @endif

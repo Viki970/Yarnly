@@ -39,6 +39,11 @@ class ProfileUpdateRequest extends FormRequest
                 'mimes:jpg,jpeg,png,gif,webp,bmp',
                 'max:5120',
             ],
+            'avatar_color' => [
+                'nullable',
+                'string',
+                'regex:/^#[0-9a-fA-F]{6}$/',
+            ],
         ];
     }
 }

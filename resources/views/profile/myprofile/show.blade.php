@@ -11,22 +11,24 @@ $allPostData = [];
 foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $post) {
     if (isset($allPostData[$post->id])) continue;
     $allPostData[$post->id] = [
-        'id'          => $post->id,
-        'images'      => $post->images->map(fn($i) => asset('storage/'.$i->image_path))->values()->all(),
-        'description' => $post->description ?? '',
-        'craft_type'  => $post->craft_type  ?? '',
-        'tags'        => $post->tags_array,
-        'likes_count' => $post->likes_count,
-        'author'      => $post->user->name,
-        'initials'    => $post->user->initials(),
-        'created_at'  => $post->created_at->diffForHumans(),
-        'is_liked'    => $authUser ? $post->isLikedBy($authUser) : false,
-        'is_faved'    => $authUser ? $post->isFavoritedBy($authUser) : false,
-        'like_url'    => route('posts.like',       $post->id),
-        'unlike_url'  => route('posts.unlike',     $post->id),
-        'fav_url'     => route('posts.favorite',   $post->id),
-        'unfav_url'   => route('posts.unfavorite', $post->id),
-        'delete_url'  => route('posts.destroy',    $post->id),
+        'id'           => $post->id,
+        'images'       => $post->images->map(fn($i) => asset('storage/'.$i->image_path))->values()->all(),
+        'description'  => $post->description ?? '',
+        'craft_type'   => $post->craft_type  ?? '',
+        'tags'         => $post->tags_array,
+        'likes_count'  => $post->likes_count,
+        'author'       => $post->user->name,
+        'initials'     => $post->user->initials(),
+        'avatar'       => $post->user->hasProfileImage() ? asset('storage/' . $post->user->profile_picture) : null,
+        'avatar_color' => $post->user->avatarColor(),
+        'created_at'   => $post->created_at->diffForHumans(),
+        'is_liked'     => $authUser ? $post->isLikedBy($authUser) : false,
+        'is_faved'     => $authUser ? $post->isFavoritedBy($authUser) : false,
+        'like_url'     => route('posts.like',       $post->id),
+        'unlike_url'   => route('posts.unlike',     $post->id),
+        'fav_url'      => route('posts.favorite',   $post->id),
+        'unfav_url'    => route('posts.unfavorite', $post->id),
+        'delete_url'   => route('posts.destroy',    $post->id),
     ];
 }
 @endphp
@@ -87,12 +89,14 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
 
             {{-- Avatar --}}
             <div class="shrink-0">
-                @if($user->profile_picture)
+                @if($user->hasProfileImage())
                     <img src="{{ asset('storage/' . $user->profile_picture) }}"
                          alt="{{ $user->username }}"
                          class="w-24 h-24 sm:w-36 sm:h-36 rounded-full object-cover shadow-lg ring-2 ring-zinc-700">
                 @else
-                    <div class="w-24 h-24 sm:w-36 sm:h-36 rounded-full bg-gradient-to-br from-violet-500 via-purple-500 to-indigo-500 flex items-center justify-center text-4xl sm:text-5xl font-bold text-white shadow-lg ring-2 ring-zinc-700">
+                    @php $avatarColor = $user->avatarColor(); @endphp
+                    <div class="w-24 h-24 sm:w-36 sm:h-36 rounded-full flex items-center justify-center text-4xl sm:text-5xl font-bold text-white shadow-lg ring-2 ring-zinc-700 {{ $avatarColor ? '' : 'bg-gradient-to-br from-violet-500 via-purple-500 to-indigo-500' }}"
+                         {!! $avatarColor ? 'style="background-color: ' . e($avatarColor) . '"' : '' !!}>
                         {{ $user->initials() }}
                     </div>
                 @endif
@@ -215,10 +219,10 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
                     </svg>
                 </div>
-                <h3 class="text-2xl font-extrabold mb-2">Share Photos</h3>
-                <p class="text-zinc-400 text-sm mb-5">When you share photos, they will appear on your profile.</p>
+                <h3 class="text-2xl font-extrabold mb-2">{{ __('Share Photos') }}</h3>
+                <p class="text-zinc-400 text-sm mb-5">{{ __('When you share photos, they will appear on your profile.') }}</p>
                 <a href="{{ route('posts.create') }}"
-                   class="text-sm font-semibold text-sky-400 hover:text-sky-300 transition-colors">Share your first photo</a>
+                   class="text-sm font-semibold text-sky-400 hover:text-sky-300 transition-colors">{{ __('Share your first photo') }}</a>
             </div>
             @else
             <div class="grid grid-cols-3 gap-0.5">
@@ -271,7 +275,7 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
 
                 {{-- Sub-tab bar --}}
                 <div class="flex items-center gap-2 py-3 overflow-x-auto scrollbar-none">
-                    @foreach(['posts' => 'Posts', 'patterns' => 'Patterns', 'collections' => 'Collections'] as $val => $label)
+                    @foreach(['posts' => __('Posts'), 'patterns' => __('Patterns'), 'collections' => __('Collections')] as $val => $label)
                     <button @click="savedTab = '{{ $val }}'"
                             :class="savedTab === '{{ $val }}'
                                 ? 'bg-violet-600 text-white border-violet-600'
@@ -303,8 +307,8 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                                       d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
                             </svg>
                         </div>
-                        <h3 class="text-2xl font-extrabold mb-2">Save Photos and Videos</h3>
-                        <p class="text-zinc-400 text-sm">Save things you want to see again. No one is notified, and only you can see what you've saved.</p>
+                        <h3 class="text-2xl font-extrabold mb-2">{{ __('Save Photos and Videos') }}</h3>
+                        <p class="text-zinc-400 text-sm">{{ __('Save things you want to see again. No one is notified, and only you can see what you\'ve saved.') }}</p>
                     </div>
                     @else
                     @php
@@ -350,7 +354,7 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                                 @endif
                             </div>
                             <div class="px-3 py-2.5">
-                                <p class="text-sm font-semibold text-white">All Posts</p>
+                                <p class="text-sm font-semibold text-white">{{ __('All Posts') }}</p>
                                 <p class="text-xs text-zinc-400">{{ $savedPosts->count() }} {{ Str::plural('post', $savedPosts->count()) }}</p>
                             </div>
                         </a>
@@ -419,13 +423,13 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                                       d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                             </svg>
                         </div>
-                        <h3 class="text-2xl font-extrabold mb-2">No Saved Patterns</h3>
-                        <p class="text-zinc-400 text-sm">Patterns you favourite will appear here.</p>
+                        <h3 class="text-2xl font-extrabold mb-2">{{ __('No Saved Patterns') }}</h3>
+                        <p class="text-zinc-400 text-sm">{{ __('Patterns you favourite will appear here.') }}</p>
                     </div>
                     @else
                     <div x-data="{ craft: 'all' }">
                         <div class="flex items-center gap-2 py-3 overflow-x-auto scrollbar-none">
-                            @foreach(['all' => 'All', 'crochet' => 'Crochet', 'knitting' => 'Knitting', 'embroidery' => 'Embroidery'] as $val => $label)
+                            @foreach(['all' => __('All'), 'crochet' => __('Crochet'), 'knitting' => __('Knitting'), 'embroidery' => __('Embroidery')] as $val => $label)
                             <button @click="craft = '{{ $val }}'"
                                     :class="craft === '{{ $val }}'
                                         ? 'bg-violet-600 text-white border-violet-600'
@@ -472,13 +476,13 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                                       d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                             </svg>
                         </div>
-                        <h3 class="text-2xl font-extrabold mb-2">No Saved Collections</h3>
-                        <p class="text-zinc-400 text-sm">Collections you favourite will appear here.</p>
+                        <h3 class="text-2xl font-extrabold mb-2">{{ __('No Saved Collections') }}</h3>
+                        <p class="text-zinc-400 text-sm">{{ __('Collections you favourite will appear here.') }}</p>
                     </div>
                     @else
                     <div x-data="{ craft: 'all' }">
                         <div class="flex items-center gap-2 py-3 overflow-x-auto scrollbar-none">
-                            @foreach(['all' => 'All', 'crochet' => 'Crochet', 'knitting' => 'Knitting', 'embroidery' => 'Embroidery'] as $val => $label)
+                            @foreach(['all' => __('All'), 'crochet' => __('Crochet'), 'knitting' => __('Knitting'), 'embroidery' => __('Embroidery')] as $val => $label)
                             <button @click="craft = '{{ $val }}'"
                                     :class="craft === '{{ $val }}'
                                         ? 'bg-violet-600 text-white border-violet-600'
@@ -550,8 +554,8 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                               d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
                     </svg>
                 </div>
-                <h3 class="text-2xl font-extrabold mb-2">No Liked Posts Yet</h3>
-                <p class="text-zinc-400 text-sm">Posts you like will appear here.</p>
+                <h3 class="text-2xl font-extrabold mb-2">{{ __('No Liked Posts Yet') }}</h3>
+                <p class="text-zinc-400 text-sm">{{ __('Posts you like will appear here.') }}</p>
             </div>
             @else
             <div class="grid grid-cols-3 gap-0.5">
@@ -605,16 +609,16 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                               d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
                 </div>
-                <h3 class="text-2xl font-extrabold mb-2">No Patterns Yet</h3>
-                <p class="text-zinc-400 text-sm mb-5">Patterns you upload will appear here.</p>
+                <h3 class="text-2xl font-extrabold mb-2">{{ __('No Patterns Yet') }}</h3>
+                <p class="text-zinc-400 text-sm mb-5">{{ __('Patterns you upload will appear here.') }}</p>
                 <a href="{{ route('patterns.create') }}"
-                   class="text-sm font-semibold text-sky-400 hover:text-sky-300 transition-colors">Upload your first pattern</a>
+                   class="text-sm font-semibold text-sky-400 hover:text-sky-300 transition-colors">{{ __('Upload your first pattern') }}</a>
             </div>
             @else
             <div x-data="{ craft: 'all' }">
                 {{-- Mini craft filter --}}
                 <div class="flex items-center gap-2 py-3 overflow-x-auto scrollbar-none">
-                    @foreach(['all' => 'All', 'crochet' => 'Crochet', 'knitting' => 'Knitting', 'embroidery' => 'Embroidery'] as $val => $label)
+                    @foreach(['all' => __('All'), 'crochet' => __('Crochet'), 'knitting' => __('Knitting'), 'embroidery' => __('Embroidery')] as $val => $label)
                     <button @click="craft = '{{ $val }}'"
                             :class="craft === '{{ $val }}'
                                 ? 'bg-violet-600 text-white border-violet-600'
@@ -662,16 +666,16 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                               d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                     </svg>
                 </div>
-                <h3 class="text-2xl font-extrabold mb-2">No Collections Yet</h3>
-                <p class="text-zinc-400 text-sm mb-5">Collections you create will appear here.</p>
+                <h3 class="text-2xl font-extrabold mb-2">{{ __('No Collections Yet') }}</h3>
+                <p class="text-zinc-400 text-sm mb-5">{{ __('Collections you create will appear here.') }}</p>
                 <a href="{{ route('collections.create') }}"
-                   class="text-sm font-semibold text-sky-400 hover:text-sky-300 transition-colors">Create your first collection</a>
+                   class="text-sm font-semibold text-sky-400 hover:text-sky-300 transition-colors">{{ __('Create your first collection') }}</a>
             </div>
             @else
             <div x-data="{ craft: 'all' }">
                 {{-- Mini craft filter --}}
                 <div class="flex items-center gap-2 py-3 overflow-x-auto scrollbar-none">
-                    @foreach(['all' => 'All', 'crochet' => 'Crochet', 'knitting' => 'Knitting', 'embroidery' => 'Embroidery'] as $val => $label)
+                    @foreach(['all' => __('All'), 'crochet' => __('Crochet'), 'knitting' => __('Knitting'), 'embroidery' => __('Embroidery')] as $val => $label)
                     <button @click="craft = '{{ $val }}'"
                             :class="craft === '{{ $val }}'
                                 ? 'bg-violet-600 text-white border-violet-600'
@@ -793,7 +797,7 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
 
                 {{-- Author header --}}
                 <div class="flex items-center gap-3 px-4 py-3 border-b border-zinc-800 shrink-0">
-                    <div id="pm-avatar" class="w-9 h-9 rounded-full bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center text-sm font-bold text-white shrink-0 select-none"></div>
+                    <div id="pm-avatar" class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0 select-none overflow-hidden"></div>
                     <div class="min-w-0 flex-1">
                         <p id="pm-author" class="text-sm font-semibold text-white truncate"></p>
                         <p id="pm-time"   class="text-xs text-zinc-500"></p>
@@ -877,12 +881,14 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
             <div id="follow-modal-content" class="max-h-80 overflow-y-auto divide-y divide-zinc-800">
                 @forelse($user->followers as $follower)
                 <a href="{{ route('users.show', $follower) }}" class="flex items-center gap-3 px-4 py-3 hover:bg-zinc-800/50 transition-colors">
-                    @if($follower->profile_picture)
+                    @if($follower->hasProfileImage())
                         <img src="{{ asset('storage/' . $follower->profile_picture) }}"
                              alt="{{ $follower->username }}"
                              class="w-10 h-10 rounded-full object-cover shrink-0">
                     @else
-                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center text-sm font-bold text-white shrink-0">
+                        @php $myfAvatarColor = $follower->avatarColor(); @endphp
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0 {{ $myfAvatarColor ? '' : 'bg-gradient-to-br from-violet-500 to-purple-500' }}"
+                             {!! $myfAvatarColor ? 'style="background-color: ' . e($myfAvatarColor) . '"' : '' !!}>
                             {{ $follower->initials() }}
                         </div>
                     @endif
@@ -960,9 +966,11 @@ foreach ($followingUsers as $fu) {
     $name       = e($fu->name);
     $username   = e($fu->username);
     $profileUrl = e(route('users.show', $fu));
-    $avatarHtml = $fu->profile_picture
+    $avatarHtml = $fu->hasProfileImage()
         ? '<img src="' . e(asset('storage/' . $fu->profile_picture)) . '" alt="' . $username . '" class="w-10 h-10 rounded-full object-cover shrink-0">'
-        : '<div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center text-sm font-bold text-white shrink-0">' . $initials . '</div>';
+        : ($fu->avatarColor()
+            ? '<div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0" style="background-color:' . e($fu->avatarColor()) . '">' . $initials . '</div>'
+            : '<div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center text-sm font-bold text-white shrink-0">' . $initials . '</div>');
     $followingHTML .= '<a href="' . $profileUrl . '" class="flex items-center gap-3 px-4 py-3 hover:bg-zinc-800/50 transition-colors">'
         . $avatarHtml
         . '<div class="min-w-0"><p class="text-sm font-semibold text-white truncate">' . $username . '</p>'
@@ -1099,7 +1107,23 @@ function openPostModal(postId) {
     _pmIndex = 0;
 
     // Populate header
-    document.getElementById('pm-avatar').textContent = post.initials;
+    const pmAv = document.getElementById('pm-avatar');
+    if (post.avatar) {
+        pmAv.innerHTML = '';
+        pmAv.style.backgroundImage = `url(${post.avatar})`;
+        pmAv.style.backgroundSize = 'cover';
+        pmAv.style.backgroundPosition = 'center';
+        pmAv.style.backgroundColor = '';
+    } else {
+        pmAv.style.backgroundImage = '';
+        if (post.avatar_color) {
+            pmAv.style.backgroundColor = post.avatar_color;
+        } else {
+            pmAv.style.backgroundColor = '';
+            pmAv.classList.add('bg-gradient-to-br', 'from-violet-500', 'to-purple-500');
+        }
+        pmAv.textContent = post.initials;
+    }
     document.getElementById('pm-author').textContent = post.author;
     document.getElementById('pm-time').textContent   = post.created_at;
     document.getElementById('pm-badge').textContent  = post.craft_type;

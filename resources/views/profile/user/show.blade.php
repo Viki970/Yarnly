@@ -10,23 +10,25 @@ $viewer = $authUser;
 $allPostData = [];
 foreach ($posts->all() as $post) {
     $allPostData[$post->id] = [
-        'id'          => $post->id,
-        'images'      => $post->images->map(fn($i) => asset('storage/'.$i->image_path))->values()->all(),
-        'description' => $post->description ?? '',
-        'craft_type'  => $post->craft_type  ?? '',
-        'tags'        => $post->tags_array,
-        'likes_count' => $post->likes_count,
-        'author'      => $post->user->name,
-        'author_id'   => $post->user->id,
-        'author_url'  => route('users.show', $post->user),
-        'initials'    => $post->user->initials(),
-        'created_at'  => $post->created_at->diffForHumans(),
-        'is_liked'    => $viewer ? $post->isLikedBy($viewer) : false,
-        'is_faved'    => $viewer ? $post->isFavoritedBy($viewer) : false,
-        'like_url'    => route('posts.like',       $post->id),
-        'unlike_url'  => route('posts.unlike',     $post->id),
-        'fav_url'     => route('posts.favorite',   $post->id),
-        'unfav_url'   => route('posts.unfavorite', $post->id),
+        'id'           => $post->id,
+        'images'       => $post->images->map(fn($i) => asset('storage/'.$i->image_path))->values()->all(),
+        'description'  => $post->description ?? '',
+        'craft_type'   => $post->craft_type  ?? '',
+        'tags'         => $post->tags_array,
+        'likes_count'  => $post->likes_count,
+        'author'       => $post->user->name,
+        'author_id'    => $post->user->id,
+        'author_url'   => route('users.show', $post->user),
+        'initials'     => $post->user->initials(),
+        'avatar'       => $post->user->hasProfileImage() ? asset('storage/' . $post->user->profile_picture) : null,
+        'avatar_color' => $post->user->avatarColor(),
+        'created_at'   => $post->created_at->diffForHumans(),
+        'is_liked'     => $viewer ? $post->isLikedBy($viewer) : false,
+        'is_faved'     => $viewer ? $post->isFavoritedBy($viewer) : false,
+        'like_url'     => route('posts.like',       $post->id),
+        'unlike_url'   => route('posts.unlike',     $post->id),
+        'fav_url'      => route('posts.favorite',   $post->id),
+        'unfav_url'    => route('posts.unfavorite', $post->id),
     ];
 }
 // Include liked/saved posts in modal data
@@ -34,23 +36,25 @@ $extraPosts = collect()->merge($likedPosts)->merge($savedPosts)->unique('id');
 foreach ($extraPosts->all() as $post) {
     if (isset($allPostData[$post->id])) continue;
     $allPostData[$post->id] = [
-        'id'          => $post->id,
-        'images'      => $post->images->map(fn($i) => asset('storage/'.$i->image_path))->values()->all(),
-        'description' => $post->description ?? '',
-        'craft_type'  => $post->craft_type  ?? '',
-        'tags'        => $post->tags_array,
-        'likes_count' => $post->likes_count,
-        'author'      => $post->user->name,
-        'author_id'   => $post->user->id,
-        'author_url'  => route('users.show', $post->user),
-        'initials'    => $post->user->initials(),
-        'created_at'  => $post->created_at->diffForHumans(),
-        'is_liked'    => $viewer ? $post->isLikedBy($viewer) : false,
-        'is_faved'    => $viewer ? $post->isFavoritedBy($viewer) : false,
-        'like_url'    => route('posts.like',       $post->id),
-        'unlike_url'  => route('posts.unlike',     $post->id),
-        'fav_url'     => route('posts.favorite',   $post->id),
-        'unfav_url'   => route('posts.unfavorite', $post->id),
+        'id'           => $post->id,
+        'images'       => $post->images->map(fn($i) => asset('storage/'.$i->image_path))->values()->all(),
+        'description'  => $post->description ?? '',
+        'craft_type'   => $post->craft_type  ?? '',
+        'tags'         => $post->tags_array,
+        'likes_count'  => $post->likes_count,
+        'author'       => $post->user->name,
+        'author_id'    => $post->user->id,
+        'author_url'   => route('users.show', $post->user),
+        'initials'     => $post->user->initials(),
+        'avatar'       => $post->user->hasProfileImage() ? asset('storage/' . $post->user->profile_picture) : null,
+        'avatar_color' => $post->user->avatarColor(),
+        'created_at'   => $post->created_at->diffForHumans(),
+        'is_liked'     => $viewer ? $post->isLikedBy($viewer) : false,
+        'is_faved'     => $viewer ? $post->isFavoritedBy($viewer) : false,
+        'like_url'     => route('posts.like',       $post->id),
+        'unlike_url'   => route('posts.unlike',     $post->id),
+        'fav_url'      => route('posts.favorite',   $post->id),
+        'unfav_url'    => route('posts.unfavorite', $post->id),
     ];
 }
 @endphp
@@ -114,12 +118,14 @@ foreach ($extraPosts->all() as $post) {
 
             {{-- Avatar --}}
             <div class="shrink-0">
-                @if($user->profile_picture)
+                @if($user->hasProfileImage())
                     <img src="{{ asset('storage/' . $user->profile_picture) }}"
                          alt="{{ $user->username }}"
                          class="w-24 h-24 sm:w-36 sm:h-36 rounded-full object-cover shadow-lg ring-2 ring-zinc-700">
                 @else
-                    <div class="w-24 h-24 sm:w-36 sm:h-36 rounded-full bg-gradient-to-br from-violet-500 via-purple-500 to-indigo-500 flex items-center justify-center text-4xl sm:text-5xl font-bold text-white shadow-lg ring-2 ring-zinc-700">
+                    @php $avatarColor = $user->avatarColor(); @endphp
+                    <div class="w-24 h-24 sm:w-36 sm:h-36 rounded-full flex items-center justify-center text-4xl sm:text-5xl font-bold text-white shadow-lg ring-2 ring-zinc-700 {{ $avatarColor ? '' : 'bg-gradient-to-br from-violet-500 via-purple-500 to-indigo-500' }}"
+                         {!! $avatarColor ? 'style="background-color: ' . e($avatarColor) . '"' : '' !!}>
                         {{ $user->initials() }}
                     </div>
                 @endif
@@ -150,7 +156,7 @@ foreach ($extraPosts->all() as $post) {
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                             @endif
                         </svg>
-                        <span id="follow-btn-label">{{ $isFollowing ? 'Following' : 'Follow' }}</span>
+                        <span id="follow-btn-label">{{ $isFollowing ? __('Following') : __('Follow') }}</span>
                     </button>
                     @else
                     <a href="{{ route('login') }}"
@@ -158,7 +164,7 @@ foreach ($extraPosts->all() as $post) {
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                         </svg>
-                        Follow
+                        {{ __('Follow') }}
                     </a>
                     @endauth
                 </div>
@@ -178,7 +184,7 @@ foreach ($extraPosts->all() as $post) {
                     </button>
                     <button onclick="openFollowModal('following')" class="text-center hover:opacity-80 transition-opacity">
                         <span class="stat-num">{{ $followingCount }}</span>
-                        <span class="ml-1 text-sm text-zinc-300">following</span>
+                        <span class="ml-1 text-sm text-zinc-300">{{ __('following') }}</span>
                     </button>
                 </div>
             </div>
@@ -188,7 +194,7 @@ foreach ($extraPosts->all() as $post) {
         <div class="sm:hidden flex items-center justify-around border-t border-b border-zinc-800 py-3 mb-6">
             <div class="text-center">
                 <div class="stat-num">{{ $postsCount }}</div>
-                <div class="stat-label">Posts</div>
+                <div class="stat-label">{{ __('Posts') }}</div>
             </div>
             <button onclick="openFollowModal('followers')" class="text-center hover:opacity-80">
                 <div id="followers-count-mobile" class="stat-num">{{ $followersCount }}</div>
@@ -196,7 +202,7 @@ foreach ($extraPosts->all() as $post) {
             </button>
             <button onclick="openFollowModal('following')" class="text-center hover:opacity-80">
                 <div class="stat-num">{{ $followingCount }}</div>
-                <div class="stat-label">Following</div>
+                <div class="stat-label">{{ __('Following') }}</div>
             </button>
         </div>
 
@@ -213,7 +219,7 @@ foreach ($extraPosts->all() as $post) {
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
                 </svg>
-                <span class="hidden sm:inline">Posts</span>
+                <span class="hidden sm:inline">{{ __('Posts') }}</span>
             </button>
 
             {{-- Patterns tab --}}
@@ -223,7 +229,7 @@ foreach ($extraPosts->all() as $post) {
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                 </svg>
-                <span class="hidden sm:inline">Patterns</span>
+                <span class="hidden sm:inline">{{ __('Patterns') }}</span>
             </button>
 
             {{-- Collections tab --}}
@@ -233,7 +239,7 @@ foreach ($extraPosts->all() as $post) {
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                 </svg>
-                <span class="hidden sm:inline">Collections</span>
+                <span class="hidden sm:inline">{{ __('Collections') }}</span>
             </button>
 
             {{-- Saved tab --}}
@@ -244,7 +250,7 @@ foreach ($extraPosts->all() as $post) {
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
                 </svg>
-                <span class="hidden sm:inline">Saved</span>
+                <span class="hidden sm:inline">{{ __('Saved') }}</span>
             </button>
             @endif
 
@@ -256,7 +262,7 @@ foreach ($extraPosts->all() as $post) {
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
                 </svg>
-                <span class="hidden sm:inline">Liked</span>
+                <span class="hidden sm:inline">{{ __('Liked') }}</span>
             </button>
             @endif
         </div>
@@ -272,8 +278,8 @@ foreach ($extraPosts->all() as $post) {
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold mb-2 text-zinc-300">No Posts Yet</h3>
-                <p class="text-zinc-500 text-sm">This user hasn't shared any posts.</p>
+                <h3 class="text-xl font-bold mb-2 text-zinc-300">{{ __('No Posts Yet') }}</h3>
+                <p class="text-zinc-500 text-sm">{{ __('This user hasn\'t shared any posts.') }}</p>
             </div>
             @else
             <div class="grid grid-cols-3 gap-0.5">
@@ -330,14 +336,14 @@ foreach ($extraPosts->all() as $post) {
                               d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold mb-2 text-zinc-300">No Patterns Yet</h3>
-                <p class="text-zinc-500 text-sm">This user hasn't uploaded any patterns.</p>
+                <h3 class="text-xl font-bold mb-2 text-zinc-300">{{ __('No Patterns Yet') }}</h3>
+                <p class="text-zinc-500 text-sm">{{ __('This user hasn\'t uploaded any patterns.') }}</p>
             </div>
             @else
             <div x-data="{ craft: 'all' }">
                 {{-- Mini craft filter --}}
                 <div class="flex items-center gap-2 py-3 overflow-x-auto scrollbar-none">
-                    @foreach(['all' => 'All', 'crochet' => 'Crochet', 'knitting' => 'Knitting', 'embroidery' => 'Embroidery'] as $val => $label)
+                    @foreach(['all' => __('All'), 'crochet' => __('Crochet'), 'knitting' => __('Knitting'), 'embroidery' => __('Embroidery')] as $val => $label)
                     <button @click="craft = '{{ $val }}'"
                             :class="craft === '{{ $val }}'
                                 ? 'bg-violet-600 text-white border-violet-600'
@@ -386,8 +392,8 @@ foreach ($extraPosts->all() as $post) {
                               d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold mb-2 text-zinc-300">No Liked Posts</h3>
-                <p class="text-zinc-500 text-sm">This user hasn't liked any posts yet.</p>
+                <h3 class="text-xl font-bold mb-2 text-zinc-300">{{ __('No Liked Posts') }}</h3>
+                <p class="text-zinc-500 text-sm">{{ __('This user hasn\'t liked any posts yet.') }}</p>
             </div>
             @else
             <div class="grid grid-cols-3 gap-0.5">
@@ -445,21 +451,21 @@ foreach ($extraPosts->all() as $post) {
                     <button @click="savedTab = 'posts'"
                             :class="savedTab === 'posts' ? 'bg-violet-600 text-white border-violet-600' : 'bg-transparent text-zinc-400 border-zinc-700 hover:border-zinc-500 hover:text-zinc-200'"
                             class="shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200">
-                        Posts
+                        {{ __('Posts') }}
                     </button>
                     @endif
                     @if($canShowSavedPatterns)
                     <button @click="savedTab = 'patterns'"
                             :class="savedTab === 'patterns' ? 'bg-violet-600 text-white border-violet-600' : 'bg-transparent text-zinc-400 border-zinc-700 hover:border-zinc-500 hover:text-zinc-200'"
                             class="shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200">
-                        Patterns
+                        {{ __('Patterns') }}
                     </button>
                     @endif
                     @if($canShowSavedCollections)
                     <button @click="savedTab = 'collections'"
                             :class="savedTab === 'collections' ? 'bg-violet-600 text-white border-violet-600' : 'bg-transparent text-zinc-400 border-zinc-700 hover:border-zinc-500 hover:text-zinc-200'"
                             class="shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200">
-                        Collections
+                        {{ __('Collections') }}
                     </button>
                     @endif
                 </div>
@@ -475,8 +481,8 @@ foreach ($extraPosts->all() as $post) {
                                       d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
                             </svg>
                         </div>
-                        <h3 class="text-xl font-bold mb-2 text-zinc-300">No Saved Posts</h3>
-                        <p class="text-zinc-500 text-sm">This user hasn't saved any posts yet.</p>
+                        <h3 class="text-xl font-bold mb-2 text-zinc-300">{{ __('No Saved Posts') }}</h3>
+                        <p class="text-zinc-500 text-sm">{{ __('This user hasn\'t saved any posts yet.') }}</p>
                     </div>
                     @else
                     <div class="grid grid-cols-3 gap-0.5">
@@ -531,13 +537,13 @@ foreach ($extraPosts->all() as $post) {
                                       d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                             </svg>
                         </div>
-                        <h3 class="text-xl font-bold mb-2 text-zinc-300">No Saved Patterns</h3>
-                        <p class="text-zinc-500 text-sm">This user hasn't favourited any patterns yet.</p>
+                        <h3 class="text-xl font-bold mb-2 text-zinc-300">{{ __('No Saved Patterns') }}</h3>
+                        <p class="text-zinc-500 text-sm">{{ __('This user hasn\'t favourited any patterns yet.') }}</p>
                     </div>
                     @else
                     <div x-data="{ craft: 'all' }">
                         <div class="flex items-center gap-2 py-3 overflow-x-auto scrollbar-none">
-                            @foreach(['all' => 'All', 'crochet' => 'Crochet', 'knitting' => 'Knitting', 'embroidery' => 'Embroidery'] as $val => $label)
+                            @foreach(['all' => __('All'), 'crochet' => __('Crochet'), 'knitting' => __('Knitting'), 'embroidery' => __('Embroidery')] as $val => $label)
                             <button @click="craft = '{{ $val }}'"
                                     :class="craft === '{{ $val }}' ? 'bg-violet-600 text-white border-violet-600' : 'bg-transparent text-zinc-400 border-zinc-700 hover:border-zinc-500 hover:text-zinc-200'"
                                     class="shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200">
@@ -584,13 +590,13 @@ foreach ($extraPosts->all() as $post) {
                                       d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                             </svg>
                         </div>
-                        <h3 class="text-xl font-bold mb-2 text-zinc-300">No Saved Collections</h3>
-                        <p class="text-zinc-500 text-sm">This user hasn't favourited any collections yet.</p>
+                        <h3 class="text-xl font-bold mb-2 text-zinc-300">{{ __('No Saved Collections') }}</h3>
+                        <p class="text-zinc-500 text-sm">{{ __('This user hasn\'t favourited any collections yet.') }}</p>
                     </div>
                     @else
                     <div x-data="{ craft: 'all' }">
                         <div class="flex items-center gap-2 py-3 overflow-x-auto scrollbar-none">
-                            @foreach(['all' => 'All', 'crochet' => 'Crochet', 'knitting' => 'Knitting', 'embroidery' => 'Embroidery'] as $val => $label)
+                            @foreach(['all' => __('All'), 'crochet' => __('Crochet'), 'knitting' => __('Knitting'), 'embroidery' => __('Embroidery')] as $val => $label)
                             <button @click="craft = '{{ $val }}'"
                                     :class="craft === '{{ $val }}' ? 'bg-violet-600 text-white border-violet-600' : 'bg-transparent text-zinc-400 border-zinc-700 hover:border-zinc-500 hover:text-zinc-200'"
                                     class="shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200">
@@ -660,14 +666,14 @@ foreach ($extraPosts->all() as $post) {
                               d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold mb-2 text-zinc-300">No Public Collections</h3>
-                <p class="text-zinc-500 text-sm">This user hasn't shared any public collections.</p>
+                <h3 class="text-xl font-bold mb-2 text-zinc-300">{{ __('No Public Collections') }}</h3>
+                <p class="text-zinc-500 text-sm">{{ __('This user hasn\'t shared any public collections.') }}</p>
             </div>
             @else
             <div x-data="{ craft: 'all' }">
                 {{-- Mini craft filter --}}
                 <div class="flex items-center gap-2 py-3 overflow-x-auto scrollbar-none">
-                    @foreach(['all' => 'All', 'crochet' => 'Crochet', 'knitting' => 'Knitting', 'embroidery' => 'Embroidery'] as $val => $label)
+                    @foreach(['all' => __('All'), 'crochet' => __('Crochet'), 'knitting' => __('Knitting'), 'embroidery' => __('Embroidery')] as $val => $label)
                     <button @click="craft = '{{ $val }}'"
                             :class="craft === '{{ $val }}'
                                 ? 'bg-violet-600 text-white border-violet-600'
@@ -789,7 +795,7 @@ foreach ($extraPosts->all() as $post) {
 
                 {{-- Author header --}}
                 <div class="flex items-center gap-3 px-4 py-3 border-b border-zinc-800 shrink-0">
-                    <a id="pm-author-link" href="#" class="w-9 h-9 rounded-full bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center text-sm font-bold text-white shrink-0 select-none hover:opacity-80 transition-opacity">
+                    <a id="pm-author-link" href="#" class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0 select-none hover:opacity-80 transition-opacity overflow-hidden">
                         <span id="pm-avatar"></span>
                     </a>
                     <div class="min-w-0 flex-1">
@@ -868,12 +874,14 @@ foreach ($extraPosts->all() as $post) {
             <div id="follow-modal-content" class="max-h-80 overflow-y-auto divide-y divide-zinc-800">
                 @forelse($user->followers as $follower)
                 <a href="{{ route('users.show', $follower) }}" class="flex items-center gap-3 px-4 py-3 hover:bg-zinc-800/50 transition-colors">
-                    @if($follower->profile_picture)
+                    @if($follower->hasProfileImage())
                         <img src="{{ asset('storage/' . $follower->profile_picture) }}"
                              alt="{{ $follower->username }}"
                              class="w-10 h-10 rounded-full object-cover shrink-0">
                     @else
-                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center text-sm font-bold text-white shrink-0">
+                        @php $fAvatarColor = $follower->avatarColor(); @endphp
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0 {{ $fAvatarColor ? '' : 'bg-gradient-to-br from-violet-500 to-purple-500' }}"
+                             {!! $fAvatarColor ? 'style="background-color: ' . e($fAvatarColor) . '"' : '' !!}>
                             {{ $follower->initials() }}
                         </div>
                     @endif
@@ -899,9 +907,11 @@ foreach ($followingUsers as $fu) {
     $name       = e($fu->name);
     $username   = e($fu->username);
     $profileUrl = e(route('users.show', $fu));
-    $avatarHtml = $fu->profile_picture
+    $avatarHtml = $fu->hasProfileImage()
         ? '<img src="' . e(asset('storage/' . $fu->profile_picture)) . '" alt="' . $username . '" class="w-10 h-10 rounded-full object-cover shrink-0">'
-        : '<div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center text-sm font-bold text-white shrink-0">' . $initials . '</div>';
+        : ($fu->avatarColor()
+            ? '<div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0" style="background-color:' . e($fu->avatarColor()) . '">' . $initials . '</div>'
+            : '<div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center text-sm font-bold text-white shrink-0">' . $initials . '</div>');
     $followingHTML .= '<a href="' . $profileUrl . '" class="flex items-center gap-3 px-4 py-3 hover:bg-zinc-800/50 transition-colors">'
         . $avatarHtml
         . '<div class="min-w-0"><p class="text-sm font-semibold text-white truncate">' . $username . '</p>'
@@ -1097,7 +1107,23 @@ function openPostModal(postId) {
     _pmIndex = 0;
 
     // Author header
-    document.getElementById('pm-avatar').textContent = post.initials;
+    const pmAvatarEl = document.getElementById('pm-author-link');
+    const pmAvatarInner = document.getElementById('pm-avatar');
+    if (post.avatar) {
+        pmAvatarEl.style.backgroundImage = `url(${post.avatar})`;
+        pmAvatarEl.style.backgroundSize = 'cover';
+        pmAvatarEl.style.backgroundPosition = 'center';
+        pmAvatarEl.style.backgroundColor = '';
+        if (pmAvatarInner) pmAvatarInner.textContent = '';
+    } else {
+        pmAvatarEl.style.backgroundImage = '';
+        if (post.avatar_color) {
+            pmAvatarEl.style.backgroundColor = post.avatar_color;
+        } else {
+            pmAvatarEl.style.backgroundColor = '';
+        }
+        if (pmAvatarInner) pmAvatarInner.textContent = post.initials;
+    }
     const authorLink     = document.getElementById('pm-author-link');
     const authorNameLink = document.getElementById('pm-author-name-link');
     if (authorLink)     authorLink.href     = post.author_url;
