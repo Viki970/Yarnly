@@ -30,9 +30,10 @@ class NewPatternFromFollowedNotification extends Notification
         return [
             'type'         => 'new_pattern',
             'creator_id'   => $this->creator->id,
-            'creator_name' => $this->creator->name,
-            'pattern_id'   => $this->pattern->id,
-            'message'      => $this->creator->name . ' published a new pattern: ' . $this->pattern->title . '.',
+            'creator_name'  => $this->creator->name,
+            'pattern_id'    => $this->pattern->id,
+            'pattern_title' => $this->pattern->title,
+            'message'       => $this->creator->name . ' published a new pattern: ' . $this->pattern->title . '.',
             'url'          => route('patterns.view', $this->pattern->id),
         ];
     }

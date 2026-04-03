@@ -50,7 +50,7 @@
         <div class="rounded-xl bg-white/95 backdrop-blur-xl shadow-xl ring-1 ring-black/5 border border-white/20 dark:bg-zinc-900/95 dark:ring-white/10 dark:border-zinc-700/50">
             {{-- Header --}}
             <div class="flex items-center justify-between px-4 py-3 border-b border-zinc-200 dark:border-zinc-700">
-                <span class="text-sm font-semibold text-zinc-800 dark:text-zinc-100">Notifications</span>
+                <span class="text-sm font-semibold text-zinc-800 dark:text-zinc-100">{{ __('Notifications') }}</span>
                 @if($unreadCount > 0)
                 <button
                     type="button"
@@ -134,7 +134,7 @@
                     <svg class="mb-2 h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                     </svg>
-                    <p class="text-sm">No notifications yet</p>
+                    <p class="text-sm">{{ __('No notifications yet') }}</p>
                 </div>
                 @endforelse
             </div>
@@ -144,7 +144,7 @@
                 <a
                     href="{{ route('notifications.index') }}"
                     class="block text-center text-xs text-violet-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300 font-medium py-1 transition">
-                    See all notifications
+                    {{ __('See all notifications') }}
                 </a>
             </div>
         </div>

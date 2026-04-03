@@ -67,7 +67,7 @@
                         {{ __('Create Pattern') }}
                     </a>
                 @else
-                    <button onclick="handleCreatePatternGuest()" 
+                    <button onclick="openLoginModal()" 
                         class="rounded-xl bg-gradient-to-r from-rose-600 to-pink-600 px-5 py-3 text-sm font-semibold text-white shadow-lg hover:from-rose-500 hover:to-pink-500 transition-all duration-200 transform hover:scale-105 whitespace-nowrap">
                         <svg class="inline-block h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
@@ -184,8 +184,13 @@
                                 </div>
                                 @if($pattern->pdf_file)
                                     <div class="mt-5 flex gap-2">
+                                        @auth
                                         <a href="{{ route('patterns.view', $pattern->id) }}" class="flex-1 rounded-lg bg-pink-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-pink-700">{{ __('View Pattern') }}</a>
                                         <a href="{{ route('patterns.download', $pattern) }}" class="flex-1 rounded-lg bg-rose-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-rose-700 dark:hover:bg-rose-500">{{ __('Download PDF') }}</a>
+                                        @else
+                                        <button onclick="openLoginModal()" class="flex-1 rounded-lg bg-pink-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-pink-700">{{ __('View Pattern') }}</button>
+                                        <button onclick="openLoginModal()" class="flex-1 rounded-lg bg-rose-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-rose-700 dark:hover:bg-rose-500">{{ __('Download PDF') }}</button>
+                                        @endauth
                                     </div>
                                 @else
                                     <button disabled class="mt-5 block w-full rounded-lg bg-zinc-200 px-4 py-2 text-center text-sm font-semibold text-zinc-500 cursor-not-allowed dark:bg-zinc-700 dark:text-zinc-400">{{ __('PDF Coming Soon') }}</button>
@@ -297,8 +302,13 @@
                                 </div>
                                 @if($pattern->pdf_file)
                                     <div class="mt-5 flex gap-2">
+                                        @auth
                                         <a href="{{ route('patterns.view', $pattern->id) }}" class="flex-1 rounded-lg bg-pink-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-pink-700">{{ __('View Pattern') }}</a>
                                         <a href="{{ route('patterns.download', $pattern) }}" class="flex-1 rounded-lg bg-rose-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-rose-700 dark:hover:bg-rose-500">{{ __('Download PDF') }}</a>
+                                        @else
+                                        <button onclick="openLoginModal()" class="flex-1 rounded-lg bg-pink-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-pink-700">{{ __('View Pattern') }}</button>
+                                        <button onclick="openLoginModal()" class="flex-1 rounded-lg bg-rose-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-rose-700 dark:hover:bg-rose-500">{{ __('Download PDF') }}</button>
+                                        @endauth
                                     </div>
                                 @else
                                     <button disabled class="mt-5 block w-full rounded-lg bg-zinc-200 px-4 py-2 text-center text-sm font-semibold text-zinc-500 cursor-not-allowed dark:bg-zinc-700 dark:text-zinc-400">{{ __('PDF Coming Soon') }}</button>
@@ -336,7 +346,7 @@
                         {{ __('Add Collection') }}
                     </a>
                 @else
-                    <button onclick="handleCreateCollectionGuest()" class="rounded-xl bg-gradient-to-r from-rose-800 to-rose-900 px-5 py-3 text-sm font-semibold text-white shadow-lg hover:from-rose-700 hover:to-rose-800 transition-all duration-200 transform hover:scale-105 whitespace-nowrap">
+                    <button onclick="openLoginModal()" class="rounded-xl bg-gradient-to-r from-rose-800 to-rose-900 px-5 py-3 text-sm font-semibold text-white shadow-lg hover:from-rose-700 hover:to-rose-800 transition-all duration-200 transform hover:scale-105 whitespace-nowrap">
                         <svg class="inline-block h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                         </svg>
@@ -459,9 +469,15 @@
                             @endauth
                         </div>
 
+                        @auth
                         <a href="{{ route('collections.show', $collection) }}" class="mt-5 block w-full rounded-lg bg-rose-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-rose-700">
                             {{ __('View Collection') }}
                         </a>
+                        @else
+                        <button onclick="openLoginModal()" class="mt-5 block w-full rounded-lg bg-rose-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-rose-700">
+                            {{ __('View Collection') }}
+                        </button>
+                        @endauth
                     </article>
                 @endforeach
             @else
@@ -476,7 +492,7 @@
                     @auth
                         <a href="{{ route('collections.select-patterns') }}" class="mt-4 inline-block rounded-lg bg-rose-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-rose-700">{{ __('Create Collection') }}</a>
                     @else
-                        <button onclick="handleCreateCollectionGuest()" class="mt-4 inline-block rounded-lg bg-rose-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-rose-700">{{ __('Create Collection') }}</button>
+                        <button onclick="openLoginModal()" class="mt-4 inline-block rounded-lg bg-rose-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-rose-700">{{ __('Create Collection') }}</button>
                     @endauth
                 </div>
             @endif
@@ -812,18 +828,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Handle create pattern for guest users
-function handleCreatePatternGuest() {
-    if (confirm('You need to sign up to create patterns. Would you like to create an account?')) {
-        window.location.href = '{{ route("register") }}';
-    }
-}
-
-// Handle create collection for guest users
-function handleCreateCollectionGuest() {
-    if (confirm('You need to sign up to create collections. Would you like to create an account?')) {
-        window.location.href = '{{ route("register") }}';
-    }
-}
 </script>
+@include('partials.auth-modal')
 @endsection

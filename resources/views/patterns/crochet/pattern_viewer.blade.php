@@ -29,10 +29,10 @@
             <div>
                 <div class="flex items-center gap-3 mb-2">
                     <div class="rounded-lg px-3 py-1 text-xs font-semibold @if($pattern->difficulty === 'beginner') bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-200 @elseif($pattern->difficulty === 'intermediate') bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-200 @else bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-200 @endif">
-                        {{ ucfirst($pattern->difficulty) }}
+                        {{ __(ucfirst($pattern->difficulty)) }}
                     </div>
                     @if($pattern->estimated_hours)
-                        <span class="text-xs font-medium text-blue-700 dark:text-blue-200">≈ {{ $pattern->estimated_hours }} hrs</span>
+                        <span class="text-xs font-medium text-blue-700 dark:text-blue-200">≈ {{ $pattern->estimated_hours }} {{ __('hours') }}</span>
                     @endif
                 </div>
                 <h1 class="text-3xl font-bold text-zinc-900 dark:text-white">{{ $pattern->title }}</h1>
@@ -82,12 +82,12 @@
         <div class="mt-8 grid gap-6 md:grid-cols-3">
             <div class="rounded-2xl border border-blue-100 bg-white p-6 dark:border-blue-900/40 dark:bg-zinc-900/70">
                 <h3 class="font-semibold text-zinc-900 dark:text-white">{{ __('Category') }}</h3>
-                <p class="mt-1 text-blue-700 dark:text-blue-200">{{ ucfirst(str_replace('-', ' ', $pattern->category)) }}</p>
+                <p class="mt-1 text-blue-700 dark:text-blue-200">{{ __(ucfirst(str_replace('-', ' ', $pattern->category))) }}</p>
             </div>
             
             <div class="rounded-2xl border border-blue-100 bg-white p-6 dark:border-blue-900/40 dark:bg-zinc-900/70">
                 <h3 class="font-semibold text-zinc-900 dark:text-white">{{ __('Difficulty') }}</h3>
-                <p class="mt-1 text-blue-700 dark:text-blue-200">{{ ucfirst($pattern->difficulty) }}</p>
+                <p class="mt-1 text-blue-700 dark:text-blue-200">{{ __(ucfirst($pattern->difficulty)) }}</p>
             </div>
             
             @if($pattern->estimated_hours)

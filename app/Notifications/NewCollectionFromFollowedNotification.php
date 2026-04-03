@@ -29,10 +29,11 @@ class NewCollectionFromFollowedNotification extends Notification
     {
         return [
             'type'           => 'new_collection',
-            'creator_id'     => $this->creator->id,
-            'creator_name'   => $this->creator->name,
-            'collection_id'  => $this->collection->id,
-            'message'        => $this->creator->name . ' published a new collection: ' . $this->collection->name . '.',
+            'creator_id'      => $this->creator->id,
+            'creator_name'    => $this->creator->name,
+            'collection_id'   => $this->collection->id,
+            'collection_name' => $this->collection->name,
+            'message'         => $this->creator->name . ' published a new collection: ' . $this->collection->name . '.',
             'url'            => route('collections.show', $this->collection->id),
         ];
     }

@@ -44,6 +44,7 @@ class ProfileUpdateRequest extends FormRequest
                 'string',
                 'regex:/^#[0-9a-fA-F]{6}$/',
             ],
+            'bio' => ['nullable', 'string', 'max:200'],
         ];
     }
 }

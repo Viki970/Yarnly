@@ -222,7 +222,7 @@
                 <div class="rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-5 shadow-sm">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-base font-bold text-zinc-900 dark:text-white">{{ __('My Recent Posts') }}</h2>
-                        <a href="{{ route('posts.index') }}" class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline">{{ __('All posts →') }}</a>
+                        <a href="{{ route('profile.show') }}?tab=posts" class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline whitespace-nowrap">{{ __('All posts →') }}</a>
                     </div>
                     @if($recentPosts->isEmpty())
                         <p class="text-sm text-zinc-400 dark:text-zinc-500 text-center py-6">{{ __('No posts yet.') }}</p>

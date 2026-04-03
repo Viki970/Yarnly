@@ -162,6 +162,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/settings/notifications', [ProfileController::class, 'saveNotificationPreferences'])->name('profile.notifications.save');
     Route::post('/settings/privacy',       [ProfileController::class, 'savePrivacyPreferences'])->name('profile.privacy.save');
     Route::post('/settings/language',      [ProfileController::class, 'saveLanguage'])->name('profile.language.save');
+    Route::post('/settings/theme',         [ProfileController::class, 'saveTheme'])->name('profile.theme.save');
     
     // Pattern creation routes
     Route::get('/patterns/create', [\App\Http\Controllers\PatternController::class, 'create'])->name('patterns.create');

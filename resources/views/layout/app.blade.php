@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ $htmlClass ?? 'dark' }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ $htmlClass ?? (auth()->check() ? (auth()->user()->theme_preference === 'light' ? '' : 'dark') : 'dark') }}">
     <head>
     @include('partials.head')
     <title>@yield('title', $title ?? config('app.name', 'Yarnly'))</title>

@@ -1,59 +1,74 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+<div class="bg-zinc-900 rounded-2xl shadow-2xl ring-1 ring-zinc-800 p-8">
+
+    <div class="mb-7">
+        <h1 class="text-2xl font-bold text-white">{{ __('Create your account') }}</h1>
+        <p class="mt-1 text-sm text-zinc-400">{{ __('Join the Yarnly crafting community') }}</p>
+    </div>
+
+    <form method="POST" action="{{ route('register') }}" class="space-y-4">
         @csrf
 
-        <!-- Name -->
+        {{-- Name --}}
         <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+            <label for="name" class="block text-xs font-semibold uppercase tracking-wide text-zinc-400 mb-1.5">{{ __('Full Name') }}</label>
+            <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name"
+                   class="w-full rounded-xl bg-zinc-800 border px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition {{ $errors->has('name') ? 'border-red-500' : 'border-zinc-700' }}">
+            @error('name')
+                <p class="mt-1.5 text-xs text-red-400">{{ $message }}</p>
+            @enderror
         </div>
 
-        <!-- Username -->
-        <div class="mt-4">
-            <x-input-label for="username" :value="__('Username')" />
-            <x-text-input id="username" class="block mt-1 w-full" type="text" name="username" :value="old('username')" required autocomplete="off" />
-            <x-input-error :messages="$errors->get('username')" class="mt-2" />
+        {{-- Username --}}
+        <div>
+            <label for="username" class="block text-xs font-semibold uppercase tracking-wide text-zinc-400 mb-1.5">{{ __('Username') }}</label>
+            <input id="username" type="text" name="username" value="{{ old('username') }}" required autocomplete="off"
+                   class="w-full rounded-xl bg-zinc-800 border px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition {{ $errors->has('username') ? 'border-red-500' : 'border-zinc-700' }}">
+            @error('username')
+                <p class="mt-1.5 text-xs text-red-400">{{ $message }}</p>
+            @enderror
         </div>
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        {{-- Email --}}
+        <div>
+            <label for="email" class="block text-xs font-semibold uppercase tracking-wide text-zinc-400 mb-1.5">{{ __('Email') }}</label>
+            <input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="username"
+                   class="w-full rounded-xl bg-zinc-800 border px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition {{ $errors->has('email') ? 'border-red-500' : 'border-zinc-700' }}">
+            @error('email')
+                <p class="mt-1.5 text-xs text-red-400">{{ $message }}</p>
+            @enderror
         </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        {{-- Password --}}
+        <div>
+            <label for="password" class="block text-xs font-semibold uppercase tracking-wide text-zinc-400 mb-1.5">{{ __('Password') }}</label>
+            <input id="password" type="password" name="password" required autocomplete="new-password"
+                   class="w-full rounded-xl bg-zinc-800 border px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition {{ $errors->has('password') ? 'border-red-500' : 'border-zinc-700' }}">
+            @error('password')
+                <p class="mt-1.5 text-xs text-red-400">{{ $message }}</p>
+            @enderror
         </div>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        {{-- Confirm Password --}}
+        <div>
+            <label for="password_confirmation" class="block text-xs font-semibold uppercase tracking-wide text-zinc-400 mb-1.5">{{ __('Confirm Password') }}</label>
+            <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password"
+                   class="w-full rounded-xl bg-zinc-800 border px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition {{ $errors->has('password_confirmation') ? 'border-red-500' : 'border-zinc-700' }}">
+            @error('password_confirmation')
+                <p class="mt-1.5 text-xs text-red-400">{{ $message }}</p>
+            @enderror
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
+        {{-- Submit --}}
+        <button type="submit"
+                class="mt-2 w-full rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-violet-600/25 transition transform hover:-translate-y-0.5 active:translate-y-0">
+            {{ __('Create Account') }}
+        </button>
     </form>
+
+    <p class="mt-6 text-center text-sm text-zinc-500">
+        {{ __('Already have an account?') }}
+        <a href="{{ route('login') }}" class="text-violet-400 hover:text-violet-300 font-semibold transition">{{ __('Sign in') }}</a>
+    </p>
+</div>
 </x-guest-layout>

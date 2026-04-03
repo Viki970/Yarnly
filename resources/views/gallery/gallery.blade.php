@@ -297,8 +297,9 @@ foreach ($allGalleryModels as $model) {
                     </svg>
                     {{ __('Top Rated') }}
                 </button>
+                @php $followingClick = auth()->check() ? "switchTab('following')" : 'openLoginModal()'; @endphp
                 <button
-                    onclick="switchTab('following')"
+                    onclick="{{ $followingClick }}"
                     id="tab-following"
                     class="tab-btn relative z-10 flex items-center gap-1.5 rounded-lg px-2.5 sm:px-4 py-2 text-xs sm:text-sm font-semibold transition-colors duration-200 text-zinc-500 dark:text-zinc-400 whitespace-nowrap">
                     <svg class="h-4 w-4 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">

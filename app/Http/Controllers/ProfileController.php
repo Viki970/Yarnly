@@ -110,8 +110,10 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $user = $request->user();
         return view('profile.myprofile.edit', [
-            'user' => $request->user(),
+            'user'         => $user,
+            'currentColor' => $user->avatar_color ?? '#7c3aed',
         ]);
     }
 
@@ -198,6 +200,25 @@ class ProfileController extends Controller
         return Redirect::route('profile.settings', ['tab' => 'language'])
             ->withCookie(cookie()->forever('locale', $locale))
             ->with('language_saved', true);
+    }
+
+    /**
+     * Save theme preference to the user's account.
+     */
+    public function saveTheme(Request $request)
+    {
+        $theme = in_array($request->input('theme'), ['dark', 'light'], true)
+            ? $request->input('theme')
+            : 'dark';
+
+        $request->user()->update(['theme_preference' => $theme]);
+
+        if ($request->expectsJson()) {
+            return response()->json(['ok' => true]);
+        }
+
+        return Redirect::route('profile.settings', ['tab' => 'theme'])
+            ->with('theme_saved', true);
     }
 
     /**

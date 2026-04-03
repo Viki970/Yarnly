@@ -37,7 +37,7 @@
                                     purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-200
                                 @endif
                             ">
-                                {{ ucfirst($collection->craft_type) }}
+                                {{ __(ucfirst($collection->craft_type)) }}
                             </span>
                             @if($collection->is_public)
                                 <span class="inline-flex items-center rounded-lg px-3 py-1.5 text-xs font-semibold bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-200">
@@ -138,7 +138,7 @@
                             @endif
                         @endauth
                         <div class="text-right">
-                            <p class="text-xs text-zinc-600 dark:text-zinc-400">Patterns</p>
+                            <p class="text-xs text-zinc-600 dark:text-zinc-400">{{ __('Patterns') }}</p>
                             <p class="text-3xl font-bold text-blue-600 dark:text-blue-400">{{ $collection->patterns->count() }}</p>
                         </div>
                     </div>
@@ -153,7 +153,7 @@
             <div class="mb-8 flex items-center justify-between">
                 <div>
                     <h2 class="text-3xl font-bold text-zinc-900 dark:text-white mb-2">{{ __('Patterns in this collection') }}</h2>
-                    <p class="text-zinc-600 dark:text-zinc-400">{{ $collection->patterns->count() }} {{ Str::plural('pattern', $collection->patterns->count()) }} {{ __('patterns ready to start') }}</p>
+                    <p class="text-zinc-600 dark:text-zinc-400">{{ $collection->patterns->count() }} {{ __('patterns ready to start') }}</p>
                 </div>
                 @if($collection->patterns->count() > 0 && $collection->patterns->where('pdf_file', '!=', null)->count() > 0)
                     <a href="{{ route('collections.downloadAll', $collection) }}" 
@@ -188,10 +188,10 @@
                                     @else 
                                         bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-200 
                                     @endif">
-                                    {{ ucfirst($pattern->difficulty) }}
+                                    {{ __(ucfirst($pattern->difficulty)) }}
                                 </div>
                                 @if($pattern->estimated_hours)
-                                    <span class="text-xs font-medium text-blue-700 dark:text-blue-200">≈ {{ $pattern->estimated_hours }} hrs</span>
+                                    <span class="text-xs font-medium text-blue-700 dark:text-blue-200">≈ {{ $pattern->estimated_hours }} {{ __('hours') }}</span>
                                 @endif
                             </div>
                             <h3 class="mt-4 text-lg font-bold text-zinc-900 dark:text-white">{{ $pattern->title }}</h3>

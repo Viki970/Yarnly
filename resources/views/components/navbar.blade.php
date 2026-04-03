@@ -680,6 +680,8 @@
             const sunIcon = document.getElementById('sun-icon');
             const moonIcon = document.getElementById('moon-icon');
             
+            var themeSaveUrl = '{{ auth()->check() ? route("profile.theme.save") : "" }}';
+
             function toggleTheme(button) {
                 const isDark = document.documentElement.classList.contains('dark');
                 
@@ -689,9 +691,22 @@
                     button.style.transform = 'scale(1)';
                 }, 150);
                 
-                // Toggle theme
-                document.documentElement.classList.toggle('dark', !isDark);
-                localStorage.setItem('theme', isDark ? 'light' : 'dark');
+                // Toggle theme via Flux (updates class + localStorage)
+                var newTheme = isDark ? 'light' : 'dark';
+                window.Flux.appearance = newTheme;
+
+                // Save to server so preference persists across logins
+                if (themeSaveUrl) {
+                    fetch(themeSaveUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json',
+                        },
+                        body: JSON.stringify({ theme: newTheme }),
+                    });
+                }
             }
             
             // Desktop theme toggle

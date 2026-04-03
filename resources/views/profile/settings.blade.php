@@ -9,7 +9,7 @@
 @section('content')
 <style>[x-cloak] { display: none !important; }</style>
 
-<div class="min-h-screen bg-zinc-950 text-white py-10"
+<div class="min-h-screen bg-zinc-100 dark:bg-zinc-950 text-zinc-900 dark:text-white py-10"
      x-data="{
          activeTab: (new URLSearchParams(window.location.search).get('tab')) || 'password',
          setTab(tab) {
@@ -24,7 +24,7 @@
         {{-- Header --}}
         <div class="mb-8">
             <h1 class="text-xl font-bold">{{ __('Settings') }}</h1>
-            <p class="text-sm text-zinc-400 mt-0.5">{{ __('Manage your account preferences') }}</p>
+            <p class="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">{{ __('Manage your account preferences') }}</p>
         </div>
 
         <div class="flex gap-8 max-lg:flex-col">
@@ -52,13 +52,13 @@
 
                     @foreach($tabs as $i => $tab)
                         @if($i === count($tabs) - 1)
-                        <div class="border-t border-zinc-800 my-1 max-lg:hidden"></div>
+                        <div class="border-t border-zinc-200 dark:border-zinc-800 my-1 max-lg:hidden"></div>
                         @endif
                         <button
                             @click="setTab('{{ $tab['id'] }}')"
                             :class="activeTab === '{{ $tab['id'] }}'
-                                ? 'bg-zinc-800 text-white font-semibold'
-                                : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50'"
+                                ? 'bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-white font-semibold'
+                                : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/70 dark:hover:bg-zinc-800/50'"
                             class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm transition-all text-left max-lg:w-auto max-lg:shrink-0">
                             <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 {!! $tab['icon'] !!}
@@ -80,7 +80,7 @@
                      x-transition:enter-start="opacity-0 translate-y-1"
                      x-transition:enter-end="opacity-100 translate-y-0"
                      class="space-y-4">
-                    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+                    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6">
                         <div class="flex items-center gap-3 mb-6">
                             <div class="w-9 h-9 rounded-xl bg-violet-500/20 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -89,8 +89,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <h2 class="text-base font-bold">{{ __('Change Password') }}</h2>
-                                <p class="text-xs text-zinc-400">{{ __('Use a long, random password to stay secure.') }}</p>
+                                <h2 class="text-base font-bold text-zinc-900 dark:text-white">{{ __('Change Password') }}</h2>
+                                <p class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Use a long, random password to stay secure.') }}</p>
                             </div>
                         </div>
                         <form method="post" action="{{ route('password.update') }}" class="space-y-5 max-w-md">
@@ -99,19 +99,19 @@
                             <div>
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">{{ __('Current Password') }}</label>
                                 <input type="password" name="current_password" autocomplete="current-password"
-                                       class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
+                                       class="w-full bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
                                 <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">{{ __('New Password') }}</label>
                                 <input type="password" name="password" autocomplete="new-password"
-                                       class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
+                                       class="w-full bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
                                 <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">{{ __('Confirm New Password') }}</label>
                                 <input type="password" name="password_confirmation" autocomplete="new-password"
-                                       class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
+                                       class="w-full bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
                                 <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
                             </div>
                             <div class="flex items-center gap-4 pt-1">
@@ -127,7 +127,7 @@
                             </div>
                         </form>
                     </div>
-                    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+                    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6">
                         <div class="flex items-center gap-3 mb-4">
                             <div class="w-9 h-9 rounded-xl bg-blue-500/20 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -136,8 +136,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <h2 class="text-base font-bold">{{ __('Account Email') }}</h2>
-                                <p class="text-xs text-zinc-400">{{ __('Change your login email address.') }}</p>
+                                <h2 class="text-base font-bold text-zinc-900 dark:text-white">{{ __('Account Email') }}</h2>
+                                <p class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Change your login email address.') }}</p>
                             </div>
                         </div>
                         <form method="post" action="{{ route('profile.update') }}" class="space-y-4 max-w-md">
@@ -147,10 +147,10 @@
                             <div>
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">{{ __('Email Address') }}</label>
                                 <input type="email" name="email" value="{{ old('email', auth()->user()->email) }}" required
-                                       class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
+                                       class="w-full bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
                                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
                                 @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! auth()->user()->hasVerifiedEmail())
-                                    <p class="mt-2 text-xs text-zinc-400">
+                                    <p class="mt-2 text-xs text-zinc-500 dark:text-zinc-400">
                                         {{ __('Your email is unverified.') }}
                                         <form id="send-verification" method="post" action="{{ route('verification.send') }}" class="inline">@csrf</form>
                                         <button form="send-verification" class="underline text-violet-400 hover:text-violet-300 ml-1">{{ __('Resend verification') }}</button>
@@ -176,7 +176,7 @@
                      x-transition:enter="transition ease-out duration-150"
                      x-transition:enter-start="opacity-0 translate-y-1"
                      x-transition:enter-end="opacity-100 translate-y-0">
-                    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+                    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6">
                         <div class="flex items-center gap-3 mb-6">
                             <div class="w-9 h-9 rounded-xl bg-amber-500/20 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -185,8 +185,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <h2 class="text-base font-bold">{{ __('Notification Preferences') }}</h2>
-                                <p class="text-xs text-zinc-400">{{ __('Choose what you want to be notified about.') }}</p>
+                                <h2 class="text-base font-bold text-zinc-900 dark:text-white">{{ __('Notification Preferences') }}</h2>
+                                <p class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Choose what you want to be notified about.') }}</p>
                             </div>
                         </div>
 
@@ -225,9 +225,9 @@
                                     ['key' => 'notify_new_patterns',    'label' => __('New patterns'),     'desc' => __('New patterns from people you follow')],
                                     ['key' => 'notify_new_collections', 'label' => __('New collections'),  'desc' => __('New collections from people you follow')],
                                 ] as $item)
-                                <div class="flex items-center justify-between gap-4 px-4 py-3.5 bg-zinc-800 rounded-xl">
+                                <div class="flex items-center justify-between gap-4 px-4 py-3.5 bg-zinc-100 dark:bg-zinc-800 rounded-xl">
                                     <div>
-                                        <p class="text-sm font-medium text-white">{{ $item['label'] }}</p>
+                                        <p class="text-sm font-medium text-zinc-900 dark:text-white">{{ $item['label'] }}</p>
                                         <p class="text-xs text-zinc-400 mt-0.5">{{ $item['desc'] }}</p>
                                     </div>
                                     <button type="button"
@@ -255,7 +255,7 @@
                      x-transition:enter="transition ease-out duration-150"
                      x-transition:enter-start="opacity-0 translate-y-1"
                      x-transition:enter-end="opacity-100 translate-y-0">
-                    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+                    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6">
                         <div class="flex items-center gap-3 mb-6">
                             <div class="w-9 h-9 rounded-xl bg-emerald-500/20 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -264,8 +264,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <h2 class="text-base font-bold">{{ __('Privacy Settings') }}</h2>
-                                <p class="text-xs text-zinc-400">{{ __('Control who can see and interact with your content.') }}</p>
+                                <h2 class="text-base font-bold text-zinc-900 dark:text-white">{{ __('Privacy Settings') }}</h2>
+                                <p class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Control who can see and interact with your content.') }}</p>
                             </div>
                         </div>
                         <form method="POST" action="{{ route('profile.privacy.save') }}">
@@ -287,10 +287,10 @@
                                     ['key' => 'show_saved_collections', 'label' => __('Show saved collections'), 'desc' => __('Let others browse the collections you\'ve created')],
                                 ] as $item)
                                 @php $isOn = $privacyPrefs[$item['key']] ?? true; @endphp
-                                <div class="flex items-center justify-between gap-4 px-4 py-3.5 bg-zinc-800 rounded-xl"
+                                <div class="flex items-center justify-between gap-4 px-4 py-3.5 bg-zinc-100 dark:bg-zinc-800 rounded-xl"
                                      x-data="{ on: {{ $isOn ? 'true' : 'false' }} }">
                                     <div>
-                                        <p class="text-sm font-medium text-white">{{ $item['label'] }}</p>
+                                        <p class="text-sm font-medium text-zinc-900 dark:text-white">{{ $item['label'] }}</p>
                                         <p class="text-xs text-zinc-400 mt-0.5">{{ $item['desc'] }}</p>
                                     </div>
                                     <input type="hidden" :name="'{{ $item['key'] }}'" :value="on ? '1' : '0'">
@@ -318,11 +318,9 @@
                      x-transition:enter-start="opacity-0 translate-y-1"
                      x-transition:enter-end="opacity-100 translate-y-0"
                      x-data="{
-                         theme:  localStorage.getItem('yarnly-theme')  || 'dark',
-                         accent: localStorage.getItem('yarnly-accent') || 'violet',
-                         size:   localStorage.getItem('yarnly-font')   || 'medium'
+                         theme: localStorage.getItem('flux.appearance') || '{{ in_array(auth()->user()->theme_preference ?? 'dark', ['light', 'dark']) ? (auth()->user()->theme_preference ?? 'dark') : 'dark' }}'
                      }">
-                    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-8">
+                    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 space-y-8">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 rounded-xl bg-purple-500/20 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -331,31 +329,40 @@
                                 </svg>
                             </div>
                             <div>
-                                <h2 class="text-base font-bold">{{ __('Appearance') }}</h2>
-                                <p class="text-xs text-zinc-400">{{ __('Choose how Yarnly looks for you.') }}</p>
+                                <h2 class="text-base font-bold text-zinc-900 dark:text-white">{{ __('Appearance') }}</h2>
+                                <p class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Choose how Yarnly looks for you.') }}</p>
                             </div>
                         </div>
 
+                        {{-- Flash message --}}
+                        @if(session('theme_saved'))
+                        <div class="flex items-center gap-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 px-4 py-2.5 text-sm text-emerald-400">
+                            <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            {{ __('Theme preference saved.') }}
+                        </div>
+                        @endif
+
                         {{-- Colour mode --}}
                         <div>
-                            <p class="text-sm font-semibold text-white mb-3">{{ __('Colour Mode') }}</p>
-                            <div class="grid grid-cols-3 gap-3 max-w-sm">
+                            <p class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">{{ __('Colour Mode') }}</p>
+                            <div class="grid grid-cols-2 gap-3 max-w-sm">
                                 @foreach ([
                                     ['value' => 'dark',   'label' => __('Dark'),   'bg' => 'bg-zinc-900',  'bar' => 'bg-zinc-700'],
                                     ['value' => 'light',  'label' => __('Light'),  'bg' => 'bg-white',     'bar' => 'bg-zinc-200'],
-                                    ['value' => 'system', 'label' => __('System'), 'bg' => 'bg-gradient-to-br from-zinc-900 to-white', 'bar' => 'bg-gradient-to-r from-zinc-700 to-zinc-200'],
                                 ] as $t)
                                 <button type="button"
-                                        @click="theme = '{{ $t['value'] }}'; localStorage.setItem('yarnly-theme', '{{ $t['value'] }}')"
+                                        @click="theme = '{{ $t['value'] }}'; window.Flux.appearance = '{{ $t['value'] }}'"
                                         :class="theme === '{{ $t['value'] }}'
-                                            ? 'ring-2 ring-violet-500 ring-offset-2 ring-offset-zinc-950'
-                                            : 'ring-1 ring-zinc-700 hover:ring-violet-400'"
+                                            ? 'ring-2 ring-violet-500 ring-offset-2 ring-offset-zinc-100 dark:ring-offset-zinc-950'
+                                            : 'ring-1 ring-zinc-300 dark:ring-zinc-700 hover:ring-violet-400'"
                                         class="rounded-xl overflow-hidden transition-all cursor-pointer focus:outline-none">
                                     <div class="{{ $t['bg'] }} h-16 flex flex-col justify-end gap-1 p-2">
                                         <div class="{{ $t['bar'] }} rounded h-1.5 w-3/4 opacity-70"></div>
                                         <div class="{{ $t['bar'] }} rounded h-1.5 w-1/2 opacity-50"></div>
                                     </div>
-                                    <div :class="theme === '{{ $t['value'] }}' ? 'bg-violet-600 text-white' : 'bg-zinc-800 text-zinc-400'"
+                                    <div :class="theme === '{{ $t['value'] }}' ? 'bg-violet-600 text-white' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400'"
                                          class="py-1.5 text-xs font-semibold text-center transition-colors">
                                         {{ $t['label'] }}
                                     </div>
@@ -364,65 +371,16 @@
                             </div>
                         </div>
 
-                        {{-- Accent colour --}}
-                        <div>
-                            <p class="text-sm font-semibold text-white mb-3">{{ __('Accent Colour') }}</p>
-                            <div class="flex items-center gap-3 flex-wrap">
-                                @foreach ([
-                                    ['value' => 'default', 'label' => __('Default'), 'bg' => 'bg-[conic-gradient(from_0deg,_#f43f5e,_#f97316,_#eab308,_#22c55e,_#06b6d4,_#6366f1,_#a855f7,_#f43f5e)]'],
-                                    ['value' => 'violet',  'label' => __('Violet'),  'bg' => 'bg-violet-500'],
-                                    ['value' => 'indigo',  'label' => __('Indigo'),  'bg' => 'bg-indigo-500'],
-                                    ['value' => 'rose',    'label' => __('Rose'),    'bg' => 'bg-rose-500'],
-                                    ['value' => 'emerald', 'label' => __('Emerald'), 'bg' => 'bg-emerald-500'],
-                                    ['value' => 'amber',   'label' => __('Amber'),   'bg' => 'bg-amber-500'],
-                                    ['value' => 'sky',     'label' => __('Sky'),     'bg' => 'bg-sky-500'],
-                                ] as $a)
-                                <div class="flex flex-col items-center gap-1.5">
-                                    <button type="button"
-                                            @click="accent = '{{ $a['value'] }}'; localStorage.setItem('yarnly-accent', '{{ $a['value'] }}')"
-                                            :class="accent === '{{ $a['value'] }}' ? 'ring-2 ring-white ring-offset-2 ring-offset-zinc-950 scale-110' : 'opacity-60 hover:opacity-100 hover:scale-110'"
-                                            class="{{ $a['bg'] }} w-8 h-8 rounded-full block transition-all focus:outline-none cursor-pointer peer">
-                                    </button>
-                                    <span :class="accent === '{{ $a['value'] }}' ? 'opacity-100 text-white translate-y-0' : 'opacity-0 peer-hover:opacity-100 peer-hover:translate-y-0 text-zinc-400 -translate-y-1'"
-                                          class="text-[10px] font-medium transition-all duration-150 pointer-events-none">{{ $a['label'] }}</span>
-                                </div>
-                                @endforeach
-                            </div>
-                        </div>
+                        {{-- Save button --}}
+                        <form method="POST" action="{{ route('profile.theme.save') }}">
+                            @csrf
+                            <input type="hidden" name="theme" :value="theme">
+                            <button type="submit"
+                                    class="px-8 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition-colors">
+                                {{ __('Save Preference') }}
+                            </button>
+                        </form>
 
-                        {{-- Font size --}}
-                        <div>
-                            <p class="text-sm font-semibold text-white mb-3">{{ __('Font Size') }}</p>
-                            <div class="space-y-2 max-w-md">
-                                @foreach ([
-                                    ['value' => 'small',  'label' => __('Small'),  'preview' => 'Aa', 'size' => 'text-sm',  'desc' => __('Compact — fits more on screen')],
-                                    ['value' => 'medium', 'label' => __('Medium'), 'preview' => 'Aa', 'size' => 'text-base','desc' => __('Default — balanced readability')],
-                                    ['value' => 'large',  'label' => __('Large'),  'preview' => 'Aa', 'size' => 'text-lg',  'desc' => __('Comfortable — easier on the eyes')],
-                                ] as $f)
-                                <button type="button"
-                                        @click="size = '{{ $f['value'] }}'; localStorage.setItem('yarnly-font', '{{ $f['value'] }}'); document.documentElement.style.fontSize = ({ small: '13px', medium: '15px', large: '17px' })['{{ $f['value'] }}']"
-                                        :class="size === '{{ $f['value'] }}'
-                                            ? 'border-violet-500 bg-violet-500/10'
-                                            : 'border-zinc-700 hover:border-zinc-500'"
-                                        class="w-full flex items-center gap-4 px-4 py-3 rounded-xl border transition-all cursor-pointer focus:outline-none text-left">
-                                    <div :class="size === '{{ $f['value'] }}' ? 'border-violet-500' : 'border-zinc-600'"
-                                         class="w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0">
-                                        <div x-show="size === '{{ $f['value'] }}'" class="w-2 h-2 rounded-full bg-violet-500"></div>
-                                    </div>
-                                    <span :class="size === '{{ $f['value'] }}' ? 'text-violet-400' : 'text-zinc-400'"
-                                          class="{{ $f['size'] }} font-bold w-8 shrink-0 transition-colors">{{ $f['preview'] }}</span>
-                                    <div>
-                                        <p class="text-sm font-medium text-white">{{ $f['label'] }}</p>
-                                        <p class="text-xs text-zinc-400">{{ $f['desc'] }}</p>
-                                    </div>
-                                </button>
-                                @endforeach
-                            </div>
-                        </div>
-
-                        <button class="px-8 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition-colors">
-                            {{ __('Save Appearance') }}
-                        </button>
                     </div>
                 </div>
 
@@ -432,7 +390,7 @@
                      x-transition:enter-start="opacity-0 translate-y-1"
                      x-transition:enter-end="opacity-100 translate-y-0"
                      x-data="{ lang: '{{ app()->getLocale() }}' }">
-                    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-8">
+                    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 space-y-8">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 rounded-xl bg-blue-500/20 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -441,8 +399,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <h2 class="text-base font-bold">{{ __('Language & Region') }}</h2>
-                                <p class="text-xs text-zinc-400">{{ __('Set your preferred language and regional format.') }}</p>
+                                <h2 class="text-base font-bold text-zinc-900 dark:text-white">{{ __('Language & Region') }}</h2>
+                                <p class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Set your preferred language and regional format.') }}</p>
                             </div>
                         </div>
 
@@ -461,7 +419,7 @@
 
                             {{-- Language list --}}
                             <div>
-                                <p class="text-sm font-semibold text-white mb-3">{{ __('Display Language') }}</p>
+                                <p class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">{{ __('Display Language') }}</p>
                                 <div class="space-y-2 max-w-md">
                                     @foreach ([
                                         ['value' => 'en', 'label' => 'English',   'native' => 'English',    'flag' => '🇬🇧'],
@@ -471,16 +429,16 @@
                                             @click="lang = '{{ $l['value'] }}'"
                                             :class="lang === '{{ $l['value'] }}'
                                                 ? 'border-violet-500 bg-violet-500/10'
-                                                : 'border-zinc-700 hover:border-zinc-500'"
+                                                : 'border-zinc-300 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500'"
                                             class="w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all focus:outline-none text-left cursor-pointer">
-                                        <div :class="lang === '{{ $l['value'] }}' ? 'border-violet-500' : 'border-zinc-600'"
+                                        <div :class="lang === '{{ $l['value'] }}' ? 'border-violet-500' : 'border-zinc-400 dark:border-zinc-600'"
                                              class="w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0">
                                             <div x-show="lang === '{{ $l['value'] }}'" class="w-2 h-2 rounded-full bg-violet-500"></div>
                                         </div>
                                         <span class="text-lg leading-none">{{ $l['flag'] }}</span>
                                         <div class="flex-1">
-                                            <p class="text-sm font-medium text-white">{{ $l['label'] }}</p>
-                                            <p class="text-xs text-zinc-400">{{ $l['native'] }}</p>
+                                            <p class="text-sm font-medium text-zinc-900 dark:text-white">{{ $l['label'] }}</p>
+                                            <p class="text-xs text-zinc-500 dark:text-zinc-400">{{ $l['native'] }}</p>
                                         </div>
                                         <span x-show="lang === '{{ $l['value'] }}'"
                                               class="text-xs text-violet-400 font-semibold">{{ __('Active') }}</span>
@@ -504,7 +462,7 @@
                      x-transition:enter-start="opacity-0 translate-y-1"
                      x-transition:enter-end="opacity-100 translate-y-0"
                      x-data="{ confirmingDeletion: false }">
-                    <div class="bg-zinc-900 border border-red-900/40 rounded-2xl p-6">
+                    <div class="bg-white dark:bg-zinc-900 border border-red-200 dark:border-red-900/40 rounded-2xl p-6">
                         <div class="flex items-center gap-3 mb-6">
                             <div class="w-9 h-9 rounded-xl bg-red-500/20 flex items-center justify-center">
                                 <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -514,12 +472,12 @@
                             </div>
                             <div>
                                 <h2 class="text-base font-bold text-red-400">{{ __('Danger Zone') }}</h2>
-                                <p class="text-xs text-zinc-400">{{ __('Irreversible and destructive actions.') }}</p>
+                                <p class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Irreversible and destructive actions.') }}</p>
                             </div>
                         </div>
-                        <div class="flex items-start justify-between gap-6 p-4 bg-zinc-800 rounded-xl border border-red-900/30">
+                        <div class="flex items-start justify-between gap-6 p-4 bg-zinc-100 dark:bg-zinc-800 rounded-xl border border-red-200 dark:border-red-900/30">
                             <div>
-                                <p class="text-sm font-semibold text-white">{{ __('Delete Account') }}</p>
+                                <p class="text-sm font-semibold text-zinc-900 dark:text-white">{{ __('Delete Account') }}</p>
                                 <p class="text-xs text-zinc-400 mt-1 leading-relaxed">
                                     {{ __('Once your account is deleted, all of its resources and data will be permanently removed. This action cannot be undone.') }}
                                 </p>
@@ -539,9 +497,9 @@
                              class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
                              style="display: none;">
                             <div @click.outside="confirmingDeletion = false"
-                                 class="w-full max-w-md bg-zinc-900 border border-zinc-700 rounded-2xl shadow-2xl p-6 space-y-4">
-                                <h2 class="text-lg font-bold text-white">{{ __('Are you sure?') }}</h2>
-                                <p class="text-sm text-zinc-400">
+                                 class="w-full max-w-md bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-2xl shadow-2xl p-6 space-y-4">
+                                <h2 class="text-lg font-bold text-zinc-900 dark:text-white">{{ __('Are you sure?') }}</h2>
+                                <p class="text-sm text-zinc-500 dark:text-zinc-400">
                                     {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm.') }}
                                 </p>
                                 <form method="post" action="{{ route('profile.destroy') }}" class="space-y-4 mt-2">
@@ -550,12 +508,12 @@
                                     <div>
                                         <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">{{ __('Password') }}</label>
                                         <input type="password" name="password" placeholder="{{ __('Enter your password') }}"
-                                               class="w-full bg-zinc-800 border border-zinc-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition">
+                                               class="w-full bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-600 rounded-xl px-4 py-2.5 text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition">
                                         <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
                                     </div>
                                     <div class="flex justify-end gap-3 pt-1">
                                         <button type="button" @click="confirmingDeletion = false"
-                                                class="px-5 py-2.5 rounded-xl bg-zinc-700 hover:bg-zinc-600 text-white text-sm font-semibold transition-colors">
+                                                class="px-5 py-2.5 rounded-xl bg-zinc-200 dark:bg-zinc-700 hover:bg-zinc-300 dark:hover:bg-zinc-600 text-zinc-900 dark:text-white text-sm font-semibold transition-colors">
                                             {{ __('Cancel') }}
                                         </button>
                                         <button type="submit"
@@ -593,3 +551,4 @@
 </script>
 @endif
 @endsection
+

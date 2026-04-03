@@ -1,4 +1,4 @@
-<article class="group rounded-2xl border border-{{ $color }}-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-{{ $color }}-500/40 dark:bg-gray-800/60">
+<article class="group rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-zinc-700/60 dark:bg-gray-800/60">
     @if($collection->cover_image_path)
         <div class="mb-4 aspect-[3/4] w-full overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800">
             <img src="{{ asset('storage/' . $collection->cover_image_path) }}" 
@@ -94,10 +94,10 @@
 
     <div class="flex items-center justify-between">
         <div class="rounded-lg px-3 py-1 text-xs font-semibold bg-{{ $color }}-100 text-{{ $color }}-800 dark:bg-{{ $color }}-900/40 dark:text-{{ $color }}-200">
-            {{ ucfirst($collection->craft_type) }}
+            {{ __(ucfirst($collection->craft_type)) }}
         </div>
         <span class="text-xs font-medium text-{{ $color }}-700 dark:text-{{ $color }}-200">
-            {{ $collection->patterns->count() }} {{ Str::plural('pattern', $collection->patterns->count()) }}
+            {{ $collection->patterns->count() }} {{ __('Patterns') }}
         </span>
     </div>
     
@@ -110,9 +110,9 @@
     @endif
     
     <div class="mt-4 flex items-center justify-between">
-        <div class="flex items-center gap-3 text-xs font-semibold text-pink-700 dark:text-pink-200">
-            <span class="inline-flex h-2 w-2 rounded-full bg-pink-400"></span>
-            <span class="favorites-count-{{ $collection->id }}">{{ $collection->favorites_count }}</span> users saved
+        <div class="flex items-center gap-3 text-xs font-semibold text-{{ $color }}-700 dark:text-{{ $color }}-200">
+            <span class="inline-flex h-2 w-2 rounded-full bg-{{ $color }}-400"></span>
+            <span class="favorites-count-{{ $collection->id }}">{{ $collection->favorites_count }}</span> {{ __('users saved') }}
         </div>
         @auth
             <button class="favorite-collection-btn p-2 rounded-full transition-all duration-200 hover:scale-110 {{ Auth::user()->hasFavoritedCollection($collection) ? 'text-pink-600 hover:text-pink-700' : 'text-zinc-400 hover:text-pink-500' }}"
@@ -126,10 +126,17 @@
     </div>
 
     <div class="mt-5 flex gap-2">
+        @auth
         <a href="{{ route('collections.show', $collection) }}"
             class="flex-1 text-center px-4 py-2 rounded-lg bg-{{ $color }}-600 text-white font-semibold text-sm hover:bg-{{ $color }}-700 transition">
             {{ __('View Collection') }}
         </a>
+        @else
+        <button onclick="openLoginModal()"
+            class="flex-1 text-center px-4 py-2 rounded-lg bg-{{ $color }}-600 text-white font-semibold text-sm hover:bg-{{ $color }}-700 transition">
+            {{ __('View Collection') }}
+        </button>
+        @endauth
         <a href="{{ route('collections.edit', $collection) }}" 
             class="px-4 py-2 rounded-lg border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 font-semibold text-sm hover:bg-zinc-50 dark:hover:bg-zinc-800 transition">
             {{ __('Edit') }}

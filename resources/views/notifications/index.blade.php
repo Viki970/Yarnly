@@ -79,8 +79,28 @@
             </div>
 
             <div class="flex-1 min-w-0">
+                @php
+                    $actorName = match($type) {
+                        'like'                       => $notification->data['liker_name'] ?? '',
+                        'comment'                    => $notification->data['commenter_name'] ?? '',
+                        'follow'                     => $notification->data['follower_name'] ?? '',
+                        'new_post'                   => $notification->data['poster_name'] ?? '',
+                        'new_pattern', 'new_collection' => $notification->data['creator_name'] ?? '',
+                        default                      => '',
+                    };
+                    $itemTitle = $notification->data['pattern_title'] ?? $notification->data['collection_name'] ?? '';
+                    $notifMessage = match($type) {
+                        'like'           => __(':name liked your post.', ['name' => $actorName]),
+                        'comment'        => __(':name commented on your post.', ['name' => $actorName]),
+                        'follow'         => __(':name started following you.', ['name' => $actorName]),
+                        'new_post'       => __(':name published a new post.', ['name' => $actorName]),
+                        'new_pattern'    => __(':name published a new pattern: :title.', ['name' => $actorName, 'title' => $itemTitle]),
+                        'new_collection' => __(':name published a new collection: :title.', ['name' => $actorName, 'title' => $itemTitle]),
+                        default          => $notification->data['message'] ?? '',
+                    };
+                @endphp
                 <p class="text-sm leading-snug text-zinc-800 dark:text-zinc-100 {{ $notification->read_at ? '' : 'font-semibold' }}">
-                    {{ $notification->data['message'] ?? '' }}
+                    {{ $notifMessage }}
                 </p>
                 <p class="mt-1 text-xs font-medium
                     {{ $notification->read_at ? 'text-zinc-400 dark:text-zinc-500' : 'text-violet-500 dark:text-violet-400' }}">

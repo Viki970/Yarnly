@@ -127,6 +127,20 @@
                 @enderror
             </div>
 
+            {{-- Bio --}}
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">{{ __('Bio') }}</label>
+                <textarea name="bio" maxlength="200" rows="3"
+                          x-data="{ count: {{ strlen(old('bio', auth()->user()->bio ?? '')) }} }"
+                          x-on:input="count = $el.value.length"
+                          class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition resize-none"
+                          placeholder="{{ __('Write a short bio...') }}">{{ old('bio', auth()->user()->bio) }}</textarea>
+                <p class="mt-1 text-xs text-zinc-500 text-right"><span x-text="count">{{ strlen(old('bio', auth()->user()->bio ?? '')) }}</span>/200</p>
+                @error('bio')
+                    <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                @enderror
+            </div>
+
             {{-- Email (read-only) --}}
             <div>
                 <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">{{ __('Email') }}</label>

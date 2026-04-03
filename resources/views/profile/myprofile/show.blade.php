@@ -117,15 +117,20 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                 {{-- Full name directly under username --}}
                 <p class="text-sm text-zinc-400 -mt-2">{{ $user->name }}</p>
 
+                {{-- Bio --}}
+                @if($user->bio)
+                    <p class="text-sm text-zinc-300 leading-relaxed max-w-sm">{{ $user->bio }}</p>
+                @endif
+
                 {{-- Stats row (desktop) --}}
                 <div class="hidden sm:flex items-center gap-8">
                     <div class="text-center">
                         <span class="stat-num">{{ $postsCount }}</span>
-                        <span class="ml-1 text-sm text-zinc-300">{{ Str::plural(__('post'), $postsCount) }}</span>
+                        <span class="ml-1 text-sm text-zinc-300">{{ $postsCount === 1 ? __('post') : __('posts') }}</span>
                     </div>
                     <button onclick="openFollowModal('followers')" class="text-center hover:opacity-80 transition-opacity">
                         <span class="stat-num">{{ $followersCount }}</span>
-                        <span class="ml-1 text-sm text-zinc-300">{{ Str::plural(__('follower'), $followersCount) }}</span>
+                        <span class="ml-1 text-sm text-zinc-300">{{ $followersCount === 1 ? __('follower') : __('followers') }}</span>
                     </button>
                     <button onclick="openFollowModal('following')" class="text-center hover:opacity-80 transition-opacity">
                         <span class="stat-num">{{ $followingCount }}</span>
@@ -143,7 +148,7 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
             </div>
             <button onclick="openFollowModal('followers')" class="text-center hover:opacity-80">
                 <div class="stat-num">{{ $followersCount }}</div>
-                <div class="stat-label">{{ Str::plural(__('Follower'), $followersCount) }}</div>
+                <div class="stat-label">{{ $followersCount === 1 ? __('Follower') : __('Followers') }}</div>
             </button>
             <button onclick="openFollowModal('following')" class="text-center hover:opacity-80">
                 <div class="stat-num">{{ $followingCount }}</div>

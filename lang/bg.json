@@ -34,6 +34,8 @@
     "Settings": "Настройки",
     "Appearance": "Облик",
     "Manage your profile and account settings": "Управлявайте профила и настройките на акаунта си",
+    "Bio": "Биография",
+    "Write a short bio...": "Напишете кратка биография...",
     "Save": "Запази",
     "Saved.": "Запазено.",
     "Cancel": "Отказ",
@@ -348,7 +350,9 @@
     "New patterns will appear here soon!": "Нови схеми ще се появят тук скоро!",
     "patterns": "схеми",
     "post": "публикация",
+    "posts": "публикации",
     "follower": "последовател",
+    "followers": "последователи",
     "following": "следвани",
     "Posts": "Публикации",
     "Follower": "Последовател",
@@ -593,5 +597,17 @@
     "No Public Collections": "Няма публични колекции",
     "This user hasn't shared any public collections.": "Този потребитeл не е споделил публични колекции.",
     "Follow": "Следвай",
-    "Are you sure you want to delete this pattern? This action cannot be undone.": "Сигурни ли сте, че искате да изтриете тази схема? Това действие не може да бъде отменено."
+    "Are you sure you want to delete this pattern? This action cannot be undone.": "Сигурни ли сте, че искате да изтриете тази схема? Това действие не може да бъде отменено.",
+
+    ":name liked your post.": ":name хареса публикацията ви.",
+    ":name commented on your post.": ":name коментира публикацията ви.",
+    ":name started following you.": ":name започна да ви следва.",
+    ":name published a new post.": ":name качи нова публикация.",
+    ":name published a new pattern: :title.": ":name качи нова схема: :title.",
+    ":name published a new collection: :title.": ":name качи нова колекция: :title.",
+    "See all notifications": "Виж всички известия",
+    "No notifications yet": "Все още няма известия",
+    "Showing": "Показване на",
+    "of": "от",
+    "collections": "колекции"
 }

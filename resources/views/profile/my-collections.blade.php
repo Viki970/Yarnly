@@ -1,6 +1,6 @@
 ﻿@extends('layout.app')
 
-@section('title', 'My Collections - Yarnly')
+@section('title', __('My Collections') . ' - Yarnly')
 
 @section('content')
 <!-- Hero Section -->
@@ -16,7 +16,7 @@
         </p>
         <div class="mt-6 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div class="max-w-3xl">
-                <h1 class="text-4xl font-bold tracking-tight text-teal-900 sm:text-5xl dark:text-teal-100">My Collections</h1>
+                <h1 class="text-4xl font-bold tracking-tight text-teal-900 sm:text-5xl dark:text-teal-100">{{ __('My Collections') }}</h1>
                 <p class="mt-4 text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
                     {{ __('Organize and manage your pattern collections. Share curated sets with the community.') }}
                 </p>
@@ -156,7 +156,7 @@
                 <p class="text-sm font-semibold text-teal-700 dark:text-teal-200">{{ __('Your workshop') }}</p>
                 <h2 class="text-3xl font-bold text-zinc-900 dark:text-white">{{ __('All collections') }}</h2>
                 <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
-                    Showing <span id="visible-count">{{ $totalCollections }}</span> of {{ $totalCollections }} collection{{ $totalCollections !== 1 ? 's' : '' }}
+                    {{ __('Showing') }} <span id="visible-count">{{ $totalCollections }}</span> {{ __('of') }} {{ $totalCollections }} {{ __('collections') }}
                 </p>
             </div>
             <a href="{{ route('patterns.crochet') }}" class="text-sm font-semibold text-zinc-600 underline-offset-4 hover:underline dark:text-zinc-300">{{ __('Browse community patterns') }}</a>
@@ -186,8 +186,8 @@
                     @php
                         $color = match($collection->craft_type) {
                             'crochet'    => 'emerald',
-                            'knitting'   => 'indigo',
-                            'embroidery' => 'purple',
+                            'knitting'   => 'purple',
+                            'embroidery' => 'rose',
                             default      => 'teal',
                         };
                     @endphp
