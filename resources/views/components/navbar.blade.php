@@ -121,6 +121,39 @@
                                         <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('User administration') }}</div>
                                     </div>
                                 </a>
+                                <a href="{{ route('admin.posts') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-sky-50 hover:to-blue-50 hover:text-sky-700 dark:text-zinc-200 dark:hover:from-sky-900/20 dark:hover:to-blue-900/20 dark:hover:text-sky-300">
+                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-100 text-sky-600 group-hover:bg-sky-200 dark:bg-sky-900/30 dark:text-sky-400 dark:group-hover:bg-sky-800/40">
+                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold">{{ __('Manage Posts') }}</div>
+                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Posts moderation') }}</div>
+                                    </div>
+                                </a>
+                                <a href="{{ route('admin.patterns') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-green-50 hover:text-emerald-700 dark:text-zinc-200 dark:hover:from-emerald-900/20 dark:hover:to-green-900/20 dark:hover:text-emerald-300">
+                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600 group-hover:bg-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:group-hover:bg-emerald-800/40">
+                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold">{{ __('Manage Patterns') }}</div>
+                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Patterns moderation') }}</div>
+                                    </div>
+                                </a>
+                                <a href="{{ route('admin.comments') }}" class="group flex items-center gap-3 px-4 py-3 text-sm font-medium text-zinc-700 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-amber-50 hover:to-yellow-50 hover:text-amber-700 dark:text-zinc-200 dark:hover:from-amber-900/20 dark:hover:to-yellow-900/20 dark:hover:text-amber-300">
+                                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100 text-amber-600 group-hover:bg-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:group-hover:bg-amber-800/40">
+                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold">{{ __('Manage Comments') }}</div>
+                                        <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ __('Comments moderation') }}</div>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     </div>

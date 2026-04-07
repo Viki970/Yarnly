@@ -62,6 +62,17 @@
                 <a href="{{ route('patterns.crochet') }}" class="rounded-lg border border-blue-200 bg-white px-6 py-3 text-sm font-semibold text-blue-800 transition hover:bg-blue-50 dark:border-blue-800 dark:bg-zinc-900 dark:text-blue-200 dark:hover:bg-zinc-800">
                     {{ __('Back to Patterns') }}
                 </a>
+                @auth
+                    @if(Auth::user()->role === 'admin' && Auth::id() !== $pattern->user_id)
+                        <form method="POST" action="{{ route('patterns.destroy', $pattern) }}" class="inline" onsubmit="return confirm('Are you sure you want to delete this pattern?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="rounded-lg border border-red-200 bg-white px-6 py-3 text-sm font-semibold text-red-600 transition hover:bg-red-50 dark:border-red-800 dark:bg-zinc-900 dark:text-red-400 dark:hover:bg-red-900/20">
+                                {{ __('Delete Pattern') }}
+                            </button>
+                        </form>
+                    @endif
+                @endauth
             </div>
         </div>
 

@@ -73,6 +73,17 @@ new class extends Component {
                 <div class="flex items-center gap-2 mb-0.5">
                     <span class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">{{ $comment->user->name }}</span>
                     <span class="text-xs text-zinc-400">{{ $comment->created_at->diffForHumans() }}</span>
+                    @auth
+                        @if(Auth::id() === $comment->user_id || Auth::user()->role === 'admin')
+                            <form method="POST" action="{{ route('comments.destroy', $comment) }}" class="inline" onsubmit="return confirm('Are you sure you want to delete this comment?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-xs text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 ml-2">
+                                    Delete
+                                </button>
+                            </form>
+                        @endif
+                    @endauth
                 </div>
                 <p class="text-sm text-zinc-600 dark:text-zinc-400 break-words">{{ $comment->body }}</p>
             </div>

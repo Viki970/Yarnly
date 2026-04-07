@@ -119,6 +119,64 @@
 
         </div>
 
+        {{-- ── Quick Management Links ─────────────────────────── --}}
+        <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 fade-up" style="animation-delay:.12s">
+            <a href="{{ route('admin.users') }}" class="group rounded-2xl bg-gradient-to-br from-violet-50 to-purple-50 dark:from-violet-900/20 dark:to-purple-900/20 border border-violet-100 dark:border-violet-800 p-4 shadow-sm hover:shadow-md transition-all duration-200">
+                <div class="flex items-center gap-3">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500 text-white">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-violet-900 dark:text-violet-200">{{ __('Manage Users') }}</p>
+                        <p class="text-xs text-violet-600 dark:text-violet-400 group-hover:underline">{{ __('View all users') }} →</p>
+                    </div>
+                </div>
+            </a>
+            <a href="{{ route('admin.posts') }}" class="group rounded-2xl bg-gradient-to-br from-sky-50 to-blue-50 dark:from-sky-900/20 dark:to-blue-900/20 border border-sky-100 dark:border-sky-800 p-4 shadow-sm hover:shadow-md transition-all duration-200">
+                <div class="flex items-center gap-3">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500 text-white">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-sky-900 dark:text-sky-200">{{ __('Manage Posts') }}</p>
+                        <p class="text-xs text-sky-600 dark:text-sky-400 group-hover:underline">{{ __('View all posts') }} →</p>
+                    </div>
+                </div>
+            </a>
+            <a href="{{ route('admin.patterns') }}" class="group rounded-2xl bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-900/20 dark:to-green-900/20 border border-emerald-100 dark:border-emerald-800 p-4 shadow-sm hover:shadow-md transition-all duration-200">
+                <div class="flex items-center gap-3">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500 text-white">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-emerald-900 dark:text-emerald-200">{{ __('Manage Patterns') }}</p>
+                        <p class="text-xs text-emerald-600 dark:text-emerald-400 group-hover:underline">{{ __('View all patterns') }} →</p>
+                    </div>
+                </div>
+            </a>
+            <a href="{{ route('admin.comments') }}" class="group rounded-2xl bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-amber-900/20 dark:to-yellow-900/20 border border-amber-100 dark:border-amber-800 p-4 shadow-sm hover:shadow-md transition-all duration-200">
+                <div class="flex items-center gap-3">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500 text-white">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-amber-900 dark:text-amber-200">{{ __('Manage Comments') }}</p>
+                        <p class="text-xs text-amber-600 dark:text-amber-400 group-hover:underline">{{ __('View all comments') }} →</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
         {{-- ── Patterns breakdown ─────────────────────────────── --}}
         <div class="mt-8 grid gap-6 md:grid-cols-2 fade-up" style="animation-delay:.15s">
 

@@ -151,6 +151,90 @@ Route::middleware(['auth', 'verified'])->group(function () {
         $user->delete();
         return back()->with('status', "{$user->name} has been deleted.");
     })->name('admin.users.delete');
+
+    // Admin - Posts Management
+    Route::get('/admin/posts', function () {
+        $query = \App\Models\Post::with('user')->withCount(['likes', 'comments']);
+
+        if ($search = request('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('description', 'like', "%{$search}%")
+                  ->orWhere('tags', 'like', "%{$search}%")
+                  ->orWhereHas('user', fn($u) => $u->where('name', 'like', "%{$search}%"));
+            });
+        }
+
+        if ($craft = request('craft_type')) {
+            $query->where('craft_type', $craft);
+        }
+
+        match (request('sort', 'newest')) {
+            'oldest' => $query->oldest(),
+            'likes'  => $query->orderByDesc('likes_count'),
+            'comments' => $query->orderByDesc('comments_count'),
+            default  => $query->latest(),
+        };
+
+        return view('adminPanel.posts', [
+            'posts' => $query->paginate(20),
+            'total' => \App\Models\Post::count(),
+        ]);
+    })->name('admin.posts');
+
+    // Admin - Patterns Management
+    Route::get('/admin/patterns', function () {
+        $query = \App\Models\Pattern::with('user');
+
+        if ($search = request('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhereHas('user', fn($u) => $u->where('name', 'like', "%{$search}%"));
+            });
+        }
+
+        if ($craftType = request('craft_type')) {
+            $query->where('craft_type', $craftType);
+        }
+
+        if ($difficulty = request('difficulty')) {
+            $query->where('difficulty', $difficulty);
+        }
+
+        match (request('sort', 'newest')) {
+            'oldest' => $query->oldest(),
+            'title'  => $query->orderBy('title'),
+            'saved'  => $query->orderByDesc('makers_saved'),
+            default  => $query->latest(),
+        };
+
+        return view('adminPanel.patterns', [
+            'patterns' => $query->paginate(20),
+            'total' => \App\Models\Pattern::count(),
+        ]);
+    })->name('admin.patterns');
+
+    // Admin - Comments Management
+    Route::get('/admin/comments', function () {
+        $query = \App\Models\PostComment::with(['user', 'post']);
+
+        if ($search = request('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('body', 'like', "%{$search}%")
+                  ->orWhereHas('user', fn($u) => $u->where('name', 'like', "%{$search}%"));
+            });
+        }
+
+        match (request('sort', 'newest')) {
+            'oldest' => $query->oldest(),
+            default  => $query->latest(),
+        };
+
+        return view('adminPanel.comments', [
+            'comments' => $query->paginate(20),
+            'total' => \App\Models\PostComment::count(),
+        ]);
+    })->name('admin.comments');
 });
 
 Route::middleware('auth')->group(function () {
@@ -227,6 +311,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/posts/{post}/favorite',   [PostController::class, 'favorite'])->name('posts.favorite');
     Route::delete('/posts/{post}/favorite', [PostController::class, 'unfavorite'])->name('posts.unfavorite');
     Route::post('/posts/{post}/comments',   [PostController::class, 'storeComment'])->name('posts.comments.store');
+    Route::delete('/comments/{comment}',    [PostController::class, 'destroyComment'])->name('comments.destroy');
 });
 
 // ─── Public User Profiles ────────────────────────────────────────────────────

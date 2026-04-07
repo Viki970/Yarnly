@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Notifications\NotificationBell;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 
@@ -21,6 +22,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Gate::before(function ($user, $ability) {
+            return $user->role === 'admin' ? true : null;
+        });
+
         Livewire::component('notification-bell', NotificationBell::class);
     }
 }

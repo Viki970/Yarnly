@@ -130,6 +130,27 @@ class PostController extends Controller
         ], 201);
     }
 
+    public function destroyComment(PostComment $comment): RedirectResponse|JsonResponse
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
+        // Only comment owner or admin can delete
+        if ($comment->user_id !== $user->id && $user->role !== 'admin') {
+            abort(403);
+        }
+
+        $postId = $comment->post_id;
+        $comment->delete();
+
+        if (request()->wantsJson()) {
+            return response()->json(['deleted' => true]);
+        }
+
+        return redirect()->route('posts.show', $postId)
+                         ->with('success', 'Comment deleted.');
+    }
+
     public function destroy(Post $post): RedirectResponse|JsonResponse
     {
         /** @var User $user */
