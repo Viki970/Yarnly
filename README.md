@@ -1,291 +1,291 @@
 ﻿# Yarnly
 
-**Yarnly** is a full-stack social platform for yarn crafters — the place where crochet, knitting, and embroidery enthusiasts discover patterns, share finished projects, follow inspiring makers, and build their crafting portfolio. Built as a graduation project using **Laravel 12** with a Livewire + Alpine.js frontend.
+**Yarnly** е пълноценна социална платформа за любителите на ръчна изработка с прежда — мястото, където ентусиастите на плетене на една кука, на две куки и бродерия откриват шаблони, споделят завършени проекти, следват вдъхновяващи творци и изграждат своето занаятчийско портфолио. Създадена като дипломен проект с използване на **Laravel 12** с Livewire + Alpine.js за потребителския интерфейс.
 
 ---
 
-## Table of Contents
+## Съдържание
 
-- [Overview](#overview)
-- [Application Pages & User Journeys](#application-pages--user-journeys)
-- [Features In Depth](#features-in-depth)
-  - [Pattern Library](#pattern-library)
-  - [Community Gallery](#community-gallery)
-  - [Post Collections (Albums)](#post-collections-albums)
-  - [Pattern Collections](#pattern-collections)
-  - [User Profiles](#user-profiles)
-  - [Social Follow System](#social-follow-system)
-  - [Personal Dashboard](#personal-dashboard)
-  - [Notifications](#notifications)
-  - [Privacy Controls](#privacy-controls)
-  - [Appearance & Theming](#appearance--theming)
-  - [Internationalisation](#internationalisation)
-  - [Admin Panel](#admin-panel)
-- [Tech Stack](#tech-stack)
-- [Architecture & Design Decisions](#architecture--design-decisions)
-- [Project Structure](#project-structure)
-- [Route Map](#route-map)
-- [Database Schema](#database-schema)
-- [Eloquent Models & Relationships](#eloquent-models--relationships)
-- [Authentication & Security](#authentication--security)
-- [Roles & Permissions](#roles--permissions)
-- [Services](#services)
-- [Installation](#installation)
-- [Environment Variables](#environment-variables)
-- [Running the Application](#running-the-application)
-- [Running Tests](#running-tests)
-- [License](#license)
+- [Общ преглед](#общ-преглед)
+- [Страници на приложението и потребителски сценарии](#страници-на-приложението-и-потребителски-сценарии)
+- [Функционалности в детайли](#функционалности-в-детайли)
+  - [Библиотека със шаблони](#библиотека-със-шаблони)
+  - [Общностна галерия](#общностна-галерия)
+  - [Колекции от публикации (албуми)](#колекции-от-публикации-албуми)
+  - [Колекции от шаблони](#колекции-от-шаблони)
+  - [Потребителски профили](#потребителски-профили)
+  - [Система за следване](#система-за-следване)
+  - [Личен табло](#личен-табло)
+  - [Известия](#известия)
+  - [Контрол на поверителността](#контрол-на-поверителността)
+  - [Външен вид и тематика](#външен-вид-и-тематика)
+  - [Интернационализация](#интернационализация)
+  - [Админ панел](#админ-панел)
+- [Технологичен стек](#технологичен-стек)
+- [Архитектура и дизайнерски решения](#архитектура-и-дизайнерски-решения)
+- [Структура на проекта](#структура-на-проекта)
+- [Карта на маршрутите](#карта-на-маршрутите)
+- [Схема на базата данни](#схема-на-базата-данни)
+- [Eloquent модели и връзки](#eloquent-модели-и-връзки)
+- [Автентикация и сигурност](#автентикация-и-сигурност)
+- [Роли и разрешения](#роли-и-разрешения)
+- [Услуги](#услуги)
+- [Инсталация](#инсталация)
+- [Променливи на средата](#променливи-на-средата)
+- [Стартиране на приложението](#стартиране-на-приложението)
+- [Изпълнение на тестове](#изпълнение-на-тестове)
+- [Лиценз](#лиценз)
 
 ---
 
-## Overview
+## Общ преглед
 
-Yarnly solves a real problem for the fibre arts community: before Yarnly, crafters had to spread themselves across Pinterest (patterns), Instagram (sharing projects), and spreadsheets (organising collections). Yarnly brings all of that into one cohesive, community-driven space.
+Yarnly решава реален проблем за общността на тъканните изкуства: преди Yarnly занаятчиите трябваше да се разпръскват между Pinterest (шаблони), Instagram (споделяне на проекти) и електронни таблици (организиране на колекции). Yarnly обединява всичко това в едно цялостно, управлявано от общността пространство.
 
-**Core pillars:**
+**Основни стълбове:**
 
-| Pillar | What it means for the user |
+| Стълб | Какво означава за потребителя |
 |---|---|
-| Discover | Browse a curated, searchable library of crochet, knitting, and embroidery patterns with PDF downloads |
-| Create | Upload your own patterns (PDF + cover image) and share them with the community |
-| Share | Post photos of finished projects, get likes and comments, build a public portfolio |
-| Connect | Follow makers you find inspiring, see only their posts in your personal feed |
-| Organise | Curate your saved patterns into named collections grouped by craft type |
-| Personalise | Choose your colour scheme, font size, language, and profile appearance |
+| Откриване | Разглеждане на курирана, търсима библиотека с шаблони за плетене на една кука, две куки и бродерия с PDF изтегляния |
+| Създаване | Качване на собствени шаблони (PDF + изображение на корицата) и споделянето им с общността |
+| Споделяне | Публикуване на снимки на завършени проекти, получаване на харесвания и коментари, изграждане на публично портфолио |
+| Свързване | Следване на творци, които ви вдъхновяват, виждане само на техните публикации в личния ви поток |
+| Организиране | Курирайте запазените си шаблони в именувани колекции, групирани по тип занаят |
+| Персонализиране | Избор на цветова схема, размер на шрифта, език и външен вид на профила |
 
 ---
 
-## Application Pages & User Journeys
+## Страници на приложението и потребителски сценарии
 
-### Guest (unauthenticated) journey
+### Сценарий на гост (неавтентикиран)
 
-1. Lands on the **Homepage** (`/`) — animated hero, platform stats (total patterns / users / posts), feature highlights, how-it-works walkthrough, and a live creator search bar.
-2. Visits any of the three **Pattern Library** pages (`/patterns/crochet`, `/patterns/knitting`, `/patterns/embroidery`) — browses newest patterns, filters by subcategory, views a pattern's details and reads it in the in-browser PDF viewer.
-3. Visits the **Gallery** (`/models/gallery`) — sees all community posts, can search; if they click **Following** or try to like/comment, a login/register modal slides in instead of a redirect.
-4. Clicks **Log in** or **Create account** — taken to `/login` or `/register`.
+1. Попада на **началната страница** (`/`) — анимирано hero секция, статистики на платформата (общо шаблони / потребители / публикации), представяне на функционалности, обяснение как работи и лента за търсене на творци в реално време.
+2. Посещава една от трите страници на **библиотеката със шаблони** (`/patterns/crochet`, `//patterns/knitting`, `/patterns/embroidery`) — разглежда най-новите шаблони, филтрира по подкатегория, преглежда детайлите на шаблон и го чете в PDF прегледа в браузъра.
+3. Посещава **галерията** (`/models/gallery`) — вижда всички публикации на общността, може да търси; ако кликне върху **Следвани** или се опита да хареса/коментира, се появява модален прозорец за вход/регистрация вместо пренасочване.
+4. Кликва върху **Вход** или **Създаване на акаунт** — отива към `/login` или `/register`.
 
-### Authenticated user journey
+### Сценарий на автентикиран потребител
 
-1. After login → **Dashboard** (`/dashboard`) — personal activity overview.
-2. **Create a pattern** → `/patterns/create` — fill in the form, upload a PDF and image.
-3. **Create a post** → `/gallery/posts/create` — upload up to 10 project photos.
-4. **View their profile** → `/profile` — see all their posts, saved/liked content, patterns they uploaded, and collections they created.
-5. **Visit another user's profile** → `/users/{username}` — follow/unfollow, view their public content according to their privacy settings.
-6. **Settings** → `/settings` — manage password, email, 2FA, notification preferences, privacy, appearance, and language.
-7. **Notifications** → `/notifications` — view all activity, click any notification to go to the relevant resource.
+1. След вход → **Табло** (`/dashboard`) — личен преглед на дейността.
+2. **Създаване на шаблон** → `/patterns/create` — попълване на формуляр, качване на PDF и изображение.
+3. **Създаване на публикация** → `/gallery/posts/create` — качване на до 10 снимки на проект.
+4. **Преглед на техния профил** → `/profile` — виждане на всички техни публикации, запазено/харесано съдържание, качени шаблони и създадени колекции.
+5. **Посещение на профила на друг потребител** → `/users/{username}` — следване/прекратяване на следване, преглед на публичното им съдържание според техните настройки за поверителност.
+6. **Настройки** → `/settings` — управление на парола, имейл, 2FA, предпочитания за известия, поверителност, външен вид и език.
+7. **Известия** → `/notifications` — преглед на цялата активност, кликване върху всяко известие, за да отидете към съответния ресурс.
 
 ---
 
-## Features In Depth
+## Функционалности в детайли
 
-### Pattern Library
+### Библиотека със шаблони
 
-The pattern library is split into three top-level craft pages, each with its own URL, view, and category system. The `PatternController` serves six public endpoints — one listing and one category-filtered view per craft type.
+Библиотеката със шаблони е разделена на три основни страници за занаяти, всяка със собствен URL, изглед и система от категории. `PatternController` обслужва шест публични крайни точки — една листваща и една филтрирана по категория за всеки тип занаят.
 
-**Subcategory taxonomy:**
+**Таксономия на подкатегориите:**
 
-| Craft | Subcategories |
+| Занаят | Подкатегории |
 |---|---|
-| Crochet | Blankets & Throws, Amigurumi, Bags & Totes, Wearables, Home Decor |
-| Knitting | Wearables, Accessories, Home & Decor, Toys, Baby & Kids |
-| Embroidery | Clothing Embroidery, Hoop Art & Wall Decor, Cross Stitch, Hand Techniques |
+| Плетене на една кука | Одеяла и покривки, Амигуруми, Чанти и торби, Облекло, Декорация за дома |
+| Плетене на две куки | Облекло, Аксесоари, Дом и декор, Играчки, Бебешки артикули |
+| Бродерия | Бродерия на дрехи, Обръчна изкуство и стенна декорация, Кръстат бод, Ръчни техники |
 
-**What each craft page shows:**
-- A "New this week" counter (patterns published within the current calendar week).
-- A "Your queue" counter (the authenticated user's saved patterns of that craft type).
-- A "Newest" grid (up to 30 most recent patterns).
-- A horizontal category filter bar — clicking a category re-renders the page with filtered results via a `GET` parameter route.
-- A "Community Sets" section showing public collections for that craft type.
+**Какво показва всяка страница за занаят:**
+- Брояч „Ново тази седмица" (шаблони, публикувани в текущата календарна седмица).
+- Брояч „Вашата опашка" (запазените шаблони на автентикирания потребител за този тип занаят).
+- Решетка „Най-нови" (до 30 най-скорошни шаблона).
+- Хоризонтална лента за филтриране по категория — кликването върху категория пререндира страницата с филтрирани резултати чрез параметър `GET`.
+- Секция „Общностни колекции", показваща публични колекции за този тип занаят.
 
-**Pattern detail & download:**
-- `GET /patterns/{id}/view` — renders the PDF in an `<iframe>` inside the app's layout (no raw file URL exposed).
-- `GET /patterns/{id}/download` — streams the file via `response()->download()` using the `original_filename` so the user gets a human-readable filename.
-- PDFs are stored in `storage/app/public/patterns/pdfs/` and cover images in `storage/app/public/patterns/images/`.
+**Детайли и изтегляне на шаблон:**
+- `GET /patterns/{id}/view` — рендира PDF-а във `<iframe>` вътре в layout-а на приложението (не се разкрива директен линк към суров файл).
+- `GET /patterns/{id}/download` — стрийва файла чрез `response()->download()`, използвайки `original_filename`, така че потребителят да получи четимо име на файл.
+- PDF-ите се съхраняват в `storage/app/public/patterns/pdfs/`, а корицата на изображенията в `storage/app/public/patterns/images/`.
 
-**Creating a pattern** (`POST /patterns`):
-- Server-side validation: PDF must be `application/pdf`, max 10 MB; image must be PNG/JPG, max 5 MB.
-- MIME type is double-checked with `getMimeType()` after the initial extension check.
-- Tags are sanitised: trimmed, deduplicated, stripped of leading `#`, max 50 characters each, max 500 characters total.
-- After storing, all of the author's followers receive a `NewPatternFromFollowedNotification`.
-- A per-user limit of 25 active patterns is enforced before the form is even shown.
+**Създаване на шаблон** (`POST /patterns`):
+-Validация на сървъра: PDF трябва да е `application/pdf`, максимум 10 MB; изображението трябва да е PNG/JPG, максимум 5 MB.
+- MIME типът се проверява двойно с `getMimeType()` след първоначалната проверка на разширението.
+- Тагове се санитизират: изрязват се празни символи, премахват се дубликати, премахва се началната `#`, максимум 50 знака всеки, общо максимум 500 знака.
+- След съхранението всички последователи на автора получават `NewPatternFromFollowedNotification`.
+- Налага се лимит от 25 активни шаблона на потребител преди формата изобщо да се покаже.
 
-**Difficulty badge colours:**
+**Цветове на значките за трудност:**
 
-| Difficulty | Badge colour |
+| Трудност | Цвят на значката |
 |---|---|
-| Beginner | Green |
-| Intermediate | Amber/yellow |
-| Advanced | Red |
+| Начинаещи | Зелен |
+| Средно ниво | Кехлибар/жълт |
+| Напреднали | Червен |
 
 ---
 
-### Community Gallery
+### Общностна галерия
 
-The gallery (`/models/gallery`) is the main social feed of the platform.
+Галерията (`/models/gallery`) е основният социален фийд на платформата.
 
-**Tabs:**
-- **Recently Added** — all posts ordered by `created_at` descending.
-- **Top Rated** — ordered by like count descending.
-- **Following** — only posts from users the authenticated user follows. Guests who click this tab see the login modal.
+**Табове:**
+- **Последно добавени** — всички публикации, подредени по `created_at` в низходящ ред.
+- **Най-високо оценени** — подредени по брой лайкове в низходящ ред.
+- **Последвани** — само публикации от потребители, които автентикираният потребител следва. Гостите, които кликнат върху този таб, виждат модал за вход.
 
-**Search:** A live AJAX search bar (`/search/users`) queries users by name or `@username`, returning JSON with profile picture, avatar colour, initials, and a link to their profile. Results respect the `searchable_profile` privacy setting.
+**Търсене:** Лайв AJAX лента за търсене (`/search/users`) търси потребители по име или `@потребителско_име`, връщайки JSON с профилна снимка, цвят на аватара, инициали и връзка към профила им. Резултатите зачитат настройката за поверителност `searchable_profile`.
 
-**Post search:** The gallery search bar also accepts free text and filters the visible grid client-side by tag, description, and creator username using Alpine.js.
+**Търсене на публикации:** Лентата за търсене в галерията приема и свободен текст и филтрира видимите резултати от страна на клиента по таг, описание и потребителско име на създателя с помощта на Alpine.js.
 
-**Liking a post:**
-- `POST /posts/{id}/like` / `DELETE /posts/{id}/like` — toggled on the gallery and post detail page.
-- Current user must be authenticated. The author receives a `NewLikeNotification` (subject to their notification preferences).
+**Лайкване на публикация:**
+- `POST /posts/{id}/like` / `DELETE /posts/{id}/like` — превключва се в галерията и страницата с подробности за публикацията.
+- Текущият потребител трябва да е автентикиран. Авторът получава `NewLikeNotification` (според неговите предпочитания за известия).
 
-**Saving/bookmarking a post:**
+**Запазване/отбелязване на публикация:**
 - `POST /posts/{id}/favorite` / `DELETE /posts/{id}/favorite`.
-- Saved posts appear in the user's profile "Saved" tab and can be organised into **Post Collections**.
+- Запазените публикации се появяват в таба „Запазени“ на профила на потребителя и могат да се организират в **Колекции от публикации**.
 
-**Comments:**
-- On the post detail page (`/gallery/posts/{id}`), comments load via `GET /posts/{id}/comments` returning JSON.
-- New comments are submitted via `POST /posts/{id}/comments`; validated to `required|string|max:500`.
-- The author receives a `NewCommentNotification`.
-- Comment JSON response includes: `body`, `author` name, `initials`, `avatar` URL, `avatar_color`, and a human-readable `created_at` (e.g. "2 hours ago").
+**Коментари:**
+- На страницата с подробности за публикацията (`/gallery/posts/{id}`), коментарите се зареждат чрез `GET /posts/{id}/comments`, връщайки JSON.
+- Нови коментари се изпращат чрез `POST /posts/{id}/comments`; валидация `required|string|max:500`.
+- Авторът получава `NewCommentNotification`.
+- JSON отговорът на коментара включва: `body`, име на `author`, `initials`, URL на `avatar`, `avatar_color` и четима `created_at` (напр. „преди 2 часа“).
 
-**Creating a post** (`POST /gallery/posts`):
-- Upload 1–10 images (JPEG/PNG/WebP, max 5 MB each). Each image is stored in `storage/app/public/posts/` and linked to the post via `post_images` with an `order` column preserving the upload sequence.
-- `tags` are stored as a comma-separated string and parsed into an array by `$post->tags_array` (strips leading `#`, filters empty entries).
-- After creation, all followers receive a `NewPostFromFollowedNotification`.
+**Създаване на публикация** (`POST /gallery/posts`):
+- Качете 1–10 изображения (JPEG/PNG/WebP, максимум 5 MB всяко). Всяко изображение се съхранява в `storage/app/public/posts/` и се свързва към публикацията чрез `post_images` с колона `order`, запазваща поредицата на качване.
+- `tags` се съхраняват като низ с разделител запетая и се парсват в масив чрез `$post->tags_array` (премахва началната `#`, филтрира празни записи).
+- След създаването всички последователи получават `NewPostFromFollowedNotification`.
 
-**Deleting a post:** `DELETE /gallery/posts/{id}` — only the post owner can delete; also deletes all associated `PostImage` records and their files from storage.
-
----
-
-### Post Collections (Albums)
-
-Users can organise their **saved** posts into named bookmark albums called Post Collections.
-
-- Create, rename, and delete post collections from the profile's Saved tab.
-- Add/remove a saved post to/from a collection via a popover picker shown on each post card.
-- Post collections are per-user and always private (they are personal bookmark groups, not shared with others).
-- Displayed on the profile page under a dedicated "Collections" sub-tab within the Saved tab.
+**Изтриване на публикация:** `DELETE /gallery/posts/{id}` — само собственикът на публикацията може да я изтрие; изтрива и всички свързани `PostImage` записи и техните файлове от съхранението.
 
 ---
 
-### Pattern Collections
+### Колекции от публикации (Албуми)
 
-Pattern collections are **shareable themed sets** of patterns that a user creates from their own uploaded patterns.
+Потребителите могат да организират своите **запазени** публикации в именувани албуми за отбелязване, наречени Колекции от публикации.
 
-**Creation flow (two-step):**
-
-1. **Step 1 — Select Patterns** (`/collections/select-patterns`): The user sees a grid of their own patterns with checkboxes. They select one or more and click "Continue to Collection Details". Can also add to an existing collection at this step.
-2. **Step 2 — Collection Details** (`/collections/create`): Fill in name (required, max 255), description (optional, max 1000), craft type, visibility (public/private), and an optional cover image (JPEG/PNG/GIF, max 5 MB).
-
-**Collections on pattern pages:**
-- Each craft page shows a "Community Sets" grid of up to 30 public collections for that craft type, with the creator's avatar, name, and pattern count.
-
-**Collection detail page** (`/collections/{id}`):
-- Shows all patterns in the collection with their difficulty badge, "makers saved" count, and individual download links.
-- A "Download All Patterns" button streams a zip-style download of all PDFs (or links each individually).
-- Edit and delete controls are shown only to the collection owner.
-
-**Favouriting collections:**
-- Any authenticated user can favourite another user's public collection via `POST /collections/{id}/favorite`.
-- Favourited collections appear in the user's profile "Saved" tab.
-- After a new public collection is created, all of the author's followers receive a `NewCollectionFromFollowedNotification`.
+- Създавайте, преименувайте и изтривайте колекции от публикации от таба „Запазени“ на профила.
+- Добавяйте/премахнете запазена публикация към/от колекция чрез поповър пикър, показан на всяка карта на публикация.
+- Колекциите от публикации са пер потребител и винаги са лични (те са лични групи за отбелязване, не се споделят с други).
+- Показват се на страницата на профила под отделен подтаб „Колекции“ в таба „Запазени“.
 
 ---
 
-### User Profiles
+### Колекции със шаблони
 
-#### My Profile (`/profile`)
+Колекциите със шаблони са **споделени тематични набори** от шаблони, които потребител създава от собствените си качени шаблони.
 
-The authenticated user's own profile, rendered by `ProfileController@show`, with the following tabs:
+**Поток за създаване (в две стъпки):**
 
-| Tab | Content |
+1. **Стъпка 1 — Избор на шаблони** (`/collections/select-patterns`): Потребителят вижда решетка от собствените си шаблони с кутийки за отметка. Избира един или повече и кликва „Продължи към подробностите за колекцията“. Може да добавя и към съществуваща колекция на тази стъпка.
+2. **Стъпка 2 — Подробности за колекцията** (`/collections/create`): Попълнете име (задължително, максимум 255 знака), описание (опционално, максимум 1000 знака), тип занаят, видимост (публична/лична) и опционално изображение за корица (JPEG/PNG/GIF, максимум 5 MB).
+
+**Колекции на страниците за шаблони:**
+- Всяка страница за занаят показва решетка „Общностни набори“ с до 30 публични колекции за този тип занаят, с аватара, името на създателя и броя шаблони.
+
+**Страница с подробности за колекцията** (`/collections/{id}`):
+- Показва всички шаблони в колекцията с техните значки за трудност, брояч „запазили го творци“ и индивидуални връзки за изтегляне.
+- Бутон „Изтегли всички шаблони“ стрийва изтегляне в стил zip на всички PDF-и (или свързва всеки поотделно).
+- Контролите за редакция и изтриване се показват само на собственика на колекцията.
+
+**Отбелязване на колекции:**
+- Всеки автентикиран потребител може да отбеляза публична колекция на друг потребител чрез `POST /collections/{id}/favorite`.
+- Отбелязаните колекции се появяват в таба „Запазени“ на профила на потребителя.
+- След създаването на нова публична колекция всички последователи на автора получават `NewCollectionFromFollowedNotification`.
+
+---
+
+### Потребителски профили
+
+#### Моят профил (`/profile`)
+
+Собственият профил на автентикирания потребител, рендиран от `ProfileController@show`, със следните табове:
+
+| Таб | Съдържание |
 |---|---|
-| Posts | All posts the user has shared, ordered by newest first |
-| Saved | Saved/bookmarked posts, organised optionally into post collections |
-| Liked | Posts the user has liked |
-| Patterns | All patterns the user has uploaded |
-| Collections | Pattern collections the user has created |
+| Публикации | Всички публикации, които потребителят е споделил, подредени по най-нови първи |
+| Запазени | Запазени/отбелязани публикации, опционално организирани в колекции от публикации |
+| Харесани | Публикации, които потребителят е харесал |
+| Шаблони | Всички шаблони, които потребителят е качил |
+| Колекции | Колекции със шаблони, които потребителят е създал |
 
-Additional "saved" sub-sections visible on the profile page:
-- Favourite Patterns (patterns saved to the `user_favorites` pivot)
-- Favourite Collections (collections saved to the `collection_favorites` pivot)
+Допълнителни подсекции "запазени", видими на страницата на профила:
+- Любими шаблони (шаблони, запазени в pivot таблицата `user_favorites`)
+- Любими колекции (колекции, запазени в pivot таблицата `collection_favorites`)
 
-**Profile header data:**
-- Profile picture (uploaded image or auto-generated initials avatar with the chosen `avatar_color`).
-- Display name and `@username`.
-- Short bio (max 200 characters, shown only when set).
-- Posts count, Followers count, Following count.
+**Данни в хедъра на профила:**
+- Профилна снимка (качено изображение или автоматично генериран аватар с инициали с избрания `avatar_color`).
+- Показвано име и `@потребителско_име`.
+- Кратка биография (максимум 200 знака, показва се само когато е зададена).
+- Брой публикации, брой последователи, брой последвани.
 
-#### Edit Profile (`/profile/edit`)
+#### Редакция на профил (`/profile/edit`)
 
-Fields editable:
-- **Profile picture** — stored in `storage/app/public/profile_pictures/`, max 5 MB, jpg/jpeg/png/gif/webp.
-- **Full name** (`name`, required, max 255).
-- **Bio** (`bio`, optional, max 200 characters) — Alpine.js live character counter in the form.
-- **Email** — changing email triggers re-verification.
-- **Avatar colour** — hex colour input with 6 preset swatches (violet, indigo, rose, emerald, amber, sky) and a free-form hex picker. Falls back to `#7c3aed` (violet) when not set.
+Полета за редакция:
+- **Профилна снимка** — съхранява се в `storage/app/public/profile_pictures/`, максимум 5 MB, jpg/jpeg/png/gif/webp.
+- **Пълно име** (`name`, задължително, максимум 255 знака).
+- **Биография** (`bio`, опционално, максимум 200 знака) — лайв брояч на знаците с Alpine.js във формата.
+- **Имейл** — промяната на имейла задейства повторна верификация.
+- **Цвят на аватара** — hex цветово поле с 6 предварително зададени мостри (виолетово, индиго, розово, изумрудено, кехлибарено, небесно) и свободен hex picker. По подразбиране `#7c3aed` (виолетово), когато не е зададен.
 
-#### Public User Profile (`/users/{user}`)
+#### Публичен потребителски профил (`/users/{user}`)
 
-Rendered by a separate view (not the same as My Profile) and controlled by the owner's privacy settings:
+Рендиран от отделен изглед (различен от Моят профил) и контролиран от настройките за поверителност на собственика:
 
-- Follow / Unfollow button with live follower count update via JSON response.
-- The follow action dispatches `NewFollowNotification` to the followed user.
-- Self-follow is guarded: returns a 422 JSON error if the user tries to follow themselves.
-- Tabs visible to visitors depend on the owner's privacy preferences (`show_liked_posts`, `show_saved_posts`, etc.).
-
----
-
-### Social Follow System
-
-Implemented with a `follows` pivot table (`follower_id`, `following_id`) and two methods on the `User` model:
-
-- `$user->follow(User $target)` — inserts a record, triggers notification.
-- `$user->unfollow(User $target)` — deletes the record.
-- `$user->isFollowing(User $target)` — boolean check.
-- `$user->followers()` — `BelongsToMany` via `follows.following_id`.
-- `$user->following()` — `BelongsToMany` via `follows.follower_id`.
-
-Follow/unfollow requests respond with JSON (`{ following: bool, followers_count: int }`) when the request expects JSON, enabling the profile button to update without a page reload using Alpine.js.
+- Бутон За последване/Спиране на последването с лайв актуализация на броя последователи чрез JSON отговор.
+- Действието на последване изпраща `NewFollowNotification` към последвания потребител.
+- Самопоследването е защитено: връща 422 JSON грешка, ако потребителят опита да последва себе си.
+- Табовете, видими за посетителите, зависят от предпочитанията за поверителност на собственика (`show_liked_posts`, `show_saved_posts` и т.н.).
 
 ---
 
-### Personal Dashboard
+### Система за социално последване
 
-The `/dashboard` route (auth + verified) computes and passes to the view:
+Реализирана с pivot таблица `follows` (`follower_id`, `following_id`) и два метода в модела `User`:
 
-| Variable | Description |
+- `$user->follow(User $target)` — вмъква запис, задейства известие.
+- `$user->unfollow(User $target)` — изтрива записа.
+- `$user->isFollowing(User $target)` — булева проверка.
+- `$user->followers()` — `BelongsToMany` чрез `follows.following_id`.
+- `$user->following()` — `BelongsToMany` чрез `follows.follower_id`.
+
+Заявките за последване/спиране на последването отговарят с JSON (`{ following: bool, followers_count: int }`), когато заявката очаква JSON, което позволява на бутона в профила да се актуализира без презареждане на страницата, използвайки Alpine.js.
+
+---
+
+### Личен табло за управление
+
+Маршрутът `/dashboard` (auth + verified) изчислява и предава на изгледа:
+
+| Променлива | Описание |
 |---|---|
-| `patternsCount` | Total patterns uploaded by the user |
-| `postsCount` | Total posts shared by the user |
-| `followersCount` | Total followers |
-| `followingCount` | Total users followed |
-| `likesReceived` | Lifetime likes on all the user's posts |
-| `commentsReceived` | Lifetime comments on all the user's posts |
-| `commentsGiven` | Comments the user has left on others' posts |
-| `patternsSaved` | Sum of times the user's posts were saved + times their patterns were favourited |
-| `patternsThisMonth` | Patterns uploaded in the current calendar month |
-| `postsThisMonth` | Posts shared in the current calendar month |
-| `likesThisWeek` | Likes on the user's posts since the start of the current week |
-| `commentsThisWeek` | Comments on the user's posts since the start of the current week |
-| `followersThisWeek` | New followers gained since the start of the current week |
-| `recentPatterns` | 5 most recently uploaded patterns |
-| `recentPosts` | 4 most recently shared posts (with images eager-loaded) |
+| `patternsCount` | Общ брой шаблони, качени от потребителя |
+| `postsCount` | Общ брой публикации, споделени от потребителя |
+| `followersCount` | Общ брой последователи |
+| `followingCount` | Общ брой последвани потребители |
+| `likesReceived` | Общо лайкове на всички публикации на потребителя |
+| `commentsReceived` | Общо коментари на всички публикации на потребителя |
+| `commentsGiven` | Коментари, оставени от потребителя на публикации на други |
+| `patternsSaved` | Сумата от пъти, когато публикациите на потребителя са били запазени + пъти неговите шаблони са били отбелязани |
+| `patternsThisMonth` | Шаблони, качени през текущия календарен месец |
+| `postsThisMonth` | Публикации, споделени през текущия календарен месец |
+| `likesThisWeek` | Лайкове на публикациите на потребителя от началото на текущата седмица |
+| `commentsThisWeek` | Коментари на публикациите на потребителя от началото на текущата седмица |
+| `followersThisWeek` | Нови последователи, придобити от началото на текущата седмица |
+| `recentPatterns` | 5-те най-скоро качени шаблона |
+| `recentPosts` | 4-те най-скоро споделени публикации (с изображения eager-loaded) |
 
 ---
 
-### Notifications
+### Известия
 
-#### Storage
+#### Съхранение
 
-Notifications use Laravel's built-in **database notification channel**. Each notification is stored as a row in the `notifications` table with:
-- `id` — UUID string.
-- `type` — fully-qualified PHP class name.
-- `notifiable_type` / `notifiable_id` — polymorphic relationship to `App\Models\User`.
-- `data` — JSON blob containing the message text and a `url` for the redirect.
-- `read_at` — null until marked as read.
+Известията използват вградения в Laravel **канал за известия в база данни**. Всяко известие се съхранява като ред в таблицата `notifications` с:
+- `id` — UUID низ.
+- `type` — пълно PHP име на класа.
+- `notifiable_type` / `notifiable_id` — полиморфна връзка към `App\Models\User`.
+- `data` — JSON блок съдържащ текста на съобщението и `url` за пренасочване.
+- `read_at` — null докато не бъде маркирано като прочетено.
 
-#### Delivery
+#### Доставка
 
-All six notification classes implement `via()` returning `['database']`. Each builds a `toDatabase()` payload:
+Всички шест класа за известия имплементират `via()` връщащ `['database']`. Всеки изгражда `toDatabase()` данни:
 
 ```php
 // Example: NewLikeNotification
@@ -296,139 +296,139 @@ return [
 ];
 ```
 
-#### Bell & unread count
+#### Камбанка и брой непрочетени
 
-The navigation bar bell icon queries `Auth::user()->unreadNotifications->count()` to show a badge. Visiting `/notifications` automatically marks all unread notifications as read via `$user->unreadNotifications->markAsRead()`.
+Иконата с камбанка в навигационната лента извиква `Auth::user()->unreadNotifications->count()` за да покаже значка. Посещаването на `/notifications` автоматично маркира всички непрочетени известия като прочетени чрез `$user->unreadNotifications->markAsRead()`.
 
-Clicking an individual notification at `/notifications/{id}/mark-read` marks it read and redirects to `data.url`.
+Кликването върху отделно известие на `/notifications/{id}/mark-read` го маркира като прочетено и пренасочва към `data.url`.
 
-#### Preference gating
+#### Контрол чрез предпочитания
 
-Before dispatching any notification, each notification class checks:
+Преди да изпрати известие, всеки клас за известия проверява:
 
 ```php
 app(NotificationPreferenceService::class)->check($notifiable, 'notify_likes')
 ```
 
-If the preference is off, `via()` returns an empty array and the notification is silently skipped. Preferences are stored as JSON in `storage/app/notification_prefs/{userId}.json` with all keys defaulting to `true`.
+Ако предпочитанието е изключено, `via()` връща празен масив и известието се пропуска незабележимо. Предпочитанията се съхраняват като JSON в `storage/app/notification_prefs/{userId}.json` като всички ключове по подразбиране са `true`.
 
 ---
 
-### Privacy Controls
+### Контроли за поверителност
 
-Privacy preferences are stored per-user as JSON in `storage/app/privacy_prefs/{userId}.json` and managed by `PrivacyPreferenceService`.
+Предпочитанията за поверителност се съхраняват за всеки потребител като JSON в `storage/app/privacy_prefs/{userId}.json` и се управляват от `PrivacyPreferenceService`.
 
-| Key | Default | When `false` |
+| Ключ | По подразбиране | Когато е `false` |
 |---|---|---|
-| `searchable_profile` | `true` | User excluded from `/search/users` JSON results |
-| `show_liked_posts` | `true` | "Liked" tab hidden on the user's public profile |
-| `show_saved_posts` | `true` | "Saved" tab hidden on the user's public profile |
-| `show_saved_patterns` | `true` | Favourite patterns section hidden on public profile |
-| `show_saved_collections` | `true` | Favourite collections section hidden on public profile |
+| `searchable_profile` | `true` | Потребителят е изключен от JSON резултатите на `/search/users` |
+| `show_liked_posts` | `true` | Раздел "Харесани" е скрит в публичния профил на потребителя |
+| `show_saved_posts` | `true` | Раздел "Запазени" е скрит в публичния профил на потребителя |
+| `show_saved_patterns` | `true` | Секцията с любими шаблони е скрита в публичния профил |
+| `show_saved_collections` | `true` | Секцията с любими колекции е скрита в публичния профил |
 
-Both services (`NotificationPreferenceService` and `PrivacyPreferenceService`) follow the same pattern:
-- `get(object $user): array` — reads JSON file, merges with defaults so missing keys always return a value.
-- `save(int $userId, array $prefs): void` — validates only known keys, casts to bool, writes JSON.
-- `check(object $user, string $key): bool` — convenience wrapper for a single key.
+И двете услуги (`NotificationPreferenceService` и `PrivacyPreferenceService`) следват един и същи модел:
+- `get(object $user): array` — чете JSON файл, слива с подразбиранията така че липсващите ключове винаги връщат стойност.
+- `save(int $userId, array $prefs): void` — валидира само познатите ключове, преобразува в bool, записва JSON.
+- `check(object $user, string $key): bool` — удобна обвивка за един ключ.
 
 ---
 
-### Appearance & Theming
+### Външен вид и тематизиране
 
-All appearance settings are stored in the `users` table (`theme_preference`) and applied on every page via a Blade layout that reads `Auth::user()->theme_preference`.
+Всички настройки за външен вид са съхранени в таблицата `users` (`theme_preference`) и се прилагат на всяка страница чрез Blade layout, който чете `Auth::user()->theme_preference`.
 
-| Setting | Options | How it works |
+| Настройка | Опции | Как работи |
 |---|---|---|
-| Colour mode | Dark / Light / System | Adds/removes the `dark` class on `<html>` |
-| Accent colour | Violet, Indigo, Rose, Emerald, Amber, Sky | Sets a `--accent-*` CSS custom property |
-| Font size | Small, Medium, Large | Sets a `data-font-size` attribute on `<html>` |
+| Цветов режим | Тъмен / Светъл / Системен | Добавя/премахва класа `dark` на `<html>` |
+| Акцентен цвят | Виолетов, Индиго, Розов, Изумруден, Кехлибарен, Небесен | Задава CSS custom property `--accent-*` |
+| Размер на шрифта | Малък, Среден, Голям | Задава атрибут `data-font-size` на `<html>` |
 
-The seven accent colours correspond to Tailwind CSS 4 colour palettes and are prefixed in the stylesheet so the accent can change without a rebuild. Changes take effect immediately after saving the Appearance settings form.
-
----
-
-### Internationalisation
-
-Yarnly supports **English** (default) and **Bulgarian** using Laravel's `__()` helper.
-
-**How it works:**
-1. `SetLocale` middleware runs on every request. If `Auth::guest()`, locale is set to `en`. For authenticated users, it reads the `locale` cookie.
-2. The cookie is written by the Language settings page (`/settings/language`) and lasts for the browser session.
-3. `App::setLocale($locale)` is called only for whitelisted locales (`['en', 'bg']`) to prevent injection.
-4. All Bulgarian strings live in `lang/bg.json` — a single flat JSON file with ~400 keys covering every UI string including navigation, forms, error messages, notification text, admin panel, and pattern pages.
-5. Pluralisation uses explicit Blade ternaries (e.g. `$count === 1 ? __('post') : __('posts')`) because Laravel's `Str::plural()` does not handle Slavic languages correctly.
+Седемте акцентни цвята съответстват на цветовите палитри на Tailwind CSS 4 и са префиксирани в стиловата таблица, така че акцентът може да се променя без повторно компилиране. Промените влизат в сила незабавно след запазване на формата за настройки на външния вид.
 
 ---
 
-### Admin Panel
+### Интернационализация
 
-Admin routes are under `middleware(['auth', 'verified'])` with an additional `role === 'admin'` inline check.
+Yarnly поддържа **Английски** (по подразбиране) и **Български** като използва Laravel's `__()` helper.
 
-#### Dashboard — `/admin/dashboard`
-
-All stats are computed in the route closure and passed to `adminPanel.dashboard`:
-
-- **Users**: total, new this month, new today, total admin count.
-- **Patterns**: total, new this month, breakdown by craft type (`crochet` / `knitting` / `embroidery`) as a `pluck('total', 'category')` map.
-- **Posts**: total, new this month, breakdown by craft type.
-- **Collections**: total, new this month.
-- **Engagement**: total likes, total comments platform-wide.
-- **Recent users table**: 10 most recently joined users with their pattern counts.
-- **Recent patterns table**: 15 most recently uploaded patterns with author and upload date.
-
-#### Manage Users — `/admin/users`
-
-A fully searchable, sortable, filterable, paginated user management interface:
-
-- **Search**: `name LIKE %q%` OR `username LIKE %q%` (case-insensitive).
-- **Role filter**: dropdown for all / user / admin.
-- **Sort options**: newest (default), oldest, name A–Z, most patterns (via `withCount`), most posts (via `withCount`).
-- **Pagination**: 20 users per page, total count displayed in the header.
-- **Actions per user**:
-  - **Promote / Revoke Admin** — `PATCH /admin/users/{user}/toggle-role` flips the `role` column between `user` and `admin`. Cannot target the currently-logged-in admin.
-  - **Delete** — `DELETE /admin/users/{user}` removes the account and all associated data. Cannot target the currently-logged-in admin.
+**Как работи:**
+1. `SetLocale` middleware се изпълнява при всяка заявка. Ако `Auth::guest()`, езикът се задава на `en`. За автентикирани потребители, чете `locale` бисквитката.
+2. Бисквитката се записва от страницата за езикови настройки (`/settings/language`) и важи за сесията на браузъра.
+3. `App::setLocale($locale)` се извиква само за одобрени езици (`['en', 'bg']`) за да се предотврати инжектиране.
+4. Всички български низове са в `lang/bg.json` — един плосък JSON файл с ~400 ключа покриващи всеки UI низ включително навигация, форми, съобщения за грешки, текст на известия, админ панел и страници със шаблони.
+5. Плурализацията използва експлицитни Blade тернарни оператори (напр. `$count === 1 ? __('post') : __('posts')`) защото Laravel's `Str::plural()` не обработва славянски езици правилно.
 
 ---
 
-## Tech Stack
+### Админ панел
 
-| Layer | Technology | Version | Notes |
+Админ маршрутите са под `middleware(['auth', 'verified'])` с допълнителна inline проверка `role === 'admin'`.
+
+#### Табло — `/admin/dashboard`
+
+Всички статистики се изчисляват в маршрутното closure и се предават на `adminPanel.dashboard`:
+
+- **Потребители**: общо, нови този месец, нови днес, общ брой администратори.
+- **Шаблони**: общо, нови този месец, разбивка по вид занаят (`crochet` / `knitting` / `embroidery`) като `pluck('total', 'category')` карта.
+- **Публикации**: общо, нови този месец, разбивка по вид занаят.
+- **Колекции**: общо, нови този месец.
+- **Ангажираност**: общо харесвания, общо коментари в платформата.
+- **Таблица с последни потребители**: 10-те най-скоро присъединили се потребители с техния брой шаблони.
+- **Таблица с последни шаблони**: 15-те най-скоро качени шаблони с автор и дата на качване.
+
+#### Управление на потребители — `/admin/users`
+
+Напълно претърсваем, сортируем, филтрируем, пагиниран интерфейс за управление на потребители:
+
+- **Търсене**: `name LIKE %q%` ИЛИ `username LIKE %q%` (без значение от главни букви).
+- **Филтър по роля**: падащо меню за всички / потребител / админ.
+- **Опции за сортиране**: най-нови (по подразбиране), най-стари, име А–Я, най-много шаблони (чрез `withCount`), най-много публикации (чрез `withCount`).
+- **Пагинация**: 20 потребители на страница, общият брой е показан в заглавието.
+- **Действия за потребител**:
+  - **Повиши / Отнеми админ** — `PATCH /admin/users/{user}/toggle-role` превключва колоната `role` между `user` и `admin`. Не може да се насочи към текущо влезлия администратор.
+  - **Изтрий** — `DELETE /admin/users/{user}` премахва акаунта и всички свързани данни. Не може да се насочи към текущо влезлия администратор.
+
+---
+
+## Технологичен стек
+
+| Слой | Технология | Версия | Бележки |
 |---|---|---|---|
-| Language | PHP | 8.2+ | Strict types throughout |
+| Език | PHP | 8.2+ | Строги типове навсякъде |
 | Framework | Laravel | 12 | |
-| Auth | Laravel Fortify | ^1.30 | 2FA, email verify, password reset |
-| UI components | Livewire Flux | ^2.1 | Prebuilt accessible components |
-| Reactive PHP views | Livewire Volt | ^1.7 | Single-file Volt components |
-| JS reactivity | Alpine.js | ^3.4 | Used for toggles, counters, modals |
-| CSS framework | Tailwind CSS | ^4.0 | CSS-first config, no tailwind.config.js |
-| Build tool | Vite | ^7.0 | `laravel-vite-plugin` integration |
-| Database | MySQL / MariaDB | 8+ / 10.4+ | |
-| File storage | Laravel local disk | — | `storage/app/public` symlinked to `public/storage` |
-| Queue | Database | — | `QUEUE_CONNECTION=database` |
-| Testing | Pest | ^4.1 | `pest-plugin-laravel` for Laravel helpers |
-| Code style | Laravel Pint | ^1.18 | PSR-12 based |
-| Dev tooling | Laravel Pail | ^1.2 | Tail logs in terminal |
-| Dev tooling | Laravel Sail | ^1.41 | Optional Docker environment |
+| Оторизация | Laravel Fortify | ^1.30 | 2FA, потвърждение на email, нулиране на парола |
+| UI компоненти | Livewire Flux | ^2.1 | Предварително изградени достъпни компоненти |
+| Реактивни PHP изгледи | Livewire Volt | ^1.7 | Едно-файлови Volt компоненти |
+| JS реактивност | Alpine.js | ^3.4 | Използва се за превключватели, брояци, модали |
+| CSS framework | Tailwind CSS | ^4.0 | CSS-first конфигурация, няма tailwind.config.js |
+| Build инструмент | Vite | ^7.0 | `laravel-vite-plugin` интеграция |
+| База данни | MySQL / MariaDB | 8+ / 10.4+ | |
+| Файлово съхранение | Laravel local disk | — | `storage/app/public` symlink към `public/storage` |
+| Опашка | Database | — | `QUEUE_CONNECTION=database` |
+| Тестване | Pest | ^4.1 | `pest-plugin-laravel` за Laravel helpers |
+| Стил на кода | Laravel Pint | ^1.18 | Базиран на PSR-12 |
+| Dev инструменти | Laravel Pail | ^1.2 | Наблюдение на логове в терминал |
+| Dev инструменти | Laravel Sail | ^1.41 | Опционална Docker среда |
 
 ---
 
-## Architecture & Design Decisions
+## Архитектура и дизайнерски решения
 
-**No JavaScript framework.** The entire frontend is server-rendered Blade + Livewire components. Alpine.js handles small reactive pieces (character counters, modals, tab switching, dropdown toggles) without any build-time compilation beyond Vite's CSS processing.
+**Без JavaScript framework.** Целият frontend е сървърно рендиран Blade + Livewire компоненти. Alpine.js управлява малки реактивни части (брояци на символи, модали, превключване на табове, падащи менюта) без каквато и да е компилация по време на build освен CSS обработката на Vite.
 
-**Controller-per-concern.** Each major domain has its own controller (`PatternController`, `PostController`, `CollectionController`, `ProfileController`, `FollowController`, `NotificationController`, `SearchController`). Route logic that is unique and short lives inline in `web.php` (dashboard, admin dashboard, admin user actions) to avoid creating controllers with a single method.
+**Контролер-за-концепция.** Всеки основен домейн има собствен контролер (`PatternController`, `PostController`, `CollectionController`, `ProfileController`, `FollowController`, `NotificationController`, `SearchController`). Маршрутна логика, която е уникална и кратка, живее inline в `web.php` (dashboard, admin dashboard, админ действия за потребители) за да се избегне създаването на контролери с един метод.
 
-**Service objects for cross-cutting preferences.** `NotificationPreferenceService` and `PrivacyPreferenceService` are injected wherever preferences need to be read or written, keeping the logic DRY across controllers and notification classes. They use flat JSON files rather than extra database columns to avoid migrating the `users` table for every new preference key.
+**Service обекти за пресичащи се предпочитания.** `NotificationPreferenceService` и `PrivacyPreferenceService` се инжектират където и да е необходимо да се четат или записват предпочитания, запазвайки логиката DRY в контролерите и класовете за известия. Те използват плоски JSON файлове вместо допълнителни колони в базата данни, за да се избегне мигриране на таблицата `users` при всеки нов ключ за предпочитание.
 
-**No API layer.** The app is not an SPA. JSON responses exist only for specific AJAX interactions: user search, post comments, like/follow toggles. All page loads are full server-rendered responses.
+**Без API слой.** Приложението не е SPA. JSON отговори съществуват само за специфични AJAX взаимодействия: търсене на потребители, коментари към публикации, превключване на харесвания/проследявания. Всички зареждания на страници са пълни сървърно рендирани отговори.
 
-**Notifications as database records.** Using Laravel's built-in `database` channel means notifications are queryable, pageable, and grouped by `read_at` without any WebSocket infrastructure. Real-time delivery is out of scope for v1.
+**Известия като записи в базата данни.** Използването на вградения в Laravel `database` канал означава, че известията могат да се запитват, пагинират и групират по `read_at` без каквато и да е WebSocket инфраструктура. Доставката в реално време е извън обхвата на v1.
 
-**Migrations are append-only.** Schema changes are made in separate migration files so that the migration history is preserved and `php artisan migrate:fresh` always produces a valid database.
+**Миграциите са append-only.** Промените в схемата се правят в отделни migration файлове, така че историята на миграциите да се запази и `php artisan migrate:fresh` винаги да произвежда валидна база данни.
 
 ---
 
-## Project Structure
+## Структура на проекта
 
 ```
 yarnly/
@@ -558,21 +558,21 @@ yarnly/
 
 ---
 
-## Route Map
+## Карта на маршрутите
 
-| Method | URI | Controller / Closure | Auth required |
+| Метод | URI | Controller / Closure | Изисква оторизация |
 |---|---|---|---|
-| GET | `/` | Closure (homepage) | No |
-| GET | `/search/users` | `SearchController@users` | No |
-| GET | `/patterns/crochet` | `PatternController@crochet` | No |
-| GET | `/patterns/crochet/{category}` | `PatternController@crochetByCategory` | No |
-| GET | `/patterns/knitting` | `PatternController@knitting` | No |
-| GET | `/patterns/knitting/{category}` | `PatternController@knittingByCategory` | No |
-| GET | `/patterns/embroidery` | `PatternController@embroidery` | No |
-| GET | `/patterns/embroidery/{category}` | `PatternController@embroideryByCategory` | No |
-| GET | `/models/gallery` | `PatternController@gallery` | No |
-| GET | `/patterns/{pattern}/view` | `PatternController@view` | No |
-| GET | `/patterns/{pattern}/download` | `PatternController@download` | No |
+| GET | `/` | Closure (homepage) | Не |
+| GET | `/search/users` | `SearchController@users` | Не |
+| GET | `/patterns/crochet` | `PatternController@crochet` | Не |
+| GET | `/patterns/crochet/{category}` | `PatternController@crochetByCategory` | Не |
+| GET | `/patterns/knitting` | `PatternController@knitting` | Не |
+| GET | `/patterns/knitting/{category}` | `PatternController@knittingByCategory` | Не |
+| GET | `/patterns/embroidery` | `PatternController@embroidery` | Не |
+| GET | `/patterns/embroidery/{category}` | `PatternController@embroideryByCategory` | Не |
+| GET | `/models/gallery` | `PatternController@gallery` | Не |
+| GET | `/patterns/{pattern}/view` | `PatternController@view` | Не |
+| GET | `/patterns/{pattern}/download` | `PatternController@download` | Не |
 | GET | `/dashboard` | Closure | auth + verified |
 | GET | `/admin/dashboard` | Closure | auth + verified |
 | GET | `/admin/users` | Closure | auth + verified |
@@ -582,12 +582,12 @@ yarnly/
 | GET | `/profile/edit` | `ProfileController@edit` | auth + verified |
 | PATCH | `/profile` | `ProfileController@update` | auth + verified |
 | DELETE | `/profile` | `ProfileController@destroy` | auth + verified |
-| GET | `/users/{user}` | `ProfileController@showUser` | No |
+| GET | `/users/{user}` | `ProfileController@showUser` | Не |
 | GET | `/gallery/posts/create` | `PostController@create` | auth + verified |
 | POST | `/gallery/posts` | `PostController@store` | auth + verified |
-| GET | `/gallery/posts/{post}` | `PostController@show` | No |
+| GET | `/gallery/posts/{post}` | `PostController@show` | Не |
 | DELETE | `/gallery/posts/{post}` | `PostController@destroy` | auth + verified |
-| GET | `/posts/{post}/comments` | `PostController@comments` | No |
+| GET | `/posts/{post}/comments` | `PostController@comments` | Не |
 | POST | `/posts/{post}/comments` | `PostController@storeComment` | auth + verified |
 | POST | `/posts/{post}/like` | `PostController@like` | auth + verified |
 | DELETE | `/posts/{post}/like` | `PostController@unlike` | auth + verified |
@@ -607,78 +607,78 @@ yarnly/
 
 ---
 
-## Database Schema
+## Схема на базата данни
 
 ### `users`
 
-| Column | Type | Nullable | Default | Notes |
+| Колона | Тип | Nullable | По подразбиране | Бележки |
 |---|---|---|---|---|
-| `id` | bigint unsigned PK | No | auto | |
-| `name` | varchar(255) | No | — | Full display name |
-| `bio` | varchar(200) | Yes | null | Short bio, max 200 chars |
-| `username` | varchar(255) | Yes | null | Unique, used in profile URL |
-| `email` | varchar(255) | No | — | Unique |
-| `email_verified_at` | timestamp | Yes | null | Set after email click |
-| `role` | enum('admin','user') | No | `user` | |
-| `password` | varchar(255) | No | — | bcrypt hashed |
-| `profile_picture` | varchar(255) | Yes | null | Relative path in public storage |
-| `avatar_color` | varchar(7) | Yes | null | Hex colour, e.g. `#7c3aed` |
-| `theme_preference` | varchar(255) | Yes | `dark` | `dark`, `light`, or `system` |
-| `two_factor_secret` | text | Yes | null | Encrypted TOTP secret |
-| `two_factor_recovery_codes` | text | Yes | null | Encrypted array of recovery codes |
-| `two_factor_confirmed_at` | timestamp | Yes | null | When 2FA was enabled |
-| `remember_token` | varchar(100) | Yes | null | |
-| `created_at` / `updated_at` | timestamp | Yes | null | |
+| `id` | bigint unsigned PK | Не | auto | |
+| `name` | varchar(255) | Не | — | Пълно показвано име |
+| `bio` | varchar(200) | Да | null | Кратка биография, макс 200 символа |
+| `username` | varchar(255) | Да | null | Уникално, използва се в URL на профила |
+| `email` | varchar(255) | Не | — | Уникален |
+| `email_verified_at` | timestamp | Да | null | Задава се след клик на email |
+| `role` | enum('admin','user') | Не | `user` | |
+| `password` | varchar(255) | Не | — | bcrypt хеширана |
+| `profile_picture` | varchar(255) | Да | null | Относителен път в public storage |
+| `avatar_color` | varchar(7) | Да | null | Hex цвят, напр. `#7c3aed` |
+| `theme_preference` | varchar(255) | Да | `dark` | `dark`, `light`, или `system` |
+| `two_factor_secret` | text | Да | null | Криптирана TOTP тайна |
+| `two_factor_recovery_codes` | text | Да | null | Криптиран масив от кодове за възстановяване |
+| `two_factor_confirmed_at` | timestamp | Да | null | Кога 2FA беше активирана |
+| `remember_token` | varchar(100) | Да | null | |
+| `created_at` / `updated_at` | timestamp | Да | null | |
 
 ### `patterns`
 
-| Column | Type | Nullable | Notes |
+| Колона | Тип | Nullable | Бележки |
 |---|---|---|---|
-| `id` | bigint PK | No | |
-| `user_id` | FK → users | No | Cascade delete |
-| `title` | varchar(255) | No | |
-| `description` | text | Yes | |
-| `craft_type` | varchar(255) | No | `crochet`, `knitting`, `embroidery` |
-| `category` | varchar(255) | No | Subcategory slug |
-| `difficulty` | varchar(255) | No | `beginner`, `intermediate`, `advanced` |
-| `estimated_hours` | int | Yes | min 1, max 200 |
-| `tags` | varchar(500) | Yes | Comma-separated, clean (no `#`) |
-| `pdf_file` | varchar(255) | No | `patterns/pdfs/{uuid}.pdf` |
-| `original_filename` | varchar(255) | No | Shown to the user on download |
-| `image_path` | varchar(255) | Yes | `patterns/images/{uuid}.jpg` |
-| `makers_saved` | int | No | Default 0 |
+| `id` | bigint PK | Не | |
+| `user_id` | FK → users | Не | Cascade delete |
+| `title` | varchar(255) | Не | |
+| `description` | text | Да | |
+| `craft_type` | varchar(255) | Не | `crochet`, `knitting`, `embroidery` |
+| `category` | varchar(255) | Не | Подкатегория slug |
+| `difficulty` | varchar(255) | Не | `beginner`, `intermediate`, `advanced` |
+| `estimated_hours` | int | Да | мин 1, макс 200 |
+| `tags` | varchar(500) | Да | Разделени със запетая, чисти (без `#`) |
+| `pdf_file` | varchar(255) | Не | `patterns/pdfs/{uuid}.pdf` |
+| `original_filename` | varchar(255) | Не | Показва се на потребителя при изтегляне |
+| `image_path` | varchar(255) | Да | `patterns/images/{uuid}.jpg` |
+| `makers_saved` | int | Не | По подразбиране 0 |
 
 ### `posts`
 
-| Column | Type | Nullable | Notes |
+| Колона | Тип | Nullable | Бележки |
 |---|---|---|---|
-| `id` | bigint PK | No | |
-| `user_id` | FK → users | No | |
-| `description` | text | Yes | |
-| `craft_type` | varchar(255) | No | |
-| `tags` | varchar(255) | Yes | Comma-separated |
+| `id` | bigint PK | Не | |
+| `user_id` | FK → users | Не | |
+| `description` | text | Да | |
+| `craft_type` | varchar(255) | Не | |
+| `tags` | varchar(255) | Да | Разделени със запетая |
 
 ### `post_images`
 
-| Column | Type | Notes |
+| Колона | Тип | Бележки |
 |---|---|---|
 | `id` | bigint PK | |
 | `post_id` | FK → posts | Cascade delete |
 | `image_path` | varchar(255) | `posts/{uuid}.jpg` |
-| `order` | int | 0-indexed, preserves upload sequence |
+| `order` | int | 0-индексиран, запазва последователност на качване |
 
 ### `follows`
 
-| Column | Type | Notes |
+| Колона | Тип | Бележки |
 |---|---|---|
 | `id` | bigint PK | |
-| `follower_id` | FK → users | The user who follows |
-| `following_id` | FK → users | The user being followed |
+| `follower_id` | FK → users | Потребителят който следва |
+| `following_id` | FK → users | Следваният потребител |
 | `created_at` | timestamp | |
 
 ### `post_likes`
 
-| Column | Type | Notes |
+| Колона | Тип | Бележки |
 |---|---|---|
 | `id` | bigint PK | |
 | `user_id` | FK → users | |
@@ -687,7 +687,7 @@ yarnly/
 
 ### `post_favorites`
 
-| Column | Type | Notes |
+| Колона | Тип | Бележки |
 |---|---|---|
 | `id` | bigint PK | |
 | `user_id` | FK → users | |
@@ -696,17 +696,17 @@ yarnly/
 
 ### `post_comments`
 
-| Column | Type | Notes |
+| Колона | Тип | Бележки |
 |---|---|---|
 | `id` | bigint PK | |
 | `user_id` | FK → users | |
 | `post_id` | FK → posts | |
-| `body` | text | max 500 chars |
+| `body` | text | макс 500 символа |
 | `created_at` / `updated_at` | timestamp | |
 
 ### `user_favorites`
 
-| Column | Type | Notes |
+| Колона | Тип | Бележки |
 |---|---|---|
 | `id` | bigint PK | |
 | `user_id` | FK → users | |
@@ -715,7 +715,7 @@ yarnly/
 
 ### `collections`
 
-| Column | Type | Notes |
+| Колона | Тип | Бележки |
 |---|---|---|
 | `id` | bigint PK | |
 | `user_id` | FK → users | |
@@ -723,16 +723,16 @@ yarnly/
 | `description` | text | nullable |
 | `craft_type` | varchar(255) | crochet / knitting / embroidery |
 | `cover_image_path` | varchar(255) | nullable |
-| `is_public` | tinyint(1) | 0 = private, 1 = public |
+| `is_public` | tinyint(1) | 0 = частна, 1 = публична |
 | `created_at` / `updated_at` | timestamp | |
 
 ### `collection_pattern`
 
-Pivot table linking `collections` to `patterns` (many-to-many with timestamps).
+Pivot таблица свързваща `collections` към `patterns` (many-to-many с timestamps).
 
 ### `collection_favorites`
 
-| Column | Type | Notes |
+| Колона | Тип | Бележки |
 |---|---|---|
 | `id` | bigint PK | |
 | `user_id` | FK → users | |
@@ -741,33 +741,33 @@ Pivot table linking `collections` to `patterns` (many-to-many with timestamps).
 
 ### `post_collections`
 
-| Column | Type | Notes |
+| Колона | Тип | Бележки |
 |---|---|---|
 | `id` | bigint PK | |
-| `user_id` | FK → users | Owner of the album |
-| `name` | varchar(255) | Album name |
+| `user_id` | FK → users | Собственик на албума |
+| `name` | varchar(255) | Име на албума |
 | `created_at` / `updated_at` | timestamp | |
 
 ### `post_collection_post`
 
-Pivot table linking `post_collections` to `posts` (saved posts organised into albums).
+Pivot таблица свързваща `post_collections` към `posts` (запазени публикации организирани в албуми).
 
 ### `notifications`
 
-Laravel's standard polymorphic notifications table. Key columns:
+Стандартна Laravel полиморфна таблица за известия. Ключови колони:
 
-| Column | Type | Notes |
+| Колона | Тип | Бележки |
 |---|---|---|
 | `id` | char(36) UUID PK | |
-| `type` | varchar(255) | FQCN of the notification class |
-| `notifiable_type` | varchar(255) | Always `App\Models\User` |
+| `type` | varchar(255) | FQCN на класа за известие |
+| `notifiable_type` | varchar(255) | Винаги `App\Models\User` |
 | `notifiable_id` | bigint | User ID |
 | `data` | text | JSON: `{message, url, actor}` |
-| `read_at` | timestamp | null = unread |
+| `read_at` | timestamp | null = непрочетено |
 
 ---
 
-## Eloquent Models & Relationships
+## Eloquent модели и връзки
 
 ### `User`
 
@@ -783,10 +783,10 @@ favoriteCollections()   → BelongsToMany(Collection, collection_favorites)
 postCollections()       → HasMany(PostCollection)
 followers()             → BelongsToMany(User, follows, following_id, follower_id)
 following()             → BelongsToMany(User, follows, follower_id, following_id)
-notifications()         → MorphMany (Laravel built-in)
+notifications()         → MorphMany (Laravel вградено)
 ```
 
-**Computed helpers:** `initials()`, `avatarColor()`, `hasProfileImage()`, `getIsAdminAttribute()`, `hasFavorited()`, `hasFavoritedCollection()`, `hasLikedPost()`, `hasFavoritedPost()`, `isFollowing()`.
+**Изчислени помощници:** `initials()`, `avatarColor()`, `hasProfileImage()`, `getIsAdminAttribute()`, `hasFavorited()`, `hasFavoritedCollection()`, `hasLikedPost()`, `hasFavoritedPost()`, `isFollowing()`.
 
 ### `Pattern`
 
@@ -794,9 +794,9 @@ notifications()         → MorphMany (Laravel built-in)
 user()                  → BelongsTo(User)
 ```
 
-**Constants:** `Pattern::CATEGORIES` — nested array defining valid craft types and their subcategory slugs and labels.
+**Константи:** `Pattern::CATEGORIES` — вложен масив дефиниращ валидни видове занаяти и техните подкатегории slug-ове и етикети.
 
-**Helpers:** `getCategoryLabel()`, `getDifficultyColor()`.
+**Помощници:** `getCategoryLabel()`, `getDifficultyColor()`.
 
 ### `Post`
 
@@ -808,9 +808,9 @@ favorites()             → HasMany(PostFavorite)
 comments()              → HasMany(PostComment, ordered oldest first)
 ```
 
-**Accessors:** `getLikesCountAttribute()`, `getCommentsCountAttribute()`, `getTagsArrayAttribute()` (strips `#`, trims whitespace, filters empty).
+**Accessors:** `getLikesCountAttribute()`, `getCommentsCountAttribute()`, `getTagsArrayAttribute()` (премахва `#`, изрязва интервали, филтрира празни).
 
-**Helpers:** `isLikedBy(User)`, `isFavoritedBy(User)`.
+**Помощници:** `isLikedBy(User)`, `isFavoritedBy(User)`.
 
 ### `Collection`
 
@@ -819,74 +819,74 @@ user()                  → BelongsTo(User)
 patterns()              → BelongsToMany(Pattern, collection_pattern)
 ```
 
-**Helpers:** `getCraftTypeLabel()`, `getCraftTypeColor()` (returns Tailwind colour name for badge rendering), `hasPattern(Pattern)`.
+**Помощници:** `getCraftTypeLabel()`, `getCraftTypeColor()` (връща Tailwind име на цвят за рендиране на badge), `hasPattern(Pattern)`.
 
 ---
 
-## Authentication & Security
+## Оторизация и сигурност
 
-Authentication is handled by **Laravel Fortify** configured in `config/fortify.php` and `FortifyServiceProvider`.
+Оторизацията се обработва от **Laravel Fortify** конфигуриран в `config/fortify.php` и `FortifyServiceProvider`.
 
-### Features enabled
+### Активирани функционалности
 
-| Feature | Description |
+| Функционалност | Описание |
 |---|---|
-| Registration | Name, username, email, password; auto-login after register |
-| Email verification | Signed URL emailed on register; protected routes use `verified` middleware |
-| Login | Standard email + password; rate-limited by Fortify |
-| Remember me | Persistent login cookie |
-| Password reset | Signed email link, tokens stored in `password_reset_tokens` |
-| Password updates | Available from Settings; requires current password confirmation |
-| Profile updates | Name, bio, email changes via `ProfileUpdateRequest` |
-| Two-factor auth | TOTP (Google Authenticator, Authy, etc.); QR code + manual key + 8 recovery codes |
-| Password confirmation | Sensitive actions require recent password confirmation (15-minute window) |
+| Регистрация | Име, потребителско име, email, парола; авто-влизане след регистрация |
+| Потвърждение на email | Подписан URL изпратен по email при регистрация; защитените маршрути използват `verified` middleware |
+| Влизане | Стандартен email + парола; ограничен по скорост от Fortify |
+| Запомни ме | Постоянна бисквитка за влизане |
+| Нулиране на парола | Подписан email линк, токени съхранени в `password_reset_tokens` |
+| Актуализации на паролата | Налични от Settings; изискват потвърждение на текущата парола |
+| Актуализации на профила | Промени на име, биография, email чрез `ProfileUpdateRequest` |
+| Двуфакторна оторизация | TOTP (Google Authenticator, Authy, и др.); QR код + ръчен ключ + 8 кода за възстановяване |
+| Потвърждение на парола | Чувствителните действия изискват скорошно потвърждение на парола (15-минутен прозорец) |
 
-### File upload security
+### Сигурност при качване на файлове
 
-- All uploads are validated for MIME type server-side (extension alone is not trusted).
-- PDFs are double-checked with `$file->getMimeType() === 'application/pdf'`.
-- Uploaded files are stored with random UUIDs as filenames in `storage/app/public/` — never in the `public/` directory directly.
-- The `original_filename` is stored separately for human-readable downloads.
-- PDF serving uses `response()->download()` through a controller, not a direct URL, so access can be controlled in the future.
+- Всички качвания се валидират за MIME тип от страна на сървъра (само разширението не е доверено).
+- PDF-ите се проверяват двойно с `$file->getMimeType() === 'application/pdf'`.
+- Качените файлове се съхраняват със случайни UUID като имена на файлове в `storage/app/public/` — никога директно в директорията `public/`.
+- `original_filename` се съхранява отделно за четими от хора изтегляния.
+- Обслужването на PDF използва `response()->download()` през контролер, не директен URL, така че достъпът може да се контролира в бъдеще.
 
 ### CSRF
 
-All forms include `@csrf`. Vite's axios config includes the `X-CSRF-TOKEN` header automatically for AJAX requests.
+Всички форми включват `@csrf`. Vite's axios конфигурацията включва автоматично `X-CSRF-TOKEN` header за AJAX заявки.
 
 ### SQL injection
 
-All database queries use Eloquent ORM or the query builder with parameter binding. No raw SQL with user input.
+Всички заявки към базата данни използват Eloquent ORM или query builder с параметърно свързване. Няма raw SQL с потребителски вход.
 
 ### XSS
 
-All Blade variables are output with `{{ }}` (double braces), which HTML-encodes by default. Raw output `{!! !!}` is not used for user-supplied data.
+Всички Blade променливи се изписват с `{{ }}` (двойни скоби), което HTML-кодира по подразбиране. Raw изход `{!! !!}` не се използва за данни доставени от потребители.
 
 ---
 
-## Roles & Permissions
+## Роли и права
 
-| Role | Capabilities |
+| Роля | Възможности |
 |---|---|
-| `user` | Manage own patterns, posts, collections, profile; follow/unfollow; like/comment/save |
-| `admin` | All user capabilities + access to `/admin/dashboard` and `/admin/users`; promote/demote other users; delete any account |
+| `user` | Управление на собствени шаблони, публикации, колекции, профил; проследяване/спиране на проследяване; харесване/коментиране/запазване |
+| `admin` | Всички възможности на потребител + достъп до `/admin/dashboard` и `/admin/users`; повишаване/понижаване на други потребители; изтриване на всеки акаунт |
 
-**Guards:**
-- An admin cannot demote themselves (`$user->id === Auth::id()` check returns 403).
-- An admin cannot delete themselves (same check).
-- Admin routes are not protected by a dedicated middleware gate; they use inline `abort_if($user->role !== 'admin', 403)` or equivalent.
+**Защити:**
+- Администратор не може да понижи себе си (проверката `$user->id === Auth::id()` връща 403).
+- Администратор не може да изтрие себе си (същата проверка).
+- Админ маршрутите не са защитени от специален middleware gate; те използват inline `abort_if($user->role !== 'admin', 403)` или еквивалент.
 
 ---
 
-## Services
+## Услуги
 
 ### `NotificationPreferenceService`
 
-Path: `app/Services/NotificationPreferenceService.php`
+Път: `app/Services/NotificationPreferenceService.php`
 
-Manages per-user notification opt-in/out preferences stored as JSON.
+Управлява предпочитания за известия opt-in/opt-out за всеки потребител, съхранени като JSON.
 
 ```php
-// Default values (all opt-in)
+// Стойности по подразбиране (всички opt-in)
 const DEFAULTS = [
     'notify_followers'       => true,
     'notify_likes'           => true,
@@ -896,16 +896,16 @@ const DEFAULTS = [
     'notify_new_collections' => true,
 ];
 
-get(object $notifiable): array    // merge stored with defaults
+get(object $notifiable): array    // слива съхранените с подразбиранията
 save(int $userId, array $prefs): void
 check(object $notifiable, string $key): bool
 ```
 
 ### `PrivacyPreferenceService`
 
-Path: `app/Services/PrivacyPreferenceService.php`
+Път: `app/Services/PrivacyPreferenceService.php`
 
-Manages per-user profile visibility preferences stored as JSON.
+Управлява предпочитания за видимост на профила за всеки потребител, съхранени като JSON.
 
 ```php
 const DEFAULTS = [
@@ -921,85 +921,85 @@ save(int $userId, array $prefs): void
 check(object $user, string $key): bool
 ```
 
-Both services resolve via `app(ServiceClass::class)` (automatic constructor injection) wherever they are needed.
+И двете услуги се резолват чрез `app(ServiceClass::class)` (автоматично constructor injection) където и да са необходими.
 
 ---
 
-## Installation
+## Инсталиране
 
-### Prerequisites
+### Предварителни изисквания
 
-- **PHP 8.2+** with extensions: `pdo_mysql`, `mbstring`, `openssl`, `fileinfo`, `gd` (or `imagick`)
+- **PHP 8.2+** с разширения: `pdo_mysql`, `mbstring`, `openssl`, `fileinfo`, `gd` (или `imagick`)
 - **[Composer](https://getcomposer.org)** 2.x
-- **[Node.js](https://nodejs.org)** 18+ and **npm** 9+
-- **MySQL 8+** or **MariaDB 10.4+**
+- **[Node.js](https://nodejs.org)** 18+ и **npm** 9+
+- **MySQL 8+** или **MariaDB 10.4+**
 
-### Steps
+### Стъпки
 
-**1. Clone the repository**
+**1. Клонирайте хранилището**
 
 ```bash
 git clone https://github.com/your-username/yarnly.git
 cd yarnly
 ```
 
-**2. Install PHP dependencies**
+**2. Инсталирайте PHP зависимости**
 
 ```bash
 composer install
 ```
 
-**3. Install Node dependencies**
+**3. Инсталирайте Node зависимости**
 
 ```bash
 npm install
 ```
 
-**4. Copy the environment file**
+**4. Копирайте environment файла**
 
 ```bash
 cp .env.example .env
 ```
 
-**5. Generate the application key**
+**5. Генерирайте application ключ**
 
 ```bash
 php artisan key:generate
 ```
 
-**6. Create the database**
+**6. Създайте базата данни**
 
-Create a MySQL database named `yarnly` (or whatever you configure in `.env`):
+Създайте MySQL база данни наречена `yarnly` (или каквото конфигурирате в `.env`):
 
 ```sql
 CREATE DATABASE yarnly CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-**7. Configure environment**
+**7. Конфигурирайте средата**
 
-Edit `.env` with your database credentials and mail settings (see [Environment Variables](#environment-variables)).
+Редактирайте `.env` с вашите database credentials и mail настройки (вижте [Environment променливи](#environment-променливи)).
 
-**8. Run database migrations**
+**8. Стартирайте database миграциите**
 
 ```bash
 php artisan migrate
 ```
 
-**9. Create the public storage symlink**
+**9. Създайте public storage symlink**
 
 ```bash
 php artisan storage:link
 ```
 
-This symlinks `public/storage` → `storage/app/public` so uploaded files are web-accessible.
+Това създава symlink `public/storage` → `storage/app/public` така че качените файлове да са достъпни от уеб.
 
-**10. Build frontend assets**
+**10. Компилирайте frontend assets**
 
 ```bash
 npm run build
 ```
 
-**11. (Optional) Seed the database**
+**11. (Опционално) Заредете базата данни със seed данни**
 
 ```bash
 php artisan db:seed
@@ -1007,17 +1007,17 @@ php artisan db:seed
 
 ---
 
-## Environment Variables
+## Environment променливи
 
-Full `.env` reference with explanations:
+Пълна `.env` справка с обяснения:
 
 ```dotenv
 # ─── Application ───────────────────────────────────────────────────────────────
 APP_NAME=Yarnly
 APP_ENV=local                       # local | staging | production
-APP_KEY=                            # Auto-generated by php artisan key:generate
-APP_DEBUG=true                      # Set to false in production
-APP_URL=http://localhost:8000       # Must match your actual URL (for signed URLs & emails)
+APP_KEY=                            # Автоматично генериран от php artisan key:generate
+APP_DEBUG=true                      # Задайте на false в production
+APP_URL=http://localhost:8000       # Трябва да съответства на вашия реален URL (за подписани URL-и и emails)
 APP_LOCALE=en
 APP_FALLBACK_LOCALE=en
 APP_FAKER_LOCALE=en_US
@@ -1033,13 +1033,13 @@ DB_PASSWORD=
 # ─── Cache, Sessions & Queues ──────────────────────────────────────────────────
 CACHE_STORE=file                    # file | redis | database
 SESSION_DRIVER=database             # database | file | cookie | redis
-SESSION_LIFETIME=120                # Minutes
-QUEUE_CONNECTION=database           # Needed for notification dispatch
+SESSION_LIFETIME=120                # Минути
+QUEUE_CONNECTION=database           # Необходима за изпращане на известия
 
 # ─── Mail ──────────────────────────────────────────────────────────────────────
-# Required for: email verification, password reset, 2FA setup emails
+# Необходимо за: потвърждение на email, нулиране на парола, 2FA setup emails
 MAIL_MAILER=smtp
-MAIL_HOST=smtp.mailtrap.io          # Replace with your provider
+MAIL_HOST=smtp.mailtrap.io          # Заменете с вашия доставчик
 MAIL_PORT=2525
 MAIL_USERNAME=
 MAIL_PASSWORD=
@@ -1048,115 +1048,115 @@ MAIL_FROM_ADDRESS="noreply@yarnly.com"
 MAIL_FROM_NAME="Yarnly"
 
 # ─── File Storage ──────────────────────────────────────────────────────────────
-FILESYSTEM_DISK=local               # local is fine for development; use s3 for production
+FILESYSTEM_DISK=local               # local е добре за разработка; използвайте s3 за production
 ```
 
-**Mail providers for development:**
-- [Mailtrap](https://mailtrap.io) — captures emails in a sandbox inbox (free tier available)
-- [Mailgun](https://www.mailgun.com) — real delivery, generous free tier
-- [Resend](https://resend.com) — modern developer-first email API
+**Mail доставчици за разработка:**
+- [Mailtrap](https://mailtrap.io) — прихваща emails в sandbox inbox (налична безплатна версия)
+- [Mailgun](https://www.mailgun.com) — реална доставка, щедра безплатна версия
+- [Resend](https://resend.com) — модерен developer-first email API
 
-**For production**, additionally set:
+**За production**, допълнително задайте:
 ```dotenv
 APP_ENV=production
 APP_DEBUG=false
 SESSION_DRIVER=database
-CACHE_STORE=redis           # Recommended for production
-QUEUE_CONNECTION=redis      # Recommended for production
+CACHE_STORE=redis           # Препоръчително за production
+QUEUE_CONNECTION=redis      # Препоръчително за production
 ```
 
 ---
 
-## Running the Application
+## Стартиране на приложението
 
-### Development — all services at once
+### Разработка — всички услуги наведнъж
 
-The custom `composer dev` script starts all required processes concurrently using `concurrently`:
+Персонализираният `composer dev` скрипт стартира всички необходими процеси едновременно използвайки `concurrently`:
 
 ```bash
 composer dev
 ```
 
-This runs simultaneously:
-- `php artisan serve` — Laravel development server on `http://localhost:8000`
-- `php artisan queue:listen --tries=1` — processes notification jobs
-- `php artisan pail --timeout=0` — tails application logs in the terminal
-- `npm run dev` — Vite HMR dev server for CSS/JS hot reload
+Това стартира едновременно:
+- `php artisan serve` — Laravel development сървър на `http://localhost:8000`
+- `php artisan queue:listen --tries=1` — обработва jobs за известия
+- `php artisan pail --timeout=0` — наблюдава application логове в терминала
+- `npm run dev` — Vite HMR dev сървър за CSS/JS hot reload
 
-Alternatively, using npm directly:
+Алтернативно, използвайки npm директно:
 
 ```bash
 npm run dev-all
 ```
 
-### Running services individually
+### Стартиране на услугите поотделно
 
 ```bash
-# Laravel server
+# Laravel сървър
 php artisan serve
 
-# Vite dev server (CSS + JS hot reload)
+# Vite dev сървър (CSS + JS hot reload)
 npm run dev
 
-# Queue worker (required for notifications)
+# Queue worker (необходим за известия)
 php artisan queue:listen --tries=1
 
-# Log watcher
+# Log наблюдател
 php artisan pail
 ```
 
-### Production build & deployment
+### Production build и deployment
 
 ```bash
-# 1. Install production-only dependencies
+# 1. Инсталирайте само production зависимости
 composer install --no-dev --optimize-autoloader
 
-# 2. Build minified assets
+# 2. Компилирайте минифицирани assets
 npm run build
 
-# 3. Cache configuration
+# 3. Кеширайте конфигурацията
 php artisan config:cache
 php artisan route:cache
 php artisan event:cache
 php artisan view:cache
 
-# 4. Run pending migrations
+# 4. Стартирайте чакащите миграции
 php artisan migrate --force
 
-# 5. Ensure storage symlink exists
+# 5. Уверете се, че storage symlink съществува
 php artisan storage:link
 
-# 6. Start the queue worker as a daemon (use Supervisor in production)
+# 6. Стартирайте queue worker като daemon (използвайте Supervisor в production)
 php artisan queue:work --tries=3 --timeout=60
 ```
 
 ---
 
-## Running Tests
+## Стартиране на тестове
 
-Yarnly uses the **Pest** testing framework.
+Yarnly използва **Pest** testing framework.
 
 ```bash
-# Run all tests
+# Стартирайте всички тестове
 php artisan test
 
-# Or via Composer
+# Или чрез Composer
 composer test
 
-# Run with coverage (requires Xdebug or PCOV)
+# Стартирайте с покритие (изисква Xdebug или PCOV)
 php artisan test --coverage
 
-# Run only feature tests
+# Стартирайте само feature тестове
 php artisan test --testsuite=Feature
 
-# Run only unit tests
+# Стартирайте само unit тестове
 php artisan test --testsuite=Unit
 ```
 
-Before each test run, `composer test` clears the config cache (`php artisan config:clear`) to ensure a fresh environment.
+Преди всяко стартиране на тест, `composer test` изчиства config cache (`php artisan config:clear`) за да осигури чиста среда.
 
 ---
 
-## License
+## Лиценз
 
-This project is open-sourced under the [MIT license](https://opensource.org/licenses/MIT).
+Този проект е с отворен код под [MIT лиценз](https://opensource.org/licenses/MIT).
