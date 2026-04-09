@@ -39,12 +39,15 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
         position: relative;
         aspect-ratio: 1 / 1;
         overflow: hidden;
-        background: #18181b;
+        background: #f4f4f5;
         cursor: pointer;
         display: block;
         border: none;
         padding: 0;
         width: 100%;
+    }
+    .dark .profile-thumb {
+        background: #18181b;
     }
     .profile-thumb img {
         width: 100%;
@@ -68,12 +71,14 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
 
     /* ── Tab bar ── */
     .tab-btn { transition: color .2s; }
-    .tab-btn.active { color: #fff; }
+    .tab-btn.active { color: #18181b; }
+    .dark .tab-btn.active { color: #fff; }
     #tab-indicator { transition: left .28s cubic-bezier(.4,0,.2,1), width .28s cubic-bezier(.4,0,.2,1); }
 
     /* ── Stat number ── */
     .stat-num { font-size: 1.125rem; font-weight: 700; line-height: 1.2; }
-    .stat-label { font-size: .75rem; color: #a1a1aa; }
+    .stat-label { font-size: .75rem; color: #71717a; }
+    .dark .stat-label { color: #a1a1aa; }
 
     /* ── Post modal carousel ── */
     #pm-track { display: flex; transition: transform .3s ease; height: 100%; }
@@ -81,7 +86,7 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
     .pm-slide img { width: 100%; height: 100%; object-fit: contain; }
 </style>
 
-<div class="min-h-screen bg-zinc-950 text-white">
+<div class="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white">
     <div class="max-w-3xl mx-auto px-4 py-10">
 
         {{-- ── Profile Header ── --}}
@@ -92,10 +97,10 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                 @if($user->hasProfileImage())
                     <img src="{{ asset('storage/' . $user->profile_picture) }}"
                          alt="{{ $user->username }}"
-                         class="w-24 h-24 sm:w-36 sm:h-36 rounded-full object-cover shadow-lg ring-2 ring-zinc-700">
+                         class="w-24 h-24 sm:w-36 sm:h-36 rounded-full object-cover shadow-lg ring-2 ring-zinc-200 dark:ring-zinc-700">
                 @else
                     @php $avatarColor = $user->avatarColor(); @endphp
-                    <div class="w-24 h-24 sm:w-36 sm:h-36 rounded-full flex items-center justify-center text-4xl sm:text-5xl font-bold text-white shadow-lg ring-2 ring-zinc-700 {{ $avatarColor ? '' : 'bg-gradient-to-br from-violet-500 via-purple-500 to-indigo-500' }}"
+                    <div class="w-24 h-24 sm:w-36 sm:h-36 rounded-full flex items-center justify-center text-4xl sm:text-5xl font-bold text-white shadow-lg ring-2 ring-zinc-200 dark:ring-zinc-700 {{ $avatarColor ? '' : 'bg-gradient-to-br from-violet-500 via-purple-500 to-indigo-500' }}"
                          {!! $avatarColor ? 'style="background-color: ' . e($avatarColor) . '"' : '' !!}>
                         {{ $user->initials() }}
                     </div>
@@ -109,39 +114,39 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                 <div class="flex flex-wrap items-center gap-3">
                     <h1 class="text-xl font-bold tracking-wide truncate">{{ $user->username }}</h1>
                     <a href="{{ route('profile.edit') }}"
-                       class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-sm font-semibold text-white transition-colors duration-200 border border-zinc-700">
+                       class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-sm font-semibold text-zinc-900 dark:text-white transition-colors duration-200 border border-zinc-300 dark:border-zinc-700">
                         {{ __('Edit Profile') }}
                     </a>
                 </div>
 
                 {{-- Full name directly under username --}}
-                <p class="text-sm text-zinc-400 -mt-2">{{ $user->name }}</p>
+                <p class="text-sm text-zinc-600 dark:text-zinc-400 -mt-2">{{ $user->name }}</p>
 
                 {{-- Bio --}}
                 @if($user->bio)
-                    <p class="text-sm text-zinc-300 leading-relaxed max-w-sm">{{ $user->bio }}</p>
+                    <p class="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed max-w-sm">{{ $user->bio }}</p>
                 @endif
 
                 {{-- Stats row (desktop) --}}
                 <div class="hidden sm:flex items-center gap-8">
                     <div class="text-center">
                         <span class="stat-num">{{ $postsCount }}</span>
-                        <span class="ml-1 text-sm text-zinc-300">{{ $postsCount === 1 ? __('post') : __('posts') }}</span>
+                        <span class="ml-1 text-sm text-zinc-700 dark:text-zinc-300">{{ $postsCount === 1 ? __('post') : __('posts') }}</span>
                     </div>
                     <button onclick="openFollowModal('followers')" class="text-center hover:opacity-80 transition-opacity">
                         <span class="stat-num">{{ $followersCount }}</span>
-                        <span class="ml-1 text-sm text-zinc-300">{{ $followersCount === 1 ? __('follower') : __('followers') }}</span>
+                        <span class="ml-1 text-sm text-zinc-700 dark:text-zinc-300">{{ $followersCount === 1 ? __('follower') : __('followers') }}</span>
                     </button>
                     <button onclick="openFollowModal('following')" class="text-center hover:opacity-80 transition-opacity">
                         <span class="stat-num">{{ $followingCount }}</span>
-                        <span class="ml-1 text-sm text-zinc-300">{{ __('following') }}</span>
+                        <span class="ml-1 text-sm text-zinc-700 dark:text-zinc-300">{{ __('following') }}</span>
                     </button>
                 </div>
             </div>
         </div>
 
         {{-- Stats row (mobile) --}}
-        <div class="sm:hidden flex items-center justify-around border-t border-b border-zinc-800 py-3 mb-6">
+        <div class="sm:hidden flex items-center justify-around border-t border-b border-zinc-200 dark:border-zinc-800 py-3 mb-6">
             <div class="text-center">
                 <div class="stat-num">{{ $postsCount }}</div>
                 <div class="stat-label">{{ __('Posts') }}</div>
@@ -157,14 +162,14 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
         </div>
 
         {{-- ── Tab bar ── --}}
-        <div class="relative flex items-center justify-center border-t border-zinc-800 mb-0.5">
+        <div class="relative flex items-center justify-center border-t border-zinc-200 dark:border-zinc-800 mb-0.5">
 
             {{-- Sliding active indicator --}}
-            <div id="tab-indicator" class="absolute top-0 h-0.5 bg-white pointer-events-none" style="left:0;width:0;"></div>
+            <div id="tab-indicator" class="absolute top-0 h-0.5 bg-zinc-900 dark:bg-white pointer-events-none" style="left:0;width:0;"></div>
 
             {{-- Posts tab --}}
             <button onclick="switchTab('posts')" id="tab-posts"
-                    class="tab-btn active flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-white">
+                    class="tab-btn active flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-900 dark:text-white">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
@@ -174,7 +179,7 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
 
             {{-- Patterns tab --}}
             <button onclick="switchTab('patterns')" id="tab-patterns"
-                    class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-400">
+                    class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-400 dark:text-zinc-400">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -184,7 +189,7 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
 
             {{-- Collections tab --}}
             <button onclick="switchTab('collections')" id="tab-collections"
-                    class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-400">
+                    class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-400 dark:text-zinc-400">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
@@ -194,7 +199,7 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
 
             {{-- Saved tab --}}
             <button onclick="switchTab('saved')" id="tab-saved"
-                    class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-400">
+                    class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-400 dark:text-zinc-400">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
@@ -204,7 +209,7 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
 
             {{-- Liked tab --}}
             <button onclick="switchTab('liked')" id="tab-liked"
-                    class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-400">
+                    class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-400 dark:text-zinc-400">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
@@ -225,9 +230,9 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                     </svg>
                 </div>
                 <h3 class="text-2xl font-extrabold mb-2">{{ __('Share Photos') }}</h3>
-                <p class="text-zinc-400 text-sm mb-5">{{ __('When you share photos, they will appear on your profile.') }}</p>
+                <p class="text-zinc-500 dark:text-zinc-400 text-sm mb-5">{{ __('When you share photos, they will appear on your profile.') }}</p>
                 <a href="{{ route('posts.create') }}"
-                   class="text-sm font-semibold text-sky-400 hover:text-sky-300 transition-colors">{{ __('Share your first photo') }}</a>
+                   class="text-sm font-semibold text-sky-500 dark:text-sky-400 hover:text-sky-600 dark:hover:text-sky-300 transition-colors">{{ __('Share your first photo') }}</a>
             </div>
             @else
             <div class="grid grid-cols-3 gap-0.5">
@@ -241,8 +246,8 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                     @if($imgUrl)
                         <img src="{{ $imgUrl }}" alt="Post" loading="lazy">
                     @else
-                        <div class="w-full h-full bg-gradient-to-br from-violet-900/50 to-purple-900/50 flex items-center justify-center">
-                            <svg class="w-8 h-8 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-full h-full bg-gradient-to-br from-violet-100/50 to-purple-100/50 dark:from-violet-900/50 dark:to-purple-900/50 flex items-center justify-center">
+                            <svg class="w-8 h-8 text-zinc-400 dark:text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                       d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
@@ -284,7 +289,7 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                     <button @click="savedTab = '{{ $val }}'"
                             :class="savedTab === '{{ $val }}'
                                 ? 'bg-violet-600 text-white border-violet-600'
-                                : 'bg-transparent text-zinc-400 border-zinc-700 hover:border-zinc-500 hover:text-zinc-200'"
+                                : 'bg-transparent text-zinc-600 dark:text-zinc-400 border-zinc-300 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'"
                             class="shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200">
                         {{ $label }}
                     </button>
@@ -294,9 +299,9 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                 {{-- Posts sub-tab --}}
                 <div x-show="savedTab === 'posts'" x-transition>
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Collections</h3>
+                        <h3 class="text-xs font-semibold text-zinc-500 dark:text-zinc-500 uppercase tracking-wider">Collections</h3>
                         <button onclick="openNewCollectionModal(null)"
-                                class="flex items-center gap-1 text-sm font-semibold text-violet-400 hover:text-violet-300 transition-colors">
+                                class="flex items-center gap-1 text-sm font-semibold text-violet-500 dark:text-violet-400 hover:text-violet-600 dark:hover:text-violet-300 transition-colors">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
                             </svg>
@@ -306,14 +311,14 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
 
                     @if($savedPosts->isEmpty() && $postCollections->isEmpty())
                     <div class="flex flex-col items-center justify-center py-24 text-center">
-                        <div class="w-20 h-20 rounded-full border-2 border-zinc-600 flex items-center justify-center mb-5">
-                            <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-20 h-20 rounded-full border-2 border-zinc-300 dark:border-zinc-600 flex items-center justify-center mb-5">
+                            <svg class="w-10 h-10 text-zinc-400 dark:text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                       d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
                             </svg>
                         </div>
                         <h3 class="text-2xl font-extrabold mb-2">{{ __('Save Photos and Videos') }}</h3>
-                        <p class="text-zinc-400 text-sm">{{ __('Save things you want to see again. No one is notified, and only you can see what you\'ve saved.') }}</p>
+                        <p class="text-zinc-500 dark:text-zinc-400 text-sm">{{ __('Save things you want to see again. No one is notified, and only you can see what you\'ve saved.') }}</p>
                     </div>
                     @else
                     @php
@@ -323,8 +328,8 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                     <div id="post-collections-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4">
                         {{-- Fixed "All Posts" card --}}
                         <a href="{{ route('post-collections.all') }}"
-                           class="group block rounded-xl overflow-hidden bg-zinc-900 ring-1 ring-zinc-800 hover:ring-violet-500/50 transition-all">
-                            <div class="aspect-square overflow-hidden bg-zinc-800">
+                           class="group block rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 ring-1 ring-zinc-200 dark:ring-zinc-800 hover:ring-violet-400 dark:hover:ring-violet-500/50 transition-all">
+                            <div class="aspect-square overflow-hidden bg-zinc-200 dark:bg-zinc-800">
                                 @if($allCoverCount > 0)
                                 <div class="grid h-full w-full gap-0.5 {{ $allCoverCount === 1 ? 'grid-cols-1 grid-rows-1' : 'grid-cols-2 grid-rows-2' }}">
                                     @if($allCoverCount === 1)
@@ -350,8 +355,8 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                                     @endif
                                 </div>
                                 @else
-                                <div class="h-full w-full flex items-center justify-center bg-gradient-to-br from-violet-900/40 to-purple-900/40">
-                                    <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div class="h-full w-full flex items-center justify-center bg-gradient-to-br from-violet-100/40 to-purple-100/40 dark:from-violet-900/40 dark:to-purple-900/40">
+                                    <svg class="w-10 h-10 text-zinc-400 dark:text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                               d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
                                     </svg>
@@ -359,8 +364,8 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                                 @endif
                             </div>
                             <div class="px-3 py-2.5">
-                                <p class="text-sm font-semibold text-white">{{ __('All Posts') }}</p>
-                                <p class="text-xs text-zinc-400">{{ $savedPosts->count() }} {{ Str::plural('post', $savedPosts->count()) }}</p>
+                                <p class="text-sm font-semibold text-zinc-900 dark:text-white">{{ __('All Posts') }}</p>
+                                <p class="text-xs text-zinc-600 dark:text-zinc-400">{{ $savedPosts->count() }} {{ Str::plural('post', $savedPosts->count()) }}</p>
                             </div>
                         </a>
                         @foreach($postCollections as $col)
@@ -373,8 +378,8 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                             $coverCount = $coverImages->count();
                         @endphp
                         <a href="{{ route('post-collections.show', $col) }}"
-                           class="group block rounded-xl overflow-hidden bg-zinc-900 ring-1 ring-zinc-800 hover:ring-violet-500/50 transition-all">
-                            <div class="aspect-square overflow-hidden bg-zinc-800">
+                           class="group block rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 ring-1 ring-zinc-200 dark:ring-zinc-800 hover:ring-violet-400 dark:hover:ring-violet-500/50 transition-all">
+                            <div class="aspect-square overflow-hidden bg-zinc-200 dark:bg-zinc-800">
                                 @if($coverCount > 0)
                                 <div class="grid h-full w-full gap-0.5 {{ $coverCount === 1 ? 'grid-cols-1 grid-rows-1' : 'grid-cols-2 grid-rows-2' }}">
                                     @if($coverCount === 1)
@@ -400,8 +405,8 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                                     @endif
                                 </div>
                                 @else
-                                <div class="h-full w-full flex items-center justify-center bg-gradient-to-br from-violet-900/40 to-purple-900/40">
-                                    <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div class="h-full w-full flex items-center justify-center bg-gradient-to-br from-violet-100/40 to-purple-100/40 dark:from-violet-900/40 dark:to-purple-900/40">
+                                    <svg class="w-10 h-10 text-zinc-400 dark:text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                               d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                                     </svg>
@@ -409,8 +414,8 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                                 @endif
                             </div>
                             <div class="px-3 py-2.5">
-                                <p class="text-sm font-semibold text-white truncate">{{ $col->name }}</p>
-                                <p class="text-xs text-zinc-400">{{ $col->posts_count }} {{ Str::plural('post', $col->posts_count) }}</p>
+                                <p class="text-sm font-semibold text-zinc-900 dark:text-white truncate">{{ $col->name }}</p>
+                                <p class="text-xs text-zinc-600 dark:text-zinc-400">{{ $col->posts_count }} {{ Str::plural('post', $col->posts_count) }}</p>
                             </div>
                         </a>
                         @endforeach
@@ -449,20 +454,20 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                             <a href="{{ route('patterns.view', $pattern) }}"
                                x-show="craft === 'all' || craft === '{{ $pattern->craft_type }}'"
                                x-transition
-                               class="group relative rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800 hover:border-violet-500/50 transition-all duration-200">
+                               class="group relative rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-violet-400 dark:hover:border-violet-500/50 transition-all duration-200">
                                 @if($pattern->image_path)
                                     <img src="{{ asset('storage/' . $pattern->image_path) }}" alt="{{ $pattern->title }}"
                                          class="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
                                 @else
-                                    <div class="w-full aspect-square bg-gradient-to-br from-violet-900/40 to-purple-900/40 flex items-center justify-center">
-                                        <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="w-full aspect-square bg-gradient-to-br from-violet-100/40 to-purple-100/40 dark:from-violet-900/40 dark:to-purple-900/40 flex items-center justify-center">
+                                        <svg class="w-10 h-10 text-zinc-400 dark:text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                         </svg>
                                     </div>
                                 @endif
                                 <div class="p-2.5">
-                                    <p class="text-sm font-semibold text-white truncate">{{ $pattern->title }}</p>
-                                    <p class="text-xs text-zinc-400 capitalize mt-0.5">{{ $pattern->craft_type }} · {{ $pattern->difficulty }}</p>
+                                    <p class="text-sm font-semibold text-zinc-900 dark:text-white truncate">{{ $pattern->title }}</p>
+                                    <p class="text-xs text-zinc-600 dark:text-zinc-400 capitalize mt-0.5">{{ $pattern->craft_type }} · {{ $pattern->difficulty }}</p>
                                 </div>
                             </a>
                             @endforeach
@@ -475,14 +480,14 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                 <div x-show="savedTab === 'collections'" x-transition>
                     @if($favoriteCollections->isEmpty())
                     <div class="flex flex-col items-center justify-center py-24 text-center">
-                        <div class="w-20 h-20 rounded-full border-2 border-zinc-600 flex items-center justify-center mb-5">
-                            <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-20 h-20 rounded-full border-2 border-zinc-300 dark:border-zinc-600 flex items-center justify-center mb-5">
+                            <svg class="w-10 h-10 text-zinc-400 dark:text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                       d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                             </svg>
                         </div>
                         <h3 class="text-2xl font-extrabold mb-2">{{ __('No Saved Collections') }}</h3>
-                        <p class="text-zinc-400 text-sm">{{ __('Collections you favourite will appear here.') }}</p>
+                        <p class="text-zinc-500 dark:text-zinc-400 text-sm">{{ __('Collections you favourite will appear here.') }}</p>
                     </div>
                     @else
                     <div x-data="{ craft: 'all' }">
@@ -491,7 +496,7 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                             <button @click="craft = '{{ $val }}'"
                                     :class="craft === '{{ $val }}'
                                         ? 'bg-violet-600 text-white border-violet-600'
-                                        : 'bg-transparent text-zinc-400 border-zinc-700 hover:border-zinc-500 hover:text-zinc-200'"
+                                        : 'bg-transparent text-zinc-600 dark:text-zinc-400 border-zinc-300 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'"
                                     class="shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200">
                                 {{ $label }}
                             </button>
@@ -502,7 +507,7 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                             <a href="{{ route('collections.show', $collection) }}"
                                x-show="craft === 'all' || craft === '{{ $collection->craft_type }}'"
                                x-transition
-                               class="group relative rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800 hover:border-violet-500/50 transition-all duration-200">
+                               class="group relative rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-violet-400 dark:hover:border-violet-500/50 transition-all duration-200">
                                 <div class="w-full aspect-square overflow-hidden">
                                     @if($collection->cover_image_path)
                                         <img src="{{ asset('storage/' . $collection->cover_image_path) }}"
@@ -553,14 +558,14 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
         <div id="panel-liked" class="hidden">
             @if($likedPosts->isEmpty())
             <div class="flex flex-col items-center justify-center py-24 text-center">
-                <div class="w-20 h-20 rounded-full border-2 border-zinc-600 flex items-center justify-center mb-5">
-                    <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-20 h-20 rounded-full border-2 border-zinc-300 dark:border-zinc-600 flex items-center justify-center mb-5">
+                    <svg class="w-10 h-10 text-zinc-400 dark:text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                               d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
                     </svg>
                 </div>
                 <h3 class="text-2xl font-extrabold mb-2">{{ __('No Liked Posts Yet') }}</h3>
-                <p class="text-zinc-400 text-sm">{{ __('Posts you like will appear here.') }}</p>
+                <p class="text-zinc-500 dark:text-zinc-400 text-sm">{{ __('Posts you like will appear here.') }}</p>
             </div>
             @else
             <div class="grid grid-cols-3 gap-0.5">
@@ -574,8 +579,8 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                     @if($imgUrl)
                         <img src="{{ $imgUrl }}" alt="Liked post" loading="lazy">
                     @else
-                        <div class="w-full h-full bg-gradient-to-br from-violet-900/50 to-purple-900/50 flex items-center justify-center">
-                            <svg class="w-8 h-8 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-full h-full bg-gradient-to-br from-violet-100/50 to-purple-100/50 dark:from-violet-900/50 dark:to-purple-900/50 flex items-center justify-center">
+                            <svg class="w-8 h-8 text-zinc-400 dark:text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                       d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
@@ -608,16 +613,16 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
         <div id="panel-patterns" class="hidden">
             @if($patterns->isEmpty())
             <div class="flex flex-col items-center justify-center py-24 text-center">
-                <div class="w-20 h-20 rounded-full border-2 border-zinc-600 flex items-center justify-center mb-5">
-                    <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-20 h-20 rounded-full border-2 border-zinc-300 dark:border-zinc-600 flex items-center justify-center mb-5">
+                    <svg class="w-10 h-10 text-zinc-400 dark:text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                               d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
                 </div>
                 <h3 class="text-2xl font-extrabold mb-2">{{ __('No Patterns Yet') }}</h3>
-                <p class="text-zinc-400 text-sm mb-5">{{ __('Patterns you upload will appear here.') }}</p>
+                <p class="text-zinc-500 dark:text-zinc-400 text-sm mb-5">{{ __('Patterns you upload will appear here.') }}</p>
                 <a href="{{ route('patterns.create') }}"
-                   class="text-sm font-semibold text-sky-400 hover:text-sky-300 transition-colors">{{ __('Upload your first pattern') }}</a>
+                   class="text-sm font-semibold text-sky-500 dark:text-sky-400 hover:text-sky-600 dark:hover:text-sky-300 transition-colors">{{ __('Upload your first pattern') }}</a>
             </div>
             @else
             <div x-data="{ craft: 'all' }">
@@ -639,20 +644,20 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                     <a href="{{ route('patterns.view', $pattern) }}"
                        x-show="craft === 'all' || craft === '{{ $pattern->craft_type }}'"
                        x-transition
-                       class="group relative rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800 hover:border-violet-500/50 transition-all duration-200">
+                       class="group relative rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-violet-400 dark:hover:border-violet-500/50 transition-all duration-200">
                         @if($pattern->image_path)
                             <img src="{{ asset('storage/' . $pattern->image_path) }}" alt="{{ $pattern->title }}"
                                  class="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
                         @else
-                            <div class="w-full aspect-square bg-gradient-to-br from-violet-900/40 to-purple-900/40 flex items-center justify-center">
-                                <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="w-full aspect-square bg-gradient-to-br from-violet-100/40 to-purple-100/40 dark:from-violet-900/40 dark:to-purple-900/40 flex items-center justify-center">
+                                <svg class="w-10 h-10 text-zinc-400 dark:text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                 </svg>
                             </div>
                         @endif
                         <div class="p-2.5">
-                            <p class="text-sm font-semibold text-white truncate">{{ $pattern->title }}</p>
-                            <p class="text-xs text-zinc-400 capitalize mt-0.5">{{ $pattern->craft_type }} · {{ $pattern->difficulty }}</p>
+                            <p class="text-sm font-semibold text-zinc-900 dark:text-white truncate">{{ $pattern->title }}</p>
+                            <p class="text-xs text-zinc-600 dark:text-zinc-400 capitalize mt-0.5">{{ $pattern->craft_type }} · {{ $pattern->difficulty }}</p>
                         </div>
                     </a>
                     @endforeach
@@ -665,16 +670,16 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
         <div id="panel-collections" class="hidden">
             @if($collections->isEmpty())
             <div class="flex flex-col items-center justify-center py-24 text-center">
-                <div class="w-20 h-20 rounded-full border-2 border-zinc-600 flex items-center justify-center mb-5">
-                    <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-20 h-20 rounded-full border-2 border-zinc-300 dark:border-zinc-600 flex items-center justify-center mb-5">
+                    <svg class="w-10 h-10 text-zinc-400 dark:text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                               d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                     </svg>
                 </div>
                 <h3 class="text-2xl font-extrabold mb-2">{{ __('No Collections Yet') }}</h3>
-                <p class="text-zinc-400 text-sm mb-5">{{ __('Collections you create will appear here.') }}</p>
+                <p class="text-zinc-500 dark:text-zinc-400 text-sm mb-5">{{ __('Collections you create will appear here.') }}</p>
                 <a href="{{ route('collections.create') }}"
-                   class="text-sm font-semibold text-sky-400 hover:text-sky-300 transition-colors">{{ __('Create your first collection') }}</a>
+                   class="text-sm font-semibold text-sky-500 dark:text-sky-400 hover:text-sky-600 dark:hover:text-sky-300 transition-colors">{{ __('Create your first collection') }}</a>
             </div>
             @else
             <div x-data="{ craft: 'all' }">
@@ -684,7 +689,7 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                     <button @click="craft = '{{ $val }}'"
                             :class="craft === '{{ $val }}'
                                 ? 'bg-violet-600 text-white border-violet-600'
-                                : 'bg-transparent text-zinc-400 border-zinc-700 hover:border-zinc-500 hover:text-zinc-200'"
+                                : 'bg-transparent text-zinc-600 dark:text-zinc-400 border-zinc-300 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'"
                             class="shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200">
                         {{ $label }}
                     </button>
@@ -696,7 +701,7 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                     <a href="{{ route('collections.show', $collection) }}"
                        x-show="craft === 'all' || craft === '{{ $collection->craft_type }}'"
                        x-transition
-                       class="group relative rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800 hover:border-violet-500/50 transition-all duration-200">
+                       class="group relative rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-violet-400 dark:hover:border-violet-500/50 transition-all duration-200">
                         <div class="w-full aspect-square overflow-hidden">
                             @if($collection->cover_image_path)
                                 <img src="{{ asset('storage/' . $collection->cover_image_path) }}"
@@ -732,16 +737,16 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                                     @endif
                                 </div>
                             @else
-                                <div class="w-full h-full bg-gradient-to-br from-sky-900/40 to-indigo-900/40 flex items-center justify-center">
-                                    <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div class="w-full h-full bg-gradient-to-br from-sky-100/40 to-indigo-100/40 dark:from-sky-900/40 dark:to-indigo-900/40 flex items-center justify-center">
+                                    <svg class="w-10 h-10 text-zinc-400 dark:text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                                     </svg>
                                 </div>
                             @endif
                         </div>
                         <div class="p-2.5">
-                            <p class="text-sm font-semibold text-white truncate">{{ $collection->name }}</p>
-                            <p class="text-xs text-zinc-400 mt-0.5">{{ $collection->patterns_count }} {{ Str::plural('pattern', $collection->patterns_count) }}</p>
+                            <p class="text-sm font-semibold text-zinc-900 dark:text-white truncate">{{ $collection->name }}</p>
+                            <p class="text-xs text-zinc-600 dark:text-zinc-400 mt-0.5">{{ $collection->patterns_count }} {{ Str::plural('pattern', $collection->patterns_count) }}</p>
                         </div>
                     </a>
                     @endforeach
@@ -769,10 +774,10 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
         </button>
 
-        <div class="relative flex flex-col md:flex-row w-full max-w-6xl rounded-2xl overflow-hidden shadow-2xl ring-1 ring-zinc-700 bg-zinc-900" style="max-height:90vh;" onclick="event.stopPropagation()">
+        <div class="relative flex flex-col md:flex-row w-full max-w-6xl rounded-2xl overflow-hidden shadow-2xl ring-1 ring-zinc-300 dark:ring-zinc-700 bg-white dark:bg-zinc-900" style="max-height:90vh;" onclick="event.stopPropagation()">
 
             {{-- ✕ close button --}}
-            <button onclick="closePostModal()" class="absolute top-3 right-3 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white transition-colors">
+            <button onclick="closePostModal()" class="absolute top-3 right-3 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-zinc-200/80 hover:bg-zinc-300 dark:bg-zinc-800/80 dark:hover:bg-zinc-700 text-zinc-700 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white transition-colors">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
@@ -798,38 +803,38 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
             </div>
 
             {{-- ── RIGHT: post meta ── --}}
-            <div class="flex flex-col w-full md:w-2/5 min-w-0 border-t border-zinc-800 md:border-t-0 md:border-l md:border-zinc-800" style="max-height:90vh;">
+            <div class="flex flex-col w-full md:w-2/5 min-w-0 border-t border-zinc-200 dark:border-zinc-800 md:border-t-0 md:border-l md:border-zinc-200 dark:md:border-zinc-800" style="max-height:90vh;">
 
                 {{-- Author header --}}
-                <div class="flex items-center gap-3 px-4 py-3 border-b border-zinc-800 shrink-0">
+                <div class="flex items-center gap-3 px-4 py-3 border-b border-zinc-200 dark:border-zinc-800 shrink-0">
                     <div id="pm-avatar" class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0 select-none overflow-hidden"></div>
                     <div class="min-w-0 flex-1">
-                        <p id="pm-author" class="text-sm font-semibold text-white truncate"></p>
-                        <p id="pm-time"   class="text-xs text-zinc-500"></p>
+                        <p id="pm-author" class="text-sm font-semibold text-zinc-900 dark:text-white truncate"></p>
+                        <p id="pm-time"   class="text-xs text-zinc-500 dark:text-zinc-500"></p>
                     </div>
-                    <span id="pm-badge" class="inline-flex items-center rounded-full bg-violet-900/40 text-violet-300 px-2.5 py-0.5 text-xs font-semibold capitalize shrink-0"></span>
+                    <span id="pm-badge" class="inline-flex items-center rounded-full bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 px-2.5 py-0.5 text-xs font-semibold capitalize shrink-0"></span>
                 </div>
 
                 {{-- Scrollable body --}}
                 <div class="flex-1 overflow-y-auto px-4 py-4 space-y-3 text-sm">
-                    <p id="pm-desc" class="text-zinc-200 leading-relaxed whitespace-pre-wrap break-words"></p>
+                    <p id="pm-desc" class="text-zinc-700 dark:text-zinc-200 leading-relaxed whitespace-pre-wrap break-words"></p>
                     <div id="pm-tags" class="flex flex-wrap gap-1.5"></div>
                 </div>
 
                 {{-- Action bar --}}
-                <div class="shrink-0 border-t border-zinc-800 px-4 py-3 space-y-2">
+                <div class="shrink-0 border-t border-zinc-200 dark:border-zinc-800 px-4 py-3 space-y-2">
                     <div class="flex items-center justify-between">
 
                         {{-- Like --}}
                         @auth
-                        <button id="pm-like-btn" onclick="pmToggleLike()" class="flex items-center gap-1.5 text-zinc-400 transition-colors duration-200 hover:text-red-400">
+                        <button id="pm-like-btn" onclick="pmToggleLike()" class="flex items-center gap-1.5 text-zinc-500 dark:text-zinc-400 transition-colors duration-200 hover:text-red-500 dark:hover:text-red-400">
                             <svg id="pm-like-icon" class="w-6 h-6 stroke-2 transition-transform duration-150 hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
                             </svg>
                             <span id="pm-like-count" class="text-sm font-medium"></span>
                         </button>
                         @else
-                        <div class="flex items-center gap-1.5 text-zinc-600">
+                        <div class="flex items-center gap-1.5 text-zinc-400 dark:text-zinc-600">
                             <svg class="w-6 h-6 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                             <span id="pm-like-count" class="text-sm font-medium"></span>
                         </div>
@@ -838,12 +843,12 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                         {{-- Save + Delete --}}
                         @auth
                         <div class="flex items-center gap-3">
-                            <button id="pm-save-btn" onclick="pmToggleSave()" class="text-zinc-400 transition-colors duration-200 hover:text-violet-400">
+                            <button id="pm-save-btn" onclick="pmToggleSave()" class="text-zinc-500 dark:text-zinc-400 transition-colors duration-200 hover:text-violet-500 dark:hover:text-violet-400">
                                 <svg id="pm-save-icon" class="w-6 h-6 stroke-2 hover:scale-110 transition-transform duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
                                 </svg>
                             </button>
-                            <button id="pm-delete-btn" onclick="pmDeletePost()" class="text-zinc-400 transition-colors duration-200 hover:text-red-400" title="Delete post">
+                            <button id="pm-delete-btn" onclick="pmDeletePost()" class="text-zinc-500 dark:text-zinc-400 transition-colors duration-200 hover:text-red-500 dark:hover:text-red-400" title="Delete post">
                                 <svg class="w-6 h-6 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m-9 0h14"/>
                                 </svg>
@@ -853,16 +858,16 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                     </div>
 
                     {{-- Likes label --}}
-                    <p id="pm-likes-label" class="text-xs text-zinc-500"></p>
+                    <p id="pm-likes-label" class="text-xs text-zinc-500 dark:text-zinc-500"></p>
 
                     {{-- Comment input (decorative – no comments table yet) --}}
-                    <div class="flex items-center gap-2 pt-1 border-t border-zinc-800">
-                        <svg class="w-6 h-6 text-zinc-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="flex items-center gap-2 pt-1 border-t border-zinc-200 dark:border-zinc-800">
+                        <svg class="w-6 h-6 text-zinc-400 dark:text-zinc-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                         <input type="text" placeholder="Add a comment…"
-                               class="flex-1 bg-transparent text-sm text-zinc-300 placeholder-zinc-600 outline-none py-1"/>
-                        <button class="text-sm font-semibold text-violet-400 hover:text-violet-300 transition-colors">Post</button>
+                               class="flex-1 bg-transparent text-sm text-zinc-700 dark:text-zinc-300 placeholder-zinc-400 dark:placeholder-zinc-600 outline-none py-1"/>
+                        <button class="text-sm font-semibold text-violet-500 dark:text-violet-400 hover:text-violet-600 dark:hover:text-violet-300 transition-colors">Post</button>
                     </div>
                 </div>
             </div>
@@ -872,20 +877,20 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
     {{-- ── Followers/Following Modal ── --}}
     <div id="follow-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeFollowModal()"></div>
-        <div class="relative w-full max-w-sm bg-zinc-900 rounded-2xl shadow-2xl ring-1 ring-zinc-700 overflow-hidden">
+        <div class="relative w-full max-w-sm bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl ring-1 ring-zinc-200 dark:ring-zinc-700 overflow-hidden">
             {{-- Modal header --}}
-            <div class="flex items-center justify-between px-4 pt-4 pb-3 border-b border-zinc-800">
-                <h2 id="follow-modal-title" class="text-base font-semibold text-white">Followers</h2>
-                <button onclick="closeFollowModal()" class="text-zinc-400 hover:text-white transition-colors">
+            <div class="flex items-center justify-between px-4 pt-4 pb-3 border-b border-zinc-200 dark:border-zinc-800">
+                <h2 id="follow-modal-title" class="text-base font-semibold text-zinc-900 dark:text-white">Followers</h2>
+                <button onclick="closeFollowModal()" class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                 </button>
             </div>
             {{-- Followers list --}}
-            <div id="follow-modal-content" class="max-h-80 overflow-y-auto divide-y divide-zinc-800">
+            <div id="follow-modal-content" class="max-h-80 overflow-y-auto divide-y divide-zinc-200 dark:divide-zinc-800">
                 @forelse($user->followers as $follower)
-                <a href="{{ route('users.show', $follower) }}" class="flex items-center gap-3 px-4 py-3 hover:bg-zinc-800/50 transition-colors">
+                <a href="{{ route('users.show', $follower) }}" class="flex items-center gap-3 px-4 py-3 hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors">
                     @if($follower->hasProfileImage())
                         <img src="{{ asset('storage/' . $follower->profile_picture) }}"
                              alt="{{ $follower->username }}"
@@ -898,12 +903,12 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
                         </div>
                     @endif
                     <div class="min-w-0">
-                        <p class="text-sm font-semibold text-white truncate">{{ $follower->username }}</p>
-                        <p class="text-xs text-zinc-400 truncate">{{ $follower->name }}</p>
+                        <p class="text-sm font-semibold text-zinc-900 dark:text-white truncate">{{ $follower->username }}</p>
+                        <p class="text-xs text-zinc-600 dark:text-zinc-400 truncate">{{ $follower->name }}</p>
                     </div>
                 </a>
                 @empty
-                <p class="px-4 py-6 text-sm text-zinc-500 text-center">No followers yet.</p>
+                <p class="px-4 py-6 text-sm text-zinc-500 dark:text-zinc-500 text-center">No followers yet.</p>
                 @endforelse
             </div>
         </div>
@@ -916,21 +921,21 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
      ══════════════════════════════════════════════════════════ --}}
 <div id="delete-confirm-modal"
      class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-    <div class="bg-zinc-900 border border-zinc-700 rounded-2xl w-full max-w-sm p-6 shadow-2xl">
+    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-2xl w-full max-w-sm p-6 shadow-2xl">
         <div class="flex items-center gap-3 mb-4">
-            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-red-900/40 flex items-center justify-center">
-                <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/40 flex items-center justify-center">
+                <svg class="w-5 h-5 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m-9 0h14"/>
                 </svg>
             </div>
             <div>
-                <h3 class="text-base font-semibold text-white">Delete Post</h3>
-                <p class="text-sm text-zinc-400">This action cannot be undone.</p>
+                <h3 class="text-base font-semibold text-zinc-900 dark:text-white">Delete Post</h3>
+                <p class="text-sm text-zinc-600 dark:text-zinc-400">This action cannot be undone.</p>
             </div>
         </div>
         <div class="flex gap-3 justify-end">
             <button id="delete-confirm-cancel"
-                    class="px-4 py-2 text-sm font-semibold text-zinc-400 hover:text-white transition-colors">
+                    class="px-4 py-2 text-sm font-semibold text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
                 Cancel
             </button>
             <button id="delete-confirm-ok"
@@ -946,13 +951,13 @@ foreach (array_merge($posts->all(), $savedPosts->all(), $likedPosts->all()) as $
      ══════════════════════════════════════════════════════════ --}}
 <div id="new-collection-modal"
      class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-    <div class="bg-zinc-900 border border-zinc-700 rounded-2xl w-full max-w-sm p-6 shadow-2xl">
-        <h3 class="text-lg font-bold text-white mb-4">New Collection</h3>
+    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-2xl w-full max-w-sm p-6 shadow-2xl">
+        <h3 class="text-lg font-bold text-zinc-900 dark:text-white mb-4">New Collection</h3>
         <input id="nc-name" type="text" maxlength="100" placeholder="Collection name"
-               class="w-full rounded-xl bg-zinc-800 border border-zinc-700 text-white px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 mb-4">
+               class="w-full rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-white placeholder-zinc-500 dark:placeholder-zinc-500 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 mb-4">
         <div class="flex gap-3 justify-end">
             <button onclick="document.getElementById('new-collection-modal').classList.add('hidden')"
-                    class="px-4 py-2 text-sm font-semibold text-zinc-400 hover:text-white transition-colors">
+                    class="px-4 py-2 text-sm font-semibold text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
                 Cancel
             </button>
             <button onclick="submitNewCollection()"
@@ -978,12 +983,12 @@ foreach ($followingUsers as $fu) {
             : '<div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center text-sm font-bold text-white shrink-0">' . $initials . '</div>');
     $followingHTML .= '<a href="' . $profileUrl . '" class="flex items-center gap-3 px-4 py-3 hover:bg-zinc-800/50 transition-colors">'
         . $avatarHtml
-        . '<div class="min-w-0"><p class="text-sm font-semibold text-white truncate">' . $username . '</p>'
-        . '<p class="text-xs text-zinc-400 truncate">' . $name . '</p></div>'
+        . '<div class="min-w-0"><p class="text-sm font-semibold text-zinc-900 dark:text-white truncate">' . $username . '</p>'
+        . '<p class="text-xs text-zinc-600 dark:text-zinc-400 truncate">' . $name . '</p></div>'
         . '</a>';
 }
 if (!$followingHTML) {
-    $followingHTML = '<p class="px-4 py-6 text-sm text-zinc-500 text-center">Not following anyone yet.</p>';
+    $followingHTML = '<p class="px-4 py-6 text-sm text-zinc-500 dark:text-zinc-500 text-center">Not following anyone yet.</p>';
 }
 @endphp
 

@@ -3,12 +3,12 @@
 @section('title', 'Edit Profile · Yarnly')
 
 @section('content')
-<div class="min-h-screen bg-zinc-950 text-white py-10">
+<div class="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white py-10">
     <div class="max-w-xl mx-auto px-4">
 
         {{-- Header --}}
         <div class="flex items-center gap-4 mb-8">
-            <a href="{{ route('profile.show') }}" class="text-zinc-400 hover:text-white transition-colors">
+            <a href="{{ route('profile.show') }}" class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                 </svg>
@@ -23,15 +23,15 @@
                     <img id="avatar-preview"
                          src="{{ asset('storage/' . auth()->user()->profile_picture) }}"
                          alt="Profile picture"
-                         class="w-24 h-24 rounded-full object-cover ring-2 ring-zinc-700">
+                         class="w-24 h-24 rounded-full object-cover ring-2 ring-zinc-200 dark:ring-zinc-700">
                 @else
                     @php $initBg = auth()->user()->avatarColor() ? 'background-color: ' . auth()->user()->avatarColor() : 'background: linear-gradient(135deg, #8b5cf6, #a855f7, #6366f1)'; @endphp
                     <div id="avatar-initials"
-                         class="w-24 h-24 rounded-full flex items-center justify-center text-3xl font-bold text-white ring-2 ring-zinc-700"
+                         class="w-24 h-24 rounded-full flex items-center justify-center text-3xl font-bold text-white ring-2 ring-zinc-200 dark:ring-zinc-700"
                          style="<?= e($initBg) ?>">
                         {{ auth()->user()->initials() }}
                     </div>
-                    <img id="avatar-preview" src="" alt="Profile picture" class="w-24 h-24 rounded-full object-cover ring-2 ring-zinc-700 hidden">
+                    <img id="avatar-preview" src="" alt="Profile picture" class="w-24 h-24 rounded-full object-cover ring-2 ring-zinc-200 dark:ring-zinc-700 hidden">
                 @endif
                 <div class="absolute inset-0 rounded-full bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -41,15 +41,15 @@
                 </div>
             </div>
             <button type="button" onclick="document.getElementById('profile_picture').click()"
-                    class="mt-3 text-sm font-semibold text-violet-400 hover:text-violet-300 transition-colors">
+                    class="mt-3 text-sm font-semibold text-violet-500 dark:text-violet-400 hover:text-violet-600 dark:hover:text-violet-300 transition-colors">
                 {{ __('Change photo') }}
             </button>
-            <p class="mt-1 text-xs text-zinc-500">{{ __('jpg, jpeg, png, gif, webp — max 5 MB') }}</p>
+            <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-500">{{ __('jpg, jpeg, png, gif, webp — max 5 MB') }}</p>
 
             {{-- Color picker — only shown when there is no real profile photo --}}
             @if(!auth()->user()->hasProfileImage())
             <div id="color-picker-section" class="mt-5 w-full">
-                <p class="text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-3 text-center">{{ __('Or choose a circle color') }}</p>
+                <p class="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-3 text-center">{{ __('Or choose a circle color') }}</p>
                 <div class="flex flex-wrap justify-center gap-2" id="color-swatches">
                     @php
                         $swatches = [
@@ -73,18 +73,18 @@
                         <button type="button"
                                 onclick="selectColor('{{ $hex }}')"
                                 title="{{ $label }}"
-                                class="swatch-btn w-8 h-8 rounded-full transition-all duration-150 ring-2 {{ $currentColor === $hex ? 'ring-white scale-110' : 'ring-transparent hover:scale-105' }}"
+                                class="swatch-btn w-8 h-8 rounded-full transition-all duration-150 ring-2 {{ $currentColor === $hex ? 'ring-zinc-900 dark:ring-white scale-110' : 'ring-transparent hover:scale-105' }}"
                                 style="<?= e($swatchStyle) ?>"
                                 data-color="{{ $hex }}">
                         </button>
                     @endforeach
                     {{-- Custom color input --}}
-                    <label class="w-8 h-8 rounded-full ring-2 ring-zinc-600 hover:ring-zinc-400 overflow-hidden cursor-pointer transition-all" title="Custom color">
+                    <label class="w-8 h-8 rounded-full ring-2 ring-zinc-300 dark:ring-zinc-600 hover:ring-zinc-400 dark:hover:ring-zinc-400 overflow-hidden cursor-pointer transition-all" title="Custom color">
                         <input type="color" id="custom-color-input"
                                value="{{ $currentColor }}"
                                onchange="selectColor(this.value)"
                                class="opacity-0 w-0 h-0 absolute">
-                        <span class="flex w-full h-full items-center justify-center text-zinc-400 text-lg">+</span>
+                        <span class="flex w-full h-full items-center justify-center text-zinc-500 dark:text-zinc-400 text-lg">+</span>
                     </label>
                 </div>
             </div>
@@ -109,9 +109,9 @@
 
             {{-- Username --}}
             <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">{{ __('Username') }}</label>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5">{{ __('Username') }}</label>
                 <input type="text" name="username" value="{{ old('username', auth()->user()->username) }}" required
-                       class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
+                       class="w-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
                 @error('username')
                     <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
                 @enderror
@@ -119,9 +119,9 @@
 
             {{-- Full name --}}
             <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">{{ __('Full Name') }}</label>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5">{{ __('Full Name') }}</label>
                 <input type="text" name="name" value="{{ old('name', auth()->user()->name) }}" required
-                       class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
+                       class="w-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
                 @error('name')
                     <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
                 @enderror
@@ -129,13 +129,13 @@
 
             {{-- Bio --}}
             <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">{{ __('Bio') }}</label>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5">{{ __('Bio') }}</label>
                 <textarea name="bio" maxlength="200" rows="3"
                           x-data="{ count: {{ strlen(old('bio', auth()->user()->bio ?? '')) }} }"
                           x-on:input="count = $el.value.length"
-                          class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition resize-none"
+                          class="w-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition resize-none"
                           placeholder="{{ __('Write a short bio...') }}">{{ old('bio', auth()->user()->bio) }}</textarea>
-                <p class="mt-1 text-xs text-zinc-500 text-right"><span x-text="count">{{ strlen(old('bio', auth()->user()->bio ?? '')) }}</span>/200</p>
+                <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-500 text-right"><span x-text="count">{{ strlen(old('bio', auth()->user()->bio ?? '')) }}</span>/200</p>
                 @error('bio')
                     <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
                 @enderror
@@ -143,15 +143,15 @@
 
             {{-- Email (read-only) --}}
             <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">{{ __('Email') }}</label>
-                <div class="flex items-center gap-3 px-4 py-3.5 bg-zinc-900 border border-zinc-700 rounded-xl">
-                    <svg class="w-5 h-5 text-zinc-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <label class="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5">{{ __('Email') }}</label>
+                <div class="flex items-center gap-3 px-4 py-3.5 bg-zinc-100 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl">
+                    <svg class="w-5 h-5 text-zinc-500 dark:text-zinc-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                     </svg>
-                    <span class="text-base text-zinc-300">{{ auth()->user()->email }}</span>
-                    <span class="ml-auto text-sm text-zinc-500 whitespace-nowrap">{{ __('Change in') }}
-                        <a href="{{ route('profile.settings') }}?tab=password" class="text-violet-400 hover:text-violet-300 underline underline-offset-2">{{ __('Settings') }}</a>
+                    <span class="text-base text-zinc-700 dark:text-zinc-300">{{ auth()->user()->email }}</span>
+                    <span class="ml-auto text-sm text-zinc-500 dark:text-zinc-500 whitespace-nowrap">{{ __('Change in') }}
+                        <a href="{{ route('profile.settings') }}?tab=password" class="text-violet-500 dark:text-violet-400 hover:text-violet-600 dark:hover:text-violet-300 underline underline-offset-2">{{ __('Settings') }}</a>
                     </span>
                 </div>
             </div>
@@ -199,7 +199,8 @@ function selectColor(hex) {
     // Update swatch ring
     document.querySelectorAll('.swatch-btn').forEach(btn => {
         const isActive = btn.dataset.color === hex;
-        btn.classList.toggle('ring-white', isActive);
+        const isDark = document.documentElement.classList.contains('dark');
+        btn.classList.toggle(isDark ? 'ring-white' : 'ring-zinc-900', isActive);
         btn.classList.toggle('scale-110', isActive);
         btn.classList.toggle('ring-transparent', !isActive);
     });
