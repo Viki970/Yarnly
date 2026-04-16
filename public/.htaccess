@@ -5,6 +5,10 @@
 
     RewriteEngine On
 
+    # Trust X-Forwarded-Proto from cPanel reverse proxy so HTTPS is detected correctly
+    RewriteCond %{HTTP:X-Forwarded-Proto} =https
+    RewriteRule ^ - [E=HTTPS:on]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
