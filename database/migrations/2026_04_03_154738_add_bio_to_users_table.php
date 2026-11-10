@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -11,9 +12,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('bio', 200)->nullable()->after('name');
-        });
+        if (!Schema::hasColumn('users', 'bio')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->string('bio', 200)->nullable()->after('name');
+            });
+        }
     }
 
     /**
@@ -21,8 +24,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('bio');
-        });
+        if (Schema::hasColumn('users', 'bio')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->dropColumn('bio');
+            });
+        }
     }
 };

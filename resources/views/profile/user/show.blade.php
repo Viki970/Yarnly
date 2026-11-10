@@ -65,13 +65,14 @@ foreach ($extraPosts->all() as $post) {
         position: relative;
         aspect-ratio: 1 / 1;
         overflow: hidden;
-        background: #18181b;
+        background: #f4f4f5;
         cursor: pointer;
         display: block;
         border: none;
         padding: 0;
         width: 100%;
     }
+    .dark .profile-thumb { background: #18181b; }
     .profile-thumb img {
         width: 100%;
         height: 100%;
@@ -94,12 +95,14 @@ foreach ($extraPosts->all() as $post) {
 
     /* ── Tab bar ── */
     .tab-btn { transition: color .2s; }
-    .tab-btn.active { color: #fff; }
+    .tab-btn.active { color: #18181b; }
+    .dark .tab-btn.active { color: #fff; }
     #tab-indicator { transition: left .28s cubic-bezier(.4,0,.2,1), width .28s cubic-bezier(.4,0,.2,1); }
 
     /* ── Stat number ── */
     .stat-num { font-size: 1.125rem; font-weight: 700; line-height: 1.2; }
-    .stat-label { font-size: .75rem; color: #a1a1aa; }
+    .stat-label { font-size: .75rem; color: #71717a; }
+    .dark .stat-label { color: #a1a1aa; }
 
     /* ── Post modal carousel ── */
     #pm-track { display: flex; transition: transform .3s ease; height: 100%; }
@@ -108,9 +111,26 @@ foreach ($extraPosts->all() as $post) {
 
     /* ── Follow button ── */
     #follow-btn { transition: background-color .2s, color .2s, border-color .2s; }
+
+    html:not(.dark) .profile-page [class~="bg-zinc-900"],
+    html:not(.dark) .profile-page [class~="bg-zinc-950"] { background-color: #fff; }
+    html:not(.dark) .profile-page [class~="bg-zinc-800"],
+    html:not(.dark) .profile-page [class~="bg-zinc-800/80"] { background-color: #f4f4f5; }
+    html:not(.dark) .profile-page [class~="hover:bg-zinc-800/50"]:hover,
+    html:not(.dark) .profile-page [class~="bg-zinc-800/50"]:hover { background-color: #f4f4f5; }
+    html:not(.dark) .profile-page [class~="text-zinc-200"],
+    html:not(.dark) .profile-page [class~="text-zinc-300"] { color: #3f3f46; }
+    html:not(.dark) .profile-page [class~="text-zinc-400"],
+    html:not(.dark) .profile-page [class~="text-zinc-500"],
+    html:not(.dark) .profile-page [class~="text-zinc-600"] { color: #71717a; }
+    html:not(.dark) .profile-page [class~="border-zinc-600"],
+    html:not(.dark) .profile-page [class~="border-zinc-700"],
+    html:not(.dark) .profile-page [class~="border-zinc-800"] { border-color: #e4e4e7; }
+    html:not(.dark) .profile-page [class~="divide-zinc-800"] { --tw-divide-color: #e4e4e7; }
+    html:not(.dark) .profile-page [class~="ring-zinc-700"] { --tw-ring-color: #d4d4d8; }
 </style>
 
-<div class="min-h-screen bg-zinc-950 text-white">
+<div class="profile-page min-h-screen bg-white text-zinc-900 dark:bg-zinc-950 dark:text-white">
     <div class="max-w-3xl mx-auto px-4 py-10">
 
         {{-- ── Profile Header ── --}}
@@ -121,10 +141,10 @@ foreach ($extraPosts->all() as $post) {
                 @if($user->hasProfileImage())
                     <img src="{{ asset('storage/' . $user->profile_picture) }}"
                          alt="{{ $user->username }}"
-                         class="w-24 h-24 sm:w-36 sm:h-36 rounded-full object-cover shadow-lg ring-2 ring-zinc-700">
+                         class="w-24 h-24 sm:w-36 sm:h-36 rounded-full object-cover shadow-lg ring-2 ring-zinc-300 dark:ring-zinc-700">
                 @else
                     @php $avatarColor = $user->avatarColor(); @endphp
-                    <div class="w-24 h-24 sm:w-36 sm:h-36 rounded-full flex items-center justify-center text-4xl sm:text-5xl font-bold text-white shadow-lg ring-2 ring-zinc-700 {{ $avatarColor ? '' : 'bg-gradient-to-br from-violet-500 via-purple-500 to-indigo-500' }}"
+                    <div class="w-24 h-24 sm:w-36 sm:h-36 rounded-full flex items-center justify-center text-4xl sm:text-5xl font-bold text-white shadow-lg ring-2 ring-zinc-300 dark:ring-zinc-700 {{ $avatarColor ? '' : 'bg-gradient-to-br from-violet-500 via-purple-500 to-indigo-500' }}"
                          {!! $avatarColor ? 'style="background-color: ' . e($avatarColor) . '"' : '' !!}>
                         {{ $user->initials() }}
                     </div>
@@ -147,7 +167,7 @@ foreach ($extraPosts->all() as $post) {
                             data-unfollow-url="{{ route('users.unfollow', $user) }}"
                             class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors duration-200 border
                                 {{ $isFollowing
-                                    ? 'bg-zinc-800 hover:bg-red-900/30 hover:text-red-400 hover:border-red-800 text-zinc-300 border-zinc-700'
+                                    ? 'bg-zinc-100 hover:bg-red-50 hover:text-red-600 hover:border-red-200 text-zinc-700 border-zinc-300 dark:bg-zinc-800 dark:hover:bg-red-900/30 dark:hover:text-red-400 dark:hover:border-red-800 dark:text-zinc-300 dark:border-zinc-700'
                                     : 'bg-violet-600 hover:bg-violet-700 text-white border-transparent' }}">
                         <svg id="follow-btn-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             @if($isFollowing)
@@ -170,33 +190,33 @@ foreach ($extraPosts->all() as $post) {
                 </div>
 
                 {{-- Full name directly under username --}}
-                <p class="text-sm text-zinc-400 -mt-2">{{ $user->name }}</p>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 -mt-2">{{ $user->name }}</p>
 
                 {{-- Bio --}}
                 @if($user->bio)
-                    <p class="text-sm text-zinc-300 leading-relaxed max-w-sm">{{ $user->bio }}</p>
+                    <p class="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed max-w-sm">{{ $user->bio }}</p>
                 @endif
 
                 {{-- Stats row (desktop) --}}
                 <div class="hidden sm:flex items-center gap-8">
                     <div class="text-center">
                         <span class="stat-num">{{ $postsCount }}</span>
-                        <span class="ml-1 text-sm text-zinc-300">{{ $postsCount === 1 ? __('post') : __('posts') }}</span>
+                        <span class="ml-1 text-sm text-zinc-700 dark:text-zinc-300">{{ $postsCount === 1 ? __('post') : __('posts') }}</span>
                     </div>
                     <button onclick="openFollowModal('followers')" class="text-center hover:opacity-80 transition-opacity">
                         <span id="followers-count-desktop" class="stat-num">{{ $followersCount }}</span>
-                        <span class="ml-1 text-sm text-zinc-300">{{ $followersCount === 1 ? __('follower') : __('followers') }}</span>
+                        <span class="ml-1 text-sm text-zinc-700 dark:text-zinc-300">{{ $followersCount === 1 ? __('follower') : __('followers') }}</span>
                     </button>
                     <button onclick="openFollowModal('following')" class="text-center hover:opacity-80 transition-opacity">
                         <span class="stat-num">{{ $followingCount }}</span>
-                        <span class="ml-1 text-sm text-zinc-300">{{ __('following') }}</span>
+                        <span class="ml-1 text-sm text-zinc-700 dark:text-zinc-300">{{ __('following') }}</span>
                     </button>
                 </div>
             </div>
         </div>
 
         {{-- Stats row (mobile) --}}
-        <div class="sm:hidden flex items-center justify-around border-t border-b border-zinc-800 py-3 mb-6">
+        <div class="sm:hidden flex items-center justify-around border-t border-b border-zinc-200 dark:border-zinc-800 py-3 mb-6">
             <div class="text-center">
                 <div class="stat-num">{{ $postsCount }}</div>
                 <div class="stat-label">{{ __('Posts') }}</div>
@@ -212,14 +232,14 @@ foreach ($extraPosts->all() as $post) {
         </div>
 
         {{-- ── Tab bar ── --}}
-        <div class="relative flex items-center justify-center border-t border-zinc-800 mb-0.5">
+        <div class="relative flex items-center justify-center border-t border-zinc-200 dark:border-zinc-800 mb-0.5">
 
             {{-- Sliding active indicator --}}
-            <div id="tab-indicator" class="absolute top-0 h-0.5 bg-white pointer-events-none" style="left:0;width:0;"></div>
+            <div id="tab-indicator" class="absolute top-0 h-0.5 bg-zinc-900 dark:bg-white pointer-events-none" style="left:0;width:0;"></div>
 
             {{-- Posts tab --}}
             <button onclick="switchTab('posts')" id="tab-posts"
-                    class="tab-btn active flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-white">
+                    class="tab-btn active flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-900 dark:text-white">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
@@ -229,7 +249,7 @@ foreach ($extraPosts->all() as $post) {
 
             {{-- Patterns tab --}}
             <button onclick="switchTab('patterns')" id="tab-patterns"
-                    class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-400">
+                    class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-500 dark:text-zinc-400">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -239,7 +259,7 @@ foreach ($extraPosts->all() as $post) {
 
             {{-- Collections tab --}}
             <button onclick="switchTab('collections')" id="tab-collections"
-                    class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-400">
+                    class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-500 dark:text-zinc-400">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
@@ -250,7 +270,7 @@ foreach ($extraPosts->all() as $post) {
             {{-- Saved tab --}}
             @if($hasSavedTab)
             <button onclick="switchTab('saved')" id="tab-saved"
-                    class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-400">
+                    class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-500 dark:text-zinc-400">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
@@ -262,7 +282,7 @@ foreach ($extraPosts->all() as $post) {
             {{-- Liked tab --}}
             @if($canShowLikedPosts)
             <button onclick="switchTab('liked')" id="tab-liked"
-                    class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-400">
+                    class="tab-btn flex items-center gap-2 px-8 py-3 text-xs font-semibold tracking-widest uppercase text-zinc-500 dark:text-zinc-400">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
@@ -276,14 +296,14 @@ foreach ($extraPosts->all() as $post) {
         <div id="panel-posts">
             @if($posts->isEmpty())
             <div class="flex flex-col items-center justify-center py-24 text-center">
-                <div class="w-20 h-20 rounded-full border-2 border-zinc-600 flex items-center justify-center mb-5">
+                <div class="w-20 h-20 rounded-full border-2 border-zinc-300 dark:border-zinc-600 flex items-center justify-center mb-5">
                     <svg class="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                               d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold mb-2 text-zinc-300">{{ __('No Posts Yet') }}</h3>
+                <h3 class="text-xl font-bold mb-2 text-zinc-700 dark:text-zinc-300">{{ __('No Posts Yet') }}</h3>
                 <p class="text-zinc-500 text-sm">{{ __('This user hasn\'t shared any posts.') }}</p>
             </div>
             @else
@@ -376,7 +396,7 @@ foreach ($extraPosts->all() as $post) {
                             </div>
                         @endif
                         <div class="p-2.5">
-                            <p class="text-sm font-semibold text-white truncate">{{ $pattern->title }}</p>
+                            <p class="text-sm font-semibold text-zinc-900 dark:text-white truncate">{{ $pattern->title }}</p>
                             <p class="text-xs text-zinc-400 capitalize mt-0.5">{{ $pattern->craft_type }} · {{ $pattern->difficulty }}</p>
                         </div>
                     </a>
@@ -573,7 +593,7 @@ foreach ($extraPosts->all() as $post) {
                                     </div>
                                 @endif
                                 <div class="p-2.5">
-                                    <p class="text-sm font-semibold text-white truncate">{{ $pattern->title }}</p>
+                                    <p class="text-sm font-semibold text-zinc-900 dark:text-white truncate">{{ $pattern->title }}</p>
                                     <p class="text-xs text-zinc-400 capitalize mt-0.5">{{ $pattern->craft_type }} · {{ $pattern->difficulty }}</p>
                                 </div>
                             </a>
@@ -646,7 +666,7 @@ foreach ($extraPosts->all() as $post) {
                                     @endif
                                 </div>
                                 <div class="p-2.5">
-                                    <p class="text-sm font-semibold text-white truncate">{{ $collection->name }}</p>
+                                    <p class="text-sm font-semibold text-zinc-900 dark:text-white truncate">{{ $collection->name }}</p>
                                     <p class="text-xs text-zinc-400 mt-0.5">{{ $collection->patterns_count }} {{ Str::plural('pattern', $collection->patterns_count) }}</p>
                                 </div>
                             </a>
@@ -738,7 +758,7 @@ foreach ($extraPosts->all() as $post) {
                             @endif
                         </div>
                         <div class="p-2.5">
-                            <p class="text-sm font-semibold text-white truncate">{{ $collection->name }}</p>
+                            <p class="text-sm font-semibold text-zinc-900 dark:text-white truncate">{{ $collection->name }}</p>
                             <p class="text-xs text-zinc-400 mt-0.5">{{ $collection->patterns_count }} {{ Str::plural('pattern', $collection->patterns_count) }}</p>
                         </div>
                     </a>
@@ -804,7 +824,7 @@ foreach ($extraPosts->all() as $post) {
                         <span id="pm-avatar"></span>
                     </a>
                     <div class="min-w-0 flex-1">
-                        <a id="pm-author-name-link" href="#" class="text-sm font-semibold text-white truncate hover:underline" id="pm-author"></a>
+                        <a id="pm-author-name-link" href="#" class="text-sm font-semibold text-zinc-900 dark:text-white truncate hover:underline" id="pm-author"></a>
                         <p id="pm-time" class="text-xs text-zinc-500"></p>
                     </div>
                     <span id="pm-badge" class="inline-flex items-center rounded-full bg-violet-900/40 text-violet-300 px-2.5 py-0.5 text-xs font-semibold capitalize shrink-0"></span>
@@ -868,7 +888,7 @@ foreach ($extraPosts->all() as $post) {
         <div class="relative w-full max-w-sm bg-zinc-900 rounded-2xl shadow-2xl ring-1 ring-zinc-700 overflow-hidden">
             {{-- Modal header --}}
             <div class="flex items-center justify-between px-4 pt-4 pb-3 border-b border-zinc-800">
-                <h2 id="follow-modal-title" class="text-base font-semibold text-white">Followers</h2>
+                <h2 id="follow-modal-title" class="text-base font-semibold text-zinc-900 dark:text-white">Followers</h2>
                 <button onclick="closeFollowModal()" class="text-zinc-400 hover:text-white transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -891,7 +911,7 @@ foreach ($extraPosts->all() as $post) {
                         </div>
                     @endif
                     <div class="min-w-0">
-                        <p class="text-sm font-semibold text-white truncate">{{ $follower->username }}</p>
+                        <p class="text-sm font-semibold text-zinc-900 dark:text-white truncate">{{ $follower->username }}</p>
                         <p class="text-xs text-zinc-400 truncate">{{ $follower->name }}</p>
                     </div>
                 </a>
@@ -919,7 +939,7 @@ foreach ($followingUsers as $fu) {
             : '<div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center text-sm font-bold text-white shrink-0">' . $initials . '</div>');
     $followingHTML .= '<a href="' . $profileUrl . '" class="flex items-center gap-3 px-4 py-3 hover:bg-zinc-800/50 transition-colors">'
         . $avatarHtml
-        . '<div class="min-w-0"><p class="text-sm font-semibold text-white truncate">' . $username . '</p>'
+        . '<div class="min-w-0"><p class="text-sm font-semibold text-zinc-900 dark:text-white truncate">' . $username . '</p>'
         . '<p class="text-xs text-zinc-400 truncate">' . $name . '</p></div>'
         . '</a>';
 }
